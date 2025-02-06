@@ -12,7 +12,6 @@ Step2:
 
 To Do:
 - fix equipment list
-- fix github so Mathias and Morten can edit
 - meld til kursus
 
 To buy:
@@ -21,6 +20,8 @@ To buy:
 - (ekstra amplifier)
 
 
+
+Finished steps
 ------
 Step 1: Base case test Done 2/5: 
 - test0: O + wave generator *check()
