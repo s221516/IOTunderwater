@@ -64,3 +64,5 @@ In Short:
 
 The speaker draws more current than the generator is designed to provide, but the generator can't supply enough current to make the speaker perform at its full potential.
 The speaker doesn’t receive enough power because of the voltage drop caused by the impedance mismatch.
+
+cock
