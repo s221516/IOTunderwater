@@ -18,18 +18,19 @@ Step2: (mostly understood)
 
 To buy:
 - (ekstra amplifier)
+- rs-232 to usb (Haris is checking, else -> https://shorturl.at/0b44g - maybe 2x, s.t. wavegenerator -> computer and oscilloscope -> computer ), possible a null modem adapter
 
 
 Finished steps
 ------
 Step 1: Base case test Done 2/5: 
-- test0: O + wave generator *check()
-- test1: O + med hydrophone *check()
+- test0: Osciloscope + wave generator *check()
+- test1: Osciloscope + med hydrophone *check()
 - test2: Speaker + wave generator (spil sinus waves) 
-- base test: Wave generator + speaker -> hydrophone + O
+- base test: Wave generator + speaker -> hydrophone + Osciloscope
 
 
-Have bought:
+Have sent request to Haris to buy:
 - find PA6 phantom powered hydophone preamp (adapter from hydrophone) (Morten knows)
 - ekstra kasse, cuz we scared 
 - adapter
