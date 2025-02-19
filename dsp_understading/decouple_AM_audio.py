@@ -9,7 +9,7 @@ modulated_wave = modulated_wave.astype(np.float32) / 32767.0  # Normalize
 
 # Define known carrier frequency
 carrier_freq = 10000  # Hz
-bit_rate = 2  # Bits per second
+bit_rate = 16  # Bits per second
 
 
 # Apply bandpass filter to isolate carrier
@@ -68,7 +68,7 @@ if len(decoded_text) == 0:
 # Print the extracted message
 print(type(decoded_text))
 print(f"length of the message is {len(decoded_text)}")
-print(f"Decoded Message: {decoded_text} and COCK")
+print(f"Decoded Message: {decoded_text}")
 
 # Plot results
 plt.figure(figsize=(10, 4))

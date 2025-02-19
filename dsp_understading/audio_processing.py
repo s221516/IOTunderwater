@@ -14,6 +14,8 @@ print(f"Data shape: {data.shape}")
 data_left_ch = data[:, 0]
 data_right_ch = data[:, 1]
 
+print(data_left_ch)
+
 # Create time array
 Ts = 1 / Fs
 N = len(data_left_ch)

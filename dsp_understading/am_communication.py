@@ -3,9 +3,9 @@ import scipy.io.wavfile as wav
 import scipy.signal as signal
 import matplotlib.pyplot as plt
 
-SAMPLE_RATE = 1000000
-CARRIER_FREQ = 100000
-BIT_RATE = 10000
+SAMPLE_RATE = 200000 # 50 Khz
+CARRIER_FREQ = 15200 #  15200 Hz
+BIT_RATE = 1000 # 1 Khz
 
 def encode_and_modulate(message, sample_rate=SAMPLE_RATE, carrier_freq=CARRIER_FREQ, bit_rate=BIT_RATE):
     """Encode text message and create AM modulated signal"""
@@ -41,35 +41,31 @@ def encode_and_modulate(message, sample_rate=SAMPLE_RATE, carrier_freq=CARRIER_F
     shaped = np.convolve(baseband, h, 'same')
     
     # Scale to ensure good modulation depth (0.2 to 1.0)
-    shaped = 0.2 + 0.8 * (shaped - np.min(shaped)) / (np.max(shaped) - np.min(shaped))
+    shaped = 0.2 + 0.85 * (shaped - np.min(shaped)) / (np.max(shaped) - np.min(shaped))
     
     # Generate time array
     t = np.arange(len(shaped)) / sample_rate
-    
 
     # After (direct frequency usage, ensure carrier_freq < sample_rate/2):
     carrier = np.sin(2 * np.pi * carrier_freq * t)
+
     # Modulate
     modulated = shaped * carrier
-    
-    # Scale and convert to int16
-    modulated = np.clip(modulated, -1, 1)
-    modulated_int16 = (modulated * 32767).astype(np.int16)
-    
-    return modulated_int16, sample_rate, t, shaped
 
-def demodulate_and_decode(modulated_signal, sample_rate=SAMPLE_RATE, carrier_freq=CARRIER_FREQ, bit_rate=BIT_RATE):
-    """Demodulate AM signal and decode message"""
-    # Convert to float
-    modulated = modulated_signal.astype(np.float32) / 32767.0
+    modulated = np.clip(modulated, -1, 1)
     
-    # Square law detector for envelope
+    return modulated, sample_rate, t, shaped
+
+def demodulate_and_decode(modulated, sample_rate=SAMPLE_RATE, carrier_freq=CARRIER_FREQ, bit_rate=BIT_RATE):
+    """Demodulate AM signal and decode message"""
+
+    # TODO: understand math behind hilbert transform, keyword: analytic signal
     envelope = np.abs(signal.hilbert(modulated))
     
     # Low-pass filter design for envelope detection
     nyq = sample_rate / 2
     cutoff = bit_rate
-    b, a = signal.butter(4, cutoff/nyq, btype='low')
+    b, a = signal.butter(8, cutoff / nyq, btype='low')
     
     # Apply low-pass filter
     filtered = signal.filtfilt(b, a, envelope)
@@ -81,21 +77,31 @@ def demodulate_and_decode(modulated_signal, sample_rate=SAMPLE_RATE, carrier_fre
     else:
         print("Error: Signal has insufficient variance")
         return "", filtered, []
+
+    num_taps = 1000
+    cut_off = 10000 # Hz
+    h = signal.firwin(num_taps, cut_off, fs=sample_rate)
+
     
     # Calculate samples per bit
     samples_per_bit = int(sample_rate / bit_rate)
+
+    # Create a matched filter for bit detection
+    matched_filter = np.ones(samples_per_bit)
     
     # Find start of data by looking for first significant transition
-    energy = np.convolve(normalized, np.ones(samples_per_bit), 'valid')
-    start_idx = np.where(energy > 0.5*np.max(energy))[0][0]
+    energy = np.convolve(normalized, matched_filter, 'valid')
+    # maybe add a noise filter here, but by slightly lowering the max energy required it got super clear
+    start_idx = np.where(energy > 0.35*np.max(energy))[0][0]
     
     # Extract bits using averaging
     bits = []
-    for i in range(start_idx, len(normalized)-samples_per_bit, samples_per_bit):
+    for i in range(start_idx, len(normalized) - samples_per_bit, samples_per_bit):
         bit_sample = normalized[i:i+samples_per_bit]
-        bit_value = 1 if np.mean(bit_sample) > 0.5 else 0
+        bit_value = 1 if np.sum(bit_sample) > (samples_per_bit / 2) else 0
         bits.append(bit_value)
     
+
     # Convert bits to ASCII (8 bits per character)
     message = ""
     for i in range(0, len(bits)-7, 8):
@@ -103,6 +109,7 @@ def demodulate_and_decode(modulated_signal, sample_rate=SAMPLE_RATE, carrier_fre
         if len(char_bits) == 8:
             char_code = int(''.join(map(str, char_bits)), 2)
             if 32 <= char_code <= 126:  # Printable ASCII
+                # print(f"index: {i / 8}, char_bits: {char_bits}")
                 message += chr(char_code)
     
     return message, normalized, bits
@@ -126,15 +133,15 @@ def plot_debug(t, modulated, envelope, bits, samples_to_plot=None):
     plt.title(f"Envelope (max={np.max(envelope):.2f}, min={np.min(envelope):.2f})")
     plt.grid(True)
     
-    # Plot histogram of envelope values
-    plt.subplot(4, 1, 3)
-    plt.hist(envelope, bins=50)
-    plt.title("Histogram of Envelope Values")
-    plt.grid(True)
+    # # Plot histogram of envelope values
+    # plt.subplot(4, 1, 3)
+    # plt.hist(envelope, bins=50)
+    # plt.title("Histogram of Envelope Values")
+    # plt.grid(True)
     
     # Plot bits if available
     if len(bits) > 0:
-        plt.subplot(4, 1, 4)
+        plt.subplot(4, 1, 3)
         plt.step(range(len(bits)), bits, where='post')
         plt.title(f"Decoded Bits (total: {len(bits)})")
         plt.grid(True)
@@ -144,10 +151,77 @@ def plot_debug(t, modulated, envelope, bits, samples_to_plot=None):
 
 if __name__ == "__main__":
     # Parameters
-    MESSAGE = "MY NAME IS MATHIAS"
-    SAMPLE_RATE = SAMPLE_RATE  # 1 MHz
-    CARRIER_FREQ = CARRIER_FREQ  # 100 MHz
-    BIT_RATE = BIT_RATE  # 1 kbps
+#     MESSAGE = """Do you ever feel like a plastic bag
+# Drifting through the wind
+# Wanting to start again?
+# Do you ever feel, feel so paper-thin
+# Like a house of cards, one blow from caving in?
+
+# Do you ever feel already buried deep?
+# Six feet under screams but no one seems to hear a thing
+# Do you know that there's still a chance for you
+# 'Cause there's a spark in you?
+
+# You just gotta ignite the light and let it shine
+# Just own the night like the 4th of July
+
+# 'Cause, baby, you're a firework
+# Come on, show 'em what you're worth
+# Make 'em go, "Ah, ah, ah"
+# As you shoot across the sky
+
+# Baby, you're a firework
+# Come on, let your colors burst
+# Make 'em go, "Ah, ah, ah"
+# You're gonna leave 'em all in awe, awe, awe
+
+# You don't have to feel like a wasted space
+# You're original, cannot be replaced
+# If you only knew what the future holds
+# After a hurricane comes a rainbow
+
+# Maybe a reason why all the doors are closed
+# So you could open one that leads you to the perfect road
+# Like a lightning bolt your heart will glow
+# And when it's time you'll know
+
+# You just gotta ignite the light and let it shine
+# Just own the night like the 4th of July
+
+# 'Cause, baby, you're a firework
+# Come on, show 'em what you're worth
+# Make 'em go, "Ah, ah, ah"
+# As you shoot across the sky
+
+# Baby, you're a firework
+# Come on, let your colors burst
+# Make 'em go, "Ah, ah, ah"
+# You're gonna leave 'em all in awe, awe, awe
+
+# Boom, boom, boom
+# Even brighter than the moon, moon, moon
+# It's always been inside of you, you, you
+# And now it's time to let it through, -ough, -ough
+
+# 'Cause, baby, you're a firework
+# Come on, show 'em what you're worth
+# Make 'em go, "Ah, ah, ah"
+# As you shoot across the sky
+
+# Baby, you're a firework
+# Come on, let your colors burst
+# Make 'em go, "Ah, ah, ah"
+# You're gonna leave 'em all in awe, awe, awe
+
+# Boom, boom, boom
+# Even brighter than the moon, moon, moon
+# Boom, boom, boom
+# Even brighter than the moon, moon, moon"""
+
+    MESSAGE = "The quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*"
+    SAMPLE_RATE = SAMPLE_RATE 
+    CARRIER_FREQ = CARRIER_FREQ  
+    BIT_RATE = BIT_RATE  
     
     print("Encoding message...")
     modulated, sample_rate, t, shaped = encode_and_modulate(
@@ -169,5 +243,5 @@ if __name__ == "__main__":
     print(f"Decoded message: {decoded_message}")
     
     # Plot first 10ms of signal
-    samples_to_plot = int(0.01 * sample_rate)  # 10ms
+    samples_to_plot = int(0.005 * sample_rate)  # 10ms
     plot_debug(t, modulated, envelope, bits, samples_to_plot)
