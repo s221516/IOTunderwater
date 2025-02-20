@@ -6,8 +6,20 @@ import matplotlib.pyplot as plt
 SAMPLE_RATE = 200000 # 50 Khz
 CARRIER_FREQ = 15200 #  15200 Hz
 BIT_RATE = 1000 # 1 Khz
+NOISE_AMPLITUDE = 0.000001
 
-def encode_and_modulate(message, sample_rate=SAMPLE_RATE, carrier_freq=CARRIER_FREQ, bit_rate=BIT_RATE):
+def butter_lowpass(cutoff, fs, order):
+    nyq = 0.5 * fs
+    normal_cutoff = cutoff / nyq
+    b, a = signal.butter(order, normal_cutoff, btype='low', analog=False)
+    return b, a
+
+def butter_lowpass_filter(data, cutoff, fs, order):
+    b, a = butter_lowpass(cutoff, fs, order=order)
+    y = signal.filtfilt(b, a, data)
+    return y
+
+def encode_and_modulate(message, sample_rate=SAMPLE_RATE, carrier_freq=CARRIER_FREQ, bit_rate=BIT_RATE, noise_amplitude = NOISE_AMPLITUDE):
     """Encode text message and create AM modulated signal"""
     # Convert text to binary
     binary_message = ''
@@ -15,7 +27,7 @@ def encode_and_modulate(message, sample_rate=SAMPLE_RATE, carrier_freq=CARRIER_F
         byte = format(ord(c), '08b')
         binary_message += byte
     
-    print(f"Binary message: {binary_message}")
+    # print(f"Binary message: {binary_message}")
     
     # Calculate timing parameters
     duration_per_bit = 1 / bit_rate
@@ -51,37 +63,43 @@ def encode_and_modulate(message, sample_rate=SAMPLE_RATE, carrier_freq=CARRIER_F
 
     # Modulate
     modulated = shaped * carrier
-
-    modulated = np.clip(modulated, -1, 1)
     
-    return modulated, sample_rate, t, shaped
+    # Gives the first 15 elements of our amplitudes
+    # print(modulated[:20])
+
+    # Add Gaussion noise, find out if this is the correct interval, maybe its -x to x and not 0 to x
+    noise = np.random.normal(0, NOISE_AMPLITUDE, len(modulated))
+    modulated_with_noise = modulated + noise
+
+    # Compute SNR
+    snr = compute_snr(modulated, noise)
+    # print(f"Signal-to-noise ratio: {snr} dB")
+    B = bit_rate
+    S = np.mean(modulated ** 2)
+    N = np.mean(noise ** 2)
+    shannon_limit = B*np.log2(1 + (S / N))
+    # print(f"Shannon limit: {shannon_limit}")
+
+    
+    return modulated_with_noise, sample_rate, t, shaped
 
 def demodulate_and_decode(modulated, sample_rate=SAMPLE_RATE, carrier_freq=CARRIER_FREQ, bit_rate=BIT_RATE):
     """Demodulate AM signal and decode message"""
 
     # TODO: understand math behind hilbert transform, keyword: analytic signal
+    # make our own implementation of the hilbert transform
     envelope = np.abs(signal.hilbert(modulated))
     
-    # Low-pass filter design for envelope detection
-    nyq = sample_rate / 2
     cutoff = bit_rate
-    b, a = signal.butter(8, cutoff / nyq, btype='low')
-    
-    # Apply low-pass filter
-    filtered = signal.filtfilt(b, a, envelope)
-    
-    # Normalize with offset removal
-    filtered = filtered - np.mean(filtered)
-    if np.max(filtered) - np.min(filtered) > 1e-10:  # Check signal variance
-        normalized = (filtered - np.min(filtered)) / (np.max(filtered) - np.min(filtered))
-    else:
-        print("Error: Signal has insufficient variance")
-        return "", filtered, []
+    signal_post_filter = butter_lowpass_filter(envelope, cutoff, sample_rate, order = 4)
 
-    num_taps = 1000
-    cut_off = 10000 # Hz
-    h = signal.firwin(num_taps, cut_off, fs=sample_rate)
+    signal_post_filter = signal_post_filter - np.mean(signal_post_filter)
 
+    s_min = np.min(signal_post_filter)
+    s_max = np.max(signal_post_filter)
+    error = 1e-12
+
+    normalized = (signal_post_filter - s_min) / (s_max - s_min + error)
     
     # Calculate samples per bit
     samples_per_bit = int(sample_rate / bit_rate)
@@ -91,12 +109,14 @@ def demodulate_and_decode(modulated, sample_rate=SAMPLE_RATE, carrier_freq=CARRI
     
     # Find start of data by looking for first significant transition
     energy = np.convolve(normalized, matched_filter, 'valid')
+
     # maybe add a noise filter here, but by slightly lowering the max energy required it got super clear
-    start_idx = np.where(energy > 0.35*np.max(energy))[0][0]
-    
-    # Extract bits using averaging
+    start_of_valid_data_array = np.where(energy > 0.35*np.max(energy))[0]
+    start_index = start_of_valid_data_array[0]
+
+    # makes the bitstring for the valid data array
     bits = []
-    for i in range(start_idx, len(normalized) - samples_per_bit, samples_per_bit):
+    for i in range(start_index, len(normalized) - samples_per_bit, samples_per_bit):
         bit_sample = normalized[i:i+samples_per_bit]
         bit_value = 1 if np.sum(bit_sample) > (samples_per_bit / 2) else 0
         bits.append(bit_value)
@@ -149,87 +169,111 @@ def plot_debug(t, modulated, envelope, bits, samples_to_plot=None):
     plt.tight_layout()
     plt.show()
 
+def compare_strings(original, decoded):
+    """Compare two strings and print out where they differ"""
+    differences = []
+    min_length = min(len(original), len(decoded))
+    
+    for i in range(min_length):
+        if original[i] != decoded[i]:
+            differences.append((i, original[i], decoded[i]))
+    
+    # Check if one string is longer than the other
+    if len(original) > len(decoded):
+        for i in range(len(decoded), len(original)):
+            differences.append((i, original[i], None))
+    elif len(decoded) > len(original):
+        for i in range(len(original), len(decoded)):
+            differences.append((i, None, decoded[i]))
+    
+    return differences
+
+def compute_snr(signal, noise):
+    signal_power = np.mean(signal ** 2)
+    noise_power = np.mean(noise ** 2)
+    return 10*np.log10((signal_power - noise_power) / noise_power)
+
+
 if __name__ == "__main__":
     # Parameters
-#     MESSAGE = """Do you ever feel like a plastic bag
-# Drifting through the wind
-# Wanting to start again?
-# Do you ever feel, feel so paper-thin
-# Like a house of cards, one blow from caving in?
+    plastic_bag_lyrics = """Do you ever feel like a plastic bag
+    Drifting through the wind
+    Wanting to start again?
+    Do you ever feel, feel so paper-thin
+    Like a house of cards, one blow from caving in?
 
-# Do you ever feel already buried deep?
-# Six feet under screams but no one seems to hear a thing
-# Do you know that there's still a chance for you
-# 'Cause there's a spark in you?
+    Do you ever feel already buried deep?
+    Six feet under screams but no one seems to hear a thing
+    Do you know that there's still a chance for you
+    'Cause there's a spark in you?
 
-# You just gotta ignite the light and let it shine
-# Just own the night like the 4th of July
+    You just gotta ignite the light and let it shine
+    Just own the night like the 4th of July
 
-# 'Cause, baby, you're a firework
-# Come on, show 'em what you're worth
-# Make 'em go, "Ah, ah, ah"
-# As you shoot across the sky
+    'Cause, baby, you're a firework
+    Come on, show 'em what you're worth
+    Make 'em go, "Ah, ah, ah"
+    As you shoot across the sky
 
-# Baby, you're a firework
-# Come on, let your colors burst
-# Make 'em go, "Ah, ah, ah"
-# You're gonna leave 'em all in awe, awe, awe
+    Baby, you're a firework
+    Come on, let your colors burst
+    Make 'em go, "Ah, ah, ah"
+    You're gonna leave 'em all in awe, awe, awe
 
-# You don't have to feel like a wasted space
-# You're original, cannot be replaced
-# If you only knew what the future holds
-# After a hurricane comes a rainbow
+    You don't have to feel like a wasted space
+    You're original, cannot be replaced
+    If you only knew what the future holds
+    After a hurricane comes a rainbow
 
-# Maybe a reason why all the doors are closed
-# So you could open one that leads you to the perfect road
-# Like a lightning bolt your heart will glow
-# And when it's time you'll know
+    Maybe a reason why all the doors are closed
+    So you could open one that leads you to the perfect road
+    Like a lightning bolt your heart will glow
+    And when it's time you'll know
 
-# You just gotta ignite the light and let it shine
-# Just own the night like the 4th of July
+    You just gotta ignite the light and let it shine
+    Just own the night like the 4th of July
 
-# 'Cause, baby, you're a firework
-# Come on, show 'em what you're worth
-# Make 'em go, "Ah, ah, ah"
-# As you shoot across the sky
+    'Cause, baby, you're a firework
+    Come on, show 'em what you're worth
+    Make 'em go, "Ah, ah, ah"
+    As you shoot across the sky
 
-# Baby, you're a firework
-# Come on, let your colors burst
-# Make 'em go, "Ah, ah, ah"
-# You're gonna leave 'em all in awe, awe, awe
+    Baby, you're a firework
+    Come on, let your colors burst
+    Make 'em go, "Ah, ah, ah"
+    You're gonna leave 'em all in awe, awe, awe
 
-# Boom, boom, boom
-# Even brighter than the moon, moon, moon
-# It's always been inside of you, you, you
-# And now it's time to let it through, -ough, -ough
+    Boom, boom, boom
+    Even brighter than the moon, moon, moon
+    It's always been inside of you, you, you
+    And now it's time to let it through, -ough, -ough
 
-# 'Cause, baby, you're a firework
-# Come on, show 'em what you're worth
-# Make 'em go, "Ah, ah, ah"
-# As you shoot across the sky
+    'Cause, baby, you're a firework
+    Come on, show 'em what you're worth
+    Make 'em go, "Ah, ah, ah"
+    As you shoot across the sky
 
-# Baby, you're a firework
-# Come on, let your colors burst
-# Make 'em go, "Ah, ah, ah"
-# You're gonna leave 'em all in awe, awe, awe
+    Baby, you're a firework
+    Come on, let your colors burst
+    Make 'em go, "Ah, ah, ah"
+    You're gonna leave 'em all in awe, awe, awe
 
-# Boom, boom, boom
-# Even brighter than the moon, moon, moon
-# Boom, boom, boom
-# Even brighter than the moon, moon, moon"""
-
-    MESSAGE = "The quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*"
-    SAMPLE_RATE = SAMPLE_RATE 
-    CARRIER_FREQ = CARRIER_FREQ  
-    BIT_RATE = BIT_RATE  
+    Boom, boom, boom
+    Even brighter than the moon, moon, moon
+    Boom, boom, boom
+    Even brighter than the moon, moon, moon"""
+    all_letters = "The quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*"
+    small_test = "mo"
     
+    MESSAGE = small_test
+
     print("Encoding message...")
     modulated, sample_rate, t, shaped = encode_and_modulate(
         MESSAGE, SAMPLE_RATE, CARRIER_FREQ, BIT_RATE
     )
     
-    print(f"Signal stats - Max: {np.max(modulated)}, Min: {np.min(modulated)}")
-    print(f"Modulation depth: {np.ptp(shaped):.2f}")
+    # print(f"Signal stats - Max: {np.max(modulated)}, Min: {np.min(modulated)}")
+    # print(f"Modulation depth: {np.ptp(shaped):.2f}")
     
     print("Saving to WAV file...")
     wav.write("hello_world_am.wav", sample_rate, modulated)
@@ -241,7 +285,16 @@ if __name__ == "__main__":
     
     print(f"Original message: {MESSAGE}")
     print(f"Decoded message: {decoded_message}")
+    differences = compare_strings(MESSAGE, decoded_message)
+    if differences:
+        print("Differences found:")
+        for index, orig_char, dec_char in differences:
+            print(f"Position {index}: Original='{orig_char}', Decoded='{dec_char}'")
+    else:
+        print("No errors")
     
     # Plot first 10ms of signal
-    samples_to_plot = int(0.005 * sample_rate)  # 10ms
+    samples_to_plot = int(0.1 * sample_rate)  # 10ms
     plot_debug(t, modulated, envelope, bits, samples_to_plot)
+
+
