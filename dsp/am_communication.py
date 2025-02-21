@@ -277,9 +277,9 @@ if __name__ == "__main__":
     Boom, boom, boom
     Even brighter than the moon, moon, moon"""
     all_letters = "the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*"
-    small_test = "suggma"
+    small_test = "morten"
 
-    MESSAGE = small_test
+    MESSAGE = all_letters
 
     print("Encoding message...")
     modulated, time_array = encode_and_modulate(MESSAGE)
