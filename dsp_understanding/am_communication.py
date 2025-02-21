@@ -6,8 +6,9 @@ import scipy.signal as signal
 SAMPLE_RATE = 200000  # 20 kHz
 CARRIER_FREQ = 15200  #  15200 Hz
 BIT_RATE = 1000  # 1 Khz
-NOISE_AMPLITUDE = 0.00000001
+NOISE_AMPLITUDE = 0.1  # 0.1
 PATH_TO_WAV_FILE = "signal.wav"
+
 
 def butter_lowpass(cutoff, fs, order):
     nyq = 0.5 * fs
@@ -15,17 +16,20 @@ def butter_lowpass(cutoff, fs, order):
     b, a = signal.butter(order, normal_cutoff, btype="low", analog=False)
     return b, a
 
+
 def butter_lowpass_filter(data, cutoff, fs, order):
     b, a = butter_lowpass(cutoff, fs, order=order)
     y = signal.filtfilt(b, a, data)
     return y
 
+
 def read_wavefile():
     data_from_wav_file = wav.read(PATH_TO_WAV_FILE)
     freq_sample = data_from_wav_file[0]
-    signal = data_from_wav_file[1] / 32767
+    signal = data_from_wav_file[1] / 32767.0  # Normalize to [-1, 1]
     return freq_sample, signal
-    
+
+
 def encode_and_modulate(message):
     """Encode text message and create AM modulated signal"""
     # Convert text to binary
@@ -60,15 +64,17 @@ def encode_and_modulate(message):
     # )
     # h[np.isnan(h)] = 1  # Fix division by zero
     # h = h / np.sum(h)  # Normalize
-
+    #
     # # Apply pulse shaping
     # data_wave = np.convolve(baseband, h, "same")
-   
+
     # Scale to ensure good modulation depth (0.2 to 1.0)
-    data_wave = 0.5 + 0.85 * (data_wave - np.min(data_wave)) / (np.max(data_wave) - np.min(data_wave))
+    data_wave = 0.2 + 0.85 * (data_wave - np.min(data_wave)) / (
+        np.max(data_wave) - np.min(data_wave)
+    )
 
     # Generate time array
-    time_array = np.arange(len(data_wave)) / SAMPLE_RATE 
+    time_array = np.arange(len(data_wave)) / SAMPLE_RATE
 
     # After (direct frequency usage, ensure carrier_freq < sample_rate/2):
     carrier = np.sin(2 * np.pi * CARRIER_FREQ * time_array)
@@ -83,7 +89,9 @@ def encode_and_modulate(message):
     noise = np.random.normal(0, NOISE_AMPLITUDE, len(modulated))
     modulated_with_noise = modulated + noise
 
-    modulated_with_noise = (modulated_with_noise * 32767).astype(np.int16)  # Convert to 16-bit PCM format
+    modulated_with_noise = (modulated_with_noise * 32767).astype(
+        np.int16
+    )  # Convert to 16-bit PCM format
 
     # Compute SNR
     snr = compute_snr(modulated, noise)
@@ -116,17 +124,25 @@ def encode_and_modulate(message):
     wav.write("signal.wav", 44100, modulated_with_noise)
     return modulated_with_noise, time_array
 
+
 def demodulate_and_decode(modulated):
-    """Demodulate AM signal and decode message"""
+    """
+    Demodulate AM signal and decode message
+    
+    
+    
+    """
 
     # TODO: understand math behind hilbert transform, keyword: analytic signal
     # make our own implementation of the hilbert transform
-    
-    analytic_signal = signal.hilbert(modulated)
-    envelope = np.abs(analytic_signal)
 
+    analytic_signal = signal.hilbert(modulated)
+    # Trying to use rms instead of hilbert transform
+    window_size = int(freq_sample / BIT_RATE)
+    rms_envelope = np.sqrt(np.convolve(modulated**2, np.ones(window_size)/window_size, mode='valid'))
+    
     cutoff = BIT_RATE
-    signal_post_filter = butter_lowpass_filter(envelope, cutoff, SAMPLE_RATE, order=4)
+    signal_post_filter = butter_lowpass_filter(rms_envelope, cutoff, SAMPLE_RATE, order=4)
 
     signal_post_filter = signal_post_filter - np.mean(signal_post_filter)
 
@@ -147,7 +163,7 @@ def demodulate_and_decode(modulated):
     energy = np.convolve(normalized, matched_filter, "valid")
 
     # maybe add a noise filter here, but by slightly lowering the max energy required it got super clear
-    start_of_valid_data_array = np.where(energy > 0.35 * np.max(energy))[0]
+    start_of_valid_data_array = np.where(energy > 0.50 * np.max(energy))[0]
     start_index = start_of_valid_data_array[0]
 
     # makes the bitstring for the valid data array
@@ -170,7 +186,9 @@ def demodulate_and_decode(modulated):
     return message, normalized, energy, bits
 
 
-def plot_debug(t, modulated, envelope, bits, energy, signal_from_wave_file, samples_to_plot=None):
+def plot_debug(
+    t, modulated, envelope, bits, energy, signal_from_wave_file, samples_to_plot=None
+):
     """Create debug plots with signal information"""
     if samples_to_plot is None:
         samples_to_plot = len(t)
@@ -192,7 +210,7 @@ def plot_debug(t, modulated, envelope, bits, energy, signal_from_wave_file, samp
     plt.grid(True)
 
     # Plot signal_to_wave file
-    plt.subplot(4,1,3)
+    plt.subplot(4, 1, 3)
     plt.plot(signal_from_wave_file[:samples_to_plot])
     plt.title("Signal plot")
     plt.grid(True)
@@ -211,6 +229,7 @@ def plot_debug(t, modulated, envelope, bits, energy, signal_from_wave_file, samp
 
     plt.tight_layout()
     plt.show()
+
 
 def compare_strings(original, decoded):
     """Compare two strings and print out where they differ"""
@@ -231,10 +250,12 @@ def compare_strings(original, decoded):
 
     return differences
 
+
 def compute_snr(signal, noise):
     signal_power = np.mean(signal**2)
     noise_power = np.mean(noise**2)
     return 10 * np.log10((signal_power - noise_power) / noise_power)
+
 
 if __name__ == "__main__":
     # Parameters
@@ -324,7 +345,9 @@ if __name__ == "__main__":
     print(modulated[:10])
 
     print("Demodulating message...")
-    decoded_message, envelope, bits, energy = demodulate_and_decode(signal_from_wave_file)
+    decoded_message, envelope, bits, energy = demodulate_and_decode(
+        signal_from_wave_file
+    )
 
     print(f"Original message: {MESSAGE}")
     print(f"Decoded message: {decoded_message}")
@@ -338,5 +361,12 @@ if __name__ == "__main__":
 
     # Plot first 10ms of signal
     samples_to_plot = int(0.1 * SAMPLE_RATE)  # 10ms
-    plot_debug(time_array, modulated, envelope, bits, energy, signal_from_wave_file, samples_to_plot)
-  
+    plot_debug(
+        time_array,
+        signal_from_wave_file,
+        envelope,
+        bits,
+        energy,
+        signal_from_wave_file,
+        samples_to_plot,
+    )
