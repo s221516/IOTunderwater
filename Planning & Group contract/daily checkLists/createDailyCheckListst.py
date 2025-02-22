@@ -4,9 +4,14 @@ import os
 def generate_weekly_markdown(week_offset=0):
     today = datetime.today()
     start_of_week = today - timedelta(days=today.weekday()) + timedelta(weeks=week_offset)  # Adjust based on user input
-    month_folder = start_of_week.strftime('%b%y')  # Format as Jan25, Feb25, etc.
     base_filename = "week_{}_{}_{}".format(start_of_week.day, start_of_week.month, start_of_week.year)
-    relative_folder = os.path.join("Planning & group contract", "daily notes", month_folder)
+    
+    # Get the current script's directory
+    script_directory = os.path.dirname(os.path.abspath(__file__))
+    
+    # Define the relative folder with the month folder added
+    month_folder = start_of_week.strftime('%b%y')  # Format as Jan25, Feb25, etc.
+    relative_folder = os.path.join(script_directory, month_folder)
     os.makedirs(relative_folder, exist_ok=True)  # Ensure directory exists
     
     # Avoid overwriting existing files
@@ -20,8 +25,10 @@ def generate_weekly_markdown(week_offset=0):
     
     for i in range(7):  # Loop through the 7 days of the week
         day = start_of_week + timedelta(days=i)
-        markdown += "- [ ] **{} ({}/{}/{})**\n".format(day.strftime('%A'), day.day, day.month, day.year)
-        markdown += "  - [ ] .\n  - [ ] .\n  - [ ] .\n\n"
+        markdown += f"**{day.strftime('%A')} ({day.day}/{day.month}/{day.year})**\n\n"
+        markdown += "- [ ] .\n"
+        markdown += "- [ ] .\n"
+        markdown += "- [ ] .\n\n"
     
     return file_path, markdown
 
