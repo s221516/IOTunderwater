@@ -1,5 +1,6 @@
 import subprocess
-import sys
+
+# Run to save git faster :)
 
 def run_command(command):
     """Runs a command in the shell and returns the output."""
@@ -16,8 +17,10 @@ def git_save(commit_message):
     run_command("git push")
 
 if __name__ == "__main__":
-    if len(sys.argv) < 2:
-        print("Usage: git_save.py \"Your commit message\"")
+    # Prompt user for commit message
+    commit_message = input("Enter your commit message: ")
+
+    if commit_message.strip() == "":
+        print("Error: Commit message cannot be empty!")
     else:
-        commit_message = sys.argv[1]
         git_save(commit_message)
