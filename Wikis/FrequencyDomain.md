@@ -31,7 +31,7 @@ Mathematically, to go between time and frequency domain we can use the Fourier T
 - t = time
 - f = freq
 
-For coding find formulas that looks at finite points.
+For coding find formulas that looks at finite points, called discrete Fourier Transform.
 
 ###### Time-Frequency properties
 
@@ -62,7 +62,6 @@ If we scale the time (t) by some **SMALL** factor (a) we compress the signal in 
 
 **BANDWIDTH**T: his has the important consequence that if we want to send more data (make our signal compact) we use more bandwidth. For our project we should therefore use the entire bandwidth/frequency spectrum that our speaker can output to send more data.
 
-
 **4. Convolution in Time Property**
 
 return to these when you know about filters
@@ -71,6 +70,11 @@ return to these when you know about filters
 
 return to these when you know about filters
 
+###### Fast Fourier Transform (FFT)
 
+Fast four transform is a algorithm to perform the discrete Fourier Transform efficiently (going from time domain to frequency domain)
 
-###### Fast Fourier Transform
+In FFT the size input is equal to the size of the output. ![1740408889533](image/FrequencyDomain/1740408889533.png)
+
+The input vector is the sampled wave. Let say we sample at a rate of 200 kHz for 1 seconds. Then we get 200*10 = 200k samples.
+The output would then also have 200k samples.
