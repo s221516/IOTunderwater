@@ -16,11 +16,9 @@ This can be seen here:
 
 ![1740391322547](image/FrequencyDomain/1740391322547.png)
 
-
 ###### Fourier Transform
 
-Mathematically, to go between time and frequency domain we can use the Fourier Transform. 
-
+Mathematically, to go between time and frequency domain we can use the Fourier Transform.
 
 | From             | To               | Formula                                                 |
 | ---------------- | ---------------- | ------------------------------------------------------- |
@@ -35,17 +33,13 @@ Mathematically, to go between time and frequency domain we can use the Fourier T
 
 For coding find formulas that looks at finite points.
 
-
-###### Time-Frequency properties 
+###### Time-Frequency properties
 
 Properties that hold if we apply some change X to our signal in the time domain, some result Y will happen in the frequency domain.
-
-
 
 **1. Linearity Property**
 
 ![1740392465130](image/FrequencyDomain/1740392465130.png)
-
 
 **2. Frequency Shift Property**
 
@@ -55,8 +49,7 @@ The complicated term on the left is a complex sinus wave. This property states t
 
 ![1740392751575](image/FrequencyDomain/1740392751575.png)
 
-
-**3.  Scaling in Time Property** 
+**3.  Scaling in Time Property**
 
 ![1740392789176](image/FrequencyDomain/1740392789176.png)
 
@@ -67,5 +60,17 @@ If we scale the time (t) by some **SMALL** factor (a) we compress the signal in 
 
 ![1740393784631](image/FrequencyDomain/1740393784631.png)
 
-
 **BANDWIDTH**T: his has the important consequence that if we want to send more data (make our signal compact) we use more bandwidth. For our project we should therefore use the entire bandwidth/frequency spectrum that our speaker can output to send more data.
+
+
+**4. Convolution in Time Property**
+
+return to these when you know about filters
+
+**5. Convolution in Frequency Property**
+
+return to these when you know about filters
+
+
+
+###### Fast Fourier Transform
