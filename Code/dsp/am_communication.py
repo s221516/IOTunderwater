@@ -2,14 +2,19 @@ import matplotlib.pyplot as plt
 import numpy as np
 import scipy.io.wavfile as wav
 import scipy.signal as signal
+from picture_in_binary import picture_in_binary
+from image_decoding import convert_binary_image_to_bits
+import cv2
+
 
 SAMPLE_RATE = 200000  # 20 kHz
 CARRIER_FREQ = 15200  #  15200 Hz
 BIT_RATE = 1000  # 1 Khz
 ACTIVATION_ENERGY_THRESHOLD = 0.4 # lower bound for start of 
-NOISE_AMPLITUDE = 0.1 # noise
-PATH_TO_WAV_FILE = "data/signal.wav"
+NOISE_AMPLITUDE = 0.00001 # noise
+PATH_TO_WAV_FILE = "Code/dsp/data/signal.wav"
 SAMPLE_RATE_FOR_WAV_FILE = 44100 # Hz
+
 
 def butter_lowpass(cutoff, freq_sampling, order):
     nyquist = 0.5 * freq_sampling
@@ -36,7 +41,7 @@ def encode_and_modulate(message):
         byte = format(ord(c), "08b")
         binary_message += byte
 
-    print(f"Binary message: {binary_message}")
+    # print(f"Binary message: {binary_message}")
 
     # Calculate timing parameters
     duration_per_bit = 1 / BIT_RATE
@@ -137,8 +142,8 @@ def demodulate_and_decode(modulated):
         char_bits = bits[i : i + 8]
         if len(char_bits) == 8:
             char_code = int("".join(map(str, char_bits)), 2)
+            # print(f"Bits: {char_bits}, Char Code: {char_code}, Char: {chr(char_code) if 32 <= char_code <= 126 else 'Non-printable'}")
             if 32 <= char_code <= 126:  # Printable ASCII
-                # print(f"index: {i / 8}, char_bits: {char_bits}")
                 message += chr(char_code)
 
     return message, normalized, energy, bits
@@ -277,9 +282,10 @@ if __name__ == "__main__":
     Boom, boom, boom
     Even brighter than the moon, moon, moon"""
     all_letters = "the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*"
-    small_test = "morten"
+    small_test = "This is: 14"
+    picture_in_binary_with_prefix = "t" + picture_in_binary
 
-    MESSAGE = all_letters
+    MESSAGE = picture_in_binary_with_prefix
 
     print("Encoding message...")
     modulated, time_array = encode_and_modulate(MESSAGE)
@@ -293,6 +299,10 @@ if __name__ == "__main__":
     print(f"Original message: {MESSAGE}")
     print(f"Decoded message: {decoded_message}")
 
+    pixels = convert_binary_image_to_bits(decoded_message[1:])
+
+
+
     # differences = compare_strings(MESSAGE, decoded_message)
     # if differences:
     #     print("Differences found:")
@@ -300,7 +310,6 @@ if __name__ == "__main__":
     #         print(f"Position {index}: Original='{orig_char}', Decoded='{dec_char}'")
     # else:
     #     print("No errors")
-
 
     samples_to_plot = int( 0.1 * SAMPLE_RATE)  
     plot_debug(time_array, modulated, envelope, bits, energy, samples_to_plot)
