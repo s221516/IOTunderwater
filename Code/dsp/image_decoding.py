@@ -9,7 +9,7 @@ img = cv2.imread("Code\dsp\data\Original_Doge_meme.jpg")
 gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
 # apply thresholding to convert grayscale to binary image
-ret, thresh = cv2.threshold(gray,175,255,0)
+_, dimensions = cv2.threshold(gray, 175, 255, 0)
 
 def convert_binary_image_to_bits(binary_image):
     bits = []
@@ -19,37 +19,47 @@ def convert_binary_image_to_bits(binary_image):
                 bits.append(1)
             else:
                 bits.append(0)
+    
     return bits
 
-bits = convert_binary_image_to_bits(thresh)
-
-width = len(thresh[0])
-height = len(thresh)
-print(width, height)
+bits = convert_binary_image_to_bits(dimensions)
+width = len(dimensions[0])
+height = len(dimensions)
 
 picture_in_binary = (''.join(str(x) for x in bits))
+
 # Open a new file in write mode
-with open("Code\dsp\picture_in_binary.py", "w") as file:
-    # Write the variable name and the bit string to the file
-    file.write(f'picture_in_binary = "{picture_in_binary}"')
+with open("Code\dsp\picture_in_binary.txt", "w") as file:
+    file.write(picture_in_binary)
     file.close()
 
 
 def convert_bits_to_image(bit_string):
     # Initialize a NumPy array with zeros
+    # 0 = black
     pixels = np.zeros((height, width), dtype=np.uint8)
+    
+    # print(len(bit_string))
+    # print(height * width)
 
+    if (len(bit_string) < height * width):
+        diff = height * width - len(bit_string)
+        bit_string += '0' * diff
+    
     # Fill the array with 255 for '1' bits
     for i in range(height):
         for j in range(width):
             bit = bit_string[i * width + j]
-            if bit == '1':
+            # 1 = white
+            if bit == '1' or bit == "L" or bit == "@":
                 pixels[i, j] = 255
-     
+            
+                
     return pixels
 
-pixels = convert_bits_to_image(picture_in_binary)
-
-cv2.imwrite('Code\dsp\image_decoded.jpg', pixels)   
-cv2.imshow("image", pixels)
-cv2.waitKey()
+print("Made it")
+     
+def show_picture(pixels):
+    cv2.imwrite('Code\dsp\data\image_decoded.jpg', pixels)   
+    cv2.imshow("image", pixels)
+    cv2.waitKey()

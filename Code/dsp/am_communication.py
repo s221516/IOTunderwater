@@ -2,19 +2,19 @@ import matplotlib.pyplot as plt
 import numpy as np
 import scipy.io.wavfile as wav
 import scipy.signal as signal
-from picture_in_binary import picture_in_binary
-from image_decoding import convert_binary_image_to_bits
+from image_decoding import *
 import cv2
 
-
-SAMPLE_RATE = 200000  # 20 kHz
+# nyquist = 30400
+# 31650 / 15200
+SAMPLE_RATE = 50000
 CARRIER_FREQ = 15200  #  15200 Hz
 BIT_RATE = 1000  # 1 Khz
 ACTIVATION_ENERGY_THRESHOLD = 0.4 # lower bound for start of 
-NOISE_AMPLITUDE = 0.00001 # noise
+# with 200 samples per bit and 0.45 noise amplitude -> about upper limit, we get a valid picture 1/3 times
+NOISE_AMPLITUDE = 0.3 # noise
 PATH_TO_WAV_FILE = "Code/dsp/data/signal.wav"
 SAMPLE_RATE_FOR_WAV_FILE = 44100 # Hz
-
 
 def butter_lowpass(cutoff, freq_sampling, order):
     nyquist = 0.5 * freq_sampling
@@ -45,8 +45,8 @@ def encode_and_modulate(message):
 
     # Calculate timing parameters
     duration_per_bit = 1 / BIT_RATE
+    
     samples_per_bit = int(SAMPLE_RATE * duration_per_bit)
-
     # Create baseband signal with oversampling
     bits = np.array([int(b) for b in binary_message])
     baseband = np.repeat(bits, samples_per_bit)
@@ -185,25 +185,6 @@ def plot_debug(t, modulated, envelope, bits, energy, samples_to_plot=None):
     plt.tight_layout()
     plt.show()
 
-def compare_strings(original, decoded):
-    """Compare two strings and print out where they differ"""
-    differences = []
-    min_length = min(len(original), len(decoded))
-
-    for i in range(min_length):
-        if original[i] != decoded[i]:
-            differences.append((i, original[i], decoded[i]))
-
-    # Check if one string is longer than the other
-    if len(original) > len(decoded):
-        for i in range(len(decoded), len(original)):
-            differences.append((i, original[i], None))
-    elif len(decoded) > len(original):
-        for i in range(len(original), len(decoded)):
-            differences.append((i, None, decoded[i]))
-
-    return differences
-
 def compute_snr_and_shannon_limit(signal, noise):
     signal_power = np.mean(signal**2)
     noise_power = np.mean(noise**2)
@@ -215,75 +196,13 @@ def compute_snr_and_shannon_limit(signal, noise):
     return snr, shannon_limit
 
 if __name__ == "__main__":
-    plastic_bag_lyrics = """Do you ever feel like a plastic bag
-    Drifting through the wind
-    Wanting to start again?
-    Do you ever feel, feel so paper-thin
-    Like a house of cards, one blow from caving in?
+    with open("Code/dsp/picture_in_binary.txt", "r") as file:
+        picture_in_binary = file.read()
 
-    Do you ever feel already buried deep?
-    Six feet under screams but no one seems to hear a thing
-    Do you know that there's still a chance for you
-    'Cause there's a spark in you?
-
-    You just gotta ignite the light and let it shine
-    Just own the night like the 4th of July
-
-    'Cause, baby, you're a firework
-    Come on, show 'em what you're worth
-    Make 'em go, "Ah, ah, ah"
-    As you shoot across the sky
-
-    Baby, you're a firework
-    Come on, let your colors burst
-    Make 'em go, "Ah, ah, ah"
-    You're gonna leave 'em all in awe, awe, awe
-
-    You don't have to feel like a wasted space
-    You're original, cannot be replaced
-    If you only knew what the future holds
-    After a hurricane comes a rainbow
-
-    Maybe a reason why all the doors are closed
-    So you could open one that leads you to the perfect road
-    Like a lightning bolt your heart will glow
-    And when it's time you'll know
-
-    You just gotta ignite the light and let it shine
-    Just own the night like the 4th of July
-
-    'Cause, baby, you're a firework
-    Come on, show 'em what you're worth
-    Make 'em go, "Ah, ah, ah"
-    As you shoot across the sky
-
-    Baby, you're a firework
-    Come on, let your colors burst
-    Make 'em go, "Ah, ah, ah"
-    You're gonna leave 'em all in awe, awe, awe
-
-    Boom, boom, boom
-    Even brighter than the moon, moon, moon
-    It's always been inside of you, you, you
-    And now it's time to let it through, -ough, -ough
-
-    'Cause, baby, you're a firework
-    Come on, show 'em what you're worth
-    Make 'em go, "Ah, ah, ah"
-    As you shoot across the sky
-
-    Baby, you're a firework
-    Come on, let your colors burst
-    Make 'em go, "Ah, ah, ah"
-    You're gonna leave 'em all in awe, awe, awe
-
-    Boom, boom, boom
-    Even brighter than the moon, moon, moon
-    Boom, boom, boom
-    Even brighter than the moon, moon, moon"""
     all_letters = "the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*"
     small_test = "This is: 14"
-    picture_in_binary_with_prefix = "t" + picture_in_binary
+    picture_in_binary_with_prefix = "p" + picture_in_binary
+    text_with_prefix = "t" + small_test
 
     MESSAGE = picture_in_binary_with_prefix
 
@@ -295,22 +214,18 @@ if __name__ == "__main__":
 
     print("Demodulating message...")
     decoded_message, envelope, bits, energy = demodulate_and_decode(signal_from_wave_file)
+    print(f"Decoded message: {decoded_message[1:]}")
 
-    print(f"Original message: {MESSAGE}")
-    print(f"Decoded message: {decoded_message}")
+    pixels = convert_bits_to_image(decoded_message[1:])
+    show_picture(pixels)
 
-    pixels = convert_binary_image_to_bits(decoded_message[1:])
+    # prefix_from_message = decoded_message[0]
+    # if (prefix_from_message == "p"):
 
-
-
-    # differences = compare_strings(MESSAGE, decoded_message)
-    # if differences:
-    #     print("Differences found:")
-    #     for index, orig_char, dec_char in differences:
-    #         print(f"Position {index}: Original='{orig_char}', Decoded='{dec_char}'")
-    # else:
-    #     print("No errors")
+    # if (prefix_from_message == "t"):
+    #     print(f"Original message: {MESSAGE}")
+    
 
     samples_to_plot = int( 0.1 * SAMPLE_RATE)  
-    plot_debug(time_array, modulated, envelope, bits, energy, samples_to_plot)
+    # plot_debug(time_array, modulated, envelope, bits, energy, samples_to_plot)
   
