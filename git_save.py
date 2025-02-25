@@ -11,7 +11,8 @@ def run_command(command):
         print(result.stdout)
 
 def git_save(commit_message):
-    """Runs git add, commit, and push."""
+    """Runs git pull, add, commit, and push."""
+    run_command("git pull")  # Always pull the latest changes first
     run_command("git add .")
     run_command(f'git commit -m "{commit_message}"')
     run_command("git push")
