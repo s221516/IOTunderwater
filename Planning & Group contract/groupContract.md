@@ -1,4 +1,3 @@
-
 # Bachelor Project
 
 ###### 0. Aim, Effort and Expectations:
@@ -13,11 +12,12 @@ Mandag, tirsdag, onsdag og fredag kl. 9-17 på Ukendt lokation (test) - corden e
 
 På meetings afholdes stand-up meeting (20 min max) && Stand-down afholdes (afternoon)
 
+* check in ;)
 * status
 * struggles
 * plan
 
-###### 2 - Communication:  
+###### 2 - Communication:
 
 Changes in Chapter 1 must at least be announced the day before at 20.00
 
