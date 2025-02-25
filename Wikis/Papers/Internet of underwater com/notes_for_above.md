@@ -1,3 +1,4 @@
+
 **Key points**
 
 - The wavelength of a sound equals the speed divived by frequency
@@ -6,6 +7,7 @@
 
     - $$
       \frac{1500}{20} = 75 m \\
+
       \frac{360}{20} = 17 m
       $$
 - State-of-the-art modulation schemes -> look **Table 3** to get inspiration of how we will modulate ours -> none of them use simple just amplitude modulation, so maybe its too simple
@@ -22,6 +24,7 @@
 
 - Either acoustic or RF (radio freq)
 - Single-hop or multi-hop: hop referes to how many "hops" the data packet must go through to end at the final destination
+
   - Singlehop: sensor -> final destination
   - Multihop: sensor -> gateway device -> buoy -> final destination
 
@@ -32,12 +35,11 @@
 
 Below is a figures of an underwater sensing network in the most simple setup
 
-<img src="image/notes_for_above/1740475937141.png" alt="Description of the image "height = 350>
+<imgsrc="image/notes_for_above/1740475937141.png"alt="Description of the image "height = 350>
 
 Slighty more complicated below
 
-<img src="image/notes_for_above/1740476028145.png" alt="Description of the image "height = 350>
-
+<imgsrc="image/notes_for_above/1740476028145.png"alt="Description of the image "height = 350>
 
 **Challenges for IoUT**
 
@@ -50,9 +52,8 @@ Slighty more complicated below
   - Multipath effect: the phenomenon when the same transmitted signal hits the receiver from different paths (reflection)
 - The lack of knowledge of the water attributes (temp and depth) is the limiting factor for the QoS for acoutics waves, since the data transfer throught the medium (the water) is dependent on those factors
 
-
-<img src="image/notes_for_above/1740475680304.png" alt="Description of the image "height = 350>
+<imgsrc="image/notes_for_above/1740475680304.png"alt="Description of the image "height = 350>
 
 Different ranges for acoustic data transfer, with their bandwidth etc
 
-<img src="image/notes_for_above/1740478192137.png" alt="Description of the image "height = 250>
+<imgsrc="image/notes_for_above/1740478192137.png"alt="Description of the image "height = 250>
