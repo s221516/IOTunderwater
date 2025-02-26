@@ -2,14 +2,16 @@
 import cv2
 import numpy as np
 
+from config_values import PATH_TO_PICTURE, THRESHOLD_BINARY_VAL
+
 # load the input image
-img = cv2.imread("Code\dsp\data\Original_Doge_meme.jpg")
+img = cv2.imread(PATH_TO_PICTURE)
 
 # convert the input image to grayscale
 gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
 # apply thresholding to convert grayscale to binary image
-_, dimensions = cv2.threshold(gray, 175, 255, 0)
+_, dimensions = cv2.threshold(gray, THRESHOLD_BINARY_VAL, 255, 0)
 
 def convert_binary_image_to_bits(binary_image):
     bits = []
@@ -31,6 +33,7 @@ picture_in_binary = (''.join(str(x) for x in bits))
 # Open a new file in write mode
 with open("Code\dsp\picture_in_binary.txt", "w") as file:
     file.write(picture_in_binary)
+    print("Saved picture as binary file...")
     file.close()
 
 
@@ -57,7 +60,6 @@ def convert_bits_to_image(bit_string):
                 
     return pixels
 
-print("Made it")
      
 def show_picture(pixels):
     cv2.imwrite('Code\dsp\data\image_decoded.jpg', pixels)   

@@ -41,7 +41,7 @@ The average of the noise is 0, if it wasnt we could simply subtract it and call 
 
 ## SNR
 
-Signal-to-noise ratio is how we measure the strength between signal and noise, its a ratio so its unitsless, but its almost always given in dB
+Signal-to-noise ratio is how we measure the strength between signal and noise, its a ratio so its unitsless, but its almost always given in dB. Below is the formula when the signal is in power and dB
 
 $$
 SNR = \frac{P_{signal}}{P_{noise}}
@@ -51,7 +51,7 @@ $$
 SNR_{dB} = P_{signal, dB} - P_{noise, dB}
 $$
 
-If the SNR = 0 dB then that means that signal and noise power are the same. A positive SNR means that our signal is higher power than the noise, while a negative SNR means that the noise is of higher power. Detecting signals at negative SNR is pretty tough. The power in a signal is equal to the variance of the signal, therefore 
+If the SNR = 0 dB then that means that signal and noise power are the same. A positive SNR means that our signal is higher power than the noise, while a negative SNR means that the noise is of higher power. Detecting signals at negative SNR is pretty tough. The power in a signal is equal to the variance of the signal, therefore
 
 $$
 SNR = \frac{P_{signal}}{P_{noise}} = \frac{\sigma^2_{signal}}{\sigma^2_{noise}}
