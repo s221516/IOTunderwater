@@ -4,12 +4,12 @@ from config_values import BIT_RATE, SAMPLE_RATE, CARRIER_FREQ, NOISE_AMPLITUDE, 
 
 def encode_and_modulate(message):
     """Encode text message and create AM modulated signal"""
+    
     # Convert text to binary
     binary_message = ""
     for c in message:
         byte = format(ord(c), "08b")
         binary_message += byte
-
 
     # print(f"Binary message: {binary_message}")
 

@@ -5,13 +5,17 @@ import scipy.signal as signal
 
 from config_values import PATH_TO_WAV_FILE, BIT_RATE, SAMPLE_RATE, ACTIVATION_ENERGY_THRESHOLD, CARRIER_FREQ
 
+def convert_to_mono(signal):
+    if len(signal.shape) == 2:
+        # Average the two channels
+        signal = signal.mean(axis=1)
+    return signal
 
-def read_wavefile():
+def read_and_convert_wavefile():
     data_from_wav_file = wav.read(PATH_TO_WAV_FILE)
     freq_sample = data_from_wav_file[0]
     signal = data_from_wav_file[1] / 32767.0
     return freq_sample, signal  
-
 
 def butter_lowpass(cutoff, freq_sampling, order):
     nyquist = 0.5 * freq_sampling
@@ -75,43 +79,34 @@ def demodulate_and_decode(modulated):
 
     return message, normalized, energy, bits
 
-def plot_debug(t, modulated, envelope, bits, energy, samples_to_plot=None):
-    """Create debug plots with signal information"""
-    if samples_to_plot is None:
-        samples_to_plot = len(t)
 
-    plt.figure(figsize=(15, 12))
-
-    # Plot modulated signal
+def plot(signal_from_wave_file_mono, envelope, energy, freq_sample):
+    # Plot the first 0.25 seconds of the signal 
+    duration_to_plot = 4.5  # seconds
+    num_samples_to_plot = int(duration_to_plot * freq_sample)
+    time_array = np.arange(num_samples_to_plot) / freq_sample
+    signal_to_plot = signal_from_wave_file_mono[:num_samples_to_plot]
+    
+    # Plots received signal
+    plt.figure(figsize=(12, 10))
     plt.subplot(4, 1, 1)
-    plt.plot(t[:samples_to_plot], modulated[:samples_to_plot])
-    plt.title(
-        f"Modulated Signal (max={np.max(modulated):.2f}, min={np.min(modulated):.2f})"
-    )
-    plt.grid(True)
-
-    # Plot envelope
+    plt.plot(time_array, signal_to_plot)
+    plt.title(f"Recorded Signal (First {duration_to_plot} Seconds)")
+    
+    # Plots the envelope of the received signal
     plt.subplot(4, 1, 2)
-    plt.plot(t[:samples_to_plot], envelope[:samples_to_plot])
+    plt.plot(time_array[:num_samples_to_plot], envelope[:num_samples_to_plot])
     plt.title(f"Envelope (max={np.max(envelope):.2f}, min={np.min(envelope):.2f})")
     plt.grid(True)
 
     # Plot energy
     plt.subplot(4, 1, 3)
-    plt.plot(energy[:samples_to_plot])
+    plt.plot(energy[:num_samples_to_plot])
     plt.title("Energy plot")
     plt.grid(True)
 
-    # Plot bits if available
-    # if len(bits) > 0:
-    #     plt.subplot(4, 1, 4)
-    #     plt.step(range(len(bits)), bits, where="post")
-    #     plt.title(f"Decoded Bits (total: {len(bits)})")
-    #     plt.grid(True)
-
-    plt.tight_layout()
+    plt.grid(True)
     plt.show()
-
 
 # def compute_snr_and_shannon_limit(signal, noise):
 #     signal_power = np.mean(signal**2)
