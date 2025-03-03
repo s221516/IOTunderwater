@@ -1,72 +1,70 @@
 import numpy as np
 import scipy.io.wavfile as wav
+import matplotlib.pyplot as plt
 from config_values import BIT_RATE, SAMPLE_RATE, CARRIER_FREQ, NOISE_AMPLITUDE, PATH_TO_WAV_FILE, SAMPLE_RATE_FOR_WAV_FILE
 
-def encode_and_modulate(message):
-    """Encode text message and create AM modulated signal"""
-    
-    # Convert text to binary
-    binary_message = ""
-    for c in message:
-        byte = format(ord(c), "08b")
-        binary_message += byte
+# returns two arrays, square_wave and the time_array
+def make_square_wave(message: str):
+    message_binary = ''.join(format(ord(i), '08b') for i in message)
+    print(f"Message in binary: {message_binary}")
+    # TODO: determine the exact number of samples per bit that makes sense in relation to our sample rate 
+    # and bits per second and also how this is done in the signal generator
+    samples_per_symbol = 100
+    square_wave = []
+    for i in message_binary:
+        square_wave.extend([int(i)] * samples_per_symbol)
 
-    # print(f"Binary message: {binary_message}")
-
-    # Calculate timing parameters
     duration_per_bit = 1 / BIT_RATE
+
+    time_array = np.arange(0, duration_per_bit * (len(square_wave)), duration_per_bit)
+    square_wave = np.array(square_wave)
+    np.set_printoptions(precision=4, suppress=True)
+    return square_wave, time_array
+
+def make_carrier_wave(time_array) -> np.array:
+    # NOTE: to add noise check the bottom of freq domain section of pysdr
+    carrier_wave = np.sin(2 * np.pi * CARRIER_FREQ * time_array) 
     
-    samples_per_bit = int(SAMPLE_RATE * duration_per_bit)
-    # Create baseband signal with oversampling
-    bits = np.array([int(b) for b in binary_message])
-    baseband = np.repeat(bits, samples_per_bit)
+    return carrier_wave
 
-    # Add padding at start and end
-    padding = np.zeros(samples_per_bit * 10)
-    data_wave = np.concatenate([padding, baseband, padding])
+def plot_waveforms(square_wave, carrier_wave, modulated_wave, time_array):
+    plt.figure(figsize=(12, 6))
 
-    ## TODO: understand pulse shaping and whether we need it
-    # # Apply pulse shaping (raised cosine)
-    # alpha = 0.35  # Roll-off factor
-    # symbol_length = samples_per_bit
-    # time_array = np.arange(-4 * symbol_length, 4 * symbol_length)
-    # h = (
-    #     np.sinc(time_array / symbol_length)
-    #     * np.cos(np.pi * alpha * time_array / symbol_length)
-    #     / (1 - (2 * alpha * time_array / symbol_length) ** 2)
-    # )
-    # h[np.isnan(h)] = 1  # Fix division by zero
-    # h = h / np.sum(h)  # Normalize
+    # Plot the square wave
+    plt.subplot(3, 1, 1)
+    plt.plot(time_array, square_wave, label='Square Wave')
+    plt.title('Square Wave')
+    plt.xlabel('Time (s)')
+    plt.ylabel('Amplitude')
+    plt.grid(True)
+    plt.legend()
 
-    # # Apply pulse shaping
-    # data_wave = np.convolve(baseband, h, "same")
-   
-    # Scale to ensure good modulation depth (0.2 to 1.0)
-    data_wave = 0.2 + 0.85 * (data_wave - np.min(data_wave)) / (np.max(data_wave) - np.min(data_wave))
+    # Plot the carrier wave
+    plt.subplot(3, 1, 2)
+    plt.plot(time_array, carrier_wave, label='Carrier Wave', color='orange')
+    plt.title('Carrier Wave')
+    plt.xlabel('Time (s)')
+    plt.ylabel('Amplitude')
+    plt.grid(True)
+    plt.legend()
 
-    # Generate time array
-    time_array = np.arange(len(data_wave)) / SAMPLE_RATE 
+    # Plot the carrier wave
+    plt.subplot(3, 1, 3)
+    plt.plot(time_array, modulated_wave, label='Modulated Wave', color='pink')
+    plt.title('Modulated Wave')
+    plt.xlabel('Time (s)')
+    plt.ylabel('Amplitude')
+    plt.grid(True)
+    plt.legend()
 
-    # After (direct frequency usage, ensure carrier_freq < sample_rate/2):
-    carrier = np.sin(2 * np.pi * CARRIER_FREQ * time_array)
+    plt.tight_layout()
+    plt.show()
 
-    # Modulate
-    modulated = data_wave * carrier
+def create_modulated_wave(square_wave: np.array, carrier_wave: np.array) -> np.array:
+    return square_wave * carrier_wave
 
-    # Add Gaussion noise, find out if this is the correct interval, maybe its -x to x and not 0 to x
-    noise = np.random.normal(0, NOISE_AMPLITUDE, len(modulated))
-    modulated_with_noise = modulated + noise
-
-    modulated_with_noise = (modulated_with_noise * 32767).astype(np.int16)  # Convert to 16-bit PCM format
-
-    # Compute SNR and Shannon
-    # snr, shannon_limit = compute_snr_and_shannon_limit(modulated, noise)
-    # print(f"Signal-to-noise ratio: {snr} dB")
-    # print(f"Shannon limit: {shannon_limit}")
-
-    # Write to wave file, with specificed sampling rate and data array
-    wav.write(PATH_TO_WAV_FILE, SAMPLE_RATE_FOR_WAV_FILE, modulated_with_noise)
-
-    return modulated_with_noise, time_array
-
-
+if __name__ == "__main__":
+    square_wave, time_array = make_square_wave("h")
+    carrier_wave = make_carrier_wave(time_array)
+    modulated_wave = create_modulated_wave(square_wave, carrier_wave)
+    plot_waveforms(square_wave, carrier_wave, modulated_wave, time_array)
