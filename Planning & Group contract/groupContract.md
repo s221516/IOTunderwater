@@ -8,7 +8,9 @@ We strive to become proud as hell of our results after this project is done.
 
 Hvor og hvornår?
 Torsdag meetings kl. 13-17 på DTU.
-Mandag, tirsdag, onsdag og fredag kl. 9-17 på Ukendt lokation (test) - corden er undtagelser (og man skal kunne vise det, og man sidder på video)
+Tirsdag, onsdag og fredag kl. 9-17 på Ukendt lokation (test) - corden er undtagelser (og man skal kunne vise det, og man sidder på video)
+
+Om mandagen er det DTU
 
 På meetings afholdes stand-up meeting (20 min max) && Stand-down afholdes (afternoon)
 
