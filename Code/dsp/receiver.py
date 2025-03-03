@@ -65,7 +65,7 @@ def demodulate_and_decode(modulated):
     # normalized = (signal_post_filter - s_min) / (s_max - s_min + error)
 
     # Calculate samples per bit
-    samples_per_bit = int(SAMPLE_RATE / BIT_RATE)
+    SAMPLES_PER_SYMBOL = int(SAMPLE_RATE / BIT_RATE)
 
     # Create a matched filter for bit detection
 
@@ -81,9 +81,9 @@ def demodulate_and_decode(modulated):
 
     # makes the bitstring for the valid data array
     bits = []
-    for i in range(start_index, len(normalized) - samples_per_bit, samples_per_bit):
-        bit_sample = normalized[i : i + samples_per_bit]
-        bit_value = 1 if np.sum(bit_sample) > (samples_per_bit / 2) else 0
+    for i in range(start_index, len(normalized) - SAMPLES_PER_SYMBOL, SAMPLES_PER_SYMBOL):
+        bit_sample = normalized[i : i + SAMPLES_PER_SYMBOL]
+        bit_value = 1 if np.sum(bit_sample) > (SAMPLES_PER_SYMBOL / 2) else 0
         bits.append(bit_value)
 
     # Convert bits to ASCII (8 bits per character)

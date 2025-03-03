@@ -1,7 +1,8 @@
 import numpy as np
 import scipy.io.wavfile as wav
 import matplotlib.pyplot as plt
-from config_values import BIT_RATE, SAMPLE_RATE, CARRIER_FREQ, NOISE_AMPLITUDE, PATH_TO_WAV_FILE, SAMPLE_RATE_FOR_WAV_FILE
+from config_values import BIT_RATE, SAMPLES_PER_SYMBOL, SAMPLE_RATE, CARRIER_FREQ, NOISE_AMPLITUDE, PATH_TO_WAV_FILE, SAMPLE_RATE_FOR_WAV_FILE
+np.set_printoptions(precision=4, suppress=True)
 
 # returns two arrays, square_wave and the time_array
 def make_square_wave(message: str):
@@ -9,16 +10,16 @@ def make_square_wave(message: str):
     print(f"Message in binary: {message_binary}")
     # TODO: determine the exact number of samples per bit that makes sense in relation to our sample rate 
     # and bits per second and also how this is done in the signal generator
-    samples_per_symbol = 100
+    
     square_wave = []
-    for i in message_binary:
-        square_wave.extend([int(i)] * samples_per_symbol)
+    for bit in message_binary:
+        square_wave += [int(bit)] * SAMPLES_PER_SYMBOL
 
-    duration_per_bit = 1 / BIT_RATE
+    duration_per_bit = len(square_wave) / SAMPLE_RATE
 
     time_array = np.arange(0, duration_per_bit * (len(square_wave)), duration_per_bit)
     square_wave = np.array(square_wave)
-    np.set_printoptions(precision=4, suppress=True)
+   
     return square_wave, time_array
 
 def make_carrier_wave(time_array) -> np.array:
@@ -66,5 +67,6 @@ def create_modulated_wave(square_wave: np.array, carrier_wave: np.array) -> np.a
 if __name__ == "__main__":
     square_wave, time_array = make_square_wave("h")
     carrier_wave = make_carrier_wave(time_array)
+    print(len(time_array), np.shape(time_array))
     modulated_wave = create_modulated_wave(square_wave, carrier_wave)
     plot_waveforms(square_wave, carrier_wave, modulated_wave, time_array)

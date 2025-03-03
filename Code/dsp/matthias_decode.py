@@ -8,7 +8,7 @@ from config_values import (
     SAMPLE_RATE,
     CARRIER_FREQ,
     CUT_OFF_FREQ,
-    SAMPLES_PER_BIT,
+    SAMPLES_PER_SYMBOL,
     MESSAGE,
 )
 
@@ -58,7 +58,7 @@ def decode_message(thresholded_signal):
     def find_start_index(thresholded_signal):
         for i in range(len(thresholded_signal)):
             if thresholded_signal[i] != thresholded_signal[i - 1]:
-                return i + SAMPLES_PER_BIT // 2
+                return i + SAMPLES_PER_SYMBOL // 2
         return -1
 
     def get_bits_from_thresholded_signal(thresholded_signal):
@@ -68,10 +68,10 @@ def decode_message(thresholded_signal):
         if start_index == -1:
             return print("No start index found")
 
-        max_index = len(thresholded_signal) - SAMPLES_PER_BIT
+        max_index = len(thresholded_signal) - SAMPLES_PER_SYMBOL
 
-        for i in range(start_index, max_index, SAMPLES_PER_BIT):
-            bit_sample = thresholded_signal[i : i + SAMPLES_PER_BIT]
+        for i in range(start_index, max_index, SAMPLES_PER_SYMBOL):
+            bit_sample = thresholded_signal[i : i + SAMPLES_PER_SYMBOL]
             bit = np.mean(bit_sample)
             bit_value = 1 if bit > 0 else 0
             bits.append(bit_value)

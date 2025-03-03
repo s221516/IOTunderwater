@@ -1,7 +1,8 @@
 import matplotlib.pyplot as plt
 import numpy as np
 import scipy.io.wavfile as wav
-from config_values import BIT_RATE, SAMPLE_RATE, CARRIER_FREQ, NOISE_AMPLITUDE, PATH_TO_WAV_FILE, SAMPLE_RATE_FOR_WAV_FILE, SAMPLES_PER_BIT
+from config_values import BIT_RATE, SAMPLES_PER_SYMBOL, SAMPLE_RATE, CARRIER_FREQ, NOISE_AMPLITUDE, PATH_TO_WAV_FILE, SAMPLE_RATE_FOR_WAV_FILE
+np.set_printoptions(precision=8, suppress=True)
 
 def encode_and_modulate(message):
     """Encode text message and create AM modulated signal"""
@@ -15,7 +16,7 @@ def encode_and_modulate(message):
         
         for b in binary_message:
             # TODO: probably too high of a samples per bit
-            square_wave_signal += [int(b)] * SAMPLES_PER_BIT
+            square_wave_signal += [int(b)] * SAMPLES_PER_SYMBOL
         
         return square_wave_signal
     
@@ -24,7 +25,7 @@ def encode_and_modulate(message):
         
         duration = size_of_data / SAMPLE_RATE
         time_array = np.linspace(0, duration, size_of_data)
-        
+        print(duration, len(time_array))
         return np.sin(2 * np.pi * carrier * time_array)     
     
     # 3. Amplitude Modulate the square wave signal with the carrier signal
@@ -35,6 +36,7 @@ def encode_and_modulate(message):
     size_of_data = len(square_wave)
     carrier     = create_carrier_signal(size_of_data)
     am_modulated_signal = combine_square_wave_and_carrier(square_wave, carrier)
+    # print(len(time_array), np.shape(time_array))
     
     plt.figure(figsize=(20, 20))
 
@@ -56,3 +58,6 @@ def encode_and_modulate(message):
     
     
     return am_modulated_signal
+
+if __name__ == "__main__":
+    encode_and_modulate("h")
