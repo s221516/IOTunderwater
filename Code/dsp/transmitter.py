@@ -15,11 +15,11 @@ def make_square_wave(message: str):
     for bit in message_binary:
         square_wave += [int(bit)] * SAMPLES_PER_SYMBOL
 
-    duration_per_bit = len(square_wave) / SAMPLE_RATE
+    duration = len(square_wave) / SAMPLE_RATE
 
-    time_array = np.arange(0, duration_per_bit * (len(square_wave)), duration_per_bit)
+    time_array = np.linspace(0, duration, len(square_wave))
     square_wave = np.array(square_wave)
-   
+
     return square_wave, time_array
 
 def make_carrier_wave(time_array) -> np.array:
