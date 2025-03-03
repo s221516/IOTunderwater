@@ -3,7 +3,14 @@ import scipy.io.wavfile as wav
 import numpy as np
 import scipy.signal as signal
 
-from config_values import PATH_TO_WAV_FILE, BIT_RATE, SAMPLE_RATE, ACTIVATION_ENERGY_THRESHOLD, CARRIER_FREQ
+from config_values import (
+    PATH_TO_WAV_FILE,
+    BIT_RATE,
+    SAMPLE_RATE,
+    ACTIVATION_ENERGY_THRESHOLD,
+    CARRIER_FREQ,
+)
+
 
 def convert_to_mono(signal):
     if len(signal.shape) == 2:
@@ -11,17 +18,20 @@ def convert_to_mono(signal):
         signal = signal.mean(axis=1)
     return signal
 
-def read_and_convert_wavefile():
+
+def read_and_convert_wav_file():
     data_from_wav_file = wav.read(PATH_TO_WAV_FILE)
     freq_sample = data_from_wav_file[0]
     signal = data_from_wav_file[1] / 32767.0
-    return freq_sample, signal  
+    return signal
+
 
 def butter_lowpass(cutoff, freq_sampling, order):
     nyquist = 0.5 * freq_sampling
     normal_cutoff = cutoff / nyquist
     b, a = signal.butter(order, normal_cutoff, btype="low", analog=False)
     return b, a
+
 
 def butter_lowpass_filter(data, cutoff, freq_sampling, order):
     b, a = butter_lowpass(cutoff, freq_sampling, order=order)
@@ -33,31 +43,40 @@ def demodulate_and_decode(modulated):
     """Demodulate AM signal and decode message"""
     # NOTE: If this simple envelope calculation is not enough, then consider hilbert transform
     # TODO: add windowing i.e. blackman or hamming
-    envelope = np.abs(modulated)
+    t = np.arange(len(modulated)) / SAMPLE_RATE
+    # 1. Demodulate the AM signal but shifting the frequency to baseband
+    coef = np.exp(-1j * 2 * np.pi * CARRIER_FREQ * t)
+    demodulated = modulated * coef
 
-    cutoff = (CARRIER_FREQ - BIT_RATE) / 2
-    signal_post_filter = butter_lowpass_filter(envelope, cutoff, SAMPLE_RATE, order=4)
+    # 2. Apply low-pass filter to remove high frequency noise
+    cutoff = BIT_RATE * 3
+    signal_post_filter = butter_lowpass_filter(
+        demodulated, cutoff, SAMPLE_RATE, order=4
+    )
 
+    # 3. Mean subtract
     signal_post_filter = signal_post_filter - np.mean(signal_post_filter)
 
-    s_min = np.min(signal_post_filter)
-    s_max = np.max(signal_post_filter)
-    error = 1e-12
+    # # 4. Normalize
+    # s_min = np.min(signal_post_filter)
+    # s_max = np.max(signal_post_filter)
+    # error = 1e-12
 
-    normalized = (signal_post_filter - s_min) / (s_max - s_min + error)
+    # normalized = (signal_post_filter - s_min) / (s_max - s_min + error)
 
     # Calculate samples per bit
     samples_per_bit = int(SAMPLE_RATE / BIT_RATE)
 
     # Create a matched filter for bit detection
-    matched_filter = np.ones(samples_per_bit)
 
-    # TODO: understand why it is necessary to convolve here
-    # Find start of data by looking for first significant transition
-    energy = np.convolve(normalized, matched_filter, "valid")
+    # # TODO: understand why it is necessary to convolve here
+    # # Find start of data by looking for first significant transition
+    # energy = np.convolve(normalized, matched_filter, "valid")
 
+    # 5. Find start of data by looking for first significant transition
     # maybe add a noise filter here, but by slightly lowering the max energy required it got super clear
-    start_of_valid_data_array = np.where(energy > ACTIVATION_ENERGY_THRESHOLD * np.max(energy))[0]
+    normalized = signal_post_filter
+    start_of_valid_data_array = np.where(normalized > 0)[0]
     start_index = start_of_valid_data_array[0]
 
     # makes the bitstring for the valid data array
@@ -77,22 +96,24 @@ def demodulate_and_decode(modulated):
             if 32 <= char_code <= 126:  # Printable ASCII
                 message += chr(char_code)
 
+    energy = []
+
     return message, normalized, energy, bits
 
 
 def plot(signal_from_wave_file_mono, envelope, energy, freq_sample):
-    # Plot the first 0.25 seconds of the signal 
+    # Plot the first 0.25 seconds of the signal
     duration_to_plot = 4.5  # seconds
     num_samples_to_plot = int(duration_to_plot * freq_sample)
     time_array = np.arange(num_samples_to_plot) / freq_sample
     signal_to_plot = signal_from_wave_file_mono[:num_samples_to_plot]
-    
+
     # Plots received signal
     plt.figure(figsize=(12, 10))
     plt.subplot(4, 1, 1)
     plt.plot(time_array, signal_to_plot)
     plt.title(f"Recorded Signal (First {duration_to_plot} Seconds)")
-    
+
     # Plots the envelope of the received signal
     plt.subplot(4, 1, 2)
     plt.plot(time_array[:num_samples_to_plot], envelope[:num_samples_to_plot])
@@ -107,6 +128,7 @@ def plot(signal_from_wave_file_mono, envelope, energy, freq_sample):
 
     plt.grid(True)
     plt.show()
+
 
 # def compute_snr_and_shannon_limit(signal, noise):
 #     signal_power = np.mean(signal**2)
