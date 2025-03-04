@@ -1,9 +1,6 @@
-
-
-
-#Make sure this is ascii
 def string_to_binary(input_string):
     return ''.join(format(ord(char), '08b') for char in input_string)
+
 def binary_to_squareWave(bit_string, floatPointsPerBit:int):
     squareWave = []
     for i in bit_string:

@@ -17,9 +17,9 @@ def make_square_wave(message: str):
 
     duration_of_wav_signal = len(square_wave) / SAMPLE_RATE
 
-    time_array = np.arange(0, duration_of_wav_signal * (len(square_wave)), duration_of_wav_signal)
+    time_array = np.linspace(0, duration_of_wav_signal, len(square_wave))
     square_wave = np.array(square_wave)
-   
+
     return square_wave, time_array
 
 def make_carrier_wave(time_array) -> np.array:
