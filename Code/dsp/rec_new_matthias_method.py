@@ -15,7 +15,6 @@ from scipy.io import wavfile
 
 def get_wav_signal(path: str):
     _, wav_signal = wavfile.read(path)
-    wav_signal = wav_signal / 32767.0
     return wav_signal
 
 
@@ -98,43 +97,42 @@ def decode_message(thresholded_signal):
 
 
 def decode_wav_signal(wav_signal):
-    analytic_signal = signal.hilbert(wav_signal)
-    envelope = np.abs(analytic_signal)
+    # analytic_signal = signal.hilbert(wav_signal)
+    # envelope = np.abs(analytic_signal)
     #
-    # filtered_signal = filter_signal(envelope)
-    mean_shifted_signal = envelope - np.mean(envelope)
-    normalized_signal = normalize_signal(mean_shifted_signal)
+    shifted_signal = shift_signal(wav_signal)
+    shifted_signal = -np.imag(shifted_signal)
+    print(f"shifted_signal: {shifted_signal[:10]}")
+    filtered_signal = filter_signal(shifted_signal)
+
+    # Normalize the demodulated signal
+    normalized_signal = (filtered_signal - np.min(filtered_signal)) / (
+        np.max(filtered_signal) - np.min(filtered_signal)
+    )
     thresholded_signal = threshold_signal(normalized_signal)
     decoded_message = decode_message(thresholded_signal)
 
-    # Plot critical signals
+    print("Thresholded signal:", thresholded_signal)
+    # Update plots to show the imaginary part
     plt.figure(figsize=(12, 8))
     plt.subplot(4, 1, 1)
-    plt.plot(envelope[:2000], label="Envelope")
-    plt.title("Envelope")
-    # plt.subplot(4, 1, 2)
-    # plt.plot(filtered_signal[:2000], label="Filtered")
-    # plt.title("Filtered Signal")
+    plt.plot(wav_signal[:2000], label="Original")
+    plt.title("Original Signal")
+    plt.subplot(4, 1, 2)
+    plt.plot(filtered_signal[:2000], label="Filtered (Imaginary)")
+    plt.title("Demodulated Signal (Imaginary Part)")
     plt.subplot(4, 1, 3)
     plt.plot(normalized_signal[:2000], label="Normalized")
     plt.title("Normalized Signal")
     plt.subplot(4, 1, 4)
-    plt.plot(normalized_signal[:2000], label="Normalized")
     plt.plot(thresholded_signal[:2000], label="Thresholded")
-    plt.plot(envelope[:2000], label="Envelope", alpha=0.5)
+    plt.plot(normalized_signal[:2000], label="Normalized", alpha=0.5)
+    plt.title("Thresholded Signal")
     plt.legend()
-
     plt.show()
 
-    print(thresholded_signal)
-    print(f"lenght of thresh in symbols {len(thresholded_signal) / SAMPLES_PER_SYMBOL}")
-
     return decoded_message, {
-        "analytic_signal": analytic_signal,
-        "envelope": envelope,
-        # "wav_signal_shifted": wav_signal_shifted,
-        # "filtered_signal": filtered_signal,
-        "mean_shifted_signal": mean_shifted_signal,
+        "filtered_signal": filtered_signal,
         "normalized_signal": normalized_signal,
         "thresholded_signal": thresholded_signal,
     }
