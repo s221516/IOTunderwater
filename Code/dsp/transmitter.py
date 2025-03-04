@@ -1,7 +1,7 @@
 import numpy as np
 import scipy.io.wavfile as wav
 import matplotlib.pyplot as plt
-from config_values import BIT_RATE, SAMPLES_PER_SYMBOL, SAMPLE_RATE, CARRIER_FREQ, NOISE_AMPLITUDE, PATH_TO_WAV_FILE, SAMPLE_RATE_FOR_WAV_FILE
+from config_values import MESSAGE, SAMPLES_PER_SYMBOL, SAMPLE_RATE, CARRIER_FREQ, NOISE_AMPLITUDE, PATH_TO_WAV_FILE 
 np.set_printoptions(precision=4, suppress=True)
 
 # returns two arrays, square_wave and the time_array
@@ -15,9 +15,9 @@ def make_square_wave(message: str):
     for bit in message_binary:
         square_wave += [int(bit)] * SAMPLES_PER_SYMBOL
 
-    duration_per_bit = len(square_wave) / SAMPLE_RATE
+    duration_of_wav_signal = len(square_wave) / SAMPLE_RATE
 
-    time_array = np.arange(0, duration_per_bit * (len(square_wave)), duration_per_bit)
+    time_array = np.arange(0, duration_of_wav_signal * (len(square_wave)), duration_of_wav_signal)
     square_wave = np.array(square_wave)
    
     return square_wave, time_array
@@ -27,6 +27,8 @@ def make_carrier_wave(time_array) -> np.array:
     carrier_wave = np.sin(2 * np.pi * CARRIER_FREQ * time_array) 
     
     return carrier_wave
+
+
 
 def plot_waveforms(square_wave, carrier_wave, modulated_wave, time_array):
     plt.figure(figsize=(12, 6))
@@ -64,9 +66,14 @@ def plot_waveforms(square_wave, carrier_wave, modulated_wave, time_array):
 def create_modulated_wave(square_wave: np.array, carrier_wave: np.array) -> np.array:
     return square_wave * carrier_wave
 
+def save_wave_file(modulated_wave):
+    modulated_wave = (modulated_wave * 32767).astype(np.int16) 
+    wav.write(PATH_TO_WAV_FILE, SAMPLE_RATE, modulated_wave)
+    
+
 if __name__ == "__main__":
-    square_wave, time_array = make_square_wave("h")
+    square_wave, time_array = make_square_wave(MESSAGE)
     carrier_wave = make_carrier_wave(time_array)
-    print(len(time_array), np.shape(time_array))
     modulated_wave = create_modulated_wave(square_wave, carrier_wave)
+    save_wave_file(modulated_wave)
     plot_waveforms(square_wave, carrier_wave, modulated_wave, time_array)

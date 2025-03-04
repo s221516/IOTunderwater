@@ -46,3 +46,6 @@ def create_wav_file_from_recording():
     # Write the audio data to the wave file
     wf.writeframes(b''.join(frames))
     wf.close()
+
+if __name__ == "__main__":
+    create_wav_file_from_recording()

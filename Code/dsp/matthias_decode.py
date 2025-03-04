@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import scipy.signal as signal
 
-from Code.dsp.transmitter_old import encode_and_modulate
+from transmitter_old import encode_and_modulate
 from receiver import read_and_convert_wav_file
 from config_values import (
     SAMPLE_RATE,
@@ -23,7 +23,7 @@ def demodule_signal(signal_from_wav_file):
     demod = signal_from_wav_file * coef
     return demod
 
-def filter_signal(demod):
+def filter_signal(demod): 
     """see reference look at answer : https://dsp.stackexchange.com/questions/49460/apply-low-pass-butterworth-filter-in-python"""
     nyquist_freq = SAMPLE_RATE * 0.5
     order = 4
@@ -55,31 +55,19 @@ def threshold_signal(normalized_signal):
 
 def decode_message(thresholded_signal):
 
-    def find_start_index(thresholded_signal):
-        for i in range(len(thresholded_signal)):
-            if thresholded_signal[i] != thresholded_signal[i - 1]:
-                return i + SAMPLES_PER_SYMBOL // 2
-        return -1
-
     def get_bits_from_thresholded_signal(thresholded_signal):
-
         bits = []
-        start_index = find_start_index(thresholded_signal)
-        if start_index == -1:
-            return print("No start index found")
-
+        start_index = thresholded_signal[0]
         max_index = len(thresholded_signal) - SAMPLES_PER_SYMBOL
-
         for i in range(start_index, max_index, SAMPLES_PER_SYMBOL):
             bit_sample = thresholded_signal[i : i + SAMPLES_PER_SYMBOL]
-            bit = np.mean(bit_sample)
-            bit_value = 1 if bit > 0 else 0
+            bit_value = 1 if np.sum(bit_sample) > (SAMPLES_PER_SYMBOL / 2) else 0
             bits.append(bit_value)
-
         return bits
 
-    def get_message_from_bits(bits):
 
+
+    def get_message_from_bits(bits):
         message = ""
         for i in range(0, len(bits) - 7, 8):
             char_bits = bits[i : i + 8]
@@ -143,7 +131,7 @@ def plot_wave_in_frequency_domain(wave):
 
 def plot_wave_in_time_domain(wave):
     time_array = np.arange(len(wave)) / SAMPLE_RATE
-    plt.plot(time_array, wave, "orange", alpha=0.5)
+    plt.plot(time_array, wave.real, "orange", alpha=0.5)
     plt.xlabel("Time (s)")
     plt.ylabel("Amplitude")
 
@@ -199,10 +187,6 @@ if __name__ == "__main__":
     plt.title("Centered signal")
 
     plt.tight_layout()
-    plt.show()
-
-    plot_wave_in_time_domain(normalized_signal)
-    plt.title("Normalized signal")
     plt.show()
 
     print(f"Message to be encoded: {MESSAGE}")
