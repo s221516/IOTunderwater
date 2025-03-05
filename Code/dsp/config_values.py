@@ -18,7 +18,7 @@ RECORD_SECONDS = 5
 # with open("picture_in_binary.txt", "r") as file:
 #     picture_in_binary = file.read()
 
-# all_letters = "the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*"
+all_letters = "the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*"
 # small_test = "This is: 14"
 
 # picture_in_binary_with_prefix = "p" + picture_in_binary
