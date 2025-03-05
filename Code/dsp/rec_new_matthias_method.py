@@ -8,14 +8,13 @@ from config_values import (
     CUT_OFF_FREQ,
     PATH_TO_WAV_FILE,
     SAMPLE_RATE,
-    SAMPLES_PER_SYMBOL
+    SAMPLES_PER_SYMBOL,
 )
 from scipy.io import wavfile
 
 
 def get_wav_signal(path: str):
     _, wav_signal = wavfile.read(path)
-    wav_signal = wav_signal / 32767.0
     return wav_signal
 
 
@@ -51,7 +50,7 @@ def filter_signal(wav_shifted_signal):
     return filtered_demodulated_signal
 
 
-def min_max_normalize_signal(signal_centered):
+def normalize_signal(signal_centered):
     # Scale to [0, 1]
     normalized = (signal_centered - np.min(signal_centered)) / (
         np.max(signal_centered) - np.min(signal_centered)
@@ -62,6 +61,7 @@ def min_max_normalize_signal(signal_centered):
 def threshold_signal(normalized_signal):
     low = 0.5
     high = 0.5
+    # TODO: possible to fine tune the threshold values for small improvements --> dont go below 0.4 or above 0.6
     return hyperestesis_thresholding(normalized_signal, low, high)
 
 
@@ -93,10 +93,9 @@ def decode_bits(bits):
 
 def decode_message(thresholded_signal):
     bits = get_bits(thresholded_signal)
-    print(f"Bits : {bits}")
+    print("Bits:", bits)
     decoded_message = decode_bits(bits)
     return decoded_message
-
 
 def remove_outliers(wave):
     mu = np.mean(wave)
@@ -107,44 +106,41 @@ def remove_outliers(wave):
             wave[i] = mu
     return wave
 def decode_wav_signal(wav_signal):
-    analytic_signal = signal.hilbert(wav_signal)
-    envelope = np.abs(analytic_signal)
+    # analytic_signal = signal.hilbert(wav_signal)
+    # envelope = np.abs(analytic_signal)
     #
-    envelope = filter_signal(envelope)
-    mean_shifted_signal = remove_outliers(envelope)
-    mean_shifted_signal = envelope - np.mean(envelope)
-    normalized_signal = min_max_normalize_signal(mean_shifted_signal)
+    shifted_signal = shift_signal(wav_signal)
+    shifted_signal = -np.imag(shifted_signal)
+    filtered_signal = filter_signal(shifted_signal)
+    filtered_signal = remove_outliers(filtered_signal)
+
+    # Normalize the demodulated signal
+    normalized_signal = (filtered_signal - np.min(filtered_signal)) / (
+        np.max(filtered_signal) - np.min(filtered_signal)
+    )
     thresholded_signal = threshold_signal(normalized_signal)
     decoded_message = decode_message(thresholded_signal)
 
-    # Plot critical signals
+    # Update plots to show the imaginary part
     plt.figure(figsize=(12, 8))
     plt.subplot(4, 1, 1)
-    plt.plot(wav_signal, label="Envelope")
-    plt.title("Envelope")
+    plt.plot(wav_signal, label="Original")
+    plt.title("Original Signal")
     plt.subplot(4, 1, 2)
-    plt.plot(analytic_signal, label="Filtered")
-    plt.title("Filtered Signal")
+    plt.plot(filtered_signal, label="Filtered (Imaginary)")
+    plt.title("Demodulated Signal (Imaginary Part)")
     plt.subplot(4, 1, 3)
-    plt.plot(envelope, label="Normalized")
+    plt.plot(normalized_signal, label="Normalized")
     plt.title("Normalized Signal")
     plt.subplot(4, 1, 4)
-    plt.plot(normalized_signal, label="Normalized")
     plt.plot(thresholded_signal, label="Thresholded")
-    plt.plot(envelope, label="Envelope", alpha=0.5)
+    plt.plot(normalized_signal, label="Normalized", alpha=0.5)
+    plt.title("Thresholded Signal")
     plt.legend()
-
     plt.show()
 
-    print(thresholded_signal)
-    print(f"lenght of thresh in symbols {len(thresholded_signal) / SAMPLES_PER_SYMBOL}")
-
     return decoded_message, {
-        "analytic_signal": analytic_signal,
-        "envelope": envelope,
-        # "wav_signal_shifted": wav_signal_shifted,
-        # "filtered_signal": filtered_signal,
-        "mean_shifted_signal": mean_shifted_signal,
+        "filtered_signal": filtered_signal,
         "normalized_signal": normalized_signal,
         "thresholded_signal": thresholded_signal,
     }
@@ -207,8 +203,7 @@ if __name__ == "__main__":
     time_array = np.linspace(
         0, (len(decoded_wav_signal) / SAMPLE_RATE), len(decoded_wav_signal)
     )
-    print("DEBUGGING")
     print(
-        f" following is the decoded message:{decoded_wav_signal}"
+        f" following is the decoded message:{decoded_wav_signal}",
     )
     # visualization_to_debug(wav_signal, debug_values)
