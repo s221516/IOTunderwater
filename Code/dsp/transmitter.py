@@ -9,8 +9,6 @@ from config_values import (
     SAMPLES_PER_SYMBOL,
 )
 
-import matplotlib.pyplot as plt
-from config_values import MESSAGE, SAMPLES_PER_SYMBOL, SAMPLE_RATE, CARRIER_FREQ, NOISE_AMPLITUDE, PATH_TO_WAV_FILE 
 np.set_printoptions(precision=4, suppress=True)
 
 
@@ -170,9 +168,7 @@ if __name__ == "__main__":
     all_letters = "the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*"
     a_ = "20000000000 dollars"
     square_wave, time_array = make_square_wave(a_)
-    square_wave, time_array = make_square_wave(MESSAGE)
     carrier_wave = make_carrier_wave(time_array)
     modulated_wave = create_modulated_wave(square_wave, carrier_wave)
     write_to_wav_file(modulated_wave)
-    save_wave_file(modulated_wave)
     plot_waveforms(square_wave, carrier_wave, modulated_wave, time_array)

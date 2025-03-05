@@ -203,8 +203,7 @@ if __name__ == "__main__":
     time_array = np.linspace(
         0, (len(decoded_wav_signal) / SAMPLE_RATE), len(decoded_wav_signal)
     )
-    # print(
-    #     f" following is the decoded message:{decoded_wav_signal}",
-    #     len(decoded_wav_signal),
-    # )
+    print(
+        f" following is the decoded message:{decoded_wav_signal}",
+    )
     # visualization_to_debug(wav_signal, debug_values)
