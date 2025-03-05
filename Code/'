@@ -15,7 +15,6 @@ from scipy.io import wavfile
 
 def get_wav_signal(path: str):
     _, wav_signal = wavfile.read(path)
-    wav_signal = wav_signal / 32767.0
     return wav_signal
 
 
@@ -51,7 +50,7 @@ def filter_signal(wav_shifted_signal):
     return filtered_demodulated_signal
 
 
-def min_max_normalize_signal(signal_centered):
+def normalize_signal(signal_centered):
     # Scale to [0, 1]
     normalized = (signal_centered - np.min(signal_centered)) / (
         np.max(signal_centered) - np.min(signal_centered)
@@ -93,58 +92,43 @@ def decode_bits(bits):
 
 def decode_message(thresholded_signal):
     bits = get_bits(thresholded_signal)
-    print(f"Bits : {bits}")
     decoded_message = decode_bits(bits)
     return decoded_message
 
 
-def remove_outliers(wave):
-    mu = np.mean(wave)
-    sigma = np.std(wave)
-    
-    for i in range(0, len(wave)):
-        if wave[i] > mu + 3*sigma or wave[i] < mu - 3*sigma:
-            wave[i] = mu
-    return wave
 def decode_wav_signal(wav_signal):
-    analytic_signal = signal.hilbert(wav_signal)
-    envelope = np.abs(analytic_signal)
+    # analytic_signal = signal.hilbert(wav_signal)
+    # envelope = np.abs(analytic_signal)
     #
-    envelope = filter_signal(envelope)
-    mean_shifted_signal = remove_outliers(envelope)
-    mean_shifted_signal = envelope - np.mean(envelope)
-    normalized_signal = min_max_normalize_signal(mean_shifted_signal)
+    shifted_signal = shift_signal(wav_signal)
+    filtered_signal = filter_signal(shifted_signal)
+    # Extract and invert the imaginary part (critical fix)
+    filtered_signal_imag = -np.imag(filtered_signal)
+
+    # Normalize the demodulated signal
+    normalized_signal = (filtered_signal_imag - np.min(filtered_signal_imag)) / (
+        np.max(filtered_signal_imag) - np.min(filtered_signal_imag)
+    )
     thresholded_signal = threshold_signal(normalized_signal)
     decoded_message = decode_message(thresholded_signal)
 
-    # Plot critical signals
+    # Update plots to show the imaginary part
     plt.figure(figsize=(12, 8))
-    plt.subplot(4, 1, 1)
-    plt.plot(wav_signal, label="Envelope")
-    plt.title("Envelope")
-    plt.subplot(4, 1, 2)
-    plt.plot(analytic_signal, label="Filtered")
-    plt.title("Filtered Signal")
-    plt.subplot(4, 1, 3)
-    plt.plot(envelope, label="Normalized")
+    plt.subplot(3, 1, 1)
+    plt.plot(filtered_signal_imag[:2000], label="Filtered (Imaginary)")
+    plt.title("Demodulated Signal (Imaginary Part)")
+    plt.subplot(3, 1, 2)
+    plt.plot(normalized_signal[:2000], label="Normalized")
     plt.title("Normalized Signal")
-    plt.subplot(4, 1, 4)
-    plt.plot(normalized_signal, label="Normalized")
-    plt.plot(thresholded_signal, label="Thresholded")
-    plt.plot(envelope, label="Envelope", alpha=0.5)
+    plt.subplot(3, 1, 3)
+    plt.plot(thresholded_signal[:2000], label="Thresholded")
+    plt.plot(normalized_signal[:2000], label="Normalized", alpha=0.5)
+    plt.title("Thresholded Signal")
     plt.legend()
-
     plt.show()
 
-    print(thresholded_signal)
-    print(f"lenght of thresh in symbols {len(thresholded_signal) / SAMPLES_PER_SYMBOL}")
-
     return decoded_message, {
-        "analytic_signal": analytic_signal,
-        "envelope": envelope,
-        # "wav_signal_shifted": wav_signal_shifted,
-        # "filtered_signal": filtered_signal,
-        "mean_shifted_signal": mean_shifted_signal,
+        "filtered_signal": filtered_signal_imag,
         "normalized_signal": normalized_signal,
         "thresholded_signal": thresholded_signal,
     }
@@ -209,6 +193,7 @@ if __name__ == "__main__":
     )
     print("DEBUGGING")
     print(
-        f" following is the decoded message:{decoded_wav_signal}"
+        f" following is the decoded message:{decoded_wav_signal}",
+        len(decoded_wav_signal),
     )
     # visualization_to_debug(wav_signal, debug_values)
