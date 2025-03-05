@@ -91,37 +91,13 @@ def hamming_distance(received, expected):
     return sum(r != e for r, e in zip(received, expected))
 
 # Function to inject random errors into the encoded sequence
-def inject_errors(encoded_bits, num_errors=2, burst=False, error_pos=None, custom_errors=None):
-    """
-    Introduces errors into the encoded bits.
-    
-    Parameters:
-    - num_errors: Number of errors to introduce.
-    - burst: If True, introduces a burst error; otherwise, introduces random errors.
-    - error_pos: If burst is True, specifies the starting index of the burst error.
-    - custom_errors: A list of indices where errors should be introduced manually.
-    
-    Returns:
-    - The received bit sequence with errors.
-    """
+def inject_errors(encoded_bits, num_errors=2):
+
     received_bits = encoded_bits.copy()
-    
-    if custom_errors:
-        # Manually specified error positions
-        for idx in custom_errors:
-            if 0 <= idx < len(received_bits):
-                received_bits[idx] ^= 1  # Flip the bit
-    
-    elif burst and error_pos is not None:
-        # Introduce a burst error at the given position
-        for i in range(error_pos, min(error_pos + num_errors, len(received_bits))):
-            received_bits[i] ^= 1  # Flip the bit
-    
-    else:
-        # Introduce random errors
-        error_indices = np.random.choice(len(encoded_bits), num_errors, replace=False)
-        for idx in error_indices:
-            received_bits[idx] ^= 1  # Flip the bit
+
+    error_indices = np.random.choice(len(encoded_bits), num_errors, replace=False)
+    for idx in error_indices:
+        received_bits[idx] ^= 1  # Flip the bit
     
     return received_bits
 
@@ -161,65 +137,61 @@ decoder = ViterbiDecoder()
 rsc = RSCodec(2)  # Reed-Solomon codec with 2 error correction symbols
 
 # Example input bit sequence
-input_bits = text_to_bits("Test")
+message = "Morten was here !!!!"
+input_bits = text_to_bits(message)
+print("Binary msg: ", input_bits)
 
 # Encode the input bits using Reed-Solomon encoding
-message = bytes(input_bits)
-encoded_message = rsc.encode(message)
-print("Reed-Solomon Encoded Message: ", bytes_to_bits(encoded_message))
+# message = bytes(input_bits)
+# encoded_message = rsc.encode(message)
+# print("Reed-Solomon Encoded Message: ", bytes_to_bits(encoded_message))
 
 # Convert the encoded message to a bit sequence
-encoded_bits = []
-for byte in encoded_message:
-    encoded_bits.extend([int(bit) for bit in format(byte, '08b')])
+# encoded_bits = []
+# for byte in encoded_message:
+#     encoded_bits.extend([int(bit) for bit in format(byte, '08b')])
 
 # Encode the bit sequence using convolutional encoding
-conv_encoded_bits = encoder.encode(encoded_bits)
+conv_encoded_bits = encoder.encode(input_bits)
 # print("Convolutional Encoded Bits:  ", conv_encoded_bits)
 
-# Pack the convolutionally encoded bits into bytes
-packed_bits = encoder.pack_bits(conv_encoded_bits)
-print("Packed Bits: ", bytes_to_bits(packed_bits))
+# # Pack the convolutionally encoded bits into bytes
+# packed_bits = encoder.pack_bits(conv_encoded_bits)
+# print("Packed Bits: ", bytes_to_bits(packed_bits))
 
-# Modify these parameters to tweak error injection
-num_errors = 32
-burst_error = False
-error_position = 0
-custom_error_positions = None  # Example: [2, 5, 10] to manually select positions
+num_errors = 6
+received_bits = inject_errors(conv_encoded_bits, num_errors=num_errors)
 
-# Inject errors into the packed bits
-received_bits = inject_errors(packed_bits, num_errors=num_errors, burst=burst_error, 
-                              error_pos=error_position, custom_errors=custom_error_positions)
-
-print("Received Bits: ", bytes_to_bits(received_bits))
-
-
-# Unpack the received bits
-unpacked_bits = encoder.unpack_bits(received_bits)
-# print("Unpacked Bits: ", unpacked_bits)
+# # Unpack the received bits
+# unpacked_bits = encoder.unpack_bits(received_bits)
+# # print("Unpacked Bits: ", unpacked_bits)
 
 # Decode the unpacked bits using Viterbi algorithm
-viterbi_decoded_bits = decoder.decode(unpacked_bits)
-# print("Viterbi Decoded Bits: ", viterbi_decoded_bits)
+viterbi_decoded_bits = decoder.decode(received_bits)
+print("Viterbi Decoded Bits: ", viterbi_decoded_bits)
 
-# Convert the decoded bits back to bytes
-decoded_bytes = bytearray()
-for i in range(0, len(viterbi_decoded_bits), 8):
-    byte = int(''.join(map(str, viterbi_decoded_bits[i:i+8])), 2)
-    decoded_bytes.append(byte)
+# # Convert the decoded bits back to bytes
+# decoded_bytes = bytearray()
+# for i in range(0, len(viterbi_decoded_bits), 8):
+#     byte = int(''.join(map(str, viterbi_decoded_bits[i:i+8])), 2)
+#     decoded_bytes.append(byte)
 
-# Decode the bytes using Reed-Solomon decoding
-try:
-    rs_decoded_message = rsc.decode(decoded_bytes)[0]
-    print("Reed-Solomon Decoded Message: ", bytes_to_bits(rs_decoded_message))
-    print("Decoded message: ", bits_to_text(bytes_to_bits(rs_decoded_message)))
-except ReedSolomonError as e:
-    print("Reed-Solomon Decoding failed: ", e)
+# # Decode the bytes using Reed-Solomon decoding
+# try:
+#     rs_decoded_message = rsc.decode(decoded_bytes)[0]
+#     print("Reed-Solomon Decoded Message: ", bytes_to_bits(rs_decoded_message))
+#     print("Decoded message: ", bits_to_text(bytes_to_bits(rs_decoded_message)))
+# except ReedSolomonError as e:
+#     print("Reed-Solomon Decoding failed: ", e)
 
-print(hamming_distance(bytes_to_bits(packed_bits), bytes_to_bits(received_bits)))
+print("Hamming distance: ", hamming_distance(conv_encoded_bits, received_bits))
 
 # Check if the original message matches the decoded message
-if rs_decoded_message == message:
+decoded_message = bits_to_text(viterbi_decoded_bits)
+print(f"Amount of bits sent: {len(conv_encoded_bits)} / recieved: {len(viterbi_decoded_bits)}")
+print("Original message: " , message)
+print("Decoded message:  ", decoded_message)
+if decoded_message == message:
     print("YAYAYAYAYAYAYAYA")
 else:
     print("FAILED")
