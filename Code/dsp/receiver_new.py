@@ -8,7 +8,7 @@ from config_values import (
     CUT_OFF_FREQ,
     PATH_TO_WAV_FILE,
     SAMPLE_RATE,
-    SAMPLES_PER_SYMBOL,
+    SAMPLES_PER_SYMBOL
 )
 from scipy.io import wavfile
 
