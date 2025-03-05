@@ -51,7 +51,7 @@ def filter_signal(wav_shifted_signal):
     return filtered_demodulated_signal
 
 
-def normalize_signal(signal_centered):
+def min_max_normalize_signal(signal_centered):
     # Scale to [0, 1]
     normalized = (signal_centered - np.min(signal_centered)) / (
         np.max(signal_centered) - np.min(signal_centered)
@@ -93,35 +93,45 @@ def decode_bits(bits):
 
 def decode_message(thresholded_signal):
     bits = get_bits(thresholded_signal)
+    print(f"Bits : {bits}")
     decoded_message = decode_bits(bits)
     return decoded_message
 
 
+def remove_outliers(wave):
+    mu = np.mean(wave)
+    sigma = np.std(wave)
+    
+    for i in range(0, len(wave)):
+        if wave[i] > mu + 3*sigma or wave[i] < mu - 3*sigma:
+            wave[i] = mu
+    return wave
 def decode_wav_signal(wav_signal):
     analytic_signal = signal.hilbert(wav_signal)
     envelope = np.abs(analytic_signal)
     #
-    # filtered_signal = filter_signal(envelope)
+    envelope = filter_signal(envelope)
+    mean_shifted_signal = remove_outliers(envelope)
     mean_shifted_signal = envelope - np.mean(envelope)
-    normalized_signal = normalize_signal(mean_shifted_signal)
+    normalized_signal = min_max_normalize_signal(mean_shifted_signal)
     thresholded_signal = threshold_signal(normalized_signal)
     decoded_message = decode_message(thresholded_signal)
 
     # Plot critical signals
     plt.figure(figsize=(12, 8))
     plt.subplot(4, 1, 1)
-    plt.plot(envelope[:2000], label="Envelope")
+    plt.plot(wav_signal, label="Envelope")
     plt.title("Envelope")
-    # plt.subplot(4, 1, 2)
-    # plt.plot(filtered_signal[:2000], label="Filtered")
-    # plt.title("Filtered Signal")
+    plt.subplot(4, 1, 2)
+    plt.plot(analytic_signal, label="Filtered")
+    plt.title("Filtered Signal")
     plt.subplot(4, 1, 3)
-    plt.plot(normalized_signal[:2000], label="Normalized")
+    plt.plot(envelope, label="Normalized")
     plt.title("Normalized Signal")
     plt.subplot(4, 1, 4)
-    plt.plot(normalized_signal[:2000], label="Normalized")
-    plt.plot(thresholded_signal[:2000], label="Thresholded")
-    plt.plot(envelope[:2000], label="Envelope", alpha=0.5)
+    plt.plot(normalized_signal, label="Normalized")
+    plt.plot(thresholded_signal, label="Thresholded")
+    plt.plot(envelope, label="Envelope", alpha=0.5)
     plt.legend()
 
     plt.show()
@@ -199,7 +209,6 @@ if __name__ == "__main__":
     )
     print("DEBUGGING")
     print(
-        f" following is the decoded message:{decoded_wav_signal}",
-        len(decoded_wav_signal),
+        f" following is the decoded message:{decoded_wav_signal}"
     )
     # visualization_to_debug(wav_signal, debug_values)

@@ -81,7 +81,6 @@ def create_modulated_wave(square_wave: np.array, carrier_wave: np.array) -> np.a
 
 
 def write_to_wav_file(modulated_wave: np.array):
-    # Convert the modulated wave to a 16-bit integer array
     wav.write(PATH_TO_WAV_FILE, SAMPLE_RATE_FOR_WAV_FILE, modulated_wave)
 
 
@@ -155,8 +154,8 @@ if __name__ == "__main__":
     'Cause once you're mine, once you're mine (mine)
     (There's no going back)"""
     all_letters = "the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*"
-    a_ = "A"
-    square_wave, time_array = make_square_wave(katy)
+    a_ = "20000000000 dollars"
+    square_wave, time_array = make_square_wave(a_)
     carrier_wave = make_carrier_wave(time_array)
     print(len(time_array), np.shape(time_array))
     modulated_wave = create_modulated_wave(square_wave, carrier_wave)
