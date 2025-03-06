@@ -113,18 +113,25 @@ def transmitVirtual(message=MESSAGE):
 
 
 ser = initPort(PORT)
+import time
+
+
 def send_command(command):
-    
-    print(f"Sending command: {command}")
+    """Send a command and wait for a response if it contains '?'."""
     commands = command.strip().split("\n")
-    print(commands)
+    
     for cmd in commands:
         cmd = cmd.strip()
         if not cmd:
             continue
         
-        ser.write((cmd + "\r\n").encode())  # Send command
-        print(f"Sent: {cmd}")  # Debugging
+        ser.write((cmd + "\r\n").encode())  # Send normal command
+        print(f"Sent: {cmd}")  
+
+        if cmd[0:8]== "DATA:DAC":
+            time.sleep(0.01)
+
+        
         if "?" in cmd:  # If it's a query, wait for a response
             response = ser.readline().decode().strip()
             print(f"Response: {response}")
@@ -145,22 +152,31 @@ def transmitPhysical(message=MESSAGE):
     arb_wave_form_command = "DATA:DAC VOLATILE, 2047, 2047, -2047"
 
     
+    # name = "AAAA"
+    # command = "" \
+    # "APPL:USER 1, 1, 1\n" \
+    # + arb_wave_form_command + "\n" \
+    # "DATA:COPY " + name + "\n" \
+    # "FUNC:USER " + name + "\n" \
+    # "FUNC:USER?\n" \
+    # "DATA:CAT?\n" \
+    # "DATA:NVOLatile:FREE?\n"\
+    # "DATA:DELete:ALL\n" \
+    # #"SYSTem:ERRor?\n" \
+    # "\r" \
+
+
+    name = "COCK"
     command = "" \
-    "APPL:SIN 0.1, 0.1, 0.1\n" \
-    + arb_wave_form_command + "\n" \
-    "DATA:COPY GIGGLE\n" \
-    "FUNC:USER GIGGLE\n" \
+    "FREQ 1 \n" \
+    "VOLTage 10.0 \n" \
+    "VOLTage:OFFSet 0.0 \n" \
+    "DATA:DAC VOLATILE, 2047, 2047, -2047\n" \
+    "DATA:COPY " + name + "\n" \
+    "FUNC:USER " + name + "\n" \
     "FUNC:USER?\n" \
-    "DATA:CAT?\n" \
-    "DATA:NVOLatile:FREE?\n"\
-    "DATA:DELete:ALL\n" \
-    #"SYSTem:ERRor?\n" \
-    "\r" \
+    "OUTPut ON"
     
-    
-    
-
-
     send_command(command)
 
 
