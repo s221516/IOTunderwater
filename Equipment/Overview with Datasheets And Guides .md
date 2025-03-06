@@ -6,4 +6,4 @@
 | Wave Generator     | 33250A Function          | [Guide ](_\wavegeneratorguide.pdf), [Datasheet](_\Waveform-generator-datasheet.pdf)           |
 | Oscilloscope       | N6705C DC Power Analyzer | [Datasheet](_\TEKTRONIX-TDS3024B-Datasheet.pdf)                                              |
 | SoundCard          |                          | [Link](https://www.startech.com/en-dk/cards-adapters/icusbaudio2d)                           |
-|                    |                          |                                                                                           |
+| Null-modem cable   |                          | [ICUSB232FTN](https://www.startech.com/en-us/cards-adapters/icusb232ftn)                     |
