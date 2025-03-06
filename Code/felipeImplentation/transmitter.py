@@ -36,6 +36,7 @@ def save_wave_file(modulated_wave):
     
 
 if __name__ == "__main__":
+    print("COCK")
     square_wave, time_array = make_square_wave(MESSAGE)
     carrier_wave = make_carrier_wave(time_array)
     modulated_wave = create_modulated_wave(square_wave, carrier_wave)
