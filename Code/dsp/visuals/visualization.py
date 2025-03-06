@@ -4,7 +4,7 @@
 import matplotlib.pyplot as plt
 import numpy as np
 from config_values import SAMPLE_RATE, SAMPLES_PER_SYMBOL
-from plotting import plot_wave_in_frequency_domain, plot_wave_in_time_domain
+from visuals.plotting import plot_wave_in_frequency_domain, plot_wave_in_time_domain
 
 
 def get_bits_from_thresholded(thresholded_signal):

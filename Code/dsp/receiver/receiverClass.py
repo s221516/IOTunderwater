@@ -1,9 +1,11 @@
 from typing import Dict, Tuple
-
 import matplotlib.pyplot as plt
 import numpy as np
 import scipy.signal as signal
-from encoding.convolutional_encoding import conv_decode
+
+from encoding.convolutional_encoding import *
+from visuals.visualization import create_processing_visualization
+
 from config_values import (
     CARRIER_FREQ,
     CUT_OFF_FREQ,
@@ -13,7 +15,6 @@ from config_values import (
     CONVOLUTIONAL_CODING
 )
 from scipy.io import wavfile
-from visualization import create_processing_visualization
 
 plt.style.use("ggplot")
 
@@ -177,19 +178,6 @@ class CoherentReceiver(Receiver):
             "thresholded": thresholded,
         }
         return message, debug_info
-
-    def plot_simulation_steps(self):
-        if self.wav_signal is None:
-            print("No signal to visualize")
-            return
-
-        message, debug_info = self.decode()
-
-        # Use the new visualization function
-        fig = create_processing_visualization(self, message, debug_info)
-        plt.show()
-        return fig
-
 
 # Example usage
 if __name__ == "__main__":
