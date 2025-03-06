@@ -91,7 +91,7 @@ dark_horse_lyrics = """Yeah, y'all know what it is
 
 all_letters = "the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*"
 small_test = "This is: 14"
-A = "A"
+A = "AAAAAAA"
 
 # picture_in_binary_with_prefix = "p" + picture_in_binary
 

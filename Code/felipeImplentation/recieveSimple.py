@@ -3,7 +3,7 @@ import scipy.io.wavfile as wav
 import matplotlib.pyplot as plt
 from scipy.signal import butter, lfilter
 from config_values import *
-from plots import *
+
 np.set_printoptions(precision=4, suppress=True, linewidth=120)
 
 def read_wave_file(file_path):
@@ -17,10 +17,10 @@ def rectify_signal(signal):
 def low_pass_filter(rectified_signal, sample_rate):
 
     nyquist = 0.5 * sample_rate #The Nyquist frequency is half the sample rate and defines the highest frequency that can be represented in a digital signal without aliasing
-    normal_cutoff = CUTOFF / nyquist # normal_cutoff = 1, means the cutoff is at max frequency.
+    normal_cutoff = 15000 / nyquist # normal_cutoff = 1, means the cutoff is at max frequency.
 
     #TODO understand these:
-    b, a = butter(ORDER, normal_cutoff, btype='low', analog=False)
+    b, a = butter(5, normal_cutoff, btype='low', analog=False)
     return lfilter(b, a, rectified_signal)
 
 def decode(filtered_signal, sample_rate):
@@ -40,7 +40,6 @@ def decode(filtered_signal, sample_rate):
     decoded_message = ''.join(str(bit) for bit in decoded_bits)
     return decoded_message
 
-
 def binary_to_ascii(binary_str):
     # Split the binary string into 8-bit chunks
     binary_values = [binary_str[i:i+8] for i in range(0, len(binary_str), 8)]
@@ -53,20 +52,27 @@ def binary_to_ascii(binary_str):
     
     return ascii_str
 
+def plot_waveform(modulated_wave, sample_rate):
+    """Plot the waveform from the modulated wave."""
+    # Generate time axis
+    time_array = np.linspace(0, len(modulated_wave) / sample_rate, num=len(modulated_wave))
+
+    # Plot the waveform with a specific color
+    plt.figure(figsize=(10, 6))
+    plt.plot(time_array, modulated_wave, color='blue')  # Specify the color here
+    plt.title("Waveform")
+    plt.xlabel("Time (seconds)")
+    plt.ylabel("Amplitude")
+    plt.grid(True)
+    plt.show()
 
 
-if __name__ == "__main__":
+
+def recieve():
     modulated_wave, sample_rate = read_wave_file(PATH_TO_WAV_FILE)
+    plot_waveform(modulated_wave, sample_rate)
     rectified_signal = rectify_signal(modulated_wave)
     filtered_signal = low_pass_filter(rectified_signal, sample_rate)
     decoded = decode(filtered_signal, sample_rate)
-
-    print(binary_to_ascii(decoded))
-
-    visualize_transformations(
-    [modulated_wave, rectified_signal, filtered_signal],
-    sample_rate,
-    ["Original Modulated Wave", "Rectified Signal", "Filtered (Envelope) Signal"]
-)
 
 
