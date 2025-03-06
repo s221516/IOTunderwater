@@ -10,7 +10,7 @@ FORMAT = pyaudio.paInt16
 CHANNELS = 1 if sys.platform == 'darwin' else 2
 RATE = 96000 # "hardcap" from StarTech
 
-def create_wav_file_from_recording():
+def create_wav_file_from_recording(record_seconds=RECORD_SECONDS):
     p = pyaudio.PyAudio()
 
     # Open a new wave file
@@ -19,21 +19,34 @@ def create_wav_file_from_recording():
     wf.setsampwidth(p.get_sample_size(FORMAT))
     wf.setframerate(RATE)
 
+    
     # List available input devices
     info = p.get_host_api_info_by_index(0)
     numdevices = info.get('deviceCount')
+    device_index = None
+
     for i in range(0, numdevices):
-        if (p.get_device_info_by_host_api_device_index(0, i).get('maxInputChannels')) > 0:
-            print("Input Device id ", i, " - ", p.get_device_info_by_host_api_device_index(0, i).get('name'))
+        device_info = p.get_device_info_by_host_api_device_index(0, i)
+        device_name = device_info.get('name')
+        print(device_name)
+        if 'Microphone (USB Advanced Audio' in device_name:
+            device_index = i
+            print(f"Found device: {device_name} at index {device_index}")
+            break  # stop looping once we find the correct device
+
+    # If device not found, raise AssertionError
+    assert device_index is not None, "Device 'Microphone (USB Advanced Audio)' not found!"
+
 
     # Open the audio stream
-    stream = p.open(format=FORMAT, channels=CHANNELS, rate=RATE, input=True, frames_per_buffer=CHUNK, input_device_index=2)
+    stream = p.open(format=FORMAT, channels=CHANNELS, rate=RATE, input=True, 
+                    frames_per_buffer=CHUNK, input_device_index=device_index)
 
     print('Recording...')
     frames = []
 
     # Read and store audio data
-    for _ in range(0, int(RATE / CHUNK * RECORD_SECONDS)):
+    for _ in range(0, int(RATE / CHUNK * record_seconds)):
         data = stream.read(CHUNK)
         frames.append(data)
     print('Done recording')

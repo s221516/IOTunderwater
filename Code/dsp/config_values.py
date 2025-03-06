@@ -13,7 +13,7 @@ PATH_TO_PICTURE = "./data/doge.jpg"
 
 CONVOLUTIONAL_CODING = True
 SAMPLE_RATE_FOR_WAV_FILE = 44100  # Hz
-RECORD_SECONDS = 5
+RECORD_SECONDS = 1
 
 
 dark_horse_lyrics = """Yeah, y'all know what it is
@@ -86,15 +86,17 @@ dark_horse_lyrics = """Yeah, y'all know what it is
     (There's no going back)"""
 
 
-
-
 # with open("picture_in_binary.txt", "r") as file:
 #     picture_in_binary = file.read()
 
 all_letters = "the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*"
 small_test = "This is: 14"
+A = "A"
 
 # picture_in_binary_with_prefix = "p" + picture_in_binary
 
 
-MESSAGE = dark_horse_lyrics
+MESSAGE = A
+
+
+PORT = "COM3"
