@@ -1,6 +1,5 @@
 def string_to_binary(input_string):
     return ''.join(format(ord(char), '08b') for char in input_string)
-
 def binary_to_squareWave(bit_string, floatPointsPerBit:int):
     squareWave = []
     for i in bit_string:
@@ -14,7 +13,6 @@ def binary_to_squareWave(bit_string, floatPointsPerBit:int):
                 squareWave.append(-0.5)
 
     return squareWave
-
 #test 0's on both sides
 def addPaddingToSquareWave(SquareWave):
     targetSize = 50 #65,536 or 16,384 (page 198 and 298 )

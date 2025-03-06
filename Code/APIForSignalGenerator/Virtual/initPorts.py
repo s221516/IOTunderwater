@@ -5,11 +5,11 @@ def initPort(portName):
         # Initialize serial port
         ser = serial.Serial(
             port=portName,  
-            baudrate=9600,  # Default baudrate
+            baudrate=57600,  # Default baudrate
             bytesize=serial.EIGHTBITS,  # 8 bits per byte
             parity=serial.PARITY_NONE,  # No parity
             stopbits=serial.STOPBITS_ONE,  # 1 stop bit
-            timeout=10,  # 1 second timeout for read/write operations
+            timeout=1,  # 1 second timeout for read/write operations
             dsrdtr=True,  # Enable DSR/DTR hardware handshaking
             rtscts=False,  # Disable RTS/CTS flow control
             xonxoff=False  # Disable software flow control (XON/XOFF)
