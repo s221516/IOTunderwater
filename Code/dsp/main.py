@@ -1,6 +1,6 @@
-from transmitterClass import Transmitter
-from receiverClass import NonCoherentReceiver, CoherentReceiver
-from config_values import PATH_TO_WAV_FILE, all_letters, SAMPLE_RATE
+from Code.dsp.transmitter.transmitterClass import Transmitter
+from Code.dsp.receiver.receiverClass import NonCoherentReceiver, CoherentReceiver
+from config_values import PATH_TO_WAV_FILE, SAMPLE_RATE, MESSAGE
 import time
 import numpy as np
 import seaborn as sns
@@ -105,8 +105,8 @@ def plot_demodulation_steps(receiver, debug_info, receiver_type):
     plt.show()
 
 def main():
-    message = "AA"
-    transmitter = Transmitter(message)
+    message = "A"
+    transmitter = Transmitter(MESSAGE)
     transmitter.transmit()
 
     time.sleep(1)

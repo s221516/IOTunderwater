@@ -2,12 +2,14 @@ from typing import Dict, Tuple
 import matplotlib.pyplot as plt
 import numpy as np
 import scipy.signal as signal
+from encoding.convolutional_encoding import conv_decode
 from config_values import (
     CARRIER_FREQ,
     CUT_OFF_FREQ,
     PATH_TO_WAV_FILE,
     SAMPLE_RATE,
     SAMPLES_PER_SYMBOL,
+    CONVOLUTIONAL_CODING
 )
 from scipy.io import wavfile
 
@@ -19,7 +21,6 @@ class Receiver:
     @classmethod
     def from_wav_file(cls, path: str):
         _, wav_signal = wavfile.read(path)
-        wav_signal = wav_signal / 32767.0  # Normalize if needed
         return cls(wav_signal)
 
     def _demodulate(self) -> Tuple[np.ndarray, Dict]:
@@ -76,7 +77,7 @@ class Receiver:
             bits.append(1 if mu > 0.5 else 0)
         return bits
 
-    def decode_bits(self, bits: list) -> str:
+    def decode_bytes_to_bits(self, bits: list) -> str:
         if len(bits) % 8 != 0:
             print("ERROR: Number of bits is not a multiple of 8")
             return ""
@@ -93,7 +94,7 @@ class Receiver:
         normalized = self.normalize_signal(adjusted_signal)
         thresholded = self.threshold_signal(normalized)
         bits = self.get_bits(thresholded)
-        message = self.decode_bits(bits)
+        message = self.decode_bytes_to_bits(bits)
         debug_info = {
             **demod_debug,
             "cleaned_signal": cleaned_signal,
@@ -120,7 +121,10 @@ class NonCoherentReceiver(Receiver):
         normalized = self.normalize_signal(cleaned_signal)
         thresholded = self.threshold_signal(normalized)
         bits = self.get_bits(thresholded)
-        message = self.decode_bits(bits)
+        if (CONVOLUTIONAL_CODING):
+            bits = conv_decode(bits)
+
+        message = self.decode_bytes_to_bits(bits)
         debug_info = {
             **demod_debug,
             "normalized": normalized,
@@ -146,7 +150,11 @@ class CoherentReceiver(Receiver):
         normalized = self.normalize_signal(cleaned_signal)
         thresholded = self.threshold_signal(normalized)
         bits = self.get_bits(thresholded)
-        message = self.decode_bits(bits)
+
+        if (CONVOLUTIONAL_CODING):
+            bits = conv_decode(bits)
+
+        message = self.decode_bytes_to_bits(bits)
         debug_info = {
             **demod_debug,
             "normalized": normalized,

@@ -1,16 +1,17 @@
 import matplotlib.pyplot as plt
 import numpy as np
 import scipy.io.wavfile as wav
+from encoding.convolutional_encoding import conv_encode, bit_string_to_list, list_to_bit_string
 from config_values import (
     CARRIER_FREQ,
     PATH_TO_WAV_FILE,
     SAMPLE_RATE,
     SAMPLE_RATE_FOR_WAV_FILE,
     SAMPLES_PER_SYMBOL,
+    CONVOLUTIONAL_CODING
 )
 
 np.set_printoptions(precision=4, suppress=True)
-
 
 class Transmitter:
     def __init__(self, message: str):
@@ -23,6 +24,13 @@ class Transmitter:
     def make_square_wave(self):
         """Convert the message into a binary square wave."""
         message_binary = "".join(format(ord(i), "08b") for i in self.message)
+        
+        if (CONVOLUTIONAL_CODING):
+
+            message_binary = bit_string_to_list(message_binary)
+            message_binary = conv_encode(message_binary)
+            message_binary = list_to_bit_string(message_binary)
+
         print("Message binary:", message_binary)
         square_wave = []
         for bit in message_binary:
