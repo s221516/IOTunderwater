@@ -113,17 +113,25 @@ def transmitVirtual(message=MESSAGE):
 
 
 ser = initPort(PORT)
-def write(command):
+def send_command(command):
     
-    ser.write(command.encode())
-    
-    message = ""
-    while True:
-        message = ser.readline().decode()  
-        if message: 
-            print(message)
-            break
-        time.sleep(0.1)
+    print(f"Sending command: {command}")
+    commands = command.strip().split("\n")
+    print(commands)
+    for cmd in commands:
+        cmd = cmd.strip()
+        if not cmd:
+            continue
+        
+        ser.write((cmd + "\r\n").encode())  # Send command
+        print(f"Sent: {cmd}")  # Debugging
+        if "?" in cmd:  # If it's a query, wait for a response
+            response = ser.readline().decode().strip()
+            print(f"Response: {response}")
+            time.sleep(0.1)  # Small delay to avoid overloading the buffer
+        else:
+            time.sleep(0.05)  # Short delay for non-query commands
+
 
 def transmitPhysical(message=MESSAGE):
     """Run virtual transmission process - send commands to signal generator"""
@@ -137,15 +145,25 @@ def transmitPhysical(message=MESSAGE):
     arb_wave_form_command = "DATA:DAC VOLATILE, 2047, 2047, -2047"
 
     
-    command = ""\
-    "APPL:USER 1, 10, 0 \r\n" \
-    + arb_wave_form_command + "\r\n" \
-    "DATA:COPY GIGGLE \r\n" \
-    "FUNC:USER GIGGLE \r\n" \
-    "FUNC:USER? \r\n" \
+    command = "" \
+    "APPL:SIN 0.1, 0.1, 0.1\n" \
+    + arb_wave_form_command + "\n" \
+    "DATA:COPY GIGGLE\n" \
+    "FUNC:USER GIGGLE\n" \
+    "FUNC:USER?\n" \
+    "DATA:CAT?\n" \
+    "DATA:NVOLatile:FREE?\n"\
+    "DATA:DELete:ALL\n" \
+    #"SYSTem:ERRor?\n" \
+    "\r" \
     
-    #"DATA:CAT?\r\n" \ shows all available waveforms
     
-    write(command)
+    
+
+
+    send_command(command)
+
+
+    
     
 
