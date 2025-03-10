@@ -70,3 +70,6 @@ def bit_string_to_list(bit_string):
 def list_to_bit_string(bit_list):
     """Converts a list of integers to a bit string."""
     return ''.join(str(bit) for bit in bit_list)
+
+# if __name__ == "__main__":
+#     print(conv_encode([0,1,0,0,0,1,1,1,0,1,0,0,0,1,1,1]))

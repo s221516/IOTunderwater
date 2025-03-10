@@ -10,7 +10,9 @@ THRESHOLD_BINARY_VAL = 170  # defines when a pixel should be black or white when
 NOISE_AMPLITUDE = 0.0  # noise
 PATH_TO_WAV_FILE = "Code/dsp/data/recording.wav"
 PATH_TO_PICTURE = "./data/doge.jpg"
-PREAMBLE_PATTERN = [0,1,0,0,0,1,1,1,0,1,0,0,0,1,1,1]
+# PREAMBLE_PATTERN = [0,1,0,0,0,1,1,1,0,1,0,0,0,1,1,1]
+PREAMBLE_PATTERN = [0, 0, 0, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 0, 0, 1, 0, 1, 0, 1, 1, 1, 0, 0, 0, 0, 1, 0, 1, 0, 1, 1, 0, 1, 1, 1, 0, 0, 0, 1, 0, 1, 0, 1, 1, 1, 0, 0]
+
 
 CONVOLUTIONAL_CODING = True
 MAKE_NEW_RECORDING = True
