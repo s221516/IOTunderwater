@@ -20,15 +20,32 @@ from scipy.io import wavfile
 plt.style.use("ggplot")
 
 
+def plot_wav_signal(sample_rate, wav_signal):
+        time = np.linspace(0, len(wav_signal) / sample_rate, num=len(wav_signal))
+        plt.figure(figsize=(10, 4))
+        plt.plot(time, wav_signal, label="WAV Signal")
+        plt.xlabel("Time (seconds)")
+        plt.ylabel("Amplitude")
+        plt.title("Waveform of WAV File")
+        plt.legend()
+        plt.grid()
+        plt.show()
+        print("Plotted WAV signal successfully.")
+
 class Receiver:
     def __init__(self, wav_signal: np.ndarray):
         self.wav_signal = wav_signal
 
     @classmethod
     def from_wav_file(cls, path: str):
-        _, wav_signal = wavfile.read(path)
-        return cls(wav_signal)
+        sample_rate, wav_signal = wavfile.read(path)
 
+        #TODO change this method to return a wav signal so it can be used for
+        print(sample_rate)
+        print(f"i am wav signal {wav_signal}")
+        plot_wav_signal(sample_rate, wav_signal)
+        return cls(wav_signal)
+    
     def _demodulate(self) -> Tuple[np.ndarray, Dict]:
         raise NotImplementedError("Subclasses must implement _demodulate")
 
@@ -116,9 +133,13 @@ class Receiver:
         if self.wav_signal is None:
             print("No signal to visualize")
             return
-
-        message, debug_info = self.decode()
-
+        
+        try:
+            message, debug_info = self.decode()
+        except Exception as e:
+            print(f"could not plot {e}")
+            return
+        
         # Use the new visualization function
         fig = create_processing_visualization(self, message, debug_info)
         plt.show()
@@ -146,7 +167,6 @@ class NonCoherentReceiver(Receiver):
         # print(len(bits_without_preamble))
         if (bits_without_preamble == -1):
             print("No preamble found RecieverClass, decode method")
-            print(bits_without_preamble)
             raise TypeError
 
         if (CONVOLUTIONAL_CODING):

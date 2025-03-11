@@ -5,11 +5,7 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 from encoding.convolutional_encoding import conv_encode
 
-
-from config_values import (
-    MESSAGE, PORT, BIT_RATE, CONVOLUTIONAL_CODING
-)
-
+from config_values import PORT, CONVOLUTIONAL_CODING, PREAMBLE_PATTERN
 
 ser = initPort(PORT)
 def send_command(command):
@@ -34,7 +30,7 @@ def send_command(command):
             time.sleep(0.1)  # Small delay to avoid overloading the buffer
         else:
             time.sleep(0.05)  # Short delay for non-query commands
-def make_square_wave(message: str): #ON OFF KEYING
+def message_toBitArray(message: str): #ON OFF KEYING
     message_binary = ''.join(format(ord(i), '08b') for i in message)
     print(f"Message in binary: {message_binary}")
     # TODO: determine the exact number of samples per bit that makes sense in relation to our sample rate 
@@ -48,23 +44,32 @@ def make_square_wave(message: str): #ON OFF KEYING
             square_wave += [1] 
 
     return square_wave
+    
+def stopTransmission():
+    command = f"""
+    OUTPut OFF
+    """
+    send_command(command)
 
-def transmit(message=MESSAGE):    
-    hej wassap dawg my name is keep sicuk dick
-    bits = make_square_wave("GG" + "Hello World")
-
-    #REMOVE THIS IF LATER
+def transmitPhysical(message, carrier, bitrate):    
+    
+    bits = message_toBitArray(message)
+   
     if CONVOLUTIONAL_CODING:
          bits = conv_encode(bits)
 
+    
+    bits = PREAMBLE_PATTERN + bits
+    #change bits to -1 for signal generator scipy commands
     for i in range(0, len(bits),1):
         if bits[i] == 0:
             bits[i]= -1
-    
+    ''
+    ''
 
     bits = np.array(bits)
     arb_wave_form_command = "DATA:DAC VOLATILE, " + ", ".join(map(str, bits * 2047))
-    freq = BIT_RATE/len(bits) 
+    freq = bitrate/len(bits) 
     
     
     name = "COCK"
@@ -80,7 +85,7 @@ def transmit(message=MESSAGE):
 
 
     command = f"""
-    APPLy:SIN 3750, 10, 0
+    APPLy:SIN {carrier}, 10, 0
     AM:SOUR INT
     AM:INTernal:FUNCtion USER
     AM:INT:FREQuency {freq}
@@ -89,10 +94,3 @@ def transmit(message=MESSAGE):
     """
 
     send_command(command)
-
-
-def main():
-    transmit(MESSAGE)
-
-if __name__ == "__main__":
-    main()
