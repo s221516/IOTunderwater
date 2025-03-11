@@ -40,11 +40,6 @@ class Receiver:
     @classmethod
     def from_wav_file(cls, path: str):
         sample_rate, wav_signal = wavfile.read(path)
-
-        #TODO change this method to return a wav signal so it can be used for
-        print(sample_rate)
-        print(f"i am wav signal {wav_signal}")
-        plot_wav_signal(sample_rate, wav_signal)
         return cls(wav_signal)
     
     def _demodulate(self) -> Tuple[np.ndarray, Dict]:
@@ -181,7 +176,6 @@ class NonCoherentReceiver(Receiver):
         thresholded = self.threshold_signal(normalized)
         bits = self.get_bits(thresholded)
         bits_without_preamble = self.remove_preamble(bits)
-        # print(len(bits_without_preamble))
         if (bits_without_preamble == -1):
             print("No preamble found RecieverClass, decode method")
             raise TypeError

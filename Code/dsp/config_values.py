@@ -1,6 +1,5 @@
 def message_toBitArray(message: str): 
     message_binary = ''.join(format(ord(i), '08b') for i in message)
-    print(f"Message in binary: {message_binary}")
     # TODO: determine the exact number of samples per bit that makes sense in relation to our sample rate 
     # and bits per second and also how this is done in the signal generator
     
@@ -17,8 +16,8 @@ def message_toBitArray(message: str):
 # 31650 / 15200
 import numpy as np
 SAMPLE_RATE = 96000  # this capped by the soundcard, therefore, this is non-changeable
-CARRIER_FREQ = 700  #  15200 Hz
-BIT_RATE = 200   
+CARRIER_FREQ = 15200  #  15200 Hz
+BIT_RATE = 200
 SAMPLES_PER_SYMBOL = int(SAMPLE_RATE / BIT_RATE)  # TODO investigate this ratio int(SAMPLE_RATE / BIT_RATE)
 CUT_OFF_FREQ = (CARRIER_FREQ + BIT_RATE) // 2  # TODO: check this value
 THRESHOLD_BINARY_VAL = 170  # defines when a pixel should be black or white when converting from RGB to black-white
@@ -34,8 +33,7 @@ PREAMBLE_PATTERN = PREAMBLE_BASE * REPETITIONS
 CONVOLUTIONAL_CODING = False
 MAKE_NEW_RECORDING = True
 SAMPLE_RATE_FOR_WAV_FILE = 44100  # Hz
-RECORD_SECONDS = 3
-
+RECORD_SECONDS = 2
 
 dark_horse_lyrics = """Yeah, y'all know what it is
     Katy Perry
@@ -119,4 +117,4 @@ all_letters = "the quick brown fox jumps over the lazy dog while vexd zebras fig
 small_test = "This is: 14"
 A = "A"
 MESSAGE = A
-PORT = "COM3"
+PORT = "COM11"

@@ -10,6 +10,7 @@ from transmitterPhysical import transmitPhysical, stopTransmission
 import csv
 
 def logInCsv(id, bitrate, carrierfreq, original_message, decoded_message, filename="log.csv"):
+
     headers = ["ID", "Bitrate", "Carrier Frequency", "Original Message", "Decoded Message"]
 
     # Check if the file exists to determine if we need to write headers
@@ -74,18 +75,16 @@ def main():
     # Start recording
     if (MAKE_NEW_RECORDING):
        create_wav_file_from_recording(RECORD_SECONDS)
-   
+
+    time.sleep(0.1)
+    stopTransmission()
     # Non-Coherent demodulation
     receiver_non_coherent = NonCoherentReceiver.from_wav_file(PATH_TO_WAV_FILE)
     
-    try:
-        message_nc, debug_nc = receiver_non_coherent.decode()
-        print(f"Non-Coherent Decoded: {message_nc}")
-        receiver_non_coherent.plot_simulation_steps()
-
-    finally:
-        stopTransmission()
-
+    message_nc, debug_nc = receiver_non_coherent.decode()
+    print(f"Non-Coherent Decoded: {message_nc}")
+    receiver_non_coherent.plot_simulation_steps()
+        
     # # Coherent demodulation
     # receiver_coherent = CoherentReceiver.from_wav_file(PATH_TO_WAV_FILE)
     # message_c, debug_c = receiver_coherent.decode()

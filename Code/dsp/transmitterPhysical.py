@@ -30,6 +30,7 @@ def send_command(command):
             time.sleep(0.1)  # Small delay to avoid overloading the buffer
         else:
             time.sleep(0.05)  # Short delay for non-query commands
+            
 def message_toBitArray(message: str): #ON OFF KEYING
     message_binary = ''.join(format(ord(i), '08b') for i in message)
     print(f"Message in binary: {message_binary}")
@@ -56,10 +57,11 @@ def transmitPhysical(message, carrier, bitrate):
     bits = message_toBitArray(message)
    
     if CONVOLUTIONAL_CODING:
-         bits = conv_encode(bits)
+        bits = conv_encode(bits)
 
     
     bits = PREAMBLE_PATTERN + bits
+    print(bits)
     #change bits to -1 for signal generator scipy commands
     for i in range(0, len(bits),1):
         if bits[i] == 0:
