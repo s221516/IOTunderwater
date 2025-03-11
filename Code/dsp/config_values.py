@@ -1,5 +1,6 @@
 # nyquist = 30400
 # 31650 / 15200
+import numpy as np
 SAMPLE_RATE = 96000  # this capped by the soundcard, therefore, this is non-changeable
 CARRIER_FREQ = 15200  #  15200 Hz
 BIT_RATE = 200   
@@ -10,9 +11,9 @@ THRESHOLD_BINARY_VAL = 170  # defines when a pixel should be black or white when
 NOISE_AMPLITUDE = 0.0  # noise
 PATH_TO_WAV_FILE = "Code/dsp/data/recording.wav"
 PATH_TO_PICTURE = "./data/doge.jpg"
-# PREAMBLE_PATTERN = [0,1,0,0,0,1,1,1,0,1,0,0,0,1,1,1]
-PREAMBLE_PATTERN = [0, 0, 0, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 0, 0, 1, 0, 1, 0, 1, 1, 1, 0, 0, 0, 0, 1, 0, 1, 0, 1, 1, 0, 1, 1, 1, 0, 0, 0, 1, 0, 1, 0, 1, 1, 1, 0, 0]
-
+PREAMBLE_BASE = [0,1,0,0,0,1,1,1]
+REPETITIONS = 3
+PREAMBLE_PATTERN = PREAMBLE_BASE * REPETITIONS
 
 CONVOLUTIONAL_CODING = True
 MAKE_NEW_RECORDING = True
@@ -104,3 +105,43 @@ MESSAGE = small_test
 
 
 PORT = "COM3"
+
+
+def test():
+
+    bits = [1,0,1,0, 1,1,1,0, 1,0,1,0]    
+    pattern_length = 4
+    for i in range(0, len(bits) - (3 * pattern_length) + 1, 1):
+        avg_pattern = (bits[i:i + pattern_length] + bits[i + pattern_length: i + (2 * pattern_length)] + bits[i + (2 * pattern_length) :  i + (3 * pattern_length)])
+        print(avg_pattern)
+        for i in range(len(avg_pattern)):
+            if avg_pattern[i] > 0.5:
+                avg_pattern[i] = 1
+            else:
+                avg_pattern[i] = 0
+    
+    print(avg_pattern)
+
+
+def process_bits(bits, pattern_length):
+    avg_pattern = []
+
+    # Compute element-wise average
+    for i in range(len(bits) - 2 * pattern_length):
+        avg_value = (bits[i] + bits[i + pattern_length] + bits[i + 2 * pattern_length]) / 3
+        avg_pattern.append(avg_value)
+
+    # Convert values to 1 or 0
+    for i in range(len(avg_pattern)):
+        if avg_pattern[i] > 0.5:
+            avg_pattern[i] = 1
+        else:
+            avg_pattern[i] = 0
+
+    return avg_pattern
+
+# Example usage
+bits = [1,0,0,0, 1,1,1,0, 1,0,1,1]   
+pattern_length = 4
+result = process_bits(bits, pattern_length)
+print(result)

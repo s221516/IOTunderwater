@@ -13,7 +13,8 @@ from config_values import (
     SAMPLE_RATE,
     SAMPLES_PER_SYMBOL,
     CONVOLUTIONAL_CODING,
-    PREAMBLE_PATTERN
+    PREAMBLE_PATTERN,
+    PREAMBLE_BASE
 )
 from scipy.io import wavfile
 
@@ -86,16 +87,22 @@ class Receiver:
     def remove_preamble(self, bits):
         start_index = None
         end_index = None
+
+        pattern_length = len(PREAMBLE_PATTERN)
+        
+                
+
+
         for i in range(0, len(bits), 1):
-            if bits[i: i+len(PREAMBLE_PATTERN)] == PREAMBLE_PATTERN:
-                start_index = i + len(PREAMBLE_PATTERN)
+            if bits[i: i + pattern_length] == PREAMBLE_BASE:
+                start_index = i + pattern_length
                 break
                 
         if (start_index == None):
             return -1
         
         for i in range(start_index, len(bits), 1):
-            if bits[i: i+len(PREAMBLE_PATTERN)] == PREAMBLE_PATTERN:
+            if bits[i: i + pattern_length] == PREAMBLE_BASE:
                 end_index = i
                 break
         
