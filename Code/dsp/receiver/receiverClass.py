@@ -12,7 +12,8 @@ from config_values import (
     PATH_TO_WAV_FILE,
     SAMPLE_RATE,
     SAMPLES_PER_SYMBOL,
-    CONVOLUTIONAL_CODING
+    CONVOLUTIONAL_CODING,
+    PREAMBLE_PATTERN
 )
 from scipy.io import wavfile
 
@@ -50,7 +51,7 @@ class Receiver:
         mu = np.mean(wave)
         sigma = np.std(wave)
         for i in range(len(wave)):
-            if wave[i] > mu + 3 * sigma or wave[i] < mu - 3 * sigma:
+            if wave[i] > mu + 2 * sigma or wave[i] < mu - 2 * sigma:
                 wave[i] = mu
         return wave
 
@@ -76,37 +77,40 @@ class Receiver:
         return thresholded
 
     def get_bits(self, thresholded_signal: np.ndarray) -> list:
-        bits = []
+        bits = []       
         for i in range(0, len(thresholded_signal), SAMPLES_PER_SYMBOL):
             mu = np.mean(thresholded_signal[i : i + SAMPLES_PER_SYMBOL])
             bits.append(1 if mu > 0.5 else 0)
         return bits
 
+    def remove_preamble(self, bits):
+        start_index = None
+        end_index = None
+        for i in range(0, len(bits), 1):
+            if bits[i: i+len(PREAMBLE_PATTERN)] == PREAMBLE_PATTERN:
+                start_index = i + len(PREAMBLE_PATTERN)
+                break
+                
+        if (start_index == None):
+            return -1
+        
+        for i in range(start_index, len(bits), 1):
+            if bits[i: i+len(PREAMBLE_PATTERN)] == PREAMBLE_PATTERN:
+                end_index = i
+                break
+        
+        return bits[start_index:end_index]
+    
+
     def decode_bytes_to_bits(self, bits: list) -> str:
         if len(bits) % 8 != 0:
-            print("ERROR: Number of bits is not a multiple of 8")
-            return ""
+            remainder = len(bits) % 8
+            bits += ([0] * (8 - remainder))
         message = ""
         for i in range(0, len(bits), 8):
             byte = bits[i : i + 8]
             message += chr(int("".join(map(str, byte)), 2))
         return message
-
-    def decode(self) -> Tuple[str, Dict]:
-        filtered_signal, demod_debug = self._demodulate()
-        cleaned_signal = self.remove_outliers(filtered_signal)
-        adjusted_signal = cleaned_signal - np.mean(cleaned_signal)
-        normalized = self.normalize_signal(adjusted_signal)
-        thresholded = self.threshold_signal(normalized)
-        bits = self.get_bits(thresholded)
-        message = self.decode_bytes_to_bits(bits)
-        debug_info = {
-            **demod_debug,
-            "cleaned_signal": cleaned_signal,
-            "normalized": normalized,
-            "thresholded": thresholded,
-        }
-        return message, debug_info
 
     def plot_simulation_steps(self):
         if self.wav_signal is None:
@@ -138,10 +142,17 @@ class NonCoherentReceiver(Receiver):
         normalized = self.normalize_signal(cleaned_signal)
         thresholded = self.threshold_signal(normalized)
         bits = self.get_bits(thresholded)
-        if (CONVOLUTIONAL_CODING):
-            bits = conv_decode(bits)
+        bits_without_preamble = self.remove_preamble(bits)
+        # print(len(bits_without_preamble))
+        if (bits_without_preamble == -1):
+            print("No preamble found RecieverClass, decode method")
+            print(bits_without_preamble)
+            raise TypeError
 
-        message = self.decode_bytes_to_bits(bits)
+        if (CONVOLUTIONAL_CODING):
+            bits_without_preamble = conv_decode(bits_without_preamble)
+
+        message = self.decode_bytes_to_bits(bits_without_preamble)
         debug_info = {
             **demod_debug,
             "normalized": normalized,
@@ -167,11 +178,12 @@ class CoherentReceiver(Receiver):
         normalized = self.normalize_signal(cleaned_signal)
         thresholded = self.threshold_signal(normalized)
         bits = self.get_bits(thresholded)
+        bits_without_preamble = self.remove_preamble(bits)
 
         if (CONVOLUTIONAL_CODING):
             bits = conv_decode(bits)
 
-        message = self.decode_bytes_to_bits(bits)
+        message = self.decode_bytes_to_bits(bits_without_preamble)
         debug_info = {
             **demod_debug,
             "normalized": normalized,

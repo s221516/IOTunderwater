@@ -1,7 +1,6 @@
 import matplotlib.pyplot as plt
 import numpy as np
 import scipy.io.wavfile as wav
-from ..initPorts import initPort
 import time
 
 
