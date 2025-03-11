@@ -14,7 +14,9 @@ from config_values import (
     SAMPLES_PER_SYMBOL,
     CONVOLUTIONAL_CODING,
     PREAMBLE_PATTERN,
-    PREAMBLE_BASE
+    PREAMBLE_BASE, 
+    APPLY_AVERAGING_PREAMBLE,
+    REPETITIONS
 )
 from scipy.io import wavfile
 
@@ -96,32 +98,32 @@ class Receiver:
             bits.append(1 if mu > 0.5 else 0)
         return bits
 
-    def remove_preamble(self, bits):
+    def remove_preamble_average(self, bits):
         start_index = None
         end_index = None
 
         base_len = len(PREAMBLE_BASE)
 
-        for i in range(0, len(bits) - (3 * base_len), 1):
+        for i in range(0, len(bits) - (REPETITIONS * base_len), 1):
             avg_pattern = []
 
             for j in range(base_len):
-                sum_bit = bits[i + j] + bits[i + base_len + j] + bits[i + 2 * base_len + j]
-                avg_bit = (sum_bit / 3)
+                sum_bit = bits[i + j] + bits[i + base_len + j] + bits[i + 2 * base_len + j] + bits[i + 3 * base_len + j] + bits[i + 4 * base_len + j] 
+                avg_bit = (sum_bit / REPETITIONS)
                 avg_pattern.append(1 if avg_bit > 0.5 else 0)
             
             if avg_pattern == PREAMBLE_BASE:
-                start_index = i + 3 * base_len
+                start_index = i + REPETITIONS * base_len
                 break
                 
         if (start_index == None):
             return -1
         
-        for i in range(start_index, len(bits) - (3 * base_len), 1):
+        for i in range(start_index, len(bits) - (REPETITIONS * base_len), 1):
             avg_pattern = []
             for j in range(base_len):
-                sum_bit = bits[i + j] + bits[i + base_len + j] + bits[i + 2 * base_len + j]
-                avg_bit = (sum_bit / 3)
+                sum_bit = bits[i + j] + bits[i + base_len + j] + bits[i + 2 * base_len + j] + bits[i + 3 * base_len + j] + bits[i + 4 * base_len + j]
+                avg_bit = (sum_bit / REPETITIONS)
                 avg_pattern.append(1 if avg_bit > 0.5 else 0)
             
             if avg_pattern == PREAMBLE_BASE:
@@ -130,6 +132,23 @@ class Receiver:
             
             return bits[start_index:end_index]
     
+    def remove_preamble_naive(self, bits):
+        start_index = None
+        end_index = None
+        for i in range(0, len(bits), 1):
+            if bits[i: i+len(PREAMBLE_PATTERN)] == PREAMBLE_PATTERN:
+                start_index = i + len(PREAMBLE_PATTERN)
+                break
+                
+        if (start_index == None):
+            return -1
+        
+        for i in range(start_index, len(bits), 1):
+            if bits[i: i+len(PREAMBLE_PATTERN)] == PREAMBLE_PATTERN:
+                end_index = i
+                break
+        
+        return bits[start_index:end_index]
 
     def decode_bytes_to_bits(self, bits: list) -> str:
         if len(bits) % 8 != 0:
@@ -175,7 +194,13 @@ class NonCoherentReceiver(Receiver):
         normalized = self.normalize_signal(cleaned_signal)
         thresholded = self.threshold_signal(normalized)
         bits = self.get_bits(thresholded)
-        bits_without_preamble = self.remove_preamble(bits)
+
+        if (APPLY_AVERAGING_PREAMBLE):
+            bits_without_preamble = self.remove_preamble_average(bits)
+        else:
+            bits_without_preamble = self.remove_preamble_naive(bits)
+        
+        
         if (bits_without_preamble == -1):
             print("No preamble found RecieverClass, decode method")
             raise TypeError
@@ -209,7 +234,7 @@ class CoherentReceiver(Receiver):
         normalized = self.normalize_signal(cleaned_signal)
         thresholded = self.threshold_signal(normalized)
         bits = self.get_bits(thresholded)
-        bits_without_preamble = self.remove_preamble(bits)
+        bits_without_preamble = self.remove_preamble_naive(bits)
 
         if (CONVOLUTIONAL_CODING):
             bits = conv_decode(bits)

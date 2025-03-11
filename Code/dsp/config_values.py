@@ -16,7 +16,7 @@ def message_toBitArray(message: str):
 # 31650 / 15200
 import numpy as np
 SAMPLE_RATE = 96000  # this capped by the soundcard, therefore, this is non-changeable
-CARRIER_FREQ = 15200  #  15200 Hz
+CARRIER_FREQ = 5750  #  15200 Hz
 BIT_RATE = 200
 SAMPLES_PER_SYMBOL = int(SAMPLE_RATE / BIT_RATE)  # TODO investigate this ratio int(SAMPLE_RATE / BIT_RATE)
 CUT_OFF_FREQ = (CARRIER_FREQ + BIT_RATE) // 2  # TODO: check this value
@@ -27,13 +27,14 @@ PATH_TO_WAV_FILE = "Code/dsp/data/recording.wav"
 PATH_TO_PICTURE = "./data/doge.jpg"
 
 PREAMBLE_BASE = message_toBitArray("G")
-REPETITIONS = 3
+REPETITIONS = 5
 PREAMBLE_PATTERN = PREAMBLE_BASE * REPETITIONS
 
-CONVOLUTIONAL_CODING = False
+CONVOLUTIONAL_CODING = True
 MAKE_NEW_RECORDING = True
-SAMPLE_RATE_FOR_WAV_FILE = 44100  # Hz
-RECORD_SECONDS = 2
+APPLY_AVERAGING_PREAMBLE = False
+# SAMPLE_RATE_FOR_WAV_FILE = 44100  # Hz
+RECORD_SECONDS = 5
 
 dark_horse_lyrics = """Yeah, y'all know what it is
     Katy Perry
@@ -116,5 +117,5 @@ dark_horse_lyrics = """Yeah, y'all know what it is
 all_letters = "the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*"
 small_test = "This is: 14"
 A = "A"
-MESSAGE = A
+MESSAGE = "Hello World!"
 PORT = "COM11"

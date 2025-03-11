@@ -33,7 +33,7 @@ def send_command(command):
             
 def message_toBitArray(message: str): #ON OFF KEYING
     message_binary = ''.join(format(ord(i), '08b') for i in message)
-    print(f"Message in binary: {message_binary}")
+    # print(f"Message in binary: {message_binary}")
     # TODO: determine the exact number of samples per bit that makes sense in relation to our sample rate 
     # and bits per second and also how this is done in the signal generator
     
@@ -59,21 +59,18 @@ def transmitPhysical(message, carrier, bitrate):
     if CONVOLUTIONAL_CODING:
         bits = conv_encode(bits)
 
-    
     bits = PREAMBLE_PATTERN + bits
-    print(bits)
     #change bits to -1 for signal generator scipy commands
     for i in range(0, len(bits),1):
         if bits[i] == 0:
             bits[i]= -1
-    ''
-    ''
 
     bits = np.array(bits)
     arb_wave_form_command = "DATA:DAC VOLATILE, " + ", ".join(map(str, bits * 2047))
+    
     freq = bitrate/len(bits) 
-    
-    
+    print("This is len of bits", len(bits))
+
     name = "COCK"
     command = f"""
     {arb_wave_form_command}

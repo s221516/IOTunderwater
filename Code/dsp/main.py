@@ -31,13 +31,14 @@ def logInCsv(id, bitrate, carrierfreq, original_message, decoded_message, filena
 def testing():
     #test words
     all_letters = "the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*"
-    helloWorld = "Hello World!"
-    messages =  [helloWorld]
+    messages = ["AAA", MESSAGE]
+    
     #test bitrates 
-    bitrates = [1000]
+    # 5 * 2 * 8 * 10
+    bitrates = np.arange(100, 1000, 200)
 
     #test carrier frequencies
-    carrierfreqs = [5000]
+    carrierfreqs = np.arange(4000, 20000, 2000)
 
     id = 0
     for message in messages:
@@ -45,12 +46,16 @@ def testing():
             for carrierfreq in carrierfreqs:
 
                 transmitPhysical(message, carrierfreq, bitrate)
-                time.sleep(1)
+
+                time.sleep(2)
 
                 # Start recording
                 if (MAKE_NEW_RECORDING):
                     create_wav_file_from_recording(RECORD_SECONDS)
 
+                time.sleep(0.1)
+                
+                stopTransmission()
                 # Non-Coherent demodulation
                 receiver_non_coherent = NonCoherentReceiver.from_wav_file(PATH_TO_WAV_FILE)
 
@@ -59,24 +64,23 @@ def testing():
                 except TypeError:
                     message_nc = "No preamble found"
    
-        
+
                 logInCsv(id, bitrate, carrierfreq, message, message_nc)
-
-    stopTransmission()
-
-
+                id+=1
 
 
 def main():
 
     transmitPhysical(MESSAGE, CARRIER_FREQ, BIT_RATE)
-    time.sleep(1)
+
+    time.sleep(2)
 
     # Start recording
     if (MAKE_NEW_RECORDING):
        create_wav_file_from_recording(RECORD_SECONDS)
 
     time.sleep(0.1)
+    
     stopTransmission()
     # Non-Coherent demodulation
     receiver_non_coherent = NonCoherentReceiver.from_wav_file(PATH_TO_WAV_FILE)
