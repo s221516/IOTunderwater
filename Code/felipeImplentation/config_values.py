@@ -1,8 +1,8 @@
 # nyquist = 30400
 # 31650 / 15200
 SAMPLE_RATE = 96000  # this capped by the soundcard, therefore, this is non-changeable
-CARRIER_FREQ = 15200  #  15200 Hz
-BIT_RATE = 1000  # 1 Khz
+CARRIER_FREQ = 152010  #  15200 Hz
+BIT_RATE = 200
 SAMPLES_PER_SYMBOL = 8  # TODO investigate this ratio int(SAMPLE_RATE / BIT_RATE)
 CUT_OFF_FREQ = (CARRIER_FREQ + BIT_RATE) // 2  # TODO: check this value
 THRESHOLD_BINARY_VAL = 170  # defines when a pixel should be black or white when converting from RGB to black-white
@@ -91,12 +91,12 @@ dark_horse_lyrics = """Yeah, y'all know what it is
 
 all_letters = "the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*"
 small_test = "This is: 14"
-A = "A"
+A = "Hello World!"
 
 # picture_in_binary_with_prefix = "p" + picture_in_binary
 
 
-MESSAGE = A
+MESSAGE = all_letters
 
 
 PORT = "COM3"
