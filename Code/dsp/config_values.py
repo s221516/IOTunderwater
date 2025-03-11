@@ -15,6 +15,7 @@ def message_toBitArray(message: str):
 
 # nyquist = 30400
 # 31650 / 15200
+import numpy as np
 SAMPLE_RATE = 96000  # this capped by the soundcard, therefore, this is non-changeable
 CARRIER_FREQ = 700  #  15200 Hz
 BIT_RATE = 200   
@@ -26,7 +27,9 @@ NOISE_AMPLITUDE = 0.0  # noise
 PATH_TO_WAV_FILE = "Code/dsp/data/recording.wav"
 PATH_TO_PICTURE = "./data/doge.jpg"
 
-PREAMBLE_PATTERN = message_toBitArray("GG")
+PREAMBLE_BASE = message_toBitArray("G")
+REPETITIONS = 3
+PREAMBLE_PATTERN = PREAMBLE_BASE * REPETITIONS
 
 CONVOLUTIONAL_CODING = False
 MAKE_NEW_RECORDING = True

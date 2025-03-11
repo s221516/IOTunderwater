@@ -13,7 +13,8 @@ from config_values import (
     SAMPLE_RATE,
     SAMPLES_PER_SYMBOL,
     CONVOLUTIONAL_CODING,
-    PREAMBLE_PATTERN
+    PREAMBLE_PATTERN,
+    PREAMBLE_BASE
 )
 from scipy.io import wavfile
 
@@ -103,20 +104,36 @@ class Receiver:
     def remove_preamble(self, bits):
         start_index = None
         end_index = None
-        for i in range(0, len(bits), 1):
-            if bits[i: i+len(PREAMBLE_PATTERN)] == PREAMBLE_PATTERN:
-                start_index = i + len(PREAMBLE_PATTERN)
+
+        base_len = len(PREAMBLE_BASE)
+
+        for i in range(0, len(bits) - (3 * base_len), 1):
+            avg_pattern = []
+
+            for j in range(base_len):
+                sum_bit = bits[i + j] + bits[i + base_len + j] + bits[i + 2 * base_len + j]
+                avg_bit = (sum_bit / 3)
+                avg_pattern.append(1 if avg_bit > 0.5 else 0)
+            
+            if avg_pattern == PREAMBLE_BASE:
+                start_index = i + 3 * base_len
                 break
                 
         if (start_index == None):
             return -1
         
-        for i in range(start_index, len(bits), 1):
-            if bits[i: i+len(PREAMBLE_PATTERN)] == PREAMBLE_PATTERN:
+        for i in range(start_index, len(bits) - (3 * base_len), 1):
+            avg_pattern = []
+            for j in range(base_len):
+                sum_bit = bits[i + j] + bits[i + base_len + j] + bits[i + 2 * base_len + j]
+                avg_bit = (sum_bit / 3)
+                avg_pattern.append(1 if avg_bit > 0.5 else 0)
+            
+            if avg_pattern == PREAMBLE_BASE:
                 end_index = i
                 break
-        
-        return bits[start_index:end_index]
+            
+            return bits[start_index:end_index]
     
 
     def decode_bytes_to_bits(self, bits: list) -> str:
