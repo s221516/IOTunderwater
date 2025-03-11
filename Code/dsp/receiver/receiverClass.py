@@ -88,25 +88,35 @@ class Receiver:
         start_index = None
         end_index = None
 
-        pattern_length = len(PREAMBLE_PATTERN)
-        
-                
+        base_len = len(PREAMBLE_BASE)
 
+        for i in range(0, len(bits) - (3 * base_len), 1):
+            avg_pattern = []
 
-        for i in range(0, len(bits), 1):
-            if bits[i: i + pattern_length] == PREAMBLE_BASE:
-                start_index = i + pattern_length
+            for j in range(base_len):
+                sum_bit = bits[i + j] + bits[i + base_len + j] + bits[i + 2 * base_len + j]
+                avg_bit = (sum_bit / 3)
+                avg_pattern.append(1 if avg_bit > 0.5 else 0)
+            
+            if avg_pattern == PREAMBLE_BASE:
+                start_index = i + 3 * base_len
                 break
                 
         if (start_index == None):
             return -1
         
-        for i in range(start_index, len(bits), 1):
-            if bits[i: i + pattern_length] == PREAMBLE_BASE:
+        for i in range(start_index, len(bits) - (3 * base_len), 1):
+            avg_pattern = []
+            for j in range(base_len):
+                sum_bit = bits[i + j] + bits[i + base_len + j] + bits[i + 2 * base_len + j]
+                avg_bit = (sum_bit / 3)
+                avg_pattern.append(1 if avg_bit > 0.5 else 0)
+            
+            if avg_pattern == PREAMBLE_BASE:
                 end_index = i
                 break
-        
-        return bits[start_index:end_index]
+            
+            return bits[start_index:end_index]
     
 
     def decode_bytes_to_bits(self, bits: list) -> str:
