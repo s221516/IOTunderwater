@@ -1,570 +1,570 @@
-ID,Bitrate,Carrier Frequency,Original Message,Decoded Message
-0,200,1500,AAA,No preamble found
-1,200,1550,AAA,No preamble found
-2,200,1600,AAA,No preamble found
-3,200,1650,AAA,No preamble found
-4,200,1700,AAA,No preamble found
-5,200,1750,AAA,No preamble found
-6,200,1800,AAA,No preamble found
-7,200,1850,AAA,No preamble found
-8,200,1900,AAA,No preamble found
-9,200,1950,AAA,No preamble found
-10,200,2000,AAA,No preamble found
-11,200,2050,AAA,No preamble found
-12,200,2100,AAA,No preamble found
-13,200,2150,AAA,No preamble found
-14,200,2200,AAA,No preamble found
-15,200,2250,AAA,No preamble found
-16,200,2300,AAA,No preamble found
-17,200,2350,AAA,No preamble found
-18,200,2400,AAA,No preamble found
-19,200,2450,AAA,No preamble found
-20,200,2500,AAA,No preamble found
-21,200,2550,AAA,No preamble found
-22,200,2600,AAA,No preamble found
-23,200,2650,AAA,No preamble found
-24,200,2700,AAA,No preamble found
-25,200,2750,AAA,No preamble found
-26,200,2800,AAA,No preamble found
-27,200,2850,AAA,No preamble found
-28,200,2900,AAA,No preamble found
-29,200,2950,AAA,No preamble found
-30,200,3000,AAA,No preamble found
-31,200,3050,AAA,No preamble found
-32,200,3100,AAA,No preamble found
-33,200,3150,AAA,No preamble found
-34,200,3200,AAA,No preamble found
-35,200,3250,AAA,No preamble found
-36,200,3300,AAA,No preamble found
-37,200,3350,AAA,No preamble found
-38,200,3400,AAA,No preamble found
-39,200,3450,AAA,No preamble found
-40,200,3500,AAA,No preamble found
-41,200,3550,AAA,No preamble found
-42,200,3600,AAA,No preamble found
-43,200,3650,AAA,No preamble found
-44,200,3700,AAA,No preamble found
-45,200,3750,AAA,No preamble found
-46,200,3800,AAA,No preamble found
-47,200,3850,AAA,No preamble found
-48,200,3900,AAA,No preamble found
-49,200,3950,AAA,No preamble found
-50,200,4000,AAA,No preamble found
-51,200,4050,AAA,No preamble found
-52,200,4100,AAA,No preamble found
-53,200,4150,AAA,No preamble found
-54,200,4200,AAA,No preamble found
-55,200,4250,AAA,No preamble found
-56,200,4300,AAA,No preamble found
-57,200,4350,AAA,No preamble found
-58,200,4400,AAA,No preamble found
-59,200,4450,AAA,No preamble found
-60,200,4500,AAA,No preamble found
-61,200,4550,AAA,No preamble found
-62,200,4600,AAA,No preamble found
-63,200,4650,AAA,No preamble found
-64,200,4700,AAA,No preamble found
-65,200,4750,AAA,No preamble found
-66,200,4800,AAA,No preamble found
-67,200,4850,AAA,No preamble found
-68,200,4900,AAA,No preamble found
-69,200,4950,AAA,No preamble found
-70,200,5000,AAA,No preamble found
-71,200,5050,AAA,No preamble found
-72,200,5100,AAA,No preamble found
-73,200,5150,AAA,No preamble found
-74,200,5200,AAA,A@
-75,200,5250,AAA,AAA
-76,200,5300,AAA,No preamble found
-77,200,5350,AAA,AAA
-78,200,5400,AAA,AAA
-79,200,5450,AAA,No preamble found
-80,200,5500,AAA,AAA
-81,200,5550,AAA,AAA
-82,200,5600,AAA,AAA
-83,200,5650,AAA,AAA
-84,200,5700,AAA,AAA
-85,200,5750,AAA,AAA
-86,200,5800,AAA,AAA
-87,200,5850,AAA,AAA
-88,200,5900,AAA,AAA
-89,200,5950,AAA,No preamble found
-0,200,6000,AAA,AAA
-1,200,6050,AAA,AAA
-2,200,6100,AAA,AAA
-3,200,6150,AAA,AAA
-4,200,6200,AAA,AAA
-5,200,6250,AAA,AAA
-6,200,6300,AAA,AAA
-7,200,6350,AAA,AAA
-8,200,6400,AAA,AAA
-9,200,6450,AAA,AAA
-10,200,6500,AAA,AAA
-11,200,6550,AAA,No preamble found
-12,200,6600,AAA,AA@
-13,200,6650,AAA,@
-14,200,6700,AAA,No preamble found
-15,200,6750,AAA,AAA
-16,200,6800,AAA,No preamble found
-17,200,6850,AAA,No preamble found
-18,200,6900,AAA,AAA
-19,200,6950,AAA,AAA
-20,200,7000,AAA,AAA
-21,200,7050,AAA,AAA
-22,200,7100,AAA,AAA
-23,200,7150,AAA,A@
-24,200,7200,AAA,AAA
-25,200,7250,AAA,AAA
-26,200,7300,AAA,No preamble found
-27,200,7350,AAA,A@
-28,200,7400,AAA,AAA
-29,200,7450,AAA,AAA
-30,200,7500,AAA,No preamble found
-31,200,7550,AAA,No preamble found
-32,200,7600,AAA,AAA
-33,200,7650,AAA,No preamble found
-34,200,7700,AAA,AAA
-35,200,7750,AAA,AAA
-36,200,7800,AAA,AAA
-0,200,7900,AAA,AAA
-1,200,7950,AAA,AAA
-2,200,8000,AAA,No preamble found
-3,200,8050,AAA,No preamble found
-4,200,8100,AAA,No preamble found
-5,200,8150,AAA,No preamble found
-6,200,8200,AAA,No preamble found
-7,200,8250,AAA,No preamble found
-8,200,8300,AAA,No preamble found
-9,200,8350,AAA,No preamble found
-10,200,8400,AAA,AAA
-11,200,8450,AAA,No preamble found
-12,200,8500,AAA,AAA
-13,200,8550,AAA,No preamble found
-14,200,8600,AAA,No preamble found
-15,200,8650,AAA,No preamble found
-16,200,8700,AAA,AAA
-17,200,8750,AAA,No preamble found
-18,200,8800,AAA,No preamble found
-19,200,8850,AAA,No preamble found
-20,200,8900,AAA,AAA
-21,200,8950,AAA,No preamble found
-22,200,9000,AAA,No preamble found
-23,200,9050,AAA,AAA
-24,200,9100,AAA,No preamble found
-25,200,9150,AAA,No preamble found
-26,200,9200,AAA,No preamble found
-27,200,9250,AAA,AAA
-28,200,9300,AAA,No preamble found
-29,200,9350,AAA,No preamble found
-30,200,9400,AAA,No preamble found
-31,200,9450,AAA,No preamble found
-32,200,9500,AAA,No preamble found
-33,200,9550,AAA,No preamble found
-34,200,9600,AAA,AAA
-35,200,9650,AAA,AAA
-36,200,9700,AAA,No preamble found
-37,200,9750,AAA,No preamble found
-38,200,9800,AAA,No preamble found
-39,200,9850,AAA,No preamble found
-40,200,9900,AAA,No preamble found
-41,200,9950,AAA,No preamble found
-42,200,10000,AAA,AAA
-43,200,10050,AAA,No preamble found
-44,200,10100,AAA,AAA
-45,200,10150,AAA,No preamble found
-46,200,10200,AAA,AA@
-47,200,10250,AAA,No preamble found
-48,200,10300,AAA,No preamble found
-49,200,10350,AAA,No preamble found
-50,200,10400,AAA,No preamble found
-51,200,10450,AAA,AAA
-52,200,10500,AAA,No preamble found
-53,200,10550,AAA,AAA
-54,200,10600,AAA,AAA
-55,200,10650,AAA,AAA
-56,200,10700,AAA,No preamble found
-57,200,10750,AAA,AAA
-58,200,10800,AAA,No preamble found
-59,200,10850,AAA,No preamble found
-60,200,10900,AAA,No preamble found
-61,200,10950,AAA,No preamble found
-0,200,1500,Hello World !,No preamble found
-1,200,1550,Hello World !,No preamble found
-2,200,1600,Hello World !,No preamble found
-3,200,1650,Hello World !,No preamble found
-4,200,1700,Hello World !,No preamble found
-5,200,1750,Hello World !,No preamble found
-6,200,1800,Hello World !,No preamble found
-7,200,1850,Hello World !,No preamble found
-8,200,1900,Hello World !,No preamble found
-9,200,1950,Hello World !,No preamble found
-10,200,2000,Hello World !,No preamble found
-11,200,2050,Hello World !,No preamble found
-12,200,2100,Hello World !,No preamble found
-13,200,2150,Hello World !,No preamble found
-14,200,2200,Hello World !,No preamble found
-15,200,2250,Hello World !,No preamble found
-16,200,2300,Hello World !,No preamble found
-17,200,2350,Hello World !,No preamble found
-18,200,2400,Hello World !,No preamble found
-19,200,2450,Hello World !,No preamble found
-20,200,2500,Hello World !,No preamble found
-21,200,2550,Hello World !,No preamble found
-22,200,2600,Hello World !,No preamble found
-23,200,2650,Hello World !,No preamble found
-24,200,2700,Hello World !,No preamble found
-25,200,2750,Hello World !,No preamble found
-26,200,2800,Hello World !,No preamble found
-27,200,2850,Hello World !,No preamble found
-28,200,2900,Hello World !,No preamble found
-29,200,2950,Hello World !,No preamble found
-30,200,3000,Hello World !,No preamble found
-31,200,3050,Hello World !,No preamble found
-32,200,3100,Hello World !,No preamble found
-33,200,3150,Hello World !,No preamble found
-34,200,3200,Hello World !,No preamble found
-35,200,3250,Hello World !,No preamble found
-36,200,3300,Hello World !,No preamble found
-37,200,3350,Hello World !,No preamble found
-38,200,3400,Hello World !,No preamble found
-39,200,3450,Hello World !,No preamble found
-40,200,3500,Hello World !,No preamble found
-41,200,3550,Hello World !,No preamble found
-42,200,3600,Hello World !,No preamble found
-43,200,3650,Hello World !,No preamble found
-44,200,3700,Hello World !,No preamble found
-45,200,3750,Hello World !,No preamble found
-46,200,3800,Hello World !,No preamble found
-47,200,3850,Hello World !,No preamble found
-48,200,3900,Hello World !,No preamble found
-49,200,3950,Hello World !,No preamble found
-50,200,4000,Hello World !,No preamble found
-51,200,4050,Hello World !,No preamble found
-52,200,4100,Hello World !,No preamble found
-53,200,4150,Hello World !,No preamble found
-54,200,4200,Hello World !,No preamble found
-55,200,4250,Hello World !,No preamble found
-56,200,4300,Hello World !,No preamble found
-57,200,4350,Hello World !,No preamble found
-58,200,4400,Hello World !,No preamble found
-59,200,4450,Hello World !,No preamble found
-60,200,4500,Hello World !,No preamble found
-61,200,4550,Hello World !,No preamble found
-62,200,4600,Hello World !,No preamble found
-63,200,4650,Hello World !,No preamble found
-64,200,4700,Hello World !,No preamble found
-65,200,4750,Hello World !,No preamble found
-66,200,4800,Hello World !,No preamble found
-67,200,4850,Hello World !,No preamble found
-68,200,4900,Hello World !,No preamble found
-69,200,4950,Hello World !,No preamble found
-70,200,5000,Hello World !,No preamble found
-71,200,5050,Hello World !,No preamble found
-72,200,5100,Hello World !,No preamble found
-73,200,5150,Hello World !,No preamble found
-74,200,5200,Hello World !,No preamble found
-75,200,5250,Hello World !,Hello World  
-76,200,5300,Hello World !,Hello World 
-77,200,5350,Hello World !,"Hello WrliÀ "
-78,200,5400,Hello World !,No preamble found
-79,200,5450,Hello World !,No preamble found
-80,200,5500,Hello World !,No preamble found
-81,200,5550,Hello World !,No preamble found
-82,200,5600,Hello World !,No preamble found
-83,200,5650,Hello World !,Hello World  
-84,200,5700,Hello World !,Hello World  
-85,200,5750,Hello World !,Hello World  
-86,200,5800,Hello World !,No preamble found
-87,200,5850,Hello World !,Hello World 
-88,200,5900,Hello World !,Hello World 
-89,200,5950,Hello World !,No preamble found
-90,200,6000,Hello World !,Hello World  
-91,200,6050,Hello World !,Hello World  
-92,200,6100,Hello World !,Hello World  
-93,200,6150,Hello World !,Hello World  
-94,200,6200,Hello World !,Hello World 
-95,200,6250,Hello World !,"Hello World  "
-96,200,6300,Hello World !,Hello World  
-97,200,6350,Hello World !,Hello World  
-98,200,6400,Hello World !,Hello World  
-99,200,6450,Hello World !,No preamble found
-100,200,6500,Hello World !,Hello [orld 
-101,200,6550,Hello World !,No preamble found
-102,200,6600,Hello World !,No preamble found
-103,200,6650,Hello World !,Hello World  
-104,200,6700,Hello World !,Hello World !
-105,200,6750,Hello World !,"Hello@ 	"
-106,200,6800,Hello World !,No preamble found
-107,200,6850,Hello World !,No preamble found
-108,200,6900,Hello World !,Hello World 
-109,200,6950,Hello World !,Hello World  
-110,200,7000,Hello World !,No preamble found
-111,200,7050,Hello World !,Hello World  
-112,200,7100,Hello World !,Hello World  
-113,200,7150,Hello World !,Hello World 
-114,200,7200,Hello World !,Hello World  
-115,200,7250,Hello World !,Hello World 
-116,200,7300,Hello World !,No preamble found
-117,200,7350,Hello World !,No preamble found
-118,200,7400,Hello World !,No preamble found
-119,200,7450,Hello World !,Hello World  
-120,200,7500,Hello World !,No preamble found
-121,200,7550,Hello World !,No preamble found
-122,200,7600,Hello World !,Hello World  
-123,200,7650,Hello World !,No preamble found
-124,200,7700,Hello World !,Hello World  
-125,200,7750,Hello World !,Hello World  
-126,200,7800,Hello World !,Hflo gorld 
-127,200,7850,Hello World !,No preamble found
-128,200,7900,Hello World !,Hello World  
-129,200,7950,Hello World !,Hello World  
-130,200,8000,Hello World !,No preamble found
-131,200,8050,Hello World !,Hflo gorld  
-132,200,8100,Hello World !,Hello World  
-133,200,8150,Hello World !,No preamble found
-134,200,8200,Hello World !,No preamble found
-135,200,8250,Hello World !,No preamble found
-136,200,8300,Hello World !,No preamble found
-137,200,8350,Hello World !,No preamble found
-138,200,8400,Hello World !,No preamble found
-139,200,8450,Hello World !,Hello World  
-140,200,8500,Hello World !,No preamble found
-141,200,8550,Hello World !,Hello World  
-142,200,8600,Hello World !,No preamble found
-143,200,8650,Hello World !,No preamble found
-144,200,8700,Hello World !,No preamble found
-145,200,8750,Hello World !,No preamble found
-146,200,8800,Hello World !,No preamble found
-147,200,8850,Hello World !,No preamble found
-148,200,8900,Hello World !,No preamble found
-149,200,8950,Hello World !,No preamble found
-150,200,9000,Hello World !,No preamble found
-151,200,9050,Hello World !,ell_ WorZ¤  
-152,200,9100,Hello World !,No preamble found
-153,200,9150,Hello World !,No preamble found
-154,200,9200,Hello World !,No preamble found
-155,200,9250,Hello World !,No preamble found
-156,200,9300,Hello World !,No preamble found
-157,200,9350,Hello World !,No preamble found
-158,200,9400,Hello World !,No preamble found
-159,200,9450,Hello World !,No preamble found
-160,200,9500,Hello World !,No preamble found
-161,200,9550,Hello World !,No preamble found
-162,200,9600,Hello World !,Hello World  
-163,200,9650,Hello World !,No preamble found
-164,200,9700,Hello World !,No preamble found
-165,200,9750,Hello World !,No preamble found
-166,200,9800,Hello World !,No preamble found
-167,200,9850,Hello World !,No preamble found
-168,200,9900,Hello World !,No preamble found
-169,200,9950,Hello World !,No preamble found
-170,200,10000,Hello World !,No preamble found
-171,200,10050,Hello World !,No preamble found
-172,200,10100,Hello World !,Hello World  
-173,200,10150,Hello World !,No preamble found
-174,200,10200,Hello World !,Hello World  
-175,200,10250,Hello World !,No preamble found
-176,200,10300,Hello World !,No preamble found
-177,200,10350,Hello World !,No preamble found
-178,200,10400,Hello World !,No preamble found
-179,200,10450,Hello World !,No preamble found
-180,200,10500,Hello World !,No preamble found
-181,200,10550,Hello World !,No preamble found
-182,200,10600,Hello World !,Hello World  
-183,200,10650,Hello World !,Hello World  
-184,200,10700,Hello World !,No preamble found
-185,200,10750,Hello World !,Hflo gorld  
-186,200,10800,Hello World !,No preamble found
-187,200,10850,Hello World !,No preamble found
-188,200,10900,Hello World !,No preamble found
-189,200,10950,Hello World !,No preamble found
-0,200,1500,"the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*",No preamble found
-1,200,1550,"the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*",No preamble found
-2,200,1600,"the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*",No preamble found
-3,200,1650,"the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*",No preamble found
-4,200,1700,"the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*",No preamble found
-5,200,1750,"the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*",No preamble found
-6,200,1800,"the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*",No preamble found
-7,200,1850,"the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*",No preamble found
-8,200,1900,"the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*",No preamble found
-9,200,1950,"the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*",No preamble found
-10,200,2000,"the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*",No preamble found
-11,200,2050,"the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*",No preamble found
-12,200,2100,"the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*",No preamble found
-13,200,2150,"the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*",No preamble found
-14,200,2200,"the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*",No preamble found
-15,200,2250,"the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*",No preamble found
-16,200,2300,"the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*",No preamble found
-17,200,2350,"the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*",No preamble found
-18,200,2400,"the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*",No preamble found
-19,200,2450,"the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*",No preamble found
-20,200,2500,"the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*",No preamble found
-21,200,2550,"the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*",No preamble found
-22,200,2600,"the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*",No preamble found
-23,200,2650,"the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*",No preamble found
-24,200,2700,"the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*",No preamble found
-25,200,2750,"the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*",No preamble found
-26,200,2800,"the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*",No preamble found
-27,200,2850,"the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*",No preamble found
-28,200,2900,"the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*",No preamble found
-29,200,2950,"the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*",No preamble found
-30,200,3000,"the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*",No preamble found
-31,200,3050,"the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*",No preamble found
-32,200,3100,"the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*",No preamble found
-33,200,3150,"the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*",No preamble found
-34,200,3200,"the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*",No preamble found
-35,200,3250,"the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*",No preamble found
-36,200,3300,"the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*",No preamble found
-37,200,3350,"the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*",No preamble found
-38,200,3400,"the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*",No preamble found
-39,200,3450,"the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*",No preamble found
-40,200,3500,"the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*",No preamble found
-41,200,3550,"the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*",No preamble found
-42,200,3600,"the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*",No preamble found
-43,200,3650,"the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*",No preamble found
-44,200,3700,"the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*",No preamble found
-45,200,3750,"the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*",No preamble found
-46,200,3800,"the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*",No preamble found
-47,200,3850,"the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*",No preamble found
-48,200,3900,"the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*",No preamble found
-49,200,3950,"the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*",No preamble found
-50,200,4000,"the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*",No preamble found
-51,200,4050,"the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*",No preamble found
-52,200,4100,"the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*",No preamble found
-53,200,4150,"the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*",No preamble found
-54,200,4200,"the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*",No preamble found
-55,200,4250,"the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*",No preamble found
-56,200,4300,"the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*",No preamble found
-57,200,4350,"the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*",No preamble found
-58,200,4400,"the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*",No preamble found
-59,200,4450,"the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*",No preamble found
-60,200,4500,"the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*",No preamble found
-61,200,4550,"the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*",No preamble found
-62,200,4600,"the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*",No preamble found
-63,200,4650,"the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*",No preamble found
-64,200,4700,"the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*",No preamble found
-65,200,4750,"the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*",No preamble found
-66,200,4800,"the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*",No preamble found
-67,200,4850,"the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*",No preamble found
-68,200,4900,"the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*",No preamble found
-69,200,4950,"the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*",No preamble found
-70,200,5000,"the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*",No preamble found
-71,200,5050,"the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*",No preamble found
-72,200,5100,"the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*",No preamble found
-73,200,5150,"the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*",No preamble found
-74,200,5200,"the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*",No preamble found
-75,200,5250,"the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*",No preamble found
-76,200,5300,"the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*",No preamble found
-77,200,5350,"the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*",No preamble found
-78,200,5400,"the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*",No preamble found
-79,200,5450,"the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*",No preamble found
-80,200,5500,"the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*",No preamble found
-81,200,5550,"the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*",No preamble found
-82,200,5600,"the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*",No preamble found
-83,200,5650,"the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*",No preamble found
-84,200,5700,"the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*",No preamble found
-85,200,5750,"the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*",No preamble found
-86,200,5800,"the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*",No preamble found
-87,200,5850,"the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*",No preamble found
-88,200,5900,"the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*",No preamble found
-89,200,5950,"the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*",No preamble found
-90,200,6000,"the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*",No preamble found
-91,200,6050,"the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*",No preamble found
-92,200,6100,"the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*",No preamble found
-93,200,6150,"the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*",No preamble found
-94,200,6200,"the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*",No preamble found
-95,200,6250,"the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*",No preamble found
-96,200,6300,"the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*",No preamble found
-97,200,6350,"the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*",No preamble found
-98,200,6400,"the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*",No preamble found
-99,200,6450,"the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*",No preamble found
-100,200,6500,"the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*",No preamble found
-101,200,6550,"the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*",No preamble found
-102,200,6600,"the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*",No preamble found
-103,200,6650,"the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*",No preamble found
-104,200,6700,"the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*",No preamble found
-105,200,6750,"the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*",No preamble found
-106,200,6800,"the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*",No preamble found
-107,200,6850,"the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*",No preamble found
-108,200,6900,"the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*",No preamble found
-109,200,6950,"the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*",No preamble found
-110,200,7000,"the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*",No preamble found
-111,200,7050,"the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*",No preamble found
-112,200,7100,"the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*",No preamble found
-113,200,7150,"the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*",No preamble found
-114,200,7200,"the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*",No preamble found
-115,200,7250,"the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*",No preamble found
-116,200,7300,"the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*",No preamble found
-117,200,7350,"the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*",No preamble found
-118,200,7400,"the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*",No preamble found
-119,200,7450,"the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*",No preamble found
-120,200,7500,"the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*",No preamble found
-121,200,7550,"the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*",No preamble found
-122,200,7600,"the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*",No preamble found
-123,200,7650,"the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*",No preamble found
-124,200,7700,"the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*",No preamble found
-125,200,7750,"the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*",No preamble found
-126,200,7800,"the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*",No preamble found
-127,200,7850,"the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*",No preamble found
-128,200,7900,"the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*",No preamble found
-129,200,7950,"the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*",No preamble found
-130,200,8000,"the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*",No preamble found
-131,200,8050,"the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*",No preamble found
-132,200,8100,"the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*",No preamble found
-133,200,8150,"the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*",No preamble found
-134,200,8200,"the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*",No preamble found
-135,200,8250,"the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*",No preamble found
-136,200,8300,"the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*",No preamble found
-137,200,8350,"the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*",No preamble found
-138,200,8400,"the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*",No preamble found
-139,200,8450,"the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*",No preamble found
-140,200,8500,"the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*",No preamble found
-141,200,8550,"the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*",No preamble found
-142,200,8600,"the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*",No preamble found
-143,200,8650,"the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*",No preamble found
-144,200,8700,"the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*",No preamble found
-145,200,8750,"the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*",No preamble found
-146,200,8800,"the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*",No preamble found
-147,200,8850,"the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*",No preamble found
-148,200,8900,"the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*",No preamble found
-149,200,8950,"the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*",No preamble found
-150,200,9000,"the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*",No preamble found
-151,200,9050,"the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*",No preamble found
-152,200,9100,"the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*",No preamble found
-153,200,9150,"the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*",No preamble found
-154,200,9200,"the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*",No preamble found
-155,200,9250,"the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*",No preamble found
-156,200,9300,"the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*",No preamble found
-157,200,9350,"the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*",No preamble found
-158,200,9400,"the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*",No preamble found
-159,200,9450,"the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*",No preamble found
-160,200,9500,"the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*",No preamble found
-161,200,9550,"the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*",No preamble found
-162,200,9600,"the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*",No preamble found
-163,200,9650,"the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*",No preamble found
-164,200,9700,"the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*",No preamble found
-165,200,9750,"the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*",No preamble found
-166,200,9800,"the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*",No preamble found
-167,200,9850,"the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*",No preamble found
-168,200,9900,"the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*",No preamble found
-169,200,9950,"the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*",No preamble found
-170,200,10000,"the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*",No preamble found
-171,200,10050,"the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*",No preamble found
-172,200,10100,"the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*",No preamble found
-173,200,10150,"the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*",No preamble found
-174,200,10200,"the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*",No preamble found
-175,200,10250,"the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*",No preamble found
-176,200,10300,"the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*",No preamble found
-177,200,10350,"the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*",No preamble found
-178,200,10400,"the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*",No preamble found
-179,200,10450,"the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*",No preamble found
-180,200,10500,"the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*",No preamble found
-181,200,10550,"the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*",No preamble found
-182,200,10600,"the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*",No preamble found
-183,200,10650,"the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*",No preamble found
-184,200,10700,"the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*",No preamble found
-185,200,10750,"the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*",No preamble found
-186,200,10800,"the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*",No preamble found
-187,200,10850,"the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*",No preamble found
-188,200,10900,"the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*",No preamble found
-189,200,10950,"the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*",No preamble found
+ID;Bitrate;Carrier Frequency;Original Message;Decoded Message
+0;200;1500;AAA;No preamble found
+1;200;1550;AAA;No preamble found
+2;200;1600;AAA;No preamble found
+3;200;1650;AAA;No preamble found
+4;200;1700;AAA;No preamble found
+5;200;1750;AAA;No preamble found
+6;200;1800;AAA;No preamble found
+7;200;1850;AAA;No preamble found
+8;200;1900;AAA;No preamble found
+9;200;1950;AAA;No preamble found
+10;200;2000;AAA;No preamble found
+11;200;2050;AAA;No preamble found
+12;200;2100;AAA;No preamble found
+13;200;2150;AAA;No preamble found
+14;200;2200;AAA;No preamble found
+15;200;2250;AAA;No preamble found
+16;200;2300;AAA;No preamble found
+17;200;2350;AAA;No preamble found
+18;200;2400;AAA;No preamble found
+19;200;2450;AAA;No preamble found
+20;200;2500;AAA;No preamble found
+21;200;2550;AAA;No preamble found
+22;200;2600;AAA;No preamble found
+23;200;2650;AAA;No preamble found
+24;200;2700;AAA;No preamble found
+25;200;2750;AAA;No preamble found
+26;200;2800;AAA;No preamble found
+27;200;2850;AAA;No preamble found
+28;200;2900;AAA;No preamble found
+29;200;2950;AAA;No preamble found
+30;200;3000;AAA;No preamble found
+31;200;3050;AAA;No preamble found
+32;200;3100;AAA;No preamble found
+33;200;3150;AAA;No preamble found
+34;200;3200;AAA;No preamble found
+35;200;3250;AAA;No preamble found
+36;200;3300;AAA;No preamble found
+37;200;3350;AAA;No preamble found
+38;200;3400;AAA;No preamble found
+39;200;3450;AAA;No preamble found
+40;200;3500;AAA;No preamble found
+41;200;3550;AAA;No preamble found
+42;200;3600;AAA;No preamble found
+43;200;3650;AAA;No preamble found
+44;200;3700;AAA;No preamble found
+45;200;3750;AAA;No preamble found
+46;200;3800;AAA;No preamble found
+47;200;3850;AAA;No preamble found
+48;200;3900;AAA;No preamble found
+49;200;3950;AAA;No preamble found
+50;200;4000;AAA;No preamble found
+51;200;4050;AAA;No preamble found
+52;200;4100;AAA;No preamble found
+53;200;4150;AAA;No preamble found
+54;200;4200;AAA;No preamble found
+55;200;4250;AAA;No preamble found
+56;200;4300;AAA;No preamble found
+57;200;4350;AAA;No preamble found
+58;200;4400;AAA;No preamble found
+59;200;4450;AAA;No preamble found
+60;200;4500;AAA;No preamble found
+61;200;4550;AAA;No preamble found
+62;200;4600;AAA;No preamble found
+63;200;4650;AAA;No preamble found
+64;200;4700;AAA;No preamble found
+65;200;4750;AAA;No preamble found
+66;200;4800;AAA;No preamble found
+67;200;4850;AAA;No preamble found
+68;200;4900;AAA;No preamble found
+69;200;4950;AAA;No preamble found
+70;200;5000;AAA;No preamble found
+71;200;5050;AAA;No preamble found
+72;200;5100;AAA;No preamble found
+73;200;5150;AAA;No preamble found
+74;200;5200;AAA;A@
+75;200;5250;AAA;AAA
+76;200;5300;AAA;No preamble found
+77;200;5350;AAA;AAA
+78;200;5400;AAA;AAA
+79;200;5450;AAA;No preamble found
+80;200;5500;AAA;AAA
+81;200;5550;AAA;AAA
+82;200;5600;AAA;AAA
+83;200;5650;AAA;AAA
+84;200;5700;AAA;AAA
+85;200;5750;AAA;AAA
+86;200;5800;AAA;AAA
+87;200;5850;AAA;AAA
+88;200;5900;AAA;AAA
+89;200;5950;AAA;No preamble found
+0;200;6000;AAA;AAA
+1;200;6050;AAA;AAA
+2;200;6100;AAA;AAA
+3;200;6150;AAA;AAA
+4;200;6200;AAA;AAA
+5;200;6250;AAA;AAA
+6;200;6300;AAA;AAA
+7;200;6350;AAA;AAA
+8;200;6400;AAA;AAA
+9;200;6450;AAA;AAA
+10;200;6500;AAA;AAA
+11;200;6550;AAA;No preamble found
+12;200;6600;AAA;AA@
+13;200;6650;AAA;@
+14;200;6700;AAA;No preamble found
+15;200;6750;AAA;AAA
+16;200;6800;AAA;No preamble found
+17;200;6850;AAA;No preamble found
+18;200;6900;AAA;AAA
+19;200;6950;AAA;AAA
+20;200;7000;AAA;AAA
+21;200;7050;AAA;AAA
+22;200;7100;AAA;AAA
+23;200;7150;AAA;A@
+24;200;7200;AAA;AAA
+25;200;7250;AAA;AAA
+26;200;7300;AAA;No preamble found
+27;200;7350;AAA;A@
+28;200;7400;AAA;AAA
+29;200;7450;AAA;AAA
+30;200;7500;AAA;No preamble found
+31;200;7550;AAA;No preamble found
+32;200;7600;AAA;AAA
+33;200;7650;AAA;No preamble found
+34;200;7700;AAA;AAA
+35;200;7750;AAA;AAA
+36;200;7800;AAA;AAA
+0;200;7900;AAA;AAA
+1;200;7950;AAA;AAA
+2;200;8000;AAA;No preamble found
+3;200;8050;AAA;No preamble found
+4;200;8100;AAA;No preamble found
+5;200;8150;AAA;No preamble found
+6;200;8200;AAA;No preamble found
+7;200;8250;AAA;No preamble found
+8;200;8300;AAA;No preamble found
+9;200;8350;AAA;No preamble found
+10;200;8400;AAA;AAA
+11;200;8450;AAA;No preamble found
+12;200;8500;AAA;AAA
+13;200;8550;AAA;No preamble found
+14;200;8600;AAA;No preamble found
+15;200;8650;AAA;No preamble found
+16;200;8700;AAA;AAA
+17;200;8750;AAA;No preamble found
+18;200;8800;AAA;No preamble found
+19;200;8850;AAA;No preamble found
+20;200;8900;AAA;AAA
+21;200;8950;AAA;No preamble found
+22;200;9000;AAA;No preamble found
+23;200;9050;AAA;AAA
+24;200;9100;AAA;No preamble found
+25;200;9150;AAA;No preamble found
+26;200;9200;AAA;No preamble found
+27;200;9250;AAA;AAA
+28;200;9300;AAA;No preamble found
+29;200;9350;AAA;No preamble found
+30;200;9400;AAA;No preamble found
+31;200;9450;AAA;No preamble found
+32;200;9500;AAA;No preamble found
+33;200;9550;AAA;No preamble found
+34;200;9600;AAA;AAA
+35;200;9650;AAA;AAA
+36;200;9700;AAA;No preamble found
+37;200;9750;AAA;No preamble found
+38;200;9800;AAA;No preamble found
+39;200;9850;AAA;No preamble found
+40;200;9900;AAA;No preamble found
+41;200;9950;AAA;No preamble found
+42;200;10000;AAA;AAA
+43;200;10050;AAA;No preamble found
+44;200;10100;AAA;AAA
+45;200;10150;AAA;No preamble found
+46;200;10200;AAA;AA@
+47;200;10250;AAA;No preamble found
+48;200;10300;AAA;No preamble found
+49;200;10350;AAA;No preamble found
+50;200;10400;AAA;No preamble found
+51;200;10450;AAA;AAA
+52;200;10500;AAA;No preamble found
+53;200;10550;AAA;AAA
+54;200;10600;AAA;AAA
+55;200;10650;AAA;AAA
+56;200;10700;AAA;No preamble found
+57;200;10750;AAA;AAA
+58;200;10800;AAA;No preamble found
+59;200;10850;AAA;No preamble found
+60;200;10900;AAA;No preamble found
+61;200;10950;AAA;No preamble found
+0;200;1500;Hello World !;No preamble found
+1;200;1550;Hello World !;No preamble found
+2;200;1600;Hello World !;No preamble found
+3;200;1650;Hello World !;No preamble found
+4;200;1700;Hello World !;No preamble found
+5;200;1750;Hello World !;No preamble found
+6;200;1800;Hello World !;No preamble found
+7;200;1850;Hello World !;No preamble found
+8;200;1900;Hello World !;No preamble found
+9;200;1950;Hello World !;No preamble found
+10;200;2000;Hello World !;No preamble found
+11;200;2050;Hello World !;No preamble found
+12;200;2100;Hello World !;No preamble found
+13;200;2150;Hello World !;No preamble found
+14;200;2200;Hello World !;No preamble found
+15;200;2250;Hello World !;No preamble found
+16;200;2300;Hello World !;No preamble found
+17;200;2350;Hello World !;No preamble found
+18;200;2400;Hello World !;No preamble found
+19;200;2450;Hello World !;No preamble found
+20;200;2500;Hello World !;No preamble found
+21;200;2550;Hello World !;No preamble found
+22;200;2600;Hello World !;No preamble found
+23;200;2650;Hello World !;No preamble found
+24;200;2700;Hello World !;No preamble found
+25;200;2750;Hello World !;No preamble found
+26;200;2800;Hello World !;No preamble found
+27;200;2850;Hello World !;No preamble found
+28;200;2900;Hello World !;No preamble found
+29;200;2950;Hello World !;No preamble found
+30;200;3000;Hello World !;No preamble found
+31;200;3050;Hello World !;No preamble found
+32;200;3100;Hello World !;No preamble found
+33;200;3150;Hello World !;No preamble found
+34;200;3200;Hello World !;No preamble found
+35;200;3250;Hello World !;No preamble found
+36;200;3300;Hello World !;No preamble found
+37;200;3350;Hello World !;No preamble found
+38;200;3400;Hello World !;No preamble found
+39;200;3450;Hello World !;No preamble found
+40;200;3500;Hello World !;No preamble found
+41;200;3550;Hello World !;No preamble found
+42;200;3600;Hello World !;No preamble found
+43;200;3650;Hello World !;No preamble found
+44;200;3700;Hello World !;No preamble found
+45;200;3750;Hello World !;No preamble found
+46;200;3800;Hello World !;No preamble found
+47;200;3850;Hello World !;No preamble found
+48;200;3900;Hello World !;No preamble found
+49;200;3950;Hello World !;No preamble found
+50;200;4000;Hello World !;No preamble found
+51;200;4050;Hello World !;No preamble found
+52;200;4100;Hello World !;No preamble found
+53;200;4150;Hello World !;No preamble found
+54;200;4200;Hello World !;No preamble found
+55;200;4250;Hello World !;No preamble found
+56;200;4300;Hello World !;No preamble found
+57;200;4350;Hello World !;No preamble found
+58;200;4400;Hello World !;No preamble found
+59;200;4450;Hello World !;No preamble found
+60;200;4500;Hello World !;No preamble found
+61;200;4550;Hello World !;No preamble found
+62;200;4600;Hello World !;No preamble found
+63;200;4650;Hello World !;No preamble found
+64;200;4700;Hello World !;No preamble found
+65;200;4750;Hello World !;No preamble found
+66;200;4800;Hello World !;No preamble found
+67;200;4850;Hello World !;No preamble found
+68;200;4900;Hello World !;No preamble found
+69;200;4950;Hello World !;No preamble found
+70;200;5000;Hello World !;No preamble found
+71;200;5050;Hello World !;No preamble found
+72;200;5100;Hello World !;No preamble found
+73;200;5150;Hello World !;No preamble found
+74;200;5200;Hello World !;No preamble found
+75;200;5250;Hello World !;Hello World  
+76;200;5300;Hello World !;Hello World 
+77;200;5350;Hello World !;Hello WrliÀ
+78;200;5400;Hello World !;No preamble found
+79;200;5450;Hello World !;No preamble found
+80;200;5500;Hello World !;No preamble found
+81;200;5550;Hello World !;No preamble found
+82;200;5600;Hello World !;No preamble found
+83;200;5650;Hello World !;Hello World  
+84;200;5700;Hello World !;Hello World  
+85;200;5750;Hello World !;Hello World  
+86;200;5800;Hello World !;No preamble found
+87;200;5850;Hello World !;Hello World 
+88;200;5900;Hello World !;Hello World 
+89;200;5950;Hello World !;No preamble found
+90;200;6000;Hello World !;Hello World  
+91;200;6050;Hello World !;Hello World  
+92;200;6100;Hello World !;Hello World  
+93;200;6150;Hello World !;Hello World  
+94;200;6200;Hello World !;Hello World 
+95;200;6250;Hello World !;Hello World 
+96;200;6300;Hello World !;Hello World  
+97;200;6350;Hello World !;Hello World  
+98;200;6400;Hello World !;Hello World  
+99;200;6450;Hello World !;No preamble found
+100;200;6500;Hello World !;Hello [orld 
+101;200;6550;Hello World !;No preamble found
+102;200;6600;Hello World !;No preamble found
+103;200;6650;Hello World !;Hello World  
+104;200;6700;Hello World !;Hello World !
+105;200;6750;Hello World !;"Hello@	"
+106;200;6800;Hello World !;No preamble found
+107;200;6850;Hello World !;No preamble found
+108;200;6900;Hello World !;Hello World 
+109;200;6950;Hello World !;Hello World  
+110;200;7000;Hello World !;No preamble found
+111;200;7050;Hello World !;Hello World  
+112;200;7100;Hello World !;Hello World  
+113;200;7150;Hello World !;Hello World 
+114;200;7200;Hello World !;Hello World  
+115;200;7250;Hello World !;Hello World 
+116;200;7300;Hello World !;No preamble found
+117;200;7350;Hello World !;No preamble found
+118;200;7400;Hello World !;No preamble found
+119;200;7450;Hello World !;Hello World  
+120;200;7500;Hello World !;No preamble found
+121;200;7550;Hello World !;No preamble found
+122;200;7600;Hello World !;Hello World  
+123;200;7650;Hello World !;No preamble found
+124;200;7700;Hello World !;Hello World  
+125;200;7750;Hello World !;Hello World  
+126;200;7800;Hello World !;Hflo gorld 
+127;200;7850;Hello World !;No preamble found
+128;200;7900;Hello World !;Hello World  
+129;200;7950;Hello World !;Hello World  
+130;200;8000;Hello World !;No preamble found
+131;200;8050;Hello World !;Hflo gorld  
+132;200;8100;Hello World !;Hello World  
+133;200;8150;Hello World !;No preamble found
+134;200;8200;Hello World !;No preamble found
+135;200;8250;Hello World !;No preamble found
+136;200;8300;Hello World !;No preamble found
+137;200;8350;Hello World !;No preamble found
+138;200;8400;Hello World !;No preamble found
+139;200;8450;Hello World !;Hello World  
+140;200;8500;Hello World !;No preamble found
+141;200;8550;Hello World !;Hello World  
+142;200;8600;Hello World !;No preamble found
+143;200;8650;Hello World !;No preamble found
+144;200;8700;Hello World !;No preamble found
+145;200;8750;Hello World !;No preamble found
+146;200;8800;Hello World !;No preamble found
+147;200;8850;Hello World !;No preamble found
+148;200;8900;Hello World !;No preamble found
+149;200;8950;Hello World !;No preamble found
+150;200;9000;Hello World !;No preamble found
+151;200;9050;Hello World !;ell_ WorZ¤  
+152;200;9100;Hello World !;No preamble found
+153;200;9150;Hello World !;No preamble found
+154;200;9200;Hello World !;No preamble found
+155;200;9250;Hello World !;No preamble found
+156;200;9300;Hello World !;No preamble found
+157;200;9350;Hello World !;No preamble found
+158;200;9400;Hello World !;No preamble found
+159;200;9450;Hello World !;No preamble found
+160;200;9500;Hello World !;No preamble found
+161;200;9550;Hello World !;No preamble found
+162;200;9600;Hello World !;Hello World  
+163;200;9650;Hello World !;No preamble found
+164;200;9700;Hello World !;No preamble found
+165;200;9750;Hello World !;No preamble found
+166;200;9800;Hello World !;No preamble found
+167;200;9850;Hello World !;No preamble found
+168;200;9900;Hello World !;No preamble found
+169;200;9950;Hello World !;No preamble found
+170;200;10000;Hello World !;No preamble found
+171;200;10050;Hello World !;No preamble found
+172;200;10100;Hello World !;Hello World  
+173;200;10150;Hello World !;No preamble found
+174;200;10200;Hello World !;Hello World  
+175;200;10250;Hello World !;No preamble found
+176;200;10300;Hello World !;No preamble found
+177;200;10350;Hello World !;No preamble found
+178;200;10400;Hello World !;No preamble found
+179;200;10450;Hello World !;No preamble found
+180;200;10500;Hello World !;No preamble found
+181;200;10550;Hello World !;No preamble found
+182;200;10600;Hello World !;Hello World  
+183;200;10650;Hello World !;Hello World  
+184;200;10700;Hello World !;No preamble found
+185;200;10750;Hello World !;Hflo gorld  
+186;200;10800;Hello World !;No preamble found
+187;200;10850;Hello World !;No preamble found
+188;200;10900;Hello World !;No preamble found
+189;200;10950;Hello World !;No preamble found
+0;200;1500;the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;No preamble found
+1;200;1550;the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;No preamble found
+2;200;1600;the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;No preamble found
+3;200;1650;the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;No preamble found
+4;200;1700;the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;No preamble found
+5;200;1750;the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;No preamble found
+6;200;1800;the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;No preamble found
+7;200;1850;the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;No preamble found
+8;200;1900;the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;No preamble found
+9;200;1950;the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;No preamble found
+10;200;2000;the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;No preamble found
+11;200;2050;the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;No preamble found
+12;200;2100;the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;No preamble found
+13;200;2150;the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;No preamble found
+14;200;2200;the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;No preamble found
+15;200;2250;the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;No preamble found
+16;200;2300;the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;No preamble found
+17;200;2350;the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;No preamble found
+18;200;2400;the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;No preamble found
+19;200;2450;the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;No preamble found
+20;200;2500;the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;No preamble found
+21;200;2550;the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;No preamble found
+22;200;2600;the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;No preamble found
+23;200;2650;the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;No preamble found
+24;200;2700;the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;No preamble found
+25;200;2750;the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;No preamble found
+26;200;2800;the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;No preamble found
+27;200;2850;the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;No preamble found
+28;200;2900;the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;No preamble found
+29;200;2950;the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;No preamble found
+30;200;3000;the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;No preamble found
+31;200;3050;the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;No preamble found
+32;200;3100;the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;No preamble found
+33;200;3150;the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;No preamble found
+34;200;3200;the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;No preamble found
+35;200;3250;the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;No preamble found
+36;200;3300;the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;No preamble found
+37;200;3350;the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;No preamble found
+38;200;3400;the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;No preamble found
+39;200;3450;the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;No preamble found
+40;200;3500;the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;No preamble found
+41;200;3550;the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;No preamble found
+42;200;3600;the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;No preamble found
+43;200;3650;the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;No preamble found
+44;200;3700;the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;No preamble found
+45;200;3750;the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;No preamble found
+46;200;3800;the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;No preamble found
+47;200;3850;the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;No preamble found
+48;200;3900;the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;No preamble found
+49;200;3950;the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;No preamble found
+50;200;4000;the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;No preamble found
+51;200;4050;the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;No preamble found
+52;200;4100;the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;No preamble found
+53;200;4150;the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;No preamble found
+54;200;4200;the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;No preamble found
+55;200;4250;the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;No preamble found
+56;200;4300;the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;No preamble found
+57;200;4350;the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;No preamble found
+58;200;4400;the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;No preamble found
+59;200;4450;the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;No preamble found
+60;200;4500;the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;No preamble found
+61;200;4550;the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;No preamble found
+62;200;4600;the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;No preamble found
+63;200;4650;the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;No preamble found
+64;200;4700;the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;No preamble found
+65;200;4750;the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;No preamble found
+66;200;4800;the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;No preamble found
+67;200;4850;the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;No preamble found
+68;200;4900;the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;No preamble found
+69;200;4950;the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;No preamble found
+70;200;5000;the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;No preamble found
+71;200;5050;the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;No preamble found
+72;200;5100;the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;No preamble found
+73;200;5150;the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;No preamble found
+74;200;5200;the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;No preamble found
+75;200;5250;the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;No preamble found
+76;200;5300;the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;No preamble found
+77;200;5350;the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;No preamble found
+78;200;5400;the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;No preamble found
+79;200;5450;the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;No preamble found
+80;200;5500;the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;No preamble found
+81;200;5550;the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;No preamble found
+82;200;5600;the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;No preamble found
+83;200;5650;the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;No preamble found
+84;200;5700;the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;No preamble found
+85;200;5750;the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;No preamble found
+86;200;5800;the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;No preamble found
+87;200;5850;the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;No preamble found
+88;200;5900;the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;No preamble found
+89;200;5950;the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;No preamble found
+90;200;6000;the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;No preamble found
+91;200;6050;the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;No preamble found
+92;200;6100;the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;No preamble found
+93;200;6150;the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;No preamble found
+94;200;6200;the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;No preamble found
+95;200;6250;the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;No preamble found
+96;200;6300;the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;No preamble found
+97;200;6350;the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;No preamble found
+98;200;6400;the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;No preamble found
+99;200;6450;the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;No preamble found
+100;200;6500;the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;No preamble found
+101;200;6550;the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;No preamble found
+102;200;6600;the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;No preamble found
+103;200;6650;the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;No preamble found
+104;200;6700;the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;No preamble found
+105;200;6750;the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;No preamble found
+106;200;6800;the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;No preamble found
+107;200;6850;the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;No preamble found
+108;200;6900;the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;No preamble found
+109;200;6950;the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;No preamble found
+110;200;7000;the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;No preamble found
+111;200;7050;the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;No preamble found
+112;200;7100;the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;No preamble found
+113;200;7150;the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;No preamble found
+114;200;7200;the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;No preamble found
+115;200;7250;the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;No preamble found
+116;200;7300;the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;No preamble found
+117;200;7350;the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;No preamble found
+118;200;7400;the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;No preamble found
+119;200;7450;the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;No preamble found
+120;200;7500;the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;No preamble found
+121;200;7550;the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;No preamble found
+122;200;7600;the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;No preamble found
+123;200;7650;the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;No preamble found
+124;200;7700;the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;No preamble found
+125;200;7750;the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;No preamble found
+126;200;7800;the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;No preamble found
+127;200;7850;the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;No preamble found
+128;200;7900;the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;No preamble found
+129;200;7950;the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;No preamble found
+130;200;8000;the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;No preamble found
+131;200;8050;the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;No preamble found
+132;200;8100;the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;No preamble found
+133;200;8150;the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;No preamble found
+134;200;8200;the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;No preamble found
+135;200;8250;the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;No preamble found
+136;200;8300;the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;No preamble found
+137;200;8350;the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;No preamble found
+138;200;8400;the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;No preamble found
+139;200;8450;the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;No preamble found
+140;200;8500;the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;No preamble found
+141;200;8550;the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;No preamble found
+142;200;8600;the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;No preamble found
+143;200;8650;the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;No preamble found
+144;200;8700;the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;No preamble found
+145;200;8750;the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;No preamble found
+146;200;8800;the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;No preamble found
+147;200;8850;the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;No preamble found
+148;200;8900;the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;No preamble found
+149;200;8950;the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;No preamble found
+150;200;9000;the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;No preamble found
+151;200;9050;the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;No preamble found
+152;200;9100;the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;No preamble found
+153;200;9150;the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;No preamble found
+154;200;9200;the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;No preamble found
+155;200;9250;the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;No preamble found
+156;200;9300;the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;No preamble found
+157;200;9350;the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;No preamble found
+158;200;9400;the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;No preamble found
+159;200;9450;the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;No preamble found
+160;200;9500;the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;No preamble found
+161;200;9550;the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;No preamble found
+162;200;9600;the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;No preamble found
+163;200;9650;the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;No preamble found
+164;200;9700;the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;No preamble found
+165;200;9750;the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;No preamble found
+166;200;9800;the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;No preamble found
+167;200;9850;the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;No preamble found
+168;200;9900;the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;No preamble found
+169;200;9950;the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;No preamble found
+170;200;10000;the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;No preamble found
+171;200;10050;the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;No preamble found
+172;200;10100;the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;No preamble found
+173;200;10150;the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;No preamble found
+174;200;10200;the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;No preamble found
+175;200;10250;the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;No preamble found
+176;200;10300;the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;No preamble found
+177;200;10350;the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;No preamble found
+178;200;10400;the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;No preamble found
+179;200;10450;the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;No preamble found
+180;200;10500;the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;No preamble found
+181;200;10550;the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;No preamble found
+182;200;10600;the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;No preamble found
+183;200;10650;the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;No preamble found
+184;200;10700;the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;No preamble found
+185;200;10750;the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;No preamble found
+186;200;10800;the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;No preamble found
+187;200;10850;the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;No preamble found
+188;200;10900;the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;No preamble found
+189;200;10950;the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;No preamble found
