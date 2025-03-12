@@ -31,14 +31,14 @@ def logInCsv(id, bitrate, carrierfreq, original_message, decoded_message, filena
 def testing():
     #test words
     all_letters = "the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*"
-    messages = ["AAA", MESSAGE]
+    messages = [all_letters]
     
     #test bitrates 
     # 5 * 2 * 8 * 10
-    bitrates = np.arange(100, 1000, 200)
+    bitrates = [200]
 
     #test carrier frequencies
-    carrierfreqs = np.arange(4000, 20000, 2000)
+    carrierfreqs = np.arange(1500, 11000, 50)
 
     id = 0
     for message in messages:
@@ -97,4 +97,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    testing()

@@ -25,7 +25,6 @@ THRESHOLD_BINARY_VAL = 170  # defines when a pixel should be black or white when
 NOISE_AMPLITUDE = 0.0  # noise
 PATH_TO_WAV_FILE = "Code/dsp/data/recording.wav"
 PATH_TO_PICTURE = "./data/doge.jpg"
-
 PREAMBLE_BASE = message_toBitArray("G")
 REPETITIONS = 5
 PREAMBLE_PATTERN = PREAMBLE_BASE * REPETITIONS
@@ -34,7 +33,7 @@ CONVOLUTIONAL_CODING = True
 MAKE_NEW_RECORDING = True
 APPLY_AVERAGING_PREAMBLE = False
 # SAMPLE_RATE_FOR_WAV_FILE = 44100  # Hz
-RECORD_SECONDS = 5
+RECORD_SECONDS = 3
 
 dark_horse_lyrics = """Yeah, y'all know what it is
     Katy Perry
@@ -117,5 +116,5 @@ dark_horse_lyrics = """Yeah, y'all know what it is
 all_letters = "the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*"
 small_test = "This is: 14"
 A = "A"
-MESSAGE = "Hello World!"
+MESSAGE = "AAA"
 PORT = "COM11"
