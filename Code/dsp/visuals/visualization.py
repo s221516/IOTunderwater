@@ -3,7 +3,7 @@
 
 import matplotlib.pyplot as plt
 import numpy as np
-from config_values import SAMPLE_RATE, SAMPLES_PER_SYMBOL
+import config
 from visuals.plotting import plot_wave_in_frequency_domain, plot_wave_in_time_domain
 
 
@@ -13,9 +13,9 @@ def get_bits_from_thresholded(thresholded_signal):
     but extracted to avoid circular imports
     """
     bits = []
-    for i in range(0, len(thresholded_signal), SAMPLES_PER_SYMBOL):
-        if i + SAMPLES_PER_SYMBOL <= len(thresholded_signal):
-            mu = np.mean(thresholded_signal[i : i + SAMPLES_PER_SYMBOL])
+    for i in range(0, len(thresholded_signal), config.SAMPLES_PER_SYMBOL):
+        if i + config.SAMPLES_PER_SYMBOL <= len(thresholded_signal):
+            mu = np.mean(thresholded_signal[i : i + config.SAMPLES_PER_SYMBOL])
             bits.append(1 if mu > 0.5 else 0)
     return bits
 
@@ -107,7 +107,7 @@ def create_processing_visualization(receiver, message, debug_info):
 
     # Plot bits in time domain - more compact format
     bits = get_bits_from_thresholded(debug_info["thresholded"])
-    bit_times = np.arange(len(bits)) * SAMPLES_PER_SYMBOL / SAMPLE_RATE
+    bit_times = np.arange(len(bits)) * config.SAMPLES_PER_SYMBOL / config.SAMPLE_RATE
     bit_values = np.array(bits)
     ax7.stem(bit_times, bit_values, linefmt="g-", markerfmt="go", basefmt=" ")
 

@@ -5,7 +5,7 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 from encoding.convolutional_encoding import conv_encode
 
-from config_values import PORT, CONVOLUTIONAL_CODING, PREAMBLE_PATTERN
+from config import PORT, CONVOLUTIONAL_CODING, PREAMBLE_PATTERN
 
 ser = initPort(PORT)
 def send_command(command):
@@ -18,7 +18,7 @@ def send_command(command):
             continue
         
         ser.write((cmd + "\r\n").encode())  # Send normal command
-        print(f"Sent: {cmd}")  
+        # print(f"Sent: {cmd}")  
 
         if cmd[0:8]== "DATA:DAC":
             time.sleep(0.01)
@@ -69,7 +69,7 @@ def transmitPhysical(message, carrier, bitrate):
     arb_wave_form_command = "DATA:DAC VOLATILE, " + ", ".join(map(str, bits * 2047))
     
     freq = bitrate/len(bits) 
-    print("This is len of bits", len(bits))
+    print("Transmitted bits: ", len(bits))
 
     name = "COCK"
     command = f"""

@@ -24,7 +24,6 @@ def conv_encode(bits):
         encoded, state = encode_bit(bit, state)
         encoded_bits.extend(encoded)
 
-    print("Encoded bits: ", encoded_bits)
     return encoded_bits
 
 

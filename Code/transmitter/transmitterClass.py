@@ -5,12 +5,11 @@ import time
 
 
 from encoding.convolutional_encoding import conv_encode, bit_string_to_list, list_to_bit_string
-from config_values import (
-    CARRIER_FREQ,
+import config
+from Code.dsp.config import (
     PATH_TO_WAV_FILE,
     SAMPLE_RATE,
     SAMPLE_RATE_FOR_WAV_FILE,
-    SAMPLES_PER_SYMBOL,
     CONVOLUTIONAL_CODING,
     MESSAGE,
     PORT
@@ -30,11 +29,11 @@ def make_square_wave(message):
     print("Message binary:", message_binary)
     square_wave = []
     for bit in message_binary:
-        square_wave += [int(bit)] * SAMPLES_PER_SYMBOL
+        square_wave += [int(bit)] * config.SAMPLES_PER_SYMBOL
     # Ensure even sampling alignment
-    if len(square_wave) % SAMPLES_PER_SYMBOL != 0:
+    if len(square_wave) % config.SAMPLES_PER_SYMBOL != 0:
         square_wave += [0] * (
-            SAMPLES_PER_SYMBOL - len(square_wave) % SAMPLES_PER_SYMBOL
+            config.SAMPLES_PER_SYMBOL - len(square_wave) % config.SAMPLES_PER_SYMBOL
         )
     duration = len(square_wave) / SAMPLE_RATE
     time_array = np.linspace(0, duration, len(square_wave))
@@ -44,7 +43,7 @@ def make_square_wave(message):
 
 def make_carrier_wave(time_array):
     """Generate the carrier wave."""
-    carrier_wave = np.sin(2 * np.pi * CARRIER_FREQ * time_array)
+    carrier_wave = np.sin(2 * np.pi * config.CARRIER_FREQ * time_array)
     return carrier_wave
 
 def create_modulated_wave(square_wave, carrier_wave):

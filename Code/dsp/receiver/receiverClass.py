@@ -5,19 +5,18 @@ import scipy.signal as signal
 
 from encoding.convolutional_encoding import *
 from visuals.visualization import create_processing_visualization
+import config
 
-from config_values import (
-    CARRIER_FREQ,
-    CUT_OFF_FREQ,
+from config import (
     PATH_TO_WAV_FILE,
     SAMPLE_RATE,
-    SAMPLES_PER_SYMBOL,
     CONVOLUTIONAL_CODING,
     PREAMBLE_PATTERN,
     PREAMBLE_BASE, 
     APPLY_AVERAGING_PREAMBLE,
     REPETITIONS
 )
+
 from scipy.io import wavfile
 
 plt.style.use("ggplot")
@@ -36,30 +35,24 @@ def plot_wav_signal(sample_rate, wav_signal):
         print("Plotted WAV signal successfully.")
 
 class Receiver:
-    def __init__(self, wav_signal: np.ndarray):
-        self.wav_signal = wav_signal
-
-    @classmethod
-    def from_wav_file(cls, path: str):
-        sample_rate, wav_signal = wavfile.read(path)
-        return cls(wav_signal)
     
+    def __init__(self, bit_rate: int, carrier_freq : int):
+        
+        _, self.wav_signal = wavfile.read(PATH_TO_WAV_FILE)
+        self.bit_rate           = bit_rate
+        self.carrier_freq       = carrier_freq
+        self.cutoff_freq        = (carrier_freq + bit_rate) // 2
+        self.samples_per_symbol = int(SAMPLE_RATE / bit_rate) 
+
     def _demodulate(self) -> Tuple[np.ndarray, Dict]:
         raise NotImplementedError("Subclasses must implement _demodulate")
 
     def filter_signal(self, input_signal: np.ndarray) -> np.ndarray:
         nyquist = SAMPLE_RATE * 0.5
         order = 4
-        cutoff = CUT_OFF_FREQ / nyquist
+        cutoff = self.cutoff_freq / nyquist
         b, a = signal.butter(order, cutoff, btype="low", analog=False)
         return signal.filtfilt(b, a, input_signal)
-
-    @staticmethod
-    def shift_signal(wav_signal: np.ndarray) -> np.ndarray:
-        duration = len(wav_signal) / SAMPLE_RATE
-        time_array = np.linspace(0, duration, len(wav_signal))
-        coef = np.exp(-1j * 2 * np.pi * CARRIER_FREQ * time_array)
-        return wav_signal * coef
 
     def remove_outliers(self, wave: np.ndarray) -> np.ndarray:
         wave = wave.copy()
@@ -93,8 +86,8 @@ class Receiver:
 
     def get_bits(self, thresholded_signal: np.ndarray) -> list:
         bits = []       
-        for i in range(0, len(thresholded_signal), SAMPLES_PER_SYMBOL):
-            mu = np.mean(thresholded_signal[i : i + SAMPLES_PER_SYMBOL])
+        for i in range(0, len(thresholded_signal), self.samples_per_symbol):
+            mu = np.mean(thresholded_signal[i : i + self.samples_per_symbol])
             bits.append(1 if mu > 0.5 else 0)
         return bits
 
@@ -157,7 +150,9 @@ class Receiver:
         message = ""
         for i in range(0, len(bits), 8):
             byte = bits[i : i + 8]
-            message += chr(int("".join(map(str, byte)), 2))
+            char = chr(int("".join(map(str, byte)), 2))
+            if 32 <= ord(char) <= 126:
+                message += char
         return message
 
     def plot_simulation_steps(self):
@@ -217,7 +212,19 @@ class NonCoherentReceiver(Receiver):
         return message, debug_info
 
 
+
+
+
+
+
 class CoherentReceiver(Receiver):
+
+    def shift_signal(self, wav_signal: np.ndarray) -> np.ndarray:
+        duration = len(wav_signal) / SAMPLE_RATE
+        time_array = np.linspace(0, duration, len(wav_signal))
+        coef = np.exp(-1j * 2 * np.pi * self.carrier_freq * time_array)
+        return wav_signal * coef
+
     def _demodulate(self) -> Tuple[np.ndarray, Dict]:
         shifted = self.shift_signal(self.wav_signal)
         shifted_imag = -np.imag(shifted)
