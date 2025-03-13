@@ -25,16 +25,10 @@ def set_carrierfreq(value):
 # 31650 / 15200
 import numpy as np
 SAMPLE_RATE = 96000  # this capped by the soundcard, therefore, this is non-changeable
-<<<<<<< HEAD:Code/dsp/config_values.py
-CARRIER_FREQ = 5750  #  15200 Hz
-BIT_RATE = 200 #96000
-SAMPLES_PER_SYMBOL = int(SAMPLE_RATE / BIT_RATE)  # TODO investigate this ratio int(SAMPLE_RATE / BIT_RATE)
-=======
 
 BIT_RATE = 400
 CARRIER_FREQ = 5950  #  15200 Hz
 SAMPLES_PER_SYMBOL = int(SAMPLE_RATE / BIT_RATE) 
->>>>>>> fb3e5d8e734803f7941a8efa123e7ddabacdae05:Code/dsp/config.py
 CUT_OFF_FREQ = (CARRIER_FREQ + BIT_RATE) // 2  # TODO: check this value
 
 
@@ -134,10 +128,5 @@ dark_horse_lyrics = """Yeah, y'all know what it is
 all_letters = "the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~` \ The 5 big oxen love quick daft zebras & dogs.>*"
 small_test = "This is: 14"
 A = "A"
-<<<<<<< HEAD:Code/dsp/config_values.py
-MESSAGE = "Hello World!"
-PORT = "COM3"
-=======
 MESSAGE = "AAA"
 PORT = "COM11"
->>>>>>> fb3e5d8e734803f7941a8efa123e7ddabacdae05:Code/dsp/config.py
