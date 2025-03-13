@@ -1,0 +1,5 @@
+Description
+
+The aim of this project is to design and implement a basic underwater communication system that can transmit data from an \underwater speaker to a hydrophone receiver. This will be achieved by generating and transmitting a carrier frequency through a signal generator connected to the underwater speaker, which will be received by a hydrophone.
+
+The project involves both the transmission and reception of a carrier frequency and the \textbf{modulation of this signal to encode binary data for transfer.} The project includes fundamental hardware setup, including generating the carrier signal at a specified frequency and monitoring the transmitted and received signals using an \textbf{oscilloscope}.  To modulate the carrier frequency and encode data, techniques such as \textbf{amplitude, frequency, or phase modulation} may be considered to represent binary data. \textbf{Encoding schemes} should be also considered to ensure that the information can be reliably decoded upon reception.

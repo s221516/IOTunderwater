@@ -17,7 +17,7 @@ def message_toBitArray(message: str):
 import numpy as np
 SAMPLE_RATE = 96000  # this capped by the soundcard, therefore, this is non-changeable
 CARRIER_FREQ = 5750  #  15200 Hz
-BIT_RATE = 200
+BIT_RATE = 200 #96000
 SAMPLES_PER_SYMBOL = int(SAMPLE_RATE / BIT_RATE)  # TODO investigate this ratio int(SAMPLE_RATE / BIT_RATE)
 CUT_OFF_FREQ = (CARRIER_FREQ + BIT_RATE) // 2  # TODO: check this value
 THRESHOLD_BINARY_VAL = 170  # defines when a pixel should be black or white when converting from RGB to black-white
@@ -118,4 +118,4 @@ all_letters = "the quick brown fox jumps over the lazy dog while vexd zebras fig
 small_test = "This is: 14"
 A = "A"
 MESSAGE = "Hello World!"
-PORT = "COM11"
+PORT = "COM3"
