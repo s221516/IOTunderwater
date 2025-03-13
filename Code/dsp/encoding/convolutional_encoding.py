@@ -24,8 +24,8 @@ def conv_encode(bits):
         encoded, state = encode_bit(bit, state)
         encoded_bits.extend(encoded)
 
-    print("Encoded bits: ", encoded_bits)
     return encoded_bits
+
 
 def conv_decode(received_bits):
     """Decodes a sequence of received bits using Viterbi algorithm."""
@@ -42,7 +42,9 @@ def conv_decode(received_bits):
     }
 
     num_steps = len(received_bits) // 3
+
     for step in range(num_steps):
+
         new_path_metrics = {s: float('inf') for s in range(num_states)}
         new_state_history = {s: [] for s in range(num_states)}
 
@@ -52,10 +54,10 @@ def conv_decode(received_bits):
             for bit in [0, 1]:  # Two possible transitions per state
                 next_state = ((prev_state << 1) | bit) & 0b11
                 expected = expected_outputs[prev_state][bit]
-                metric = path_metrics[prev_state] + hamming_distance(received, expected)
+                branch_metric = path_metrics[prev_state] + hamming_distance(received, expected)
 
-                if metric < new_path_metrics[next_state]:
-                    new_path_metrics[next_state] = metric
+                if branch_metric < new_path_metrics[next_state]:
+                    new_path_metrics[next_state] = branch_metric
                     new_state_history[next_state] = state_history[prev_state] + [bit]
 
         path_metrics = new_path_metrics
@@ -75,3 +77,4 @@ def list_to_bit_string(bit_list):
 
 # if __name__ == "__main__":
 #     print(conv_encode([0,1,0,0,0,1,1,1,0,1,0,0,0,1,1,1]))
+

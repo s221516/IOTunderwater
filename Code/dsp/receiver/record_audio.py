@@ -1,7 +1,7 @@
 import wave
 import sys
 import pyaudio
-from config_values import RECORD_SECONDS, PATH_TO_WAV_FILE, SAMPLE_RATE
+from config import RECORD_SECONDS, PATH_TO_WAV_FILE, SAMPLE_RATE
 
 
 #TODO FIX THIS BULLSHIT

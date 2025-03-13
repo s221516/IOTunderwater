@@ -2,7 +2,7 @@
 import cv2
 import numpy as np
 
-from config_values import PATH_TO_PICTURE, THRESHOLD_BINARY_VAL
+from Code.dsp.config import PATH_TO_PICTURE, THRESHOLD_BINARY_VAL
 
 # load the input image
 img = cv2.imread(PATH_TO_PICTURE)
