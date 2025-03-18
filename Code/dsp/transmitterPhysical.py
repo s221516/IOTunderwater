@@ -5,7 +5,7 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 from encoding.convolutional_encoding import conv_encode
 
-from config import PORT, CONVOLUTIONAL_CODING, PREAMBLE_PATTERN
+from config import PORT, CONVOLUTIONAL_CODING, PREAMBLE_PATTERN, BINARY_BARKER, APPLY_BAKER_PREAMBLE
 
 ser = initPort(PORT)
 def send_command(command):
@@ -59,7 +59,11 @@ def transmitPhysical(message, carrier, bitrate):
     if CONVOLUTIONAL_CODING:
         bits = conv_encode(bits)
 
-    bits = PREAMBLE_PATTERN + bits
+    if (APPLY_BAKER_PREAMBLE):
+        bits = BINARY_BARKER + bits
+    else:
+        bits = PREAMBLE_PATTERN + bits
+
     #change bits to -1 for signal generator scipy commands
     for i in range(0, len(bits),1):
         if bits[i] == 0:
@@ -68,7 +72,7 @@ def transmitPhysical(message, carrier, bitrate):
     bits = np.array(bits)
     arb_wave_form_command = "DATA:DAC VOLATILE, " + ", ".join(map(str, bits * 2047))
     
-    freq = bitrate/len(bits) 
+    freq = bitrate/len(bits)
     print("Transmitted bits: ", len(bits))
 
     name = "COCK"
@@ -80,8 +84,7 @@ def transmitPhysical(message, carrier, bitrate):
     """
     send_command(command)
 
-    time.sleep(1)
-
+    time.sleep(0.5)
 
     command = f"""
     APPLy:SIN {carrier}, 10, 0

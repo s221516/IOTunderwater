@@ -9,9 +9,9 @@ from transmitterPhysical import transmitPhysical, stopTransmission
 
 import csv
 
-def logInCsv(id, bitrate, carrierfreq, original_message, decoded_message, filename="tests.csv"):
+def logInCsv(id, bitrate, carrierfreq, original_message, decoded_message, hamming_dist, filename="test.csv"):
 
-    headers = ["ID", "Bitrate", "Carrier Frequency", "Original Message", "Decoded Message"]
+    headers = ["ID", "Bitrate", "Carrier Frequency", "Original Message", "Decoded Message", "Barker Code", "Hamming Distance"]
 
     # Check if the file exists to determine if we need to write headers
     try:
@@ -27,25 +27,25 @@ def logInCsv(id, bitrate, carrierfreq, original_message, decoded_message, filena
             writer.writerow(headers)
         
         # Write the log entry
-        writer.writerow([id, bitrate, carrierfreq, original_message, decoded_message])
+        writer.writerow([id, bitrate, carrierfreq, original_message, decoded_message, hamming_dist, "Barker-13"])
 
 def testing():
     #test words
-    all_letters = "the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~`.>*"
-    # all_letters = "the quick brown fox jumps over the lazy dog while vexd zebras fight for joy!"
-
-    messages = [all_letters]
+    # all_letters = "the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~`.>*"
+    all_letters = "the quick brown fox jumps over the lazy dog @#$%^&()_+[]{}|;:,.<>/?~`"
+    
+    # hello world -> i think rld is bit-wise very close to baker-13, it is way more inconsistent than "Hello there"
+    messages = ["Hello_there"]
     
     # test bitrates  
     # 16 * 9 * 15 * (2)
     # bitrates = np.arange(200, 1000, 50)
 
-    bitrates = [900, 900, 900]
+    bitrates = [400] * 50
 
     #test carrier frequencies
     # carrierfreqs = np.arange(2000, 12000, 1000)
-    carrierfreqs = [6000, 7000, 8000]
-
+    carrierfreqs = [6000]
 
     id = 0
     for message in messages:
@@ -53,7 +53,7 @@ def testing():
             for carrierfreq in carrierfreqs:
                 transmitPhysical(message, carrierfreq, bitrate)
 
-                time.sleep(2)
+                time.sleep(1.5)
 
                 # Start recording
                 if (config.MAKE_NEW_RECORDING):
@@ -65,15 +65,16 @@ def testing():
                 # Non-Coherent demodulation
                 nonCoherentReceiver = NonCoherentReceiver(bitrate, carrierfreq)
                 
-                
                 try:
                     message_nc, debug_nc = nonCoherentReceiver.decode()
                     print("Decoded message: ", message_nc)
+                    hamming_dist = config.hamming_distance(config.string_to_bin_array(message_nc), config.string_to_bin_array(message))
+                    print("Hamming distance of msgs: ", hamming_dist) 
                 except TypeError:
                     message_nc = "No preamble found"
    
 
-                logInCsv(id, bitrate, carrierfreq, message, message_nc)
+                logInCsv(id, bitrate, carrierfreq, message, message_nc, hamming_dist)
                 id+=1
 
 

@@ -14,7 +14,10 @@ from config import (
     PREAMBLE_PATTERN,
     PREAMBLE_BASE, 
     APPLY_AVERAGING_PREAMBLE,
-    REPETITIONS
+    REPETITIONS,
+    BINARY_BARKER, 
+    APPLY_BAKER_PREAMBLE, 
+    EXPECTED_LEN_OF_DATA_BITS
 )
 
 from scipy.io import wavfile
@@ -125,7 +128,45 @@ class Receiver:
             
             return bits[start_index:end_index]
     
-    def remove_preamble_naive(self, bits):
+    def remove_preamble_baker_code(self, bits, std_factor = 2.4):
+        correlation = signal.correlate(bits, BINARY_BARKER, mode='valid')
+        threshold = np.mean(correlation) + std_factor * np.std(correlation)
+        peak_indices, _ = signal.find_peaks(correlation, height=threshold, distance=EXPECTED_LEN_OF_DATA_BITS)
+        # Print correlation values at each peak index
+        
+        # for peak_index in peak_indices:
+        #     print(f"Peak index: {peak_index}, Correlation value: {correlation[peak_index]}")
+        
+        print("Diff in peaks: ", np.diff(peak_indices))
+       
+        if len(peak_indices) < 3:
+            print(f"Not enough preambles detected with std_factor={std_factor}")
+            if std_factor > 1.7:  # Set a lower limit for the std_factor to avoid infinite recursion
+                return self.remove_preamble_baker_code(bits, std_factor - 0.1)   
+            else:
+                return -1
+        
+        
+        start_index = peak_indices[1] + len(BINARY_BARKER)
+        end_index = peak_indices[2]
+        data_bits = bits[start_index:end_index]
+        # print("Extracted Data Bits:", data_bits)
+
+        # plt.figure(figsize=(10, 4))
+        # plt.plot(correlation, label="Cross-Correlation")
+        # plt.scatter(peak_indices, correlation[peak_indices], color='red', label="Detected Preambles", zorder=3)
+        # plt.axhline(threshold, color='gray', linestyle='--', label="Threshold")
+        # plt.xlabel("Index")
+        # plt.ylabel("Correlation Value")
+        # plt.title("Cross-Correlation with Preamble")
+        # plt.legend()
+        # plt.grid()
+        # plt.show()
+
+        return data_bits
+
+
+    def remove_preamble_naive(self, bits):        
         start_index = None
         end_index = None
         for i in range(0, len(bits), 1):
@@ -192,6 +233,8 @@ class NonCoherentReceiver(Receiver):
 
         if (APPLY_AVERAGING_PREAMBLE):
             bits_without_preamble = self.remove_preamble_average(bits)
+        elif (APPLY_BAKER_PREAMBLE):
+            bits_without_preamble = self.remove_preamble_baker_code(bits)
         else:
             bits_without_preamble = self.remove_preamble_naive(bits)
         
