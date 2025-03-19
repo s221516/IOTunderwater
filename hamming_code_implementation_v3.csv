@@ -1,0 +1,12 @@
+ID,Bitrate,Carrier Frequency,Original Message,Decoded Message,Hamming Distance,Hamming Encoding
+0,100,6000,Hello_there,Hello_there,0,False
+0,100,6000,"the quick brown fox jumps over the lazy dog, test test test, suggma",the quick br`,,False
+0,100,6000,"the quick brown fox jumps over the lazy dog, test test test, suggma",the quick brown fox jumps over thelazx  g'4 q00 100011830,,False
+1,100,6000,"the quick brown fox jumps over the lazy dog, test test test, suggma",the quick brown fox jumps over thelazx  o'4 q00 100011830,,False
+2,100,6000,"the quick brown fox jumps over the lazy dog, test test test, suggma",the quick brown fox jumps over the lazy `o' 4 q00!100 1010#&0,,False
+0,100,6000,Hello_there,Hello_there,0,False
+1,100,6000,Hello_there,`llop``pa,,False
+0,50,6000,"the quick brown fox jumps over the lazy dog, test test test, suggma","the quick brown fox jumps over the lazy dog, test test test, suggma",0,False
+1,50,6000,"the quick brown fox jumps over the lazy dog, test test test, suggma","the quick brown fox jumps over the lazy dog, test test test, suggma",0,False
+2,50,6000,"the quick brown fox jumps over the lazy dog, test test test, suggma","the quick brown fox jumps over the lazy dog, test test test, suggma",0,False
+0,100,6000,hello world,hello world,0,False

@@ -9,9 +9,9 @@ from transmitterPhysical import transmitPhysical, stopTransmission
 
 import csv
 
-def logInCsv(id, bitrate, carrierfreq, original_message, decoded_message, hamming_dist, filename="test.csv"):
+def logInCsv(id, bitrate, carrierfreq, original_message, decoded_message, hamming_distance, filename="hamming_code_implementation_v3.csv"):
 
-    headers = ["ID", "Bitrate", "Carrier Frequency", "Original Message", "Decoded Message", "Barker Code", "Hamming Distance"]
+    headers = ["ID", "Bitrate", "Carrier Frequency", "Original Message", "Decoded Message", "Hamming Distance", "Hamming Encoding"]
 
     # Check if the file exists to determine if we need to write headers
     try:
@@ -27,21 +27,20 @@ def logInCsv(id, bitrate, carrierfreq, original_message, decoded_message, hammin
             writer.writerow(headers)
         
         # Write the log entry
-        writer.writerow([id, bitrate, carrierfreq, original_message, decoded_message, hamming_dist, "Barker-13"])
+        writer.writerow([id, bitrate, carrierfreq, original_message, decoded_message, hamming_distance, config.HAMMING_CODING])
 
 def testing():
     #test words
     # all_letters = "the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~`.>*"
-    all_letters = "the quick brown fox jumps over the lazy dog @#$%^&()_+[]{}|;:,.<>/?~`"
+    all_letters = "the quick brown fox jumps over the lazy dog, test test test, suggma"
     
-    # hello world -> i think rld is bit-wise very close to baker-13, it is way more inconsistent than "Hello there"
-    messages = ["Hello_there"]
+    messages = ["hello world"]
     
     # test bitrates  
     # 16 * 9 * 15 * (2)
     # bitrates = np.arange(200, 1000, 50)
 
-    bitrates = [400] * 50
+    bitrates = [100] * 10
 
     #test carrier frequencies
     # carrierfreqs = np.arange(2000, 12000, 1000)

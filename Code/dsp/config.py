@@ -62,14 +62,17 @@ BINARY_BARKER = [1, 1, 1, 1, 1, 0, 0, 1, 1, 0, 1, 0, 1]
 REPETITIONS = 3
 PREAMBLE_PATTERN = PREAMBLE_BASE * REPETITIONS
 
-EXPECTED_LEN_OF_DATA_BITS = 90
+EXPECTED_LEN_OF_DATA_BITS = 80
 
 CONVOLUTIONAL_CODING = False # NOTE: with the new preamble, convo coding does not work at all
-MAKE_NEW_RECORDING = True
+HAMMING_CODING = False
+
 APPLY_BAKER_PREAMBLE = True
 APPLY_AVERAGING_PREAMBLE = False
+
 # SAMPLE_RATE_FOR_WAV_FILE = 44100  # Hz
-RECORD_SECONDS = 1
+RECORD_SECONDS = 3
+MAKE_NEW_RECORDING = True
 
 dark_horse_lyrics = """Yeah, y'all know what it is
     Katy Perry

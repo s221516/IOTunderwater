@@ -4,8 +4,17 @@ import numpy as np
 import seaborn as sns
 import matplotlib.pyplot as plt
 from encoding.convolutional_encoding import conv_encode
+from encoding.hamming_codes import hamming_encode
 
-from config import PORT, CONVOLUTIONAL_CODING, PREAMBLE_PATTERN, BINARY_BARKER, APPLY_BAKER_PREAMBLE
+from config import (
+    PORT, 
+    CONVOLUTIONAL_CODING,
+    PREAMBLE_PATTERN,
+    BINARY_BARKER,
+    APPLY_BAKER_PREAMBLE,
+    HAMMING_CODING
+
+)
 
 ser = initPort(PORT)
 def send_command(command):
@@ -54,8 +63,19 @@ def stopTransmission():
 
 def transmitPhysical(message, carrier, bitrate):    
     
-    bits = message_toBitArray(message)
+    if HAMMING_CODING:
+        square_wave = []
+        bits = hamming_encode(message)
+        for bit in bits:
+            if bit == '0':
+                square_wave += [0]
+            elif bit == '1':
+                square_wave += [1] 
+        bits =  square_wave
+    else:
+        bits = message_toBitArray(message)
    
+
     if CONVOLUTIONAL_CODING:
         bits = conv_encode(bits)
 

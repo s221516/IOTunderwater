@@ -4,6 +4,7 @@ import numpy as np
 import scipy.signal as signal
 
 from encoding.convolutional_encoding import *
+from encoding.hamming_codes import hamming_decode
 from visuals.visualization import create_processing_visualization
 import config
 
@@ -17,7 +18,8 @@ from config import (
     REPETITIONS,
     BINARY_BARKER, 
     APPLY_BAKER_PREAMBLE, 
-    EXPECTED_LEN_OF_DATA_BITS
+    EXPECTED_LEN_OF_DATA_BITS,
+    HAMMING_CODING
 )
 
 from scipy.io import wavfile
@@ -146,25 +148,23 @@ class Receiver:
             else:
                 return -1
         
-        
         start_index = peak_indices[1] + len(BINARY_BARKER)
         end_index = peak_indices[2]
         data_bits = bits[start_index:end_index]
         # print("Extracted Data Bits:", data_bits)
 
-        # plt.figure(figsize=(10, 4))
-        # plt.plot(correlation, label="Cross-Correlation")
-        # plt.scatter(peak_indices, correlation[peak_indices], color='red', label="Detected Preambles", zorder=3)
-        # plt.axhline(threshold, color='gray', linestyle='--', label="Threshold")
-        # plt.xlabel("Index")
-        # plt.ylabel("Correlation Value")
-        # plt.title("Cross-Correlation with Preamble")
-        # plt.legend()
-        # plt.grid()
-        # plt.show()
+        plt.figure(figsize=(10, 4))
+        plt.plot(correlation, label="Cross-Correlation")
+        plt.scatter(peak_indices, correlation[peak_indices], color='red', label="Detected Preambles", zorder=3)
+        plt.axhline(threshold, color='gray', linestyle='--', label="Threshold")
+        plt.xlabel("Index")
+        plt.ylabel("Correlation Value")
+        plt.title("Cross-Correlation with Preamble")
+        plt.legend()
+        plt.grid()
+        plt.show()
 
         return data_bits
-
 
     def remove_preamble_naive(self, bits):        
         start_index = None
@@ -245,6 +245,9 @@ class NonCoherentReceiver(Receiver):
 
         if (CONVOLUTIONAL_CODING):
             bits_without_preamble = conv_decode(bits_without_preamble)
+
+        if (HAMMING_CODING):
+            bits_without_preamble = hamming_decode(bits_without_preamble)
 
         message = self.decode_bytes_to_bits(bits_without_preamble)
         debug_info = {
