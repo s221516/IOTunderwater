@@ -130,41 +130,49 @@ class Receiver:
             
             return bits[start_index:end_index]
     
-    def remove_preamble_baker_code(self, bits, std_factor = 2.4):
+    def remove_preamble_baker_code(self, bits, std_factor = 4):
         correlation = signal.correlate(bits, BINARY_BARKER, mode='valid')
         threshold = np.mean(correlation) + std_factor * np.std(correlation)
         peak_indices, _ = signal.find_peaks(correlation, height=threshold, distance=EXPECTED_LEN_OF_DATA_BITS)
         # Print correlation values at each peak index
-        
-        # for peak_index in peak_indices:
-        #     print(f"Peak index: {peak_index}, Correlation value: {correlation[peak_index]}")
-        
-        print("Diff in peaks: ", np.diff(peak_indices))
-       
-        if len(peak_indices) < 3:
-            print(f"Not enough preambles detected with std_factor={std_factor}")
+        # print("Peak indices ", peak_indices)
+
+        if len(peak_indices) < 2:
+            # print(f"Not enough preambles detected with std_factor={std_factor}")
             if std_factor > 1.7:  # Set a lower limit for the std_factor to avoid infinite recursion
                 return self.remove_preamble_baker_code(bits, std_factor - 0.1)   
             else:
                 return -1
         
-        start_index = peak_indices[1] + len(BINARY_BARKER)
-        end_index = peak_indices[2]
-        data_bits = bits[start_index:end_index]
-        # print("Extracted Data Bits:", data_bits)
+        diff_in_peaks = np.diff(peak_indices)
+        print("Diff in peaks: ", diff_in_peaks)
+        data_bits = []
+        for i in range(len(peak_indices) - 1):
+            if EXPECTED_LEN_OF_DATA_BITS <= diff_in_peaks[i]:
+                # good_peak.append((peak_indices[i], peak_indices[i+1]))
+                data_bits.append(bits[peak_indices[i] + len(BINARY_BARKER): peak_indices[i+1]])
 
-        plt.figure(figsize=(10, 4))
-        plt.plot(correlation, label="Cross-Correlation")
-        plt.scatter(peak_indices, correlation[peak_indices], color='red', label="Detected Preambles", zorder=3)
-        plt.axhline(threshold, color='gray', linestyle='--', label="Threshold")
-        plt.xlabel("Index")
-        plt.ylabel("Correlation Value")
-        plt.title("Cross-Correlation with Preamble")
-        plt.legend()
-        plt.grid()
-        plt.show()
 
-        return data_bits
+        # plt.figure(figsize=(10, 4))
+        # plt.plot(correlation, label="Cross-Correlation")
+        # plt.scatter(peak_indices, correlation[peak_indices], color='red', label="Detected Preambles", zorder=3)
+        # plt.axhline(threshold, color='gray', linestyle='--', label="Threshold")
+        # plt.xlabel("Index")
+        # plt.ylabel("Correlation Value")
+        # plt.title("Cross-Correlation with Preamble")
+        # plt.legend()
+        # plt.grid()
+        # plt.show()
+
+        for i in range(len(data_bits)):
+            print(self.decode_bytes_to_bits(data_bits[i]))
+
+        # TODO: fix this :)
+        # print(int(0.6))
+        avg = [int(round((sum(col))/len(col))) for col in zip(*data_bits)]
+        # print("This is avg: ", avg)
+        # print(len(avg))
+        return avg
 
     def remove_preamble_naive(self, bits):        
         start_index = None

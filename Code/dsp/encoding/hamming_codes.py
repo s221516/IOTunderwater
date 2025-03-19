@@ -137,7 +137,7 @@ def decode_bytes_to_bits(bits: list) -> str:
 
 if __name__ == "__main__":
     MODE = 8    # count of signifed bits
-    msg = "Morten"
+    msg = "AA"
 
     enc_msg = hamming_encode(msg, MODE) # Encode your message to Hamming code
     print("encode:", enc_msg)

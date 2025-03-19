@@ -9,9 +9,9 @@ from transmitterPhysical import transmitPhysical, stopTransmission
 
 import csv
 
-def logInCsv(id, bitrate, carrierfreq, original_message, decoded_message, hamming_distance, filename="hamming_code_implementation_v3.csv"):
+def logInCsv(id, bitrate, carrierfreq, original_message, decoded_message, filename="comparing_encoding.csv"):
 
-    headers = ["ID", "Bitrate", "Carrier Frequency", "Original Message", "Decoded Message", "Hamming Distance", "Hamming Encoding"]
+    headers = ["ID", "Bitrate", "Carrier Frequency", "Original Message", "Decoded Message", "Encoding"]
 
     # Check if the file exists to determine if we need to write headers
     try:
@@ -27,20 +27,23 @@ def logInCsv(id, bitrate, carrierfreq, original_message, decoded_message, hammin
             writer.writerow(headers)
         
         # Write the log entry
-        writer.writerow([id, bitrate, carrierfreq, original_message, decoded_message, hamming_distance, config.HAMMING_CODING])
+        writer.writerow([id, bitrate, carrierfreq, original_message, decoded_message, "Hamming"])
 
 def testing():
     #test words
-    # all_letters = "the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~`.>*"
-    all_letters = "the quick brown fox jumps over the lazy dog, test test test, suggma"
+    all_letters = "the quick brown fox jumps over the lazy dog while vexd zebras fight for joy!>*"
+    # all_letters = "the quick brown fox jumps over the lazy dog, test test test, suggma"
     
-    messages = ["hello world"]
+    messages = [config.MESSAGE]
     
+    # 1 = 3
+    # 8 = 12
+
     # test bitrates  
     # 16 * 9 * 15 * (2)
     # bitrates = np.arange(200, 1000, 50)
 
-    bitrates = [100] * 10
+    bitrates = [200]
 
     #test carrier frequencies
     # carrierfreqs = np.arange(2000, 12000, 1000)
@@ -67,13 +70,13 @@ def testing():
                 try:
                     message_nc, debug_nc = nonCoherentReceiver.decode()
                     print("Decoded message: ", message_nc)
-                    hamming_dist = config.hamming_distance(config.string_to_bin_array(message_nc), config.string_to_bin_array(message))
-                    print("Hamming distance of msgs: ", hamming_dist) 
+                    # hamming_dist = config.hamming_distance(config.string_to_bin_array(message_nc), config.string_to_bin_array(message))
+                    # print("Hamming distance of msgs: ", hamming_dist) 
                 except TypeError:
                     message_nc = "No preamble found"
    
 
-                logInCsv(id, bitrate, carrierfreq, message, message_nc, hamming_dist)
+                logInCsv(id, bitrate, carrierfreq, message, message_nc)
                 id+=1
 
 

@@ -10,3 +10,25 @@ ID,Bitrate,Carrier Frequency,Original Message,Decoded Message,Hamming Distance,H
 1,50,6000,"the quick brown fox jumps over the lazy dog, test test test, suggma","the quick brown fox jumps over the lazy dog, test test test, suggma",0,False
 2,50,6000,"the quick brown fox jumps over the lazy dog, test test test, suggma","the quick brown fox jumps over the lazy dog, test test test, suggma",0,False
 0,100,6000,hello world,hello world,0,False
+0,200,6000,hello_there,HeLloWtheRe,4,False
+1,200,6000,hello_there,heddg_4herd,5,False
+2,200,6000,hello_there,Heldo_4here,3,False
+3,200,6000,hello_there,HeLlO_tHere,4,False
+4,200,6000,hello_there,hello_there,0,False
+5,200,6000,hello_there,hedlo_4here,2,False
+6,200,6000,hello_there,heddg_4herd,5,False
+7,200,6000,hello_there,heddg_4herd,5,False
+8,200,6000,hello_there,heddg_4herd,5,False
+9,200,6000,hello_there,H_tHr,,False
+0,200,6000,hello_there,hello_there,0,True
+1,200,6000,hello_there,E,,True
+2,200,6000,hello_there,heLLothere,,True
+3,200,6000,hello_there,?O],,True
+0,200,6000,hello_there,hello_there,0,True
+1,200,6000,hello_there,hellothe,,True
+2,200,6000,hello_there,hello_there,0,True
+0,200,6000,"the quick brown fox jumps over the lazy dog, test test test, suggma","the quic+ brgwf fox jumps over the lazy dog, test test test, suggma",3,False
+1,200,6000,"the quick brown fox jumps over the lazy dog, test test test, suggma",lgq%0c{g0bge:972:4260<27:2:2:29,,False
+2,200,6000,"the quick brown fox jumps over the lazy dog, test test test, suggma","tE quick brown fox jumps over the lazy dgg, test test test, suggma",,False
+3,200,6000,"the quick brown fox jumps over the lazy dog, test test test, suggma",c7~vJ23X<RQ[\\H^H\\\YX@,,False
+4,200,6000,"the quick brown fox jumps over the lazy dog, test test test, suggma",dgy0#9w375:972:4260<27:2:2:29,,False
