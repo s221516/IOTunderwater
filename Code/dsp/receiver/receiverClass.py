@@ -165,7 +165,12 @@ class Receiver:
         # plt.show()
 
         for i in range(len(data_bits)):
-            print(self.decode_bytes_to_bits(data_bits[i]))
+            if CONVOLUTIONAL_CODING:
+                print(self.decode_bytes_to_bits(conv_decode(data_bits[i])))
+            elif HAMMING_CODING:
+                print(self.decode_bytes_to_bits(hamming_decode(data_bits[i])))
+            else:
+                print(self.decode_bytes_to_bits(data_bits[i]))
 
         # TODO: fix this :)
         # print(int(0.6))

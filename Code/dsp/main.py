@@ -9,7 +9,7 @@ from transmitterPhysical import transmitPhysical, stopTransmission
 
 import csv
 
-def logInCsv(id, bitrate, carrierfreq, original_message, decoded_message, filename="comparing_encoding.csv"):
+def logInCsv(id, bitrate, carrierfreq, original_message, decoded_message, filename="conv_encode_new.csv"):
 
     headers = ["ID", "Bitrate", "Carrier Frequency", "Original Message", "Decoded Message", "Encoding"]
 
@@ -43,7 +43,7 @@ def testing():
     # 16 * 9 * 15 * (2)
     # bitrates = np.arange(200, 1000, 50)
 
-    bitrates = [200]
+    bitrates = [800]
 
     #test carrier frequencies
     # carrierfreqs = np.arange(2000, 12000, 1000)

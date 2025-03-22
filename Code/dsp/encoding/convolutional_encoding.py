@@ -75,6 +75,77 @@ def list_to_bit_string(bit_list):
     """Converts a list of integers to a bit string."""
     return ''.join(str(bit) for bit in bit_list)
 
-# if __name__ == "__main__":
-#     print(conv_encode([0,1,0,0,0,1,1,1,0,1,0,0,0,1,1,1]))
+import random
 
+def inject_errors(encoded_bits, num_errors):
+    """
+    Injects a specified number of random bit errors into the encoded data.
+    
+    Args:
+        encoded_bits (list): The encoded bits to inject errors into
+        num_errors (int): Number of errors to inject
+    
+    Returns:
+        list: Encoded bits with errors injected
+    """
+    # Convert to list if input is a string
+    if isinstance(encoded_bits, str):
+        bits = bit_string_to_list(encoded_bits)
+    else:
+        bits = encoded_bits.copy()
+    
+    # Get random positions to inject errors
+    positions = random.sample(range(len(bits)), num_errors)
+    
+    # Flip bits at the selected positions
+    for pos in positions:
+        bits[pos] = 1 - bits[pos]  # Flip the bit (0->1 or 1->0)
+    
+    return bits
+
+def string_to_bits(message):
+    """Convert a string to a list of bits."""
+    # Convert string to bytes, then to binary representation
+    bits = []
+    for char in message:
+        # Get ASCII value and convert to 8-bit binary
+        ascii_val = ord(char)
+        for i in range(7, -1, -1):  # MSB first
+            bits.append((ascii_val >> i) & 1)
+    return bits
+
+def bits_to_string(bits):
+    """Convert a list of bits back to a string."""
+    # Ensure the number of bits is divisible by 8
+    if len(bits) % 8 != 0:
+        padding = 8 - (len(bits) % 8)
+        bits = bits + [0] * padding
+    
+    # Convert bits back to characters
+    message = ""
+    for i in range(0, len(bits), 8):
+        byte = bits[i:i+8]
+        char_code = sum(bit << (7-j) for j, bit in enumerate(byte))
+        message += chr(char_code)
+    return message
+
+# Update the main example usage:
+if __name__ == "__main__":
+    # Test with a string message
+    message = "AA"
+    print(f"Original message: {message}")
+    
+    # Convert string to bits and encode
+    message_bits = string_to_bits(message)
+    encoded_message = conv_encode(message_bits)
+    print(f"Encoded message: {encoded_message}")
+    
+    # Inject some errors
+    num_errors = 2
+    corrupted_message = inject_errors(encoded_message, num_errors)
+    print(f"Corrupted message (with {num_errors} errors): {corrupted_message}")
+    
+    # Decode the corrupted message
+    decoded_bits = conv_decode(corrupted_message)
+    decoded_message = bits_to_string(decoded_bits)
+    print(f"Decoded message: {decoded_message}")

@@ -2,34 +2,36 @@ from typing import List
 from math import log2, ceil
 from random import randrange
 
+def hamming_distance(received, expected):
+    """Computes Hamming distance between received bits and expected bits."""
+    if (len(received) != len(expected)):
+        return 
+    else:
+        return sum(r != e for r, e in zip(received, expected))
 
 def __hamming_common(src: List[List[int]], s_num: int, encode=True) -> None:
     """
-    Here's the real magic =)
+    Performs Hamming encoding/decoding operations
     """
-    s_range = range(s_num)
-
-    for i in src:
+    for block in src:
         sindrome = 0
-        for s in s_range:
+        for s in range(s_num):
             sind = 0
-            for p in range(2 ** s, len(i) + 1, 2 ** (s + 1)):
+            for p in range(2 ** s, len(block) + 1, 2 ** (s + 1)):
                 for j in range(2 ** s):
-                    if (p + j) > len(i):
+                    if (p + j) > len(block):
                         break
-                    sind ^= i[p + j - 1]
-
+                    sind ^= block[p + j - 1]
+            
             if encode:
-                i[2 ** s - 1] = sind
+                block[2 ** s - 1] = sind
             else:
                 sindrome += (2 ** s * sind)
-
-    if (not encode) and sindrome:
-        if 0 < sindrome <= len(i):
-            i[sindrome - 1] = int(not i[sindrome - 1])
-        else:
-            print(f"Error: sindrome value {sindrome} is out of range. Multiple errors detected.")
-
+        
+        if (not encode) and sindrome:
+            if 0 < sindrome <= len(block):
+                block[sindrome - 1] ^= 1  # Correct the error by flipping the bit
+                print(f"Corrected error at position {sindrome}")
 
 def hamming_encode(msg: str, mode: int=8) -> str:
     """
@@ -65,62 +67,85 @@ def hamming_encode(msg: str, mode: int=8) -> str:
 
     return result
 
-
 def hamming_decode(msg: str, mode: int=8) -> str:
     """
-    Decoding the message with Hamming code.
-    :param msg: Message string to decode
-    :param mode: number of significant bits
-    :return: 
+    Decoding the message with Hamming code
     """
-
-    result = ""
-
-    s_num = ceil(log2(log2(mode + 1) + mode + 1))   # number of control bits
-    res_len = len(msg) // (mode + s_num)    # length of result (bytes)
-    code_len = mode + s_num     # length of one code sequence
-
+    s_num = ceil(log2(log2(mode + 1) + mode + 1))
+    code_len = mode + s_num
+    res_len = len(msg) // code_len
+    
+    # Convert message to blocks of integers
     to_hamming = []
-
-    for i in range(res_len):    # convert binary-like string to int-list
-        code = list(map(int, msg[i * code_len:i * code_len + code_len]))
-        to_hamming.append(code)
-
-    __hamming_common(to_hamming, s_num, False)  # process
-
-    for i in to_hamming:    # delete control bits
-        for j in range(s_num):
-            i.pop(2 ** j - 1 - j)
-        result += "".join(map(str, i))
-
-    msg_l = []
-
-    for i in range(len(result) // 8):   # convert from binary-sring value to integer
-        val = "".join(result[i * 8:i * 8 + 8])
-        msg_l.append(int(val, 2))
-
-	# result = bit string
+    for i in range(res_len):
+        block = list(map(int, msg[i * code_len:(i + 1) * code_len]))
+        to_hamming.append(block)
+    
+    # Process each block
+    __hamming_common(to_hamming, s_num, False)
+    
+    # Remove parity bits and construct result
+    result = ""
+    for block in to_hamming:
+        data_bits = []
+        # Skip parity bit positions (powers of 2)
+        for i in range(1, len(block) + 1):
+            if not (i & (i - 1) == 0):  # Check if i is not a power of 2
+                data_bits.append(str(block[i - 1]))
+        result += ''.join(data_bits)
+    
     return result
 
-
-def noizer(msg: str, mode: int) -> str:
+def noizer_single_error_per_block(msg: str, mode: int) -> str:
     """
-    Generates an error in each element of a Hamming encoded message
+    Generates exactly one error per block using random positions
     """
     seq = list(map(int, msg))
     s_num = ceil(log2(log2(mode + 1) + mode + 1))
     code_len = mode + s_num
     cnt = len(msg) // code_len
-    result = ""
+    result = []
 
     for i in range(cnt):
-        to_noize = seq[i * code_len:i * code_len + code_len]
-        noize = randrange(code_len)
-        to_noize[noize] = int(not to_noize[noize])
-        result += "".join(map(str, to_noize))
+        block = seq[i * code_len:(i + 1) * code_len]
+        # Introduce one random error in each block
+        error_pos = randrange(code_len)
+        block[error_pos] = 1 - block[error_pos]
+        result.extend(block)
+        print(f"Block {i}: Introduced error at position {error_pos}")
 
-    return result
+    return ''.join(map(str, result))
 
+def noizer_multiple_errors_per_block(msg: str, mode: int, errors_per_block: int) -> str:
+    """
+    Generates multiple errors per block using random positions
+    
+    Args:
+        msg: The encoded message
+        mode: Number of significant bits
+        errors_per_block: Number of errors to introduce in each block
+    """
+    seq = list(map(int, msg))
+    s_num = ceil(log2(log2(mode + 1) + mode + 1))
+    code_len = mode + s_num
+    cnt = len(msg) // code_len
+    result = []
+
+    for i in range(cnt):
+        block = seq[i * code_len:(i + 1) * code_len]
+        # Get random positions for errors, ensuring no duplicates
+        error_positions = set()
+        while len(error_positions) < errors_per_block:
+            error_positions.add(randrange(code_len))
+        
+        # Introduce errors at selected positions
+        for pos in error_positions:
+            block[pos] = 1 - block[pos]  # Flip the bit
+            print(f"Block {i}: Introduced error at position {pos}")
+        
+        result.extend(block)
+
+    return ''.join(map(str, result))
 
 def decode_bytes_to_bits(bits: list) -> str:
 	if len(bits) % 8 != 0:
@@ -135,17 +160,38 @@ def decode_bytes_to_bits(bits: list) -> str:
 	return message
 
 
-if __name__ == "__main__":
-    MODE = 8    # count of signifed bits
-    msg = "AA"
-
-    enc_msg = hamming_encode(msg, MODE) # Encode your message to Hamming code
-    print("encode:", enc_msg)
-
-    noize_msg = noizer(enc_msg, MODE)   # Noizer for encoded message
-    print("noise: ", noize_msg)
-
-    dec_msg = hamming_decode(noize_msg, MODE)   # Hamming decode
-    print("decode:", dec_msg)
-    print(decode_bytes_to_bits(dec_msg))
+# Updated test function
+def test_multiple_error_correction():
+    """Test Hamming code's ability to handle multiple errors per block"""
     
+    print("\nTest Case: Multiple errors per block")
+    test_string = "Hello"
+    print(f"Original message: {test_string}")
+    print(f"Original binary: {''.join(format(ord(c), '08b') for c in test_string)}")
+    
+    # Encode
+    encoded = hamming_encode(test_string, 8)
+    print(f"Encoded message: {encoded}")
+    print(f"Number of 12-bit blocks: {len(encoded) // 12}")
+    
+    # Try different numbers of errors per block
+    for errors in range(1, 2):  # Test with 1, 2, and 3 errors per block
+        print(f"\nTesting with {errors} errors per block:")
+        
+        # Introduce errors
+        corrupted = noizer_multiple_errors_per_block(encoded, 8, errors)
+        print(f"Corrupted message: {corrupted}")
+        print("Hamming dist: ", hamming_distance(corrupted, encoded))
+        
+        # Count differences
+        differences = sum(1 for a, b in zip(encoded, corrupted) if a != b)
+        print(f"Total number of introduced errors: {differences}")
+        
+        # Try to decode and correct
+        decoded = hamming_decode(corrupted, 8)
+        decoded_string = decode_bytes_to_bits([int(bit) for bit in decoded])
+        print(f"Decoded message: {decoded_string}")
+        print(f"Success: {'Yes' if decoded_string == test_string else 'No'}")
+
+if __name__ == "__main__":
+    test_multiple_error_correction()
