@@ -2,6 +2,7 @@ from typing import Dict, Tuple
 import matplotlib.pyplot as plt
 import numpy as np
 import scipy.signal as signal
+from scipy.io import wavfile
 
 from encoding.convolutional_encoding import *
 from encoding.hamming_codes import hamming_decode
@@ -19,10 +20,10 @@ from config import (
     BINARY_BARKER, 
     APPLY_BAKER_PREAMBLE, 
     EXPECTED_LEN_OF_DATA_BITS,
-    HAMMING_CODING
+    HAMMING_CODING, 
+    BAND_PASS_FILTER
 )
 
-from scipy.io import wavfile
 
 plt.style.use("ggplot")
 
@@ -51,6 +52,16 @@ class Receiver:
 
     def _demodulate(self) -> Tuple[np.ndarray, Dict]:
         raise NotImplementedError("Subclasses must implement _demodulate")
+
+    def bandpass_filter(self, input_signal: np.ndarray) -> np.ndarray:
+        """Apply a bandpass filter around the carrier frequency"""
+        nyquist = SAMPLE_RATE * 0.5
+        order = 4
+        # Define bandpass range around carrier frequency
+        low = (self.carrier_freq - self.bit_rate) / nyquist
+        high = (self.carrier_freq + self.bit_rate) / nyquist
+        b, a = signal.butter(order, [low, high], btype='band', analog=False)
+        return signal.filtfilt(b, a, input_signal)
 
     def filter_signal(self, input_signal: np.ndarray) -> np.ndarray:
         nyquist = SAMPLE_RATE * 0.5
@@ -139,7 +150,7 @@ class Receiver:
 
         if len(peak_indices) < 2:
             # print(f"Not enough preambles detected with std_factor={std_factor}")
-            if std_factor > 1.7:  # Set a lower limit for the std_factor to avoid infinite recursion
+            if std_factor > 1 :  # Set a lower limit for the std_factor to avoid infinite recursion
                 return self.remove_preamble_baker_code(bits, std_factor - 0.1)   
             else:
                 return -1
@@ -148,21 +159,10 @@ class Receiver:
         print("Diff in peaks: ", diff_in_peaks)
         data_bits = []
         for i in range(len(peak_indices) - 1):
-            if EXPECTED_LEN_OF_DATA_BITS <= diff_in_peaks[i]:
+            if EXPECTED_LEN_OF_DATA_BITS == diff_in_peaks[i]:
                 # good_peak.append((peak_indices[i], peak_indices[i+1]))
                 data_bits.append(bits[peak_indices[i] + len(BINARY_BARKER): peak_indices[i+1]])
 
-
-        # plt.figure(figsize=(10, 4))
-        # plt.plot(correlation, label="Cross-Correlation")
-        # plt.scatter(peak_indices, correlation[peak_indices], color='red', label="Detected Preambles", zorder=3)
-        # plt.axhline(threshold, color='gray', linestyle='--', label="Threshold")
-        # plt.xlabel("Index")
-        # plt.ylabel("Correlation Value")
-        # plt.title("Cross-Correlation with Preamble")
-        # plt.legend()
-        # plt.grid()
-        # plt.show()
 
         for i in range(len(data_bits)):
             if CONVOLUTIONAL_CODING:
@@ -177,6 +177,18 @@ class Receiver:
         avg = [int(round((sum(col))/len(col))) for col in zip(*data_bits)]
         # print("This is avg: ", avg)
         # print(len(avg))
+
+        plt.figure(figsize=(10, 4))
+        plt.plot(correlation, label="Cross-Correlation")
+        plt.scatter(peak_indices, correlation[peak_indices], color='red', label="Detected Preambles", zorder=3)
+        plt.axhline(threshold, color='gray', linestyle='--', label="Threshold")
+        plt.xlabel("Index of bit")
+        plt.ylabel("Correlation Value")
+        plt.title("Cross-Correlation with Preamble")
+        plt.legend()
+        plt.grid()
+        plt.show()
+
         return avg
 
     def remove_preamble_naive(self, bits):        
@@ -228,7 +240,12 @@ class Receiver:
 
 class NonCoherentReceiver(Receiver):
     def _demodulate(self) -> Tuple[np.ndarray, Dict]:
-        analytic = signal.hilbert(self.wav_signal)
+        if (BAND_PASS_FILTER):
+            bandpassed = self.bandpass_filter(self.wav_signal)
+            analytic = signal.hilbert(bandpassed)
+        else:   
+            analytic = signal.hilbert(self.wav_signal)
+            
         envelope = np.abs(analytic)
         filtered = self.filter_signal(envelope)
         return filtered, {

@@ -31,7 +31,7 @@ def __hamming_common(src: List[List[int]], s_num: int, encode=True) -> None:
         if (not encode) and sindrome:
             if 0 < sindrome <= len(block):
                 block[sindrome - 1] ^= 1  # Correct the error by flipping the bit
-                print(f"Corrected error at position {sindrome}")
+                # print(f"Corrected error at position {sindrome}")
 
 def hamming_encode(msg: str, mode: int=8) -> str:
     """
@@ -165,7 +165,7 @@ def test_multiple_error_correction():
     """Test Hamming code's ability to handle multiple errors per block"""
     
     print("\nTest Case: Multiple errors per block")
-    test_string = "Hello"
+    test_string = "TEst disse nedder"
     print(f"Original message: {test_string}")
     print(f"Original binary: {''.join(format(ord(c), '08b') for c in test_string)}")
     

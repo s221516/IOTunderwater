@@ -9,9 +9,9 @@ from transmitterPhysical import transmitPhysical, stopTransmission
 
 import csv
 
-def logInCsv(id, bitrate, carrierfreq, original_message, decoded_message, filename="conv_encode_new.csv"):
+def logInCsv(id, bitrate, carrierfreq, original_message, decoded_message, filename="testing_bit_rate.csv"):
 
-    headers = ["ID", "Bitrate", "Carrier Frequency", "Original Message", "Decoded Message", "Encoding"]
+    headers = ["ID", "Bitrate", "Carrier Frequency", "Original Message", "Decoded Message"]
 
     # Check if the file exists to determine if we need to write headers
     try:
@@ -27,23 +27,17 @@ def logInCsv(id, bitrate, carrierfreq, original_message, decoded_message, filena
             writer.writerow(headers)
         
         # Write the log entry
-        writer.writerow([id, bitrate, carrierfreq, original_message, decoded_message, "Hamming"])
+        writer.writerow([id, bitrate, carrierfreq, original_message, decoded_message])
 
 def testing():
     #test words
     all_letters = "the quick brown fox jumps over the lazy dog while vexd zebras fight for joy!>*"
     # all_letters = "the quick brown fox jumps over the lazy dog, test test test, suggma"
     
-    messages = [config.MESSAGE]
-    
-    # 1 = 3
-    # 8 = 12
-
-    # test bitrates  
-    # 16 * 9 * 15 * (2)
+    messages = ["Hello_there"]
     # bitrates = np.arange(200, 1000, 50)
 
-    bitrates = [800]
+    bitrates = [200]
 
     #test carrier frequencies
     # carrierfreqs = np.arange(2000, 12000, 1000)
@@ -53,7 +47,7 @@ def testing():
     for message in messages:
         for bitrate in bitrates:
             for carrierfreq in carrierfreqs:
-                transmitPhysical(message, carrierfreq, bitrate)
+                transmitPhysical(message, carrierfreq, bitrate) 
 
                 time.sleep(1.5)
 
@@ -70,6 +64,8 @@ def testing():
                 try:
                     message_nc, debug_nc = nonCoherentReceiver.decode()
                     print("Decoded message: ", message_nc)
+                    # nonCoherentReceiver.plot_simulation_steps()
+                    # nonCoherentReceiver.plot_bandpass_comparison()
                     # hamming_dist = config.hamming_distance(config.string_to_bin_array(message_nc), config.string_to_bin_array(message))
                     # print("Hamming distance of msgs: ", hamming_dist) 
                 except TypeError:

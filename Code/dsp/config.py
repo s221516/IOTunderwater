@@ -62,27 +62,24 @@ BINARY_BARKER = [1, 1, 1, 1, 1, 0, 0, 1, 1, 0, 1, 0, 1]
 REPETITIONS = 3
 PREAMBLE_PATTERN = PREAMBLE_BASE * REPETITIONS
 
-EXPECTED_LEN_OF_DATA_BITS = 145
+EXPECTED_LEN_OF_DATA_BITS = 101
 
 CONVOLUTIONAL_CODING = False 
-HAMMING_CODING = True
+HAMMING_CODING = False
+BAND_PASS_FILTER = True
 
 APPLY_BAKER_PREAMBLE = True
 APPLY_AVERAGING_PREAMBLE = False
 
 # SAMPLE_RATE_FOR_WAV_FILE = 44100  # Hz
-RECORD_SECONDS = 4
+RECORD_SECONDS = 3
 MAKE_NEW_RECORDING = True
 
 dark_horse_lyrics = """AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC"""
 
-
 # with open("picture_in_binary.txt", "r") as file:
 #     picture_in_binary = file.read()
-
-
 # picture_in_binary_with_prefix = "p" + picture_in_binary
-
 
 
 all_letters = "the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! The 5 big oxen love quick daft zebras & dogs.>* there"
