@@ -62,29 +62,25 @@ BINARY_BARKER = [1, 1, 1, 1, 1, 0, 0, 1, 1, 0, 1, 0, 1]
 REPETITIONS = 3
 PREAMBLE_PATTERN = PREAMBLE_BASE * REPETITIONS
 
-EXPECTED_LEN_OF_DATA_BITS = 53
+all_letters = "the_quick_brown_fox_jumps_over_the_lazy_dog_while_vexd_zebras_fight_for_joy!>*"
+
+MESSAGE = all_letters
+EXPECTED_LEN_OF_DATA_BITS = 637
 
 CONVOLUTIONAL_CODING = False 
 HAMMING_CODING = False
+
 BAND_PASS_FILTER = False
 
 APPLY_BAKER_PREAMBLE = True
 APPLY_AVERAGING_PREAMBLE = False
 
 # SAMPLE_RATE_FOR_WAV_FILE = 44100  # Hz
-RECORD_SECONDS = 3
+RECORD_SECONDS = 15
 MAKE_NEW_RECORDING = True
 
 dark_horse_lyrics = """AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC"""
 
-# with open("picture_in_binary.txt", "r") as file:
-#     picture_in_binary = file.read()
-# picture_in_binary_with_prefix = "p" + picture_in_binary
-
-
-all_letters = "the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! The 5 big oxen love quick daft zebras & dogs.>* there"
-small_test = "This is: 14"
-A = "A"
-
-MESSAGE = "Hello_there"
 PORT = "COM11"
+
+

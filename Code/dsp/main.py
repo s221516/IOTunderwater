@@ -2,15 +2,16 @@ from receiver.receiverClass import NonCoherentReceiver, CoherentReceiver
 import config
 import time
 import threading
+import numpy as np
 from receiver.record_audio import create_wav_file_from_recording
 from transmitterPhysical import transmitPhysical, stopTransmission
 from errors import PreambleNotFoundError
 
 import csv
 
-def logInCsv(id, bitrate, carrierfreq, original_message, decoded_message, filename="testing_bit_rate.csv"):
+def logInCsv(id, bitrate, carrierfreq, original_message, decoded_message1, decoded_message2, filename="testing_hyperesi.csv"):
 
-    headers = ["ID", "Bitrate", "Carrier Frequency", "Original Message", "Decoded Message"]
+    headers = ["ID", "Bitrate", "Carrier Frequency", "Original Message", "Decoded without bandpass", "Decoded with bandpass"]
 
     # Check if the file exists to determine if we need to write headers
     try:
@@ -26,19 +27,19 @@ def logInCsv(id, bitrate, carrierfreq, original_message, decoded_message, filena
             writer.writerow(headers)
         
         # Write the log entry
-        writer.writerow([id, bitrate, carrierfreq, original_message, decoded_message])
+        writer.writerow([id, bitrate, carrierfreq, original_message, decoded_message1, decoded_message2])
 
 def testing():
     #test words
+    # all_letters = "the_quick_brown_fox_jumps_over_the_lazy_dog_while_vexd_zebras_fight_for_joy!>*"
+
     all_letters = "the quick brown fox jumps over the lazy dog while vexd zebras fight for joy!>*"
-    # all_letters = "the quick brown fox jumps over the lazy dog, test test test, suggma"
     
-    messages = ["Hello"]
-    # bitrates = np.arange(200, 1000, 50)
+    messages = [all_letters]
 
-    bitrates = [200]
+    bitrates = [300] * 4
 
-    #test carrier frequencies
+    # test carrier frequencies
     # carrierfreqs = np.arange(2000, 12000, 1000)
     carrierfreqs = [6000]
 
@@ -58,19 +59,25 @@ def testing():
                 
                 stopTransmission()
                 # Non-Coherent demodulation
-                nonCoherentReceiver = NonCoherentReceiver(bitrate, carrierfreq)
+                nonCoherentReceiver = NonCoherentReceiver(bitrate, carrierfreq, False)
+                nonCoherentReceiverWithBandPass = NonCoherentReceiver(bitrate, carrierfreq, True)
                 
                 try:
                     message_nc, debug_nc = nonCoherentReceiver.decode()
-                    print("Decoded message: ", message_nc)
+                    message_nc_bandpass, debug_nc = nonCoherentReceiverWithBandPass.decode()
+                    print("Decoded message, false: ", message_nc)
+                    print("Decoded message, true: ", message_nc_bandpass)
                     # nonCoherentReceiver.plot_simulation_steps()
                     # nonCoherentReceiver.plot_bandpass_comparison()
-                    # hamming_dist = config.hamming_distance(config.string_to_bin_array(message_nc), config.string_to_bin_array(message))
-                    # print("Hamming distance of msgs: ", hamming_dist) 
+                    hamming_dist = config.hamming_distance(config.string_to_bin_array(message_nc), config.string_to_bin_array(message))
+                    hamming_dist_bandpass = config.hamming_distance(config.string_to_bin_array(message_nc_bandpass), config.string_to_bin_array(message))
+                    print("Hamming distance of msgs, no pass: ", hamming_dist) 
+                    print("Hamming distance of msgs, with pass", hamming_dist_bandpass) 
                 except PreambleNotFoundError:
                     message_nc = "No preamble found"
+                    message_nc_bandpass = "No preamble found"
 
-                logInCsv(id, bitrate, carrierfreq, message, message_nc)
+                logInCsv(id, bitrate, carrierfreq, message, message_nc, message_nc_bandpass)
                 id+=1
 
 def main():

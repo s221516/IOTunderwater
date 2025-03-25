@@ -41,11 +41,12 @@ def plot_wav_signal(sample_rate, wav_signal):
 
 class Receiver:
     
-    def __init__(self, bit_rate: int, carrier_freq : int):
+    def __init__(self, bit_rate: int, carrier_freq : int, band_pass: bool):
         
         _, self.wav_signal = wavfile.read(PATH_TO_WAV_FILE)
         self.bit_rate           = bit_rate
         self.carrier_freq       = carrier_freq
+        self.band_pass          = band_pass
         self.cutoff_freq        = (carrier_freq + bit_rate) // 2
         self.samples_per_symbol = int(SAMPLE_RATE / bit_rate) 
 
@@ -84,17 +85,15 @@ class Receiver:
         )
 
     def threshold_signal(self, normalized_signal: np.ndarray) -> np.ndarray:
-        return self.hyperestesis_thresholding(normalized_signal, 0.5, 0.5)
-
-    def hyperestesis_thresholding(
-        self, normalized_signal: np.ndarray, low: float, high: float
-    ) -> np.ndarray:
+        # this is called hyperestesis thresholding, essentially you have a memory while checking
+        low = 0.4
+        high = 0.6
         thresholded = np.zeros_like(normalized_signal)
         state = 0
         for i in range(len(normalized_signal)):
-            if state == 0 and normalized_signal[i] > high:
+            if state == 0 and normalized_signal[i] > low:
                 state = 1
-            elif state == 1 and normalized_signal[i] < low:
+            elif state == 1 and normalized_signal[i] < high:
                 state = 0
             thresholded[i] = state
         return thresholded
@@ -142,8 +141,8 @@ class Receiver:
     
     def remove_preamble_baker_code(self, bits, std_factor = 4):
         correlation = signal.correlate(bits, BINARY_BARKER, mode='valid')
-        # threshold = np.mean(correlation) + std_factor * np.std(correlation)
-        threshold = 9
+        threshold = np.mean(correlation) + std_factor * np.std(correlation)
+        # threshold = 9
         peak_indices, _ = signal.find_peaks(correlation, height=threshold, distance=EXPECTED_LEN_OF_DATA_BITS)
         
         if len(peak_indices) < 2:
@@ -154,9 +153,10 @@ class Receiver:
         
         diff_in_peaks = np.diff(peak_indices)
         print("Diff in peaks: ", diff_in_peaks)
+
         data_bits = []
         for i in range(len(peak_indices) - 1):
-            if EXPECTED_LEN_OF_DATA_BITS == diff_in_peaks[i]:
+            if EXPECTED_LEN_OF_DATA_BITS == diff_in_peaks[i]: # NOTE: we tested less than equal but it makes a big difference with just a few bits, it needs to be exactly equal, as one bit makes a huge difference when decoding
                 data_bits.append(bits[peak_indices[i] + len(BINARY_BARKER): peak_indices[i+1]])
 
 
@@ -166,20 +166,21 @@ class Receiver:
             elif HAMMING_CODING:
                 print(self.decode_bytes_to_bits(hamming_decode(data_bits[i])))
             else:
-                print(self.decode_bytes_to_bits(data_bits[i]))
+                bits = self.decode_bytes_to_bits(data_bits[i])
+                print(bits, len(bits))
 
         avg = [int(round((sum(col))/len(col))) for col in zip(*data_bits)]
 
-        plt.figure(figsize=(10, 4))
-        plt.plot(correlation, label="Cross-Correlation")
-        plt.scatter(peak_indices, correlation[peak_indices], color='red', label="Detected Preambles", zorder=3)
-        plt.axhline(threshold, color='gray', linestyle='--', label="Threshold")
-        plt.xlabel("Index of bit")
-        plt.ylabel("Correlation Value")
-        plt.title("Cross-Correlation with Preamble")
-        plt.legend()
-        plt.grid()
-        plt.show()
+        # plt.figure(figsize=(10, 4))
+        # plt.plot(correlation, label="Cross-Correlation")
+        # plt.scatter(peak_indices, correlation[peak_indices], color='red', label="Detected Preambles", zorder=3)
+        # plt.axhline(threshold, color='gray', linestyle='--', label="Threshold")
+        # plt.xlabel("Index of bit")
+        # plt.ylabel("Correlation Value")
+        # plt.title("Cross-Correlation with Preamble")
+        # plt.legend()
+        # plt.grid()
+        # plt.show()
 
         return avg
 
@@ -232,7 +233,7 @@ class Receiver:
 
 class NonCoherentReceiver(Receiver):
     def _demodulate(self) -> Tuple[np.ndarray, Dict]:
-        if (BAND_PASS_FILTER):
+        if (self.band_pass):
             bandpassed = self.bandpass_filter(self.wav_signal)
             analytic = signal.hilbert(bandpassed)
         else:   
