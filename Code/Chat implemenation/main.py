@@ -1,14 +1,6 @@
 
-
-
 def transmit(message):
     
-
-    
-
-
-
-
 
 def main():
 

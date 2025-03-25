@@ -1,0 +1,30 @@
+ID,Bitrate,Carrier Frequency,Original Message,Decoded Message
+0,200,6000,Hello_there,No preamble found
+0,200,6000,Hello_there,No preamble found
+0,200,6000,Hello_there,|pgg
+0,200,6000,Hello_there,g|pgg
+0,100,6000,Hello_there,He|xeg
+0,100,6000,Hello_there,Hu~~xuzu
+0,200,6000,Test,
+0,200,6000,Test,Test
+0,200,6000,Test,No preamble found
+0,200,6000,Test,No preamble found
+0,200,6000,Test,No preamble found
+0,200,6000,Test,No preamble found
+0,200,6000,Test,Test
+0,200,6000,Test,Test
+0,200,6000,Test,No preamble found
+0,200,6000,Test,No preamble found
+0,200,6000,Test,O2
+0,200,6000,Test,j
+0,200,6000,Test,
+0,200,6000,Test,
+0,200,6000,Test,
+0,100,6000,Test,
+0,200,6000,Test,
+0,200,6000,Test,
+0,100,6000,Hello,
+0,100,6000,Hello,Hello
+0,100,6000,Hello,Hello
+0,100,6000,Hello,Hello
+0,200,6000,Hello,~uu
