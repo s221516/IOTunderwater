@@ -1,46 +1,14 @@
-#include <stdio.h>
-#include <math.h>
-#include <string.h>
-#include "freertos/FreeRTOS.h"
-#include "freertos/task.h"
-#include "driver/gpio.h"
-#include "driver/dac.h"
-#include "esp_system.h"
-#include "esp_mac.h"
+#include "transmitter.h"
 
-// Fixed macros (removed semicolons)
-#define BIT_RATE 100
-#define SAMPLE_RATE 10000
-#define SAMPLES_PER_SYMBOL (SAMPLE_RATE/BIT_RATE)
-#define CARRIER_FREQ 1000
-// Message definition (example for "hello, world")
-const int message[] = { 
-    // 'h' 01101000
-    0,1,1,0,1,0,0,0,
-    // 'e' 01100101
-    0,1,1,0,0,1,0,1,
-    // ... continue for all characters
-    // Add proper ASCII-to-bits conversion in final implementation
-};
-
-// Helper function prototypes
-void string_to_bits(const char* str, int** bits, int* length);
-void create_square_wave(int* square_wave, const int* message, int message_length);
-void create_time_array(float* time_array, int total_samples, float time_increment);
-void create_carrier_wave(const float* time_array, int* carrier_wave, int total_samples);
-void create_modulated_wave(const int* carrier_wave, const int* square_wave, 
-                          int* modulated_wave, int total_samples);
-void send_wave(const int* modulated_wave, int total_samples);
-
-void app_main(void)
+void transmit(char* message)
 {
-    dac_output_enable(DAC_CHAN_0);
+    dac_output_enable(DAC_CHAN_0); //TODO what is this used for??
     
     // Convert string to bits
-    const char* text = "hello, world";
+
     int* message_bits = NULL;
     int message_length = 0;
-    string_to_bits(text, &message_bits, &message_length);
+    string_to_bits(message, &message_bits, &message_length);
     
     const int total_samples = message_length * SAMPLES_PER_SYMBOL;
     
@@ -68,8 +36,6 @@ void app_main(void)
     free(carrier_wave);
     free(modulated_wave);
 }
-
-// Convert ASCII string to bit array (simple 8-bit per character)
 void string_to_bits(const char* str, int** bits, int* length)
 {
     const int str_len = strlen(str);
@@ -83,7 +49,6 @@ void string_to_bits(const char* str, int** bits, int* length)
         }
     }
 }
-
 void create_square_wave(int* square_wave, const int* message, int message_length)
 {
     for(int i = 0; i < message_length; i++) {
@@ -92,14 +57,12 @@ void create_square_wave(int* square_wave, const int* message, int message_length
         }
     }
 }
-
 void create_time_array(float* time_array, int total_samples, float time_increment)
 {
     for(int i = 0; i < total_samples; i++) {
         time_array[i] = i * time_increment;
     }
 }
-
 void create_carrier_wave(const float* time_array, int* carrier_wave, int total_samples)
 {
     for(int i = 0; i < total_samples; i++) {
@@ -107,20 +70,18 @@ void create_carrier_wave(const float* time_array, int* carrier_wave, int total_s
         carrier_wave[i] = (int)fmin(fmax(round(value) + 128, 0), 255);
     }
 }
-
-void create_modulated_wave(const int* carrier_wave, const int* square_wave, 
-                          int* modulated_wave, int total_samples)
+void create_modulated_wave(const int* carrier_wave, const int* square_wave, int* modulated_wave, int total_samples)
 {
     for(int i = 0; i < total_samples; i++) {
         modulated_wave[i] = (carrier_wave[i] * square_wave[i]);
     }
 }
-
 void send_wave(const int* modulated_wave, int total_samples)
-{
-    for(int i = 0; i < total_samples; i++) {
-        dac_output_voltage(DAC_CHAN_0, modulated_wave[i]);
-        vTaskDelay(pdMS_TO_TICKS(1000/SAMPLE_RATE));
-        printf("Modulated wave: %d\n", modulated_wave[i]);
-    }
+{   
+    while true(1):
+        for(int i = 0; i < total_samples; i++) {
+            dac_output_voltage(DAC_CHAN_0, modulated_wave[i]);
+            vTaskDelay(pdMS_TO_TICKS(1000/SAMPLE_RATE));
+            printf("Modulated wave: %d\n", modulated_wave[i]);
+        }
 }
