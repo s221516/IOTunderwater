@@ -1,11 +1,10 @@
 from receiver.receiverClass import NonCoherentReceiver, CoherentReceiver
 import config
 import time
-import numpy as np
-import seaborn as sns
-import matplotlib.pyplot as plt
+import threading
 from receiver.record_audio import create_wav_file_from_recording
 from transmitterPhysical import transmitPhysical, stopTransmission
+from errors import PreambleNotFoundError
 
 import csv
 
@@ -34,7 +33,7 @@ def testing():
     all_letters = "the quick brown fox jumps over the lazy dog while vexd zebras fight for joy!>*"
     # all_letters = "the quick brown fox jumps over the lazy dog, test test test, suggma"
     
-    messages = ["Hello_there"]
+    messages = ["Hello"]
     # bitrates = np.arange(200, 1000, 50)
 
     bitrates = [200]
@@ -68,16 +67,13 @@ def testing():
                     # nonCoherentReceiver.plot_bandpass_comparison()
                     # hamming_dist = config.hamming_distance(config.string_to_bin_array(message_nc), config.string_to_bin_array(message))
                     # print("Hamming distance of msgs: ", hamming_dist) 
-                except TypeError:
+                except PreambleNotFoundError:
                     message_nc = "No preamble found"
-   
 
                 logInCsv(id, bitrate, carrierfreq, message, message_nc)
                 id+=1
 
-
 def main():
-
     transmitPhysical(config.MESSAGE, config.CARRIER_FREQ, config.BIT_RATE)
 
     time.sleep(2)
@@ -101,9 +97,6 @@ def main():
     # message_c, debug_c = receiver_coherent.decode()
     # print(f"Coherent Decoded: {message_c}")
     # receiver_coherent.plot_simulation_steps()
-
-
-
 
 
 if __name__ == "__main__":

@@ -3,12 +3,11 @@ import matplotlib.pyplot as plt
 import numpy as np
 import scipy.signal as signal
 from scipy.io import wavfile
+from errors import PreambleNotFoundError
 
 from encoding.convolutional_encoding import *
 from encoding.hamming_codes import hamming_decode
 from visuals.visualization import create_processing_visualization
-import config
-
 from config import (
     PATH_TO_WAV_FILE,
     SAMPLE_RATE,
@@ -143,14 +142,12 @@ class Receiver:
     
     def remove_preamble_baker_code(self, bits, std_factor = 4):
         correlation = signal.correlate(bits, BINARY_BARKER, mode='valid')
-        threshold = np.mean(correlation) + std_factor * np.std(correlation)
+        # threshold = np.mean(correlation) + std_factor * np.std(correlation)
+        threshold = 9
         peak_indices, _ = signal.find_peaks(correlation, height=threshold, distance=EXPECTED_LEN_OF_DATA_BITS)
-        # Print correlation values at each peak index
-        # print("Peak indices ", peak_indices)
-
+        
         if len(peak_indices) < 2:
-            # print(f"Not enough preambles detected with std_factor={std_factor}")
-            if std_factor > 1 :  # Set a lower limit for the std_factor to avoid infinite recursion
+            if std_factor > 1 : 
                 return self.remove_preamble_baker_code(bits, std_factor - 0.1)   
             else:
                 return -1
@@ -160,7 +157,6 @@ class Receiver:
         data_bits = []
         for i in range(len(peak_indices) - 1):
             if EXPECTED_LEN_OF_DATA_BITS == diff_in_peaks[i]:
-                # good_peak.append((peak_indices[i], peak_indices[i+1]))
                 data_bits.append(bits[peak_indices[i] + len(BINARY_BARKER): peak_indices[i+1]])
 
 
@@ -172,11 +168,7 @@ class Receiver:
             else:
                 print(self.decode_bytes_to_bits(data_bits[i]))
 
-        # TODO: fix this :)
-        # print(int(0.6))
         avg = [int(round((sum(col))/len(col))) for col in zip(*data_bits)]
-        # print("This is avg: ", avg)
-        # print(len(avg))
 
         plt.figure(figsize=(10, 4))
         plt.plot(correlation, label="Cross-Correlation")
@@ -268,10 +260,9 @@ class NonCoherentReceiver(Receiver):
         else:
             bits_without_preamble = self.remove_preamble_naive(bits)
         
-        
         if (bits_without_preamble == -1):
-            print("No preamble found RecieverClass, decode method")
-            raise TypeError
+            print("No preamble found, error was raised in receiverClass")       
+            raise PreambleNotFoundError("No preamble found in signal")
 
         if (CONVOLUTIONAL_CODING):
             bits_without_preamble = conv_decode(bits_without_preamble)
