@@ -119,6 +119,3 @@ def transmitPhysical(message, carrier, bitrate):
     """
 
     send_command(command)
-
-def get_len_of_trans_bits():
-    return len_of_bits

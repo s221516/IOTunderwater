@@ -65,7 +65,7 @@ PREAMBLE_PATTERN = PREAMBLE_BASE * REPETITIONS
 all_letters = "the_quick_brown_fox_jumps_over_the_lazy_dog_while_vexd_zebras_fight_for_joy!>*"
 
 MESSAGE = all_letters
-EXPECTED_LEN_OF_DATA_BITS = 637
+LEN_OF_DATA_BITS = 637
 
 CONVOLUTIONAL_CODING = False 
 HAMMING_CODING = False

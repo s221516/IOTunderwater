@@ -18,7 +18,7 @@ from config import (
     REPETITIONS,
     BINARY_BARKER, 
     APPLY_BAKER_PREAMBLE, 
-    EXPECTED_LEN_OF_DATA_BITS,
+    LEN_OF_DATA_BITS,
     HAMMING_CODING, 
     BAND_PASS_FILTER
 )
@@ -143,7 +143,7 @@ class Receiver:
         correlation = signal.correlate(bits, BINARY_BARKER, mode='valid')
         threshold = np.mean(correlation) + std_factor * np.std(correlation)
         # threshold = 9
-        peak_indices, _ = signal.find_peaks(correlation, height=threshold, distance=EXPECTED_LEN_OF_DATA_BITS)
+        peak_indices, _ = signal.find_peaks(correlation, height=threshold, distance=LEN_OF_DATA_BITS)
         
         if len(peak_indices) < 2:
             if std_factor > 1 : 
@@ -156,7 +156,7 @@ class Receiver:
 
         data_bits = []
         for i in range(len(peak_indices) - 1):
-            if EXPECTED_LEN_OF_DATA_BITS == diff_in_peaks[i]: # NOTE: we tested less than equal but it makes a big difference with just a few bits, it needs to be exactly equal, as one bit makes a huge difference when decoding
+            if LEN_OF_DATA_BITS == diff_in_peaks[i]: # NOTE: we tested less than equal but it makes a big difference with just a few bits, it needs to be exactly equal, as one bit makes a huge difference when decoding
                 data_bits.append(bits[peak_indices[i] + len(BINARY_BARKER): peak_indices[i+1]])
 
 
@@ -212,6 +212,8 @@ class Receiver:
             char = chr(int("".join(map(str, byte)), 2))
             if 32 <= ord(char) <= 126:
                 message += char
+            else: # NOTE: all invalid characters will instead be "-", instead of just whitespace
+                message += "-"
         return message
 
     def plot_simulation_steps(self):
@@ -278,10 +280,6 @@ class NonCoherentReceiver(Receiver):
             "thresholded": thresholded,
         }
         return message, debug_info
-
-
-
-
 
 
 
