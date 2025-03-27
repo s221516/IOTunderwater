@@ -2,5 +2,6 @@
   "AVR.reporter.arguments": ["-A"],
   "AVR.source.compiler": "/Users/mathiasmarkvardsen/bachelor/IOTunderwater/Code/ESP32/underwater_esp/src/CMakeLists.txt",
   "idf.pythonInstallPath": "C:\\Users\\morte\\.espressif\\tools\\idf-python\\3.11.2\\python.exe",
-  "idf.portWin": "COM12"
+  "idf.portWin": "COM12",
+  "cmake.sourceDirectory": "C:/Users/morte/OneDrive - Danmarks Tekniske Universitet/Bachelor/IOTunderwater/Code/Chat implemenation/esp32-signal-genertor"
 }

@@ -164,8 +164,8 @@ def decode_bytes_to_bits(bits: list) -> str:
 def test_multiple_error_correction():
     """Test Hamming code's ability to handle multiple errors per block"""
     
+    test_string = "A"
     print("\nTest Case: Multiple errors per block")
-    test_string = "TEst disse nedder"
     print(f"Original message: {test_string}")
     print(f"Original binary: {''.join(format(ord(c), '08b') for c in test_string)}")
     
@@ -175,7 +175,7 @@ def test_multiple_error_correction():
     print(f"Number of 12-bit blocks: {len(encoded) // 12}")
     
     # Try different numbers of errors per block
-    for errors in range(1, 2):  # Test with 1, 2, and 3 errors per block
+    for errors in range(1, 3):  # Test with 1, 2, and 3 errors per block
         print(f"\nTesting with {errors} errors per block:")
         
         # Introduce errors
