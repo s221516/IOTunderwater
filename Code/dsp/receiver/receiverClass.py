@@ -20,7 +20,6 @@ from config import (
     APPLY_BAKER_PREAMBLE, 
     LEN_OF_DATA_BITS,
     HAMMING_CODING, 
-    BAND_PASS_FILTER
 )
 
 
@@ -41,12 +40,13 @@ def plot_wav_signal(sample_rate, wav_signal):
 
 class Receiver:
     
-    def __init__(self, bit_rate: int, carrier_freq : int, band_pass: bool):
+    def __init__(self, bit_rate: int, carrier_freq : int, band_pass: bool, other_method: bool):
         
         _, self.wav_signal = wavfile.read(PATH_TO_WAV_FILE)
         self.bit_rate           = bit_rate
         self.carrier_freq       = carrier_freq
         self.band_pass          = band_pass
+        self.other_method       = other_method
         self.cutoff_freq        = (carrier_freq + bit_rate) // 2
         self.samples_per_symbol = int(SAMPLE_RATE / bit_rate) 
 
@@ -212,8 +212,8 @@ class Receiver:
             char = chr(int("".join(map(str, byte)), 2))
             if 32 <= ord(char) <= 126:
                 message += char
-            else: # NOTE: all invalid characters will instead be "-", instead of just whitespace
-                message += "-"
+            # else: # NOTE: all invalid characters will instead be "-", instead of just whitespace
+            #     message += "-"
         return message
 
     def plot_simulation_steps(self):
@@ -236,10 +236,19 @@ class Receiver:
 class NonCoherentReceiver(Receiver):
     def _demodulate(self) -> Tuple[np.ndarray, Dict]:
         if (self.band_pass):
-            bandpassed = self.bandpass_filter(self.wav_signal)
-            analytic = signal.hilbert(bandpassed)
-        else:   
+            self.wav_signal = self.bandpass_filter(self.wav_signal)
+
+        if (self.other_method):
+            fourier_transform_of_wav = np.fft.fft(self.wav_signal)
+            length = len(fourier_transform_of_wav)
+            fourier_analytic = np.zeros(length, dtype=complex)
+            fourier_analytic[0] = fourier_transform_of_wav[0]
+            fourier_analytic[1: length // 2] = 2 * fourier_transform_of_wav[1: length // 2]
+            fourier_analytic[length // 2 : ] = 0
+            analytic = np.fft.ifft(fourier_analytic)
+        else:
             analytic = signal.hilbert(self.wav_signal)
+
             
         envelope = np.abs(analytic)
         filtered = self.filter_signal(envelope)
@@ -278,6 +287,7 @@ class NonCoherentReceiver(Receiver):
             **demod_debug,
             "normalized": normalized,
             "thresholded": thresholded,
+            "bits_without_preamble": bits_without_preamble
         }
         return message, debug_info
 

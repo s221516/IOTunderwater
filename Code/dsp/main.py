@@ -9,9 +9,9 @@ from errors import PreambleNotFoundError
 
 import csv
 
-def logInCsv(id, bitrate, carrierfreq, original_message, decoded_message1, decoded_message2, filename="testing_hyperesi.csv"):
+def logInCsv(id, bitrate, carrierfreq, original_message, decoded_message1, decoded_message2, decoded_message3, filename="testing_other_method.csv"):
 
-    headers = ["ID", "Bitrate", "Carrier Frequency", "Original Message", "Decoded without bandpass", "Decoded with bandpass"]
+    headers = ["ID", "Bitrate", "Carrier Frequency", "Original Message", "Decoded without bandpass", "Decoded with bandpass", "Decoded with bandpass and other method"]
 
     # Check if the file exists to determine if we need to write headers
     try:
@@ -27,7 +27,7 @@ def logInCsv(id, bitrate, carrierfreq, original_message, decoded_message1, decod
             writer.writerow(headers)
         
         # Write the log entry
-        writer.writerow([id, bitrate, carrierfreq, original_message, decoded_message1, decoded_message2])
+        writer.writerow([id, bitrate, carrierfreq, original_message, decoded_message1, decoded_message2, decoded_message3])
 
 def testing():
     #test words
@@ -35,9 +35,9 @@ def testing():
 
     all_letters = "the quick brown fox jumps over the lazy dog while vexd zebras fight for joy!>*"
     
-    messages = [all_letters]
+    messages = ["Hello_there"]
 
-    bitrates = [300] * 4
+    bitrates = [350] * 4
 
     # test carrier frequencies
     # carrierfreqs = np.arange(2000, 12000, 1000)
@@ -49,7 +49,7 @@ def testing():
             for carrierfreq in carrierfreqs:
                 transmitPhysical(message, carrierfreq, bitrate) 
 
-                time.sleep(1.5)
+                time.sleep(1.0)
 
                 # Start recording
                 if (config.MAKE_NEW_RECORDING):
@@ -59,25 +59,33 @@ def testing():
                 
                 stopTransmission()
                 # Non-Coherent demodulation
-                nonCoherentReceiver = NonCoherentReceiver(bitrate, carrierfreq, False)
-                nonCoherentReceiverWithBandPass = NonCoherentReceiver(bitrate, carrierfreq, True)
+                nonCoherentReceiver = NonCoherentReceiver(bitrate, carrierfreq, False, False)            
+                nonCoherentReceiverWithBandPass = NonCoherentReceiver(bitrate, carrierfreq, True, False)
+                nonCoherentReceiverWithBandPassOtherMethod = NonCoherentReceiver(bitrate, carrierfreq, True, True)
                 
                 try:
                     message_nc, debug_nc = nonCoherentReceiver.decode()
-                    message_nc_bandpass, debug_nc = nonCoherentReceiverWithBandPass.decode()
-                    print("Decoded message, false: ", message_nc)
-                    print("Decoded message, true: ", message_nc_bandpass)
+                    message_nc_bandpass, debug_nc_bandpass = nonCoherentReceiverWithBandPass.decode()
+                    message_nc_bandpass_othermethod, debug_nc_bandpass_om = nonCoherentReceiverWithBandPassOtherMethod.decode()
+                    print("Decoded message, false, false: ", message_nc)
+                    print("Decoded message, true, false: ", message_nc_bandpass)
+                    print("Decoded message, true, true: ", message_nc_bandpass_othermethod)
                     # nonCoherentReceiver.plot_simulation_steps()
                     # nonCoherentReceiver.plot_bandpass_comparison()
-                    hamming_dist = config.hamming_distance(config.string_to_bin_array(message_nc), config.string_to_bin_array(message))
-                    hamming_dist_bandpass = config.hamming_distance(config.string_to_bin_array(message_nc_bandpass), config.string_to_bin_array(message))
-                    print("Hamming distance of msgs, no pass: ", hamming_dist) 
-                    print("Hamming distance of msgs, with pass", hamming_dist_bandpass) 
+                    original_message_in_bits = config.string_to_bin_array(message)
+                    hamming_dist = config.hamming_distance(debug_nc["bits_without_preamble"], original_message_in_bits)
+                    hamming_dist_bandpass = config.hamming_distance(debug_nc_bandpass["bits_without_preamble"], original_message_in_bits)
+                    hamming_dist_bandpass_othermethod = config.hamming_distance(debug_nc_bandpass_om["bits_without_preamble"], original_message_in_bits)
+                    print("Hamming distance of msgs, no pass:        ", hamming_dist) 
+                    print("Hamming distance of msgs, with pass       ", hamming_dist_bandpass) 
+                    print("Hamming distance of msgs, with pass and om", hamming_dist_bandpass_othermethod) 
+                
                 except PreambleNotFoundError:
                     message_nc = "No preamble found"
                     message_nc_bandpass = "No preamble found"
+                    message_nc_bandpass_othermethod = "No preamble found"
 
-                logInCsv(id, bitrate, carrierfreq, message, message_nc, message_nc_bandpass)
+                logInCsv(id, bitrate, carrierfreq, message, message_nc, message_nc_bandpass, message_nc_bandpass_othermethod)
                 id+=1
 
 def main():
