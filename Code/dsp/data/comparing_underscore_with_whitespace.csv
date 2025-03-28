@@ -1,0 +1,41 @@
+ID,Bitrate,Carrier Frequency,Original Message,Decoded Message,Hamming Distance
+0,400,6000,Hello there,He|lo there,1
+1,400,6000,Hello there,He|lo txere,2
+2,400,6000,Hello there,Hello there,0
+3,400,6000,Hello there,He|| txere,
+4,400,6000,Hello there,Xd|| |xdr,
+5,400,6000,Hello there,He|lo there,1
+6,400,6000,Hello there,Hun./ t(uru,8
+7,400,6000,Hello there,t ,
+8,400,6000,Hello there,H5~>? 48urwAO\,
+9,400,6000,Hello there,Xd|| |xdr,
+10,400,6000,Hello there,He|lo there,1
+11,400,6000,Hello there,Hun>? t8uru,11
+12,400,6000,Hello there,He|lo there,1
+13,400,6000,Hello there,Hello there,0
+14,400,6000,Hello there,~p0,
+15,400,6000,Hello there,Hu~>? 4(uru,12
+16,400,6000,Hello there,Hello t(ere,1
+17,400,6000,Hello there,He|| txere,
+18,400,6000,Hello there,Hel| there,
+19,400,6000,Hello there,He|lo there,1
+0,400,6000,Hello_there,Hello_there,0
+1,400,6000,Hello_there,Hello_there,0
+2,400,6000,Hello_there,Hello_there,0
+3,400,6000,Hello_there,Hello_there,0
+4,400,6000,Hello_there,Xd||_txdre,
+5,400,6000,Hello_there,Hello_there,0
+6,400,6000,Hello_there,H5~>?_t8urwA,
+7,400,6000,Hello_there,He||_txere,
+8,400,6000,Hello_there,He|lo_there,1
+9,400,6000,Hello_there,d||txdre,
+10,400,6000,Hello_there,Hello_there,0
+11,400,6000,Hello_there,He|lo_there,1
+12,400,6000,Hello_there,G,
+13,400,6000,Hello_there,'N,
+14,400,6000,Hello_there,Hello_there,0
+15,400,6000,Hello_there,1~>?_t812u,
+16,400,6000,Hello_there,Hello_there,0
+17,400,6000,Hello_there,He|lo_there,1
+18,400,6000,Hello_there,Hello_there,0
+19,400,6000,Hello_there,Hello_there,0

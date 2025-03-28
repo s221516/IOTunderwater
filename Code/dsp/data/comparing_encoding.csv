@@ -1,0 +1,30 @@
+ID,Bitrate,Carrier Frequency,Original Message,Decoded Message,Encoding
+0,400,6000,Hello_there,"Hdl,o_thdrd",Hamming
+1,400,6000,Hello_there,"Hdl,o_thdre",Hamming
+0,400,6000,Hello_there,Hello_there,Hamming
+0,400,6000,Hello_there,"Hdl,o_thdre",Hamming
+0,400,6000,Hello_there,,Hamming
+0,400,6000,Hello_there,"H$,lO_t2",Hamming
+0,400,6000,Hello_there,Hello_there,Hamming
+0,400,6000,Hello_there,Hello_there,Hamming
+0,500,6000,Hello_there,,Hamming
+0,500,6000,Hello_there,"e,lo_the2e",Hamming
+0,450,6000,Hello_there,Hello_there,Hamming
+0,450,6000,Hello_there,Hello_there,Hamming
+0,450,6000,Hello_there,Hello_there,Hamming
+0,450,6000,Hello_there,"H%,lo_th%2e",Hamming
+0,450,6000,Hello_there,B,Hamming
+0,100,6000,"the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~`.>*",No preamble found,Hamming
+0,200,6000,"the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~`.>*","PDDHABPNCJXHIPPKPHA@L@QHIL@PDX@@FHCHTBHOI@#H$**$/,O`&l",Hamming
+0,200,6000,"the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~`.>*",,Hamming
+0,200,6000,"the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~`.>*",,Hamming
+0,200,6000,"the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~`.>*","t(%pua!! p'7.""o8(051'0040&0827;42;222909:",Hamming
+0,100,6000,"the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! @#$%^&()_+[]{}|;:,.<>/?~`.>*",,Hamming
+0,100,6000,AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBBBBBBBBBBBBBBCCCCCCCCCCCCCCCCCCCCCAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBBBBBBBBBBBBBBCCCCCCCCCCCCCCCCCCCCCAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBBBBB,No preamble found,Hamming
+0,100,6000,AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBBBBBBBBBBBBBBCCCCCCCCCCCCCCCCCCCCCAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBBBBBBBBBBBBBBCCCCCCCCCCCCCCCCCCCCCAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBBBBB,,Hamming
+0,100,6000,AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC,,Hamming
+0,100,6000,AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC,"4$4$$$$$$$$$$ ,`hhhHHHHHHHHHHH@(((((((((((((( @PPPPPPPPPPPPPP`!AAAAAAAAAAAAAAAB",Hamming
+0,200,6000,the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! The 5 big oxen love quick daft zebras & dogs.>*,the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! The 5 big oxen love quick daft zebras & dogs.>*,Hamming
+0,200,6000,the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! The 5 big oxen love quick daft zebras & dogs.>*the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! The 5 big oxen love quick daft zebras & dogs.>*,"the quick brown &ox jump3 /vap4(1 . <""7;42;22=29034:3757*4214272018\H]ZX[\\HH_LL.d,DM$$M,.,md,LNL$q",Hamming
+0,200,6000,the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! The 5 big oxen love quick daft zebras & dogs.>* Morten was here and here and here not there,the quick brown f'x`0$09';2:4260<27;42;22=29034@HHY[H]ZXYXA.dL-L-L,Hamming
+0,200,6000,the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! The 5 big oxen love quick daft zebras & dogs.>* there,the quick brown fox jumps over the lazy dog while vexd zebras fight for joy! The 5 big oxen love quick daft zebras & dogs.>* there,Hamming

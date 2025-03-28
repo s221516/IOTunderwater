@@ -1,0 +1,41 @@
+ID;Bitrate;Carrier_Frequency;Original_Message;Decoded_Message;Conv_Encode;Hamming_Distance
+0;400;6000;Hello world!;No preamble found;False;
+1;400;6000;Hello world!;He|lm vmbLd!;False;6.0
+2;400;6000;Hello world!;No preamble found;False;
+3;400;6000;Hello world!;No preamble found;False;
+4;400;6000;Hello world!;He,lm wobld!;False;3.0
+5;400;6000;Hello world!;No preamble found;False;
+6;400;6000;Hello world!;He|lm vmbLd!;False;6.0
+7;400;6000;Hello world!;He<| voblt!;False;
+8;400;6000;Hello world!;He,lm wobld!;False;3.0
+9;400;6000;Hello world!;No preamble found;False;
+10;400;6000;Hello world!;He|lm vmbLd!;False;6.0
+11;400;6000;Hello world!;No preamble found;False;
+12;400;6000;Hello world!;No preamble found;False;
+13;400;6000;Hello world!;He|lo wobld!;False;2.0
+14;400;6000;Hello world!;No preamble found;False;
+15;400;6000;Hello world!;No preamble found;False;
+16;400;6000;Hello world!;No preamble found;False;
+17;400;6000;Hello world!;He|| vobLt!;False;
+18;400;6000;Hello world!;He|lm vmbLd!;False;6.0
+19;400;6000;Hello world!;He|lo wobld!;False;2.0
+0;400;6000;Hello world!;Hel wotd!%o@woq %l,/@wotP%l/@wor%pP%l/@ot%P%l,/@%P%l,/@r;True;
+1;400;6000;Hello world!;No preamble found;True;
+2;400;6000;Hello world!;Hello world!;True;0.0
+3;400;6000;Hello world!;No preamble found;True;
+4;400;6000;Hello world!;Szc@wtd!Hello world!;True;
+5;400;6000;Hello world!;No preamble found;True;
+6;400;6000;Hello world!;No preamble found;True;
+7;400;6000;Hello world!;Hello world ;True;1.0
+8;400;6000;Hello world!;Hclo world!Hello world!;True;
+9;400;6000;Hello world!;Hclo world!;True;
+10;400;6000;Hello world!;Hello world!;True;0.0
+11;400;6000;Hello world!;No preamble found;True;
+12;400;6000;Hello world!;Hello worl;True;
+13;400;6000;Hello world!;No preamble found;True;
+14;400;6000;Hello world!;No preamble found;True;
+15;400;6000;Hello world!;Hello world!;True;0.0
+16;400;6000;Hello world!;Hello world!;True;0.0
+17;400;6000;Hello world!;Hello world!;True;0.0
+18;400;6000;Hello world!;Hclo wot;True;
+19;400;6000;Hello world!;Hello world!;True;0.0

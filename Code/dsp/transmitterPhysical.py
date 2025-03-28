@@ -4,8 +4,17 @@ import numpy as np
 import seaborn as sns
 import matplotlib.pyplot as plt
 from encoding.convolutional_encoding import conv_encode
+from encoding.hamming_codes import hamming_encode
 
-from config import PORT, CONVOLUTIONAL_CODING, PREAMBLE_PATTERN
+from config import (
+    PORT, 
+    CONVOLUTIONAL_CODING,
+    PREAMBLE_PATTERN,
+    BINARY_BARKER,
+    APPLY_BAKER_PREAMBLE,
+    HAMMING_CODING
+
+)
 
 ser = initPort(PORT)
 def send_command(command):
@@ -54,12 +63,27 @@ def stopTransmission():
 
 def transmitPhysical(message, carrier, bitrate):    
     
-    bits = message_toBitArray(message)
+    if HAMMING_CODING:
+        square_wave = []
+        bits = hamming_encode(message)
+        for bit in bits:
+            if bit == '0':
+                square_wave += [0]
+            elif bit == '1':
+                square_wave += [1] 
+        bits =  square_wave
+    else:
+        bits = message_toBitArray(message)
    
+
     if CONVOLUTIONAL_CODING:
         bits = conv_encode(bits)
 
-    bits = PREAMBLE_PATTERN + bits
+    if (APPLY_BAKER_PREAMBLE):
+        bits = BINARY_BARKER + bits
+    else:
+        bits = PREAMBLE_PATTERN + bits
+
     #change bits to -1 for signal generator scipy commands
     for i in range(0, len(bits),1):
         if bits[i] == 0:
@@ -68,8 +92,11 @@ def transmitPhysical(message, carrier, bitrate):
     bits = np.array(bits)
     arb_wave_form_command = "DATA:DAC VOLATILE, " + ", ".join(map(str, bits * 2047))
     
-    freq = bitrate/len(bits) 
-    print("Transmitted bits: ", len(bits))
+    freq = bitrate/len(bits)
+    global len_of_bits 
+    len_of_bits = len(bits)
+    print("Transmitted bits: ", len_of_bits)
+    
 
     name = "COCK"
     command = f"""
@@ -80,8 +107,7 @@ def transmitPhysical(message, carrier, bitrate):
     """
     send_command(command)
 
-    time.sleep(1)
-
+    time.sleep(0.5)
 
     command = f"""
     APPLy:SIN {carrier}, 10, 0

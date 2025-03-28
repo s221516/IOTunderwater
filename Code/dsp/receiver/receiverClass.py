@@ -2,11 +2,12 @@ from typing import Dict, Tuple
 import matplotlib.pyplot as plt
 import numpy as np
 import scipy.signal as signal
+from scipy.io import wavfile
+from errors import PreambleNotFoundError
 
 from encoding.convolutional_encoding import *
+from encoding.hamming_codes import hamming_decode
 from visuals.visualization import create_processing_visualization
-import config
-
 from config import (
     PATH_TO_WAV_FILE,
     SAMPLE_RATE,
@@ -14,10 +15,13 @@ from config import (
     PREAMBLE_PATTERN,
     PREAMBLE_BASE, 
     APPLY_AVERAGING_PREAMBLE,
-    REPETITIONS
+    REPETITIONS,
+    BINARY_BARKER, 
+    APPLY_BAKER_PREAMBLE, 
+    LEN_OF_DATA_BITS,
+    HAMMING_CODING, 
 )
 
-from scipy.io import wavfile
 
 plt.style.use("ggplot")
 
@@ -36,16 +40,28 @@ def plot_wav_signal(sample_rate, wav_signal):
 
 class Receiver:
     
-    def __init__(self, bit_rate: int, carrier_freq : int):
+    def __init__(self, bit_rate: int, carrier_freq : int, band_pass: bool, other_method: bool):
         
         _, self.wav_signal = wavfile.read(PATH_TO_WAV_FILE)
         self.bit_rate           = bit_rate
         self.carrier_freq       = carrier_freq
+        self.band_pass          = band_pass
+        self.other_method       = other_method
         self.cutoff_freq        = (carrier_freq + bit_rate) // 2
         self.samples_per_symbol = int(SAMPLE_RATE / bit_rate) 
 
     def _demodulate(self) -> Tuple[np.ndarray, Dict]:
         raise NotImplementedError("Subclasses must implement _demodulate")
+
+    def bandpass_filter(self, input_signal: np.ndarray) -> np.ndarray:
+        """Apply a bandpass filter around the carrier frequency"""
+        nyquist = SAMPLE_RATE * 0.5
+        order = 4
+        # Define bandpass range around carrier frequency
+        low = (self.carrier_freq - self.bit_rate) / nyquist
+        high = (self.carrier_freq + self.bit_rate) / nyquist
+        b, a = signal.butter(order, [low, high], btype='band', analog=False)
+        return signal.filtfilt(b, a, input_signal)
 
     def filter_signal(self, input_signal: np.ndarray) -> np.ndarray:
         nyquist = SAMPLE_RATE * 0.5
@@ -69,17 +85,15 @@ class Receiver:
         )
 
     def threshold_signal(self, normalized_signal: np.ndarray) -> np.ndarray:
-        return self.hyperestesis_thresholding(normalized_signal, 0.5, 0.5)
-
-    def hyperestesis_thresholding(
-        self, normalized_signal: np.ndarray, low: float, high: float
-    ) -> np.ndarray:
+        # this is called hyperestesis thresholding, essentially you have a memory while checking
+        low = 0.4
+        high = 0.6
         thresholded = np.zeros_like(normalized_signal)
         state = 0
         for i in range(len(normalized_signal)):
-            if state == 0 and normalized_signal[i] > high:
+            if state == 0 and normalized_signal[i] > low:
                 state = 1
-            elif state == 1 and normalized_signal[i] < low:
+            elif state == 1 and normalized_signal[i] < high:
                 state = 0
             thresholded[i] = state
         return thresholded
@@ -125,7 +139,52 @@ class Receiver:
             
             return bits[start_index:end_index]
     
-    def remove_preamble_naive(self, bits):
+    def remove_preamble_baker_code(self, bits, std_factor = 4):
+        correlation = signal.correlate(bits, BINARY_BARKER, mode='valid')
+        threshold = np.mean(correlation) + std_factor * np.std(correlation)
+        # threshold = 9
+        peak_indices, _ = signal.find_peaks(correlation, height=threshold, distance=LEN_OF_DATA_BITS)
+        
+        if len(peak_indices) < 2:
+            if std_factor > 1 : 
+                return self.remove_preamble_baker_code(bits, std_factor - 0.1)   
+            else:
+                return -1
+        
+        diff_in_peaks = np.diff(peak_indices)
+        print("Diff in peaks: ", diff_in_peaks)
+
+        data_bits = []
+        for i in range(len(peak_indices) - 1):
+            if LEN_OF_DATA_BITS == diff_in_peaks[i]: # NOTE: we tested less than equal but it makes a big difference with just a few bits, it needs to be exactly equal, as one bit makes a huge difference when decoding
+                data_bits.append(bits[peak_indices[i] + len(BINARY_BARKER): peak_indices[i+1]])
+
+
+        for i in range(len(data_bits)):
+            if CONVOLUTIONAL_CODING:
+                print(self.decode_bytes_to_bits(conv_decode(data_bits[i])))
+            elif HAMMING_CODING:
+                print(self.decode_bytes_to_bits(hamming_decode(data_bits[i])))
+            else:
+                bits = self.decode_bytes_to_bits(data_bits[i])
+                print(bits, len(bits))
+
+        avg = [int(round((sum(col))/len(col))) for col in zip(*data_bits)]
+
+        # plt.figure(figsize=(10, 4))
+        # plt.plot(correlation, label="Cross-Correlation")
+        # plt.scatter(peak_indices, correlation[peak_indices], color='red', label="Detected Preambles", zorder=3)
+        # plt.axhline(threshold, color='gray', linestyle='--', label="Threshold")
+        # plt.xlabel("Index of bit")
+        # plt.ylabel("Correlation Value")
+        # plt.title("Cross-Correlation with Preamble")
+        # plt.legend()
+        # plt.grid()
+        # plt.show()
+
+        return avg
+
+    def remove_preamble_naive(self, bits):        
         start_index = None
         end_index = None
         for i in range(0, len(bits), 1):
@@ -153,6 +212,8 @@ class Receiver:
             char = chr(int("".join(map(str, byte)), 2))
             if 32 <= ord(char) <= 126:
                 message += char
+            # else: # NOTE: all invalid characters will instead be "-", instead of just whitespace
+            #     message += "-"
         return message
 
     def plot_simulation_steps(self):
@@ -174,7 +235,21 @@ class Receiver:
 
 class NonCoherentReceiver(Receiver):
     def _demodulate(self) -> Tuple[np.ndarray, Dict]:
-        analytic = signal.hilbert(self.wav_signal)
+        if (self.band_pass):
+            self.wav_signal = self.bandpass_filter(self.wav_signal)
+
+        if (self.other_method):
+            fourier_transform_of_wav = np.fft.fft(self.wav_signal)
+            length = len(fourier_transform_of_wav)
+            fourier_analytic = np.zeros(length, dtype=complex)
+            fourier_analytic[0] = fourier_transform_of_wav[0]
+            fourier_analytic[1: length // 2] = 2 * fourier_transform_of_wav[1: length // 2]
+            fourier_analytic[length // 2 : ] = 0
+            analytic = np.fft.ifft(fourier_analytic)
+        else:
+            analytic = signal.hilbert(self.wav_signal)
+
+            
         envelope = np.abs(analytic)
         filtered = self.filter_signal(envelope)
         return filtered, {
@@ -192,28 +267,29 @@ class NonCoherentReceiver(Receiver):
 
         if (APPLY_AVERAGING_PREAMBLE):
             bits_without_preamble = self.remove_preamble_average(bits)
+        elif (APPLY_BAKER_PREAMBLE):
+            bits_without_preamble = self.remove_preamble_baker_code(bits)
         else:
             bits_without_preamble = self.remove_preamble_naive(bits)
         
-        
         if (bits_without_preamble == -1):
-            print("No preamble found RecieverClass, decode method")
-            raise TypeError
+            print("No preamble found, error was raised in receiverClass")       
+            raise PreambleNotFoundError("No preamble found in signal")
 
         if (CONVOLUTIONAL_CODING):
             bits_without_preamble = conv_decode(bits_without_preamble)
+
+        if (HAMMING_CODING):
+            bits_without_preamble = hamming_decode(bits_without_preamble)
 
         message = self.decode_bytes_to_bits(bits_without_preamble)
         debug_info = {
             **demod_debug,
             "normalized": normalized,
             "thresholded": thresholded,
+            "bits_without_preamble": bits_without_preamble
         }
         return message, debug_info
-
-
-
-
 
 
 
