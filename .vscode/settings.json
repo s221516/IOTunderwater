@@ -1,5 +1,5 @@
 {
   "AVR.reporter.arguments": ["-A"],
   "AVR.source.compiler": "/Users/mathiasmarkvardsen/bachelor/IOTunderwater/Code/ESP32/underwater_esp/src/CMakeLists.txt",
-  "idf.pythonInstallPath": "/opt/anaconda3/bin/python"
+  "idf.pythonInstallPath": "C:\\Users\\felim\\.espressif\\tools\\idf-python\\3.11.2\\python.exe"
 }
