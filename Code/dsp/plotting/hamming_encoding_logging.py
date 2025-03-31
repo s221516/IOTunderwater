@@ -24,7 +24,7 @@ def count_correct_decodings(file_path):
     return count_true, count_false
 
 if __name__ == "__main__":
-    file_path = "hamming_encoding_test.csv"  # Update path if necessary
+    file_path = "Code\dsp\data\hamming_encoding_test.csv"  # Update path if necessary
     avg_true, avg_false = compute_avg_hamming_distance(file_path)
     print(f"Average Hamming Distance (Encoding=False): {avg_false}")
     print(f"Average Hamming Distance (Encoding=True): {avg_true}")

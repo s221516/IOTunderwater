@@ -57,8 +57,9 @@ class Receiver:
         nyquist = SAMPLE_RATE * 0.5
         order = 4
         # Define bandpass range around carrier frequency
-        low = (self.carrier_freq - self.bit_rate) / nyquist
-        high = (self.carrier_freq + self.bit_rate) / nyquist
+        low = (self.carrier_freq - self.bit_rate - 100) / nyquist
+        high = (self.carrier_freq + self.bit_rate + 100) / nyquist
+
         b, a = signal.butter(order, [low, high], btype='band', analog=False)
         return signal.filtfilt(b, a, input_signal)
 
@@ -260,29 +261,29 @@ class NonCoherentReceiver(Receiver):
         thresholded = self.threshold_signal(normalized)
         bits = self.get_bits(thresholded)
 
-        # if (APPLY_AVERAGING_PREAMBLE):
-        #     bits_without_preamble = self.remove_preamble_average(bits)
-        # elif (APPLY_BAKER_PREAMBLE):
-        #     bits_without_preamble = self.remove_preamble_baker_code(bits)
-        # else:
-        #     bits_without_preamble = self.remove_preamble_naive(bits)
+        if (APPLY_AVERAGING_PREAMBLE):
+            bits_without_preamble = self.remove_preamble_average(bits)
+        elif (APPLY_BAKER_PREAMBLE):
+            bits_without_preamble = self.remove_preamble_baker_code(bits)
+        else:
+            bits_without_preamble = self.remove_preamble_naive(bits)
         
-        # if (bits_without_preamble == -1):
-        #     print("No preamble found, error was raised in receiverClass")       
-        #     raise PreambleNotFoundError("No preamble found in signal")
+        if (bits_without_preamble == -1):
+            print("No preamble found, error was raised in receiverClass")       
+            raise PreambleNotFoundError("No preamble found in signal")
 
-        # if (CONVOLUTIONAL_CODING):
-        #     bits_without_preamble = conv_decode(bits_without_preamble)
+        if (CONVOLUTIONAL_CODING):
+            bits_without_preamble = conv_decode(bits_without_preamble)
 
-        # if (HAMMING_CODING):
-        #     bits_without_preamble = hamming_decode(bits_without_preamble)
+        if (HAMMING_CODING):
+            bits_without_preamble = hamming_decode(bits_without_preamble)
 
-        message = self.decode_bytes_to_bits(bits)
+        message = self.decode_bytes_to_bits(bits_without_preamble)
         debug_info = {
             **demod_debug,
             "normalized": normalized,
             "thresholded": thresholded,
-            "bits_without_preamble": bits
+            "bits_without_preamble": bits_without_preamble
         }
         return message, debug_info
 

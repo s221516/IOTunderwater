@@ -49,14 +49,13 @@ def signal_generator_testing():
 
                 time.sleep(0.75)
 
-                # Start recording
                 if (config.MAKE_NEW_RECORDING):
                     create_wav_file_from_recording(config.RECORD_SECONDS)
 
                 time.sleep(0.1)
                 
                 stopTransmission()
-                # Non-Coherent demodulation
+
                 nonCoherentReceiver = NonCoherentReceiver(bitrate, carrierfreq, band_pass=False)            
                 nonCoherentReceiverWithBandPass = NonCoherentReceiver(bitrate, carrierfreq, band_pass=True)                
                 
@@ -67,13 +66,15 @@ def signal_generator_testing():
                     print("Decoded message, with pass: ", message_nc_bandpass)
 
                     # nonCoherentReceiver.plot_simulation_steps()
-                    # nonCoherentReceiver.plot_bandpass_comparison()
+                    # nonCoherentReceiverWithBandPass.plot_simulation_steps()
 
                     original_message_in_bits = config.string_to_bin_array(message)
                     decoded_bits = debug_nc["bits_without_preamble"]
                     decoded_bits_bandpass = debug_nc_bandpass["bits_without_preamble"]
-                    decoded_bits = list(map(int, decoded_bits))
-                    decoded_bits_bandpass = list(map(int, decoded_bits_bandpass))
+
+                    if (config.HAMMING_CODING):
+                        decoded_bits = list(map(int, decoded_bits))
+                        decoded_bits_bandpass = list(map(int, decoded_bits_bandpass))
 
                     hamming_dist = config.hamming_distance(decoded_bits, original_message_in_bits)
                     hamming_dist_bandpass = config.hamming_distance(decoded_bits_bandpass, original_message_in_bits)
@@ -87,6 +88,7 @@ def signal_generator_testing():
 
                 logInCsv(id, bitrate, carrierfreq, message, message_nc, hamming_dist, message_nc_bandpass, hamming_dist_bandpass)
                 id+=1
+
 
 def esp32_testing():
     if (config.MAKE_NEW_RECORDING):
@@ -109,6 +111,6 @@ def esp32_testing():
 
 
 if __name__ == "__main__":
-    main()
+    signal_generator_testing()
 
 

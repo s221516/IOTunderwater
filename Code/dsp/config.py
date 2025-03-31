@@ -39,53 +39,33 @@ def set_carrierfreq(value):
     global CARRIER_FREQ
     CARRIER_FREQ = value
 
-
-# nyquist = 30400
-# 31650 / 15200
-import numpy as np
-SAMPLE_RATE = 48000  # this capped by the soundcard, therefore, this is non-changeable
+PORT = "COM11"
+SAMPLE_RATE = 96000  # this capped by the soundcard, therefore, this is non-changeable
 
 BIT_RATE = 100
 CARRIER_FREQ = 4000  #  15200 Hz
 SAMPLES_PER_SYMBOL = int(SAMPLE_RATE / BIT_RATE) 
 CUT_OFF_FREQ = (CARRIER_FREQ + BIT_RATE) // 2  # TODO: check this value
 
-
-THRESHOLD_BINARY_VAL = 170  # defines when a pixel should be black or white when converting from RGB to black-white
-# with 200 samples per bit and 0.45 noise amplitude -> about upper limit, we get a valid picture 1/3 times
-NOISE_AMPLITUDE = 0.0  # noise
 PATH_TO_WAV_FILE = "Code/dsp/data/recording.wav"
-PATH_TO_PICTURE = "./data/doge.jpg"
 
+PREAMBLE_BASE = message_toBitArray("G")
+REPETITIONS = 3
+PREAMBLE_PATTERN = PREAMBLE_BASE * REPETITIONS
 # BINARY_BARKER = [1, 1, 1, 0, 0, 1, 0]
 # BINARY_BARKER = [1, 1, 1, 0, 0, 0, 1, 0, 0, 1, 0]
 BINARY_BARKER = [1, 1, 1, 1, 1, 0, 0, 1, 1, 0, 1, 0, 1]
+APPLY_BAKER_PREAMBLE = True
+APPLY_AVERAGING_PREAMBLE = False
+
+LEN_OF_DATA_BITS = 301
+RECORD_SECONDS = 3
+MAKE_NEW_RECORDING = True
 
 STAGE_1 = True
 
-PREAMBLE_BASE = message_toBitArray("G")
+HAMMING_CODING = False
+CONVOLUTIONAL_CODING = True 
 
-REPETITIONS = 3
-PREAMBLE_PATTERN = PREAMBLE_BASE * REPETITIONS
-
-all_letters = "the_quick_brown_fox_jumps_over_the_lazy_dog_while_vexd_zebras_fight_for_joy!>*"
-
-MESSAGE = all_letters
-LEN_OF_DATA_BITS = 145
-
-CONVOLUTIONAL_CODING = False 
-HAMMING_CODING = True
-
-APPLY_BAKER_PREAMBLE = True
-
-APPLY_AVERAGING_PREAMBLE = False
-
-# SAMPLE_RATE_FOR_WAV_FILE = 44100  # Hz
-RECORD_SECONDS = 10
-MAKE_NEW_RECORDING = True
 
 dark_horse_lyrics = """AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC"""
-
-PORT = "COM11"
-
-
