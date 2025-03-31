@@ -141,7 +141,7 @@ if __name__ == "__main__":
     print(f"Encoded message: {encoded_message}")
     
     # Inject some errors
-    num_errors = 4
+    num_errors = 2
     corrupted_message = inject_errors(encoded_message, num_errors)
     print(f"Corrupted message (with {num_errors} errors): {corrupted_message}")
     

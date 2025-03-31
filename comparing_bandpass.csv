@@ -1,0 +1,19 @@
+ID,Bitrate,Carrier Frequency,Original Message,Decoded without bandpass,Hamming Dist without bnadpass,Decoded with bandpass,Hamming Dist with bandpass,Encoding
+0,500,6000,Hello_there,,,,,Hamming Encoding
+1,500,6000,Hello_there,,,,,Hamming Encoding
+0,500,6000,Hello_there,,50,pp0,45,Hamming Encoding
+1,500,6000,Hello_there,,,,,Hamming Encoding
+0,500,6000,Hello_there,,49,!\`,48,Hamming Encoding
+1,500,6000,Hello_there,,,,,Hamming Encoding
+0,500,6000,Hello_there,,49,bRwb,48,Hamming Encoding
+0,500,6000,Hello_there,N1nn]^l1r5,22,d,49,Hamming Encoding
+1,500,6000,Hello_there,Hllo_VHr1,16,o\E,49,Hamming Encoding
+2,500,6000,Hello_there,"%,( x",27,w8.\],45,Hamming Encoding
+3,500,6000,Hello_there,Hello_there,0,Hello_there,0,Hamming Encoding
+4,500,6000,Hello_there,8n,49,Kn,50,Hamming Encoding
+5,500,6000,Hello_there,Hello_there,0,Hello_there,0,Hamming Encoding
+6,500,6000,Hello_there,Hello_there,0,\%nxE,26,Hamming Encoding
+7,500,6000,Hello_there,00A,40,0],41,Hamming Encoding
+8,500,6000,Hello_there,H@llothArU,8,I8\SxE,32,Hamming Encoding
+9,500,6000,Hello_there,Hello_there,0,Hpln2@PF,24,Hamming Encoding
+10,500,6000,Hello_there,Hello_there,0, 8xd,34,Hamming Encoding

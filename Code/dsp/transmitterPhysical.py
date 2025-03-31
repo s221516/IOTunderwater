@@ -92,12 +92,12 @@ def transmitPhysical(message, carrier, bitrate):
     bits = np.array(bits)
     arb_wave_form_command = "DATA:DAC VOLATILE, " + ", ".join(map(str, bits * 2047))
     
-    freq = bitrate/len(bits)
-    global len_of_bits 
     len_of_bits = len(bits)
+
+    freq = bitrate/len_of_bits
+
     print("Transmitted bits: ", len_of_bits)
     
-
     name = "COCK"
     command = f"""
     {arb_wave_form_command}
@@ -107,7 +107,7 @@ def transmitPhysical(message, carrier, bitrate):
     """
     send_command(command)
 
-    time.sleep(0.5)
+    time.sleep(0.2)
 
     command = f"""
     APPLy:SIN {carrier}, 10, 0

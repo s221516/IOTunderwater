@@ -43,10 +43,10 @@ def set_carrierfreq(value):
 # nyquist = 30400
 # 31650 / 15200
 import numpy as np
-SAMPLE_RATE = 96000  # this capped by the soundcard, therefore, this is non-changeable
+SAMPLE_RATE = 48000  # this capped by the soundcard, therefore, this is non-changeable
 
-BIT_RATE = 200
-CARRIER_FREQ = 6000  #  15200 Hz
+BIT_RATE = 100
+CARRIER_FREQ = 4000  #  15200 Hz
 SAMPLES_PER_SYMBOL = int(SAMPLE_RATE / BIT_RATE) 
 CUT_OFF_FREQ = (CARRIER_FREQ + BIT_RATE) // 2  # TODO: check this value
 
@@ -57,7 +57,11 @@ NOISE_AMPLITUDE = 0.0  # noise
 PATH_TO_WAV_FILE = "Code/dsp/data/recording.wav"
 PATH_TO_PICTURE = "./data/doge.jpg"
 
+# BINARY_BARKER = [1, 1, 1, 0, 0, 1, 0]
+# BINARY_BARKER = [1, 1, 1, 0, 0, 0, 1, 0, 0, 1, 0]
 BINARY_BARKER = [1, 1, 1, 1, 1, 0, 0, 1, 1, 0, 1, 0, 1]
+
+STAGE_1 = True
 
 PREAMBLE_BASE = message_toBitArray("G")
 
@@ -67,17 +71,17 @@ PREAMBLE_PATTERN = PREAMBLE_BASE * REPETITIONS
 all_letters = "the_quick_brown_fox_jumps_over_the_lazy_dog_while_vexd_zebras_fight_for_joy!>*"
 
 MESSAGE = all_letters
-LEN_OF_DATA_BITS = 101
+LEN_OF_DATA_BITS = 145
 
 CONVOLUTIONAL_CODING = False 
-HAMMING_CODING = False
+HAMMING_CODING = True
 
 APPLY_BAKER_PREAMBLE = True
 
 APPLY_AVERAGING_PREAMBLE = False
 
 # SAMPLE_RATE_FOR_WAV_FILE = 44100  # Hz
-RECORD_SECONDS = 3
+RECORD_SECONDS = 10
 MAKE_NEW_RECORDING = True
 
 dark_horse_lyrics = """AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC"""

@@ -40,13 +40,12 @@ def plot_wav_signal(sample_rate, wav_signal):
 
 class Receiver:
     
-    def __init__(self, bit_rate: int, carrier_freq : int, band_pass: bool, other_method: bool):
+    def __init__(self, bit_rate: int, carrier_freq : int, band_pass: bool):
         
         _, self.wav_signal = wavfile.read(PATH_TO_WAV_FILE)
         self.bit_rate           = bit_rate
         self.carrier_freq       = carrier_freq
         self.band_pass          = band_pass
-        self.other_method       = other_method
         self.cutoff_freq        = (carrier_freq + bit_rate) // 2
         self.samples_per_symbol = int(SAMPLE_RATE / bit_rate) 
 
@@ -142,7 +141,6 @@ class Receiver:
     def remove_preamble_baker_code(self, bits, std_factor = 4):
         correlation = signal.correlate(bits, BINARY_BARKER, mode='valid')
         threshold = np.mean(correlation) + std_factor * np.std(correlation)
-        # threshold = 9
         peak_indices, _ = signal.find_peaks(correlation, height=threshold, distance=LEN_OF_DATA_BITS)
         
         if len(peak_indices) < 2:
@@ -164,18 +162,19 @@ class Receiver:
             if CONVOLUTIONAL_CODING:
                 print(self.decode_bytes_to_bits(conv_decode(data_bits[i])))
             elif HAMMING_CODING:
-                print(self.decode_bytes_to_bits(hamming_decode(data_bits[i])))
+                # print(self.decode_bytes_to_bits(hamming_decode(data_bits[i])))
+                pass
             else:
                 bits = self.decode_bytes_to_bits(data_bits[i])
-                print(bits, len(bits))
+                # print(bits, len(bits))
 
         avg = [int(round((sum(col))/len(col))) for col in zip(*data_bits)]
 
         # plt.figure(figsize=(10, 4))
-        # plt.plot(correlation, label="Cross-Correlation")
-        # plt.scatter(peak_indices, correlation[peak_indices], color='red', label="Detected Preambles", zorder=3)
-        # plt.axhline(threshold, color='gray', linestyle='--', label="Threshold")
-        # plt.xlabel("Index of bit")
+        # plt.plot(correlation, color = "#FF3300" , label="Correlation Value", linewidth = 2)
+        # plt.scatter(peak_indices, correlation[peak_indices], color='#000000', label="Detected Preambles", zorder=3, s = 100, marker='D')
+        # plt.axhline(threshold, color='gray', linestyle='--', label="Threshold", linewidth = 2)
+        # plt.xlabel("Bits from received signal")
         # plt.ylabel("Correlation Value")
         # plt.title("Cross-Correlation with Preamble")
         # plt.legend()
@@ -237,19 +236,15 @@ class NonCoherentReceiver(Receiver):
     def _demodulate(self) -> Tuple[np.ndarray, Dict]:
         if (self.band_pass):
             self.wav_signal = self.bandpass_filter(self.wav_signal)
+   
+        fourier_transform_of_wav = np.fft.fft(self.wav_signal)
+        length = len(fourier_transform_of_wav)
+        fourier_analytic = np.zeros(length, dtype=complex)
+        fourier_analytic[0] = fourier_transform_of_wav[0]
+        fourier_analytic[1: length // 2] = 2 * fourier_transform_of_wav[1: length // 2]
+        fourier_analytic[length // 2 : ] = 0
+        analytic = np.fft.ifft(fourier_analytic)
 
-        if (self.other_method):
-            fourier_transform_of_wav = np.fft.fft(self.wav_signal)
-            length = len(fourier_transform_of_wav)
-            fourier_analytic = np.zeros(length, dtype=complex)
-            fourier_analytic[0] = fourier_transform_of_wav[0]
-            fourier_analytic[1: length // 2] = 2 * fourier_transform_of_wav[1: length // 2]
-            fourier_analytic[length // 2 : ] = 0
-            analytic = np.fft.ifft(fourier_analytic)
-        else:
-            analytic = signal.hilbert(self.wav_signal)
-
-            
         envelope = np.abs(analytic)
         filtered = self.filter_signal(envelope)
         return filtered, {
@@ -265,29 +260,29 @@ class NonCoherentReceiver(Receiver):
         thresholded = self.threshold_signal(normalized)
         bits = self.get_bits(thresholded)
 
-        if (APPLY_AVERAGING_PREAMBLE):
-            bits_without_preamble = self.remove_preamble_average(bits)
-        elif (APPLY_BAKER_PREAMBLE):
-            bits_without_preamble = self.remove_preamble_baker_code(bits)
-        else:
-            bits_without_preamble = self.remove_preamble_naive(bits)
+        # if (APPLY_AVERAGING_PREAMBLE):
+        #     bits_without_preamble = self.remove_preamble_average(bits)
+        # elif (APPLY_BAKER_PREAMBLE):
+        #     bits_without_preamble = self.remove_preamble_baker_code(bits)
+        # else:
+        #     bits_without_preamble = self.remove_preamble_naive(bits)
         
-        if (bits_without_preamble == -1):
-            print("No preamble found, error was raised in receiverClass")       
-            raise PreambleNotFoundError("No preamble found in signal")
+        # if (bits_without_preamble == -1):
+        #     print("No preamble found, error was raised in receiverClass")       
+        #     raise PreambleNotFoundError("No preamble found in signal")
 
-        if (CONVOLUTIONAL_CODING):
-            bits_without_preamble = conv_decode(bits_without_preamble)
+        # if (CONVOLUTIONAL_CODING):
+        #     bits_without_preamble = conv_decode(bits_without_preamble)
 
-        if (HAMMING_CODING):
-            bits_without_preamble = hamming_decode(bits_without_preamble)
+        # if (HAMMING_CODING):
+        #     bits_without_preamble = hamming_decode(bits_without_preamble)
 
-        message = self.decode_bytes_to_bits(bits_without_preamble)
+        message = self.decode_bytes_to_bits(bits)
         debug_info = {
             **demod_debug,
             "normalized": normalized,
             "thresholded": thresholded,
-            "bits_without_preamble": bits_without_preamble
+            "bits_without_preamble": bits
         }
         return message, debug_info
 

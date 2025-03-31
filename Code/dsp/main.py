@@ -1,17 +1,19 @@
 from receiver.receiverClass import NonCoherentReceiver, CoherentReceiver
 import config
 import time
-import threading
-import numpy as np
 from receiver.record_audio import create_wav_file_from_recording
-from transmitterPhysical import transmitPhysical, stopTransmission
+
+if (config.STAGE_1):
+    from transmitterPhysical import transmitPhysical, stopTransmission
+
 from errors import PreambleNotFoundError
+from encoding.hamming_codes import hamming_encode
 
 import csv
 
-def logInCsv(id, bitrate, carrierfreq, original_message, decoded_message1, decoded_message2, decoded_message3, filename="testing_other_method.csv"):
+def logInCsv(id, bitrate, carrierfreq, original_message, decoded_message1, hamming_dist_without, decod_msg2, ham_dist_with, filename="comparing_bandpass.csv"):
 
-    headers = ["ID", "Bitrate", "Carrier Frequency", "Original Message", "Decoded without bandpass", "Decoded with bandpass", "Decoded with bandpass and other method"]
+    headers = ["ID", "Bitrate", "Carrier Frequency", "Original Message", "Decoded without bandpass", "Hamming Dist without bnadpass", "Decoded with bandpass", "Hamming Dist with bandpass","Encoding"]
 
     # Check if the file exists to determine if we need to write headers
     try:
@@ -27,20 +29,16 @@ def logInCsv(id, bitrate, carrierfreq, original_message, decoded_message1, decod
             writer.writerow(headers)
         
         # Write the log entry
-        writer.writerow([id, bitrate, carrierfreq, original_message, decoded_message1, decoded_message2, decoded_message3])
+        writer.writerow([id, bitrate, carrierfreq, original_message, decoded_message1, hamming_dist_without, decod_msg2, ham_dist_with, "Hamming Encoding"])
 
-def testing():
-    #test words
-    # all_letters = "the_quick_brown_fox_jumps_over_the_lazy_dog_while_vexd_zebras_fight_for_joy!>*"
+def signal_generator_testing():
 
     all_letters = "the quick brown fox jumps over the lazy dog while vexd zebras fight for joy!>*"
     
     messages = ["Hello_there"]
 
-    bitrates = [350] * 4
+    bitrates = [500] * 100
 
-    # test carrier frequencies
-    # carrierfreqs = np.arange(2000, 12000, 1000)
     carrierfreqs = [6000]
 
     id = 0
@@ -49,7 +47,7 @@ def testing():
             for carrierfreq in carrierfreqs:
                 transmitPhysical(message, carrierfreq, bitrate) 
 
-                time.sleep(1.0)
+                time.sleep(0.75)
 
                 # Start recording
                 if (config.MAKE_NEW_RECORDING):
@@ -59,60 +57,58 @@ def testing():
                 
                 stopTransmission()
                 # Non-Coherent demodulation
-                nonCoherentReceiver = NonCoherentReceiver(bitrate, carrierfreq, False, False)            
-                nonCoherentReceiverWithBandPass = NonCoherentReceiver(bitrate, carrierfreq, True, False)
-                nonCoherentReceiverWithBandPassOtherMethod = NonCoherentReceiver(bitrate, carrierfreq, True, True)
+                nonCoherentReceiver = NonCoherentReceiver(bitrate, carrierfreq, band_pass=False)            
+                nonCoherentReceiverWithBandPass = NonCoherentReceiver(bitrate, carrierfreq, band_pass=True)                
                 
                 try:
                     message_nc, debug_nc = nonCoherentReceiver.decode()
                     message_nc_bandpass, debug_nc_bandpass = nonCoherentReceiverWithBandPass.decode()
-                    message_nc_bandpass_othermethod, debug_nc_bandpass_om = nonCoherentReceiverWithBandPassOtherMethod.decode()
-                    print("Decoded message, false, false: ", message_nc)
-                    print("Decoded message, true, false: ", message_nc_bandpass)
-                    print("Decoded message, true, true: ", message_nc_bandpass_othermethod)
+                    print("Decoded message: no pass    ", message_nc)
+                    print("Decoded message, with pass: ", message_nc_bandpass)
+
                     # nonCoherentReceiver.plot_simulation_steps()
                     # nonCoherentReceiver.plot_bandpass_comparison()
+
                     original_message_in_bits = config.string_to_bin_array(message)
-                    hamming_dist = config.hamming_distance(debug_nc["bits_without_preamble"], original_message_in_bits)
-                    hamming_dist_bandpass = config.hamming_distance(debug_nc_bandpass["bits_without_preamble"], original_message_in_bits)
-                    hamming_dist_bandpass_othermethod = config.hamming_distance(debug_nc_bandpass_om["bits_without_preamble"], original_message_in_bits)
-                    print("Hamming distance of msgs, no pass:        ", hamming_dist) 
-                    print("Hamming distance of msgs, with pass       ", hamming_dist_bandpass) 
-                    print("Hamming distance of msgs, with pass and om", hamming_dist_bandpass_othermethod) 
+                    decoded_bits = debug_nc["bits_without_preamble"]
+                    decoded_bits_bandpass = debug_nc_bandpass["bits_without_preamble"]
+                    decoded_bits = list(map(int, decoded_bits))
+                    decoded_bits_bandpass = list(map(int, decoded_bits_bandpass))
+
+                    hamming_dist = config.hamming_distance(decoded_bits, original_message_in_bits)
+                    hamming_dist_bandpass = config.hamming_distance(decoded_bits_bandpass, original_message_in_bits)
+                    
+                    print("Hamming distance of msgs, no pass:   ", hamming_dist) 
+                    print("Hamming distance of msgs, with pass  ", hamming_dist_bandpass) 
                 
                 except PreambleNotFoundError:
                     message_nc = "No preamble found"
                     message_nc_bandpass = "No preamble found"
-                    message_nc_bandpass_othermethod = "No preamble found"
 
-                logInCsv(id, bitrate, carrierfreq, message, message_nc, message_nc_bandpass, message_nc_bandpass_othermethod)
+                logInCsv(id, bitrate, carrierfreq, message, message_nc, hamming_dist, message_nc_bandpass, hamming_dist_bandpass)
                 id+=1
 
-def main():
-    transmitPhysical(config.MESSAGE, config.CARRIER_FREQ, config.BIT_RATE)
-
-    time.sleep(2)
-
-    # Start recording
+def esp32_testing():
     if (config.MAKE_NEW_RECORDING):
        create_wav_file_from_recording(config.RECORD_SECONDS)
 
     time.sleep(0.1)
+
+    nonCoherentReceiver = NonCoherentReceiver(config.BIT_RATE, config.CARRIER_FREQ, band_pass=False)       
     
-    stopTransmission()
-    # Non-Coherent demodulation
-    receiver_non_coherent = NonCoherentReceiver.from_wav_file(config.PATH_TO_WAV_FILE)
-    
-    message_nc, debug_nc = receiver_non_coherent.decode()
-    print(f"Non-Coherent Decoded: {message_nc}")
-    receiver_non_coherent.plot_simulation_steps()
+    try:
+        message_nc, debug_nc = nonCoherentReceiver.decode()
+        decoded_bits = debug_nc["bits_without_preamble"]
+        print(f"Bits received: {decoded_bits}")
+        print(len(decoded_bits))
+        print(f"Decoded message, no pass: {message_nc}")
+        nonCoherentReceiver.plot_simulation_steps()
         
-    # # Coherent demodulation
-    # receiver_coherent = CoherentReceiver.from_wav_file(PATH_TO_WAV_FILE)
-    # message_c, debug_c = receiver_coherent.decode()
-    # print(f"Coherent Decoded: {message_c}")
-    # receiver_coherent.plot_simulation_steps()
+    except PreambleNotFoundError:
+        message_nc = "No preamble found"
 
 
 if __name__ == "__main__":
-    testing()
+    main()
+
+

@@ -26,7 +26,7 @@ def create_processing_visualization(receiver, message, debug_info):
     and optimized layout for standard window sizes
     """
     # Smaller overall figure size that works better on standard displays
-    fig = plt.figure(figsize=(14, 10))
+    fig = plt.figure(figsize=(10, 6))
 
     # Adjust the subplot parameters for tighter spacing
     plt.subplots_adjust(
@@ -138,7 +138,8 @@ def create_processing_visualization(receiver, message, debug_info):
     for i in range(0, len(bits), 8):
         if i + 8 <= len(bits):
             byte = bits[i : i + 8]
-            bits_text.append("".join(map(str, byte)))
+            if any(byte): # Checks if just one of the bits is a 1, thereby removing the byte blocks where they are all 0
+                bits_text.append("".join(map(str, byte)))
 
     bits_formatted = " ".join(bits_text)
     ax9.axis("off")
