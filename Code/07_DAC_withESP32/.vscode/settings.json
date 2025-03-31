@@ -1,0 +1,14 @@
+{
+    "C_Cpp.intelliSenseEngine": "default",
+    "idf.espIdfPathWin": "C:\\Users\\felim\\esp\\v5.4\\esp-idf",
+    "idf.pythonInstallPath": "C:\\Users\\felim\\.espressif\\tools\\idf-python\\3.11.2\\python.exe",
+    "idf.openOcdConfigs": [
+        "board/esp32-wrover-kit-3.3v.cfg"
+    ],
+    "idf.portWin": "COM7",
+    "idf.toolsPathWin": "C:\\Users\\felim\\.espressif",
+    "idf.flashType": "UART",
+    "files.associations": {
+        "transmitter.h": "c"
+    }
+}
