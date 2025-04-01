@@ -18,7 +18,6 @@ from config import (
     REPETITIONS,
     BINARY_BARKER, 
     APPLY_BAKER_PREAMBLE, 
-    LEN_OF_DATA_BITS,
     HAMMING_CODING, 
 )
 
@@ -142,7 +141,7 @@ class Receiver:
     def remove_preamble_baker_code(self, bits, std_factor = 4):
         correlation = signal.correlate(bits, BINARY_BARKER, mode='valid')
         threshold = np.mean(correlation) + std_factor * np.std(correlation)
-        peak_indices, _ = signal.find_peaks(correlation, height=threshold, distance=LEN_OF_DATA_BITS)
+        peak_indices, _ = signal.find_peaks(correlation, height=threshold, distance=len_of_data_bits)
         
         if len(peak_indices) < 2:
             if std_factor > 1 : 
@@ -155,23 +154,23 @@ class Receiver:
 
         data_bits = []
         for i in range(len(peak_indices) - 1):
-            if LEN_OF_DATA_BITS == diff_in_peaks[i]: # NOTE: we tested less than equal but it makes a big difference with just a few bits, it needs to be exactly equal, as one bit makes a huge difference when decoding
+            if len_of_data_bits == diff_in_peaks[i]: # NOTE: we tested less than equal but it makes a big difference with just a few bits, it needs to be exactly equal, as one bit makes a huge difference when decoding
                 data_bits.append(bits[peak_indices[i] + len(BINARY_BARKER): peak_indices[i+1]])
 
 
-        for i in range(len(data_bits)):
-            if CONVOLUTIONAL_CODING:
-                print(self.decode_bytes_to_bits(conv_decode(data_bits[i])))
-            elif HAMMING_CODING:
-                # print(self.decode_bytes_to_bits(hamming_decode(data_bits[i])))
-                pass
-            else:
-                bits = self.decode_bytes_to_bits(data_bits[i])
-                # print(bits, len(bits))
+        # for i in range(len(data_bits)):
+        #     if CONVOLUTIONAL_CODING:
+        #         print(self.decode_bytes_to_bits(conv_decode(data_bits[i])))
+        #     elif HAMMING_CODING:
+        #         print(self.decode_bytes_to_bits(hamming_decode(data_bits[i])))
+        #         pass
+        #     else:
+        #         bits = self.decode_bytes_to_bits(data_bits[i])
+        #         print(bits, len(bits))
 
         avg = [int(round((sum(col))/len(col))) for col in zip(*data_bits)]
 
-        # plt.figure(figsize=(10, 4))
+        # plt.figure(figsize=(14, 8))
         # plt.plot(correlation, color = "#FF3300" , label="Correlation Value", linewidth = 2)
         # plt.scatter(peak_indices, correlation[peak_indices], color='#000000', label="Detected Preambles", zorder=3, s = 100, marker='D')
         # plt.axhline(threshold, color='gray', linestyle='--', label="Threshold", linewidth = 2)
@@ -232,6 +231,9 @@ class Receiver:
         plt.show()
         return fig
 
+    def set_len_of_data_bits(self, value):
+        global len_of_data_bits
+        len_of_data_bits = value
 
 class NonCoherentReceiver(Receiver):
     def _demodulate(self) -> Tuple[np.ndarray, Dict]:

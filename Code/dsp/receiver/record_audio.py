@@ -3,7 +3,7 @@ import pyaudio
 import numpy as np
 import os
 from collections import deque
-from config import RECORD_SECONDS, PATH_TO_WAV_FILE, SAMPLE_RATE, BIT_RATE, CARRIER_FREQ
+from config import PATH_TO_WAV_FILE, SAMPLE_RATE, BIT_RATE, CARRIER_FREQ
 from datetime import datetime
 from receiver.receiverClass import NonCoherentReceiver
 from errors import PreambleNotFoundError
@@ -14,7 +14,7 @@ CHUNK = 1024 # the amount of frames read per buffer, 1024 to balance between lat
 FORMAT = pyaudio.paInt16
 CHANNELS = 1 # this is either mono or stereo // mono = 1, stereo = 2, we do mono
 
-def create_wav_file_from_recording(record_seconds=RECORD_SECONDS):
+def create_wav_file_from_recording(record_seconds):
     p = pyaudio.PyAudio()
 
     # Open a new wave file

@@ -11,9 +11,9 @@ from encoding.hamming_codes import hamming_encode
 
 import csv
 
-def logInCsv(id, bitrate, carrierfreq, original_message, decoded_message1, hamming_dist_without, decod_msg2, ham_dist_with, filename="comparing_bandpass.csv"):
+def logInCsv(id, bitrate, carrierfreq, original_message, decoded_message1, hamming_dist_without, decod_msg2, ham_dist_with, filename="large_test_no_encoding.csv"):
 
-    headers = ["ID", "Bitrate", "Carrier Frequency", "Original Message", "Decoded without bandpass", "Hamming Dist without bnadpass", "Decoded with bandpass", "Hamming Dist with bandpass","Encoding"]
+    headers = ["ID", "Bitrate", "Carrier Frequency", "Original Message", "Decoded without bandpass", "Hamming Dist without bnadpass", "Decoded with bandpass", "Hamming Dist with bandpass"]
 
     # Check if the file exists to determine if we need to write headers
     try:
@@ -29,7 +29,7 @@ def logInCsv(id, bitrate, carrierfreq, original_message, decoded_message1, hammi
             writer.writerow(headers)
         
         # Write the log entry
-        writer.writerow([id, bitrate, carrierfreq, original_message, decoded_message1, hamming_dist_without, decod_msg2, ham_dist_with, "Hamming Encoding"])
+        writer.writerow([id, bitrate, carrierfreq, original_message, decoded_message1, hamming_dist_without, decod_msg2, ham_dist_with])
 
 def signal_generator_testing():
 
@@ -37,28 +37,44 @@ def signal_generator_testing():
     
     messages = ["Hello_there"]
 
-    bitrates = [500] * 100
+    bitrates = [300] * 47
 
     carrierfreqs = [6000]
 
-    id = 0
+    id = 53
     for message in messages:
         for bitrate in bitrates:
             for carrierfreq in carrierfreqs:
                 transmitPhysical(message, carrierfreq, bitrate) 
 
+                # NOTE: this is just to give the recieverClass the length of the transmitted bits, so you dont have to do it in config
+                len_of_data_bits = len(message) * 8 
+                len_of_preamble = len(config.BINARY_BARKER)
+                if (config.CONVOLUTIONAL_CODING):
+                    len_of_data_bits = len_of_data_bits * 3 + len_of_preamble
+                elif (config.HAMMING_CODING):
+                    len_of_data_bits = len_of_data_bits * 3/2 + len_of_preamble
+                else:
+                    len_of_data_bits = len_of_data_bits + len_of_preamble
+
                 time.sleep(0.75)
 
+                # NOTE: to make the time of recording dynamic 
+                record_seconds = round((len_of_data_bits / bitrate) * 5)
+
                 if (config.MAKE_NEW_RECORDING):
-                    create_wav_file_from_recording(config.RECORD_SECONDS)
+                    print(f"Recording for: {record_seconds} seconds")
+                    create_wav_file_from_recording(record_seconds)
 
                 time.sleep(0.1)
                 
                 stopTransmission()
 
-                nonCoherentReceiver = NonCoherentReceiver(bitrate, carrierfreq, band_pass=False)            
+                nonCoherentReceiver = NonCoherentReceiver(bitrate, carrierfreq, band_pass=False)      
+                nonCoherentReceiver.set_len_of_data_bits(len_of_data_bits)    
                 nonCoherentReceiverWithBandPass = NonCoherentReceiver(bitrate, carrierfreq, band_pass=True)                
-                
+                nonCoherentReceiverWithBandPass.set_len_of_data_bits(len_of_data_bits)
+
                 try:
                     message_nc, debug_nc = nonCoherentReceiver.decode()
                     message_nc_bandpass, debug_nc_bandpass = nonCoherentReceiverWithBandPass.decode()
