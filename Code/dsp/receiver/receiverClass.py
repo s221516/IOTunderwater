@@ -158,6 +158,7 @@ class Receiver:
                 data_bits.append(bits[peak_indices[i] + len(BINARY_BARKER): peak_indices[i+1]])
 
 
+        # NOTE: this is to plot the decodins of each entry of data bits
         # for i in range(len(data_bits)):
         #     if CONVOLUTIONAL_CODING:
         #         print(self.decode_bytes_to_bits(conv_decode(data_bits[i])))
@@ -170,6 +171,7 @@ class Receiver:
 
         avg = [int(round((sum(col))/len(col))) for col in zip(*data_bits)]
 
+        # NOTE: this plots the correlation of the preamble and the received signal
         # plt.figure(figsize=(14, 8))
         # plt.plot(correlation, color = "#FF3300" , label="Correlation Value", linewidth = 2)
         # plt.scatter(peak_indices, correlation[peak_indices], color='#000000', label="Detected Preambles", zorder=3, s = 100, marker='D')
@@ -288,7 +290,6 @@ class NonCoherentReceiver(Receiver):
             "bits_without_preamble": bits_without_preamble
         }
         return message, debug_info
-
 
 
 class CoherentReceiver(Receiver):

@@ -18,20 +18,25 @@ def compute_BER(file_path):
     total_bits = total_transmissions * bits_per_message
     
     # Calculate BER
-    ber_no_bp = ham_dist_no_bp / total_bits
-    ber_with_bp = ham_dist_with_bp / total_bits
+    ber_no_bp = (ham_dist_no_bp / total_bits) * 100
+    ber_with_bp = (ham_dist_with_bp / total_bits) * 100
     
     print(f"Number of transmissions: {total_transmissions}")
     print(f"Total bits transmitted: {total_bits}")
-    print(f"Total bit errors without bandpass: {ham_dist_no_bp}")
+    print(f"\nTotal bit errors without bandpass: {ham_dist_no_bp}")
     print(f"Total bit errors with bandpass: {ham_dist_with_bp}")
-    print(f"\nBit Error Rate without bandpass: {ber_no_bp:.6f}")
-    print(f"Bit Error Rate with bandpass: {ber_with_bp:.6f}")
+    print(f"Bit Error Rate without bandpass: {ber_no_bp:.2f}%")
+    print(f"Bit Error Rate with bandpass: {ber_with_bp:.2f}% \n")
     
     return ber_no_bp, ber_with_bp
 
 if __name__ == "__main__":
     # Test with both files
-    file = "c:/Users/morte/OneDrive - Danmarks Tekniske Universitet/Bachelor/IOTunderwater/large_test_no_encoding, 100bps, 50 cm.csv"
+    files = ["c:/Users/morte/OneDrive - Danmarks Tekniske Universitet/Bachelor/IOTunderwater/Code/dsp/data/large_test_no_encoding, 100bps, 50 cm.csv"
+            ,"c:/Users/morte/OneDrive - Danmarks Tekniske Universitet/Bachelor/IOTunderwater/Code/dsp/data/large_test_no_encoding, 200bps, 50 cm.csv"
+            ,"c:/Users/morte/OneDrive - Danmarks Tekniske Universitet/Bachelor/IOTunderwater/Code/dsp/data/large_test_no_encoding, 300bps, 50 cm.csv" 
 
-    ber_no_bp, ber_with_bp = compute_BER(file)
+            ,"c:/Users/morte/OneDrive - Danmarks Tekniske Universitet/Bachelor/IOTunderwater/Code/dsp/data/large_test_hamming_encoding, 100bps, 50 cm.csv" ]
+
+    for file in files:
+        ber_no_bp, ber_with_bp = compute_BER(file)

@@ -11,9 +11,9 @@ from encoding.hamming_codes import hamming_encode
 
 import csv
 
-def logInCsv(id, bitrate, carrierfreq, original_message, decoded_message1, hamming_dist_without, decod_msg2, ham_dist_with, filename="large_test_no_encoding.csv"):
+def logInCsv(id, bitrate, carrierfreq, original_message, decoded_message1, hamming_dist_without, decod_msg2, ham_dist_with, filename="large_test_hamming_encoding.csv"):
 
-    headers = ["ID", "Bitrate", "Carrier Frequency", "Original Message", "Decoded without bandpass", "Hamming Dist without bnadpass", "Decoded with bandpass", "Hamming Dist with bandpass"]
+    headers = ["ID", "Bitrate", "Carrier Frequency", "Original Message", "Decoded without bandpass", "Hamming Dist without bandpass", "Decoded with bandpass", "Hamming Dist with bandpass", "Encoding"]
 
     # Check if the file exists to determine if we need to write headers
     try:
@@ -29,7 +29,7 @@ def logInCsv(id, bitrate, carrierfreq, original_message, decoded_message1, hammi
             writer.writerow(headers)
         
         # Write the log entry
-        writer.writerow([id, bitrate, carrierfreq, original_message, decoded_message1, hamming_dist_without, decod_msg2, ham_dist_with])
+        writer.writerow([id, bitrate, carrierfreq, original_message, decoded_message1, hamming_dist_without, decod_msg2, ham_dist_with, "Hamming Encoding"])
 
 def signal_generator_testing():
 
@@ -37,11 +37,11 @@ def signal_generator_testing():
     
     messages = ["Hello_there"]
 
-    bitrates = [300] * 47
+    bitrates = [100]
 
     carrierfreqs = [6000]
 
-    id = 53
+    id = 0
     for message in messages:
         for bitrate in bitrates:
             for carrierfreq in carrierfreqs:
