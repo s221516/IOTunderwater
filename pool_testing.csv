@@ -1,0 +1,29 @@
+ID,Bitrate,Carrier Frequency,Original Message,Decoded without bandpass,Hamming Dist without bandpass,Decoded with bandpass,Hamming Dist with bandpass,Encoding,Speaker depth,Distance to speaker
+0,100,6000,Hello_there,@#lJpHep%,21,F'7V~S,40,Hamming Encoding,40,110
+0,100,6000,Hello_there,Hellothere,2,Hello_there,0,Hamming Encoding,40,110
+0,100,6000,Hello_there,,,eE &:@,50,Hamming Encoding,40,130
+0,100,6000,Hello_there,,,"RPV&""",51,Hamming Encoding,40,130
+0,100,6000,Hello_there,,,D*,45,Hamming Encoding,40,130
+0,100,6000,Hello_there,0@`,41,16.Syl,38,Hamming Encoding,40,130
+0,50,6000,Hello,a,17,a `,14,Hamming Encoding,40,130
+0,50,6000,Hello,,,,,Hamming Encoding,40,130
+0,50,6000,Hello,.!,25,Z,25,Hamming Encoding,40,130
+0,50,6000,Hello_there,,,h,48,Hamming Encoding,40,130
+0,100,6000,Hello_there,,,,52,Hamming Encoding,40,130
+0,100,6000,Hello_there,@ellop`ara,6,@ellot`era,4,Hamming Encoding,40,50
+0,100,6000,Hello_there,Hello_there,0,HAlSHd,28,Hamming Encoding,40,50
+0,100,6000,Hello_there,Hello_there,0,Hello_there,0,Hamming Encoding,40,50
+1,100,6000,Hello_there,Hello_there,0,Hello_there,0,Hamming Encoding,40,50
+2,100,6000,Hello_there,Hello_there,0,HH,49,Hamming Encoding,40,50
+3,100,6000,Hello_there,Hello_there,0,Hello_there,0,Hamming Encoding,40,50
+4,100,6000,Hello_there,Hello_there,0,Hello_there,0,Hamming Encoding,40,50
+0,100,6000,Hello_there,Hello_there,0,Hello_there,0,Hamming Encoding,40,50
+1,100,6000,Hello_there,Hello_there,0,Hello_there,0,Hamming Encoding,40,50
+2,100,6000,Hello_there,,,Hello_there,0,Hamming Encoding,40,50
+3,100,6000,Hello_there,Hello_there,0,Hello_there,0,Hamming Encoding,40,50
+4,100,6000,Hello_there,Hello_there,0,Hellg_there,1,Hamming Encoding,40,50
+0,100,6000,Hello_there,Hello_there,0,Hello_there,0,Hamming Encoding,40,50
+1,100,6000,Hello_there,Helln_there,1,Hellophere,3,Hamming Encoding,40,50
+2,100,6000,Hello_there,Hello_there,0,Hello_there,0,Hamming Encoding,40,50
+3,100,6000,Hello_there,Hello_there,0,Hello_there,0,Hamming Encoding,40,50
+4,100,6000,Hello_there,Hello_there,0,Hello_there,0,Hamming Encoding,40,50

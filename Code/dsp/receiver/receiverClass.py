@@ -45,7 +45,7 @@ class Receiver:
         self.bit_rate           = bit_rate
         self.carrier_freq       = carrier_freq
         self.band_pass          = band_pass
-        self.cutoff_freq        = (carrier_freq + bit_rate) // 2
+        self.cutoff_freq        = bit_rate * 5
         self.samples_per_symbol = int(SAMPLE_RATE / bit_rate) 
 
     def _demodulate(self) -> Tuple[np.ndarray, Dict]:
@@ -55,9 +55,8 @@ class Receiver:
         """Apply a bandpass filter around the carrier frequency"""
         nyquist = SAMPLE_RATE * 0.5
         order = 4
-        # Define bandpass range around carrier frequency
-        low = (self.carrier_freq - self.bit_rate - 100) / nyquist
-        high = (self.carrier_freq + self.bit_rate + 100) / nyquist
+        low = (self.carrier_freq - self.bit_rate ) / nyquist
+        high = (self.carrier_freq + self.bit_rate ) / nyquist
 
         b, a = signal.butter(order, [low, high], btype='band', analog=False)
         return signal.filtfilt(b, a, input_signal)
@@ -172,16 +171,16 @@ class Receiver:
         avg = [int(round((sum(col))/len(col))) for col in zip(*data_bits)]
 
         # NOTE: this plots the correlation of the preamble and the received signal
-        # plt.figure(figsize=(14, 8))
-        # plt.plot(correlation, color = "#FF3300" , label="Correlation Value", linewidth = 2)
-        # plt.scatter(peak_indices, correlation[peak_indices], color='#000000', label="Detected Preambles", zorder=3, s = 100, marker='D')
-        # plt.axhline(threshold, color='gray', linestyle='--', label="Threshold", linewidth = 2)
-        # plt.xlabel("Bits from received signal")
-        # plt.ylabel("Correlation Value")
-        # plt.title("Cross-Correlation with Preamble")
-        # plt.legend()
-        # plt.grid()
-        # plt.show()
+        plt.figure(figsize=(14, 8))
+        plt.plot(correlation, color = "#FF3300" , label="Correlation Value", linewidth = 2)
+        plt.scatter(peak_indices, correlation[peak_indices], color='#000000', label="Detected Preambles", zorder=3, s = 100, marker='D')
+        plt.axhline(threshold, color='gray', linestyle='--', label="Threshold", linewidth = 2)
+        plt.xlabel("Bits from received signal")
+        plt.ylabel("Correlation Value")
+        plt.title("Cross-Correlation with Preamble")
+        plt.legend()
+        plt.grid()
+        plt.show()
 
         return avg
 

@@ -1,0 +1,151 @@
+ID,Bitrate,Carrier Frequency,Original Message,Decoded without bandpass,Hamming Dist without bandpass,Decoded with bandpass,Hamming Dist with bandpass,Hamming Encoding,Speaker depth,Distance to speaker
+0,100,14000,Hello_there,Hello_there,0,Hello_there,0,False,200,600
+1,100,14000,Hello_there,Hehho^thEre,4,Hello_there,0,False,200,600
+2,100,14000,Hello_there,Hehho^thEre,4,DhLn^``DbE,14,False,200,600
+3,100,14000,Hello_there,Hello_there,0,Hello_there,0,False,200,600
+4,100,14000,Hello_there,DHho^phEbe,10, $$'0  0 ,25,False,200,600
+5,100,14000,Hello_there,Hello_there,0,Hello_there,0,False,200,600
+6,100,14000,Hello_there,Hello_there,0,Hello_there,0,False,200,600
+7,100,14000,Hello_there,Hello_there,0,Hello_there,0,False,200,600
+8,100,14000,Hello_there,Hello_there,0,Hello_there,0,False,200,600
+9,100,14000,Hello_there,  0 !!8,45,  0 !!8,45,False,200,600
+10,100,14000,Hello_there,Hehho^thEre,4,Ehlo^``EbE,10,False,200,600
+11,100,14000,Hello_there,Hello_there,0,Hello_there,0,False,200,600
+12,100,14000,Hello_there,Hello_there,0,Hello_there,0,False,200,600
+13,100,14000,Hello_there,Hello_ther%,1,hap!cc:,40,False,200,600
+14,100,14000,Hello_there,Hehlo_there,1,Hello_there,0,False,200,600
+15,100,14000,Hello_there,HeHho^thEbe,6, $$'0  0 ,25,False,200,600
+16,100,14000,Hello_there, $$'0  0 ,25, !0!!!8,45,False,200,600
+17,100,14000,Hello_there,Hehlo_there,1,Hello_there,0,False,200,600
+18,100,14000,Hello_there,Hello_there,0,Hello_there,0,False,200,600
+19,100,14000,Hello_there,Hehlo_there,1,Hello_there,0,False,200,600
+20,100,14000,Hello_there,Hello_there,0,Hello_there,0,False,200,600
+21,100,14000,Hello_there,Hello_there,0,Hello_there,0,False,200,600
+22,100,14000,Hello_there,Hello_there,0,Hello_there,0,False,200,600
+23,100,14000,Hello_there,dHho^p`Dbe,11, $$'0  0 ,25,False,200,600
+24,100,14000,Hello_there,Hello_there,0,Hello_there,0,False,200,600
+25,100,14000,Hello_there,Hello_there,0,Hello_there,0,False,200,600
+26,100,14000,Hello_there,Hello_there,0,Hello_there,0,False,200,600
+27,100,14000,Hello_there,Hehlo_there,1,Hello_there,0,False,200,600
+28,100,14000,Hello_there,Hello_there,0,Hello_there,0,False,200,600
+29,100,14000,Hello_there,Hello_ther%,1,Hello_ther!,2,False,200,600
+30,100,14000,Hello_there, $$'0  0 ,25, !0!!!8,45,False,200,600
+31,100,14000,Hello_there,Hello_there,0,Hello_there,0,False,200,600
+32,100,14000,Hello_there,Hello_there,0,Hello_there,0,False,200,600
+33,100,14000,Hello_there,dHho^thEbe,8, $$'0  0 ,25,False,200,600
+34,100,14000,Hello_there,Hello_there,0,Hello_there,0,False,200,600
+35,100,14000,Hello_there,Hello_there,0,Hello_there,0,False,200,600
+36,100,14000,Hello_there, $$'0  0 ,25, $$'0  0 ,25,False,200,600
+37,100,14000,Hello_there,Hello_there,0,Hello_there,0,False,200,600
+38,100,14000,Hello_there,  0 !!8,45,  0 !!8,45,False,200,600
+39,100,14000,Hello_there,DHho^phDbe,11, $$'0  0 ,25,False,200,600
+40,100,14000,Hello_there,Hello_there,0,Hello_there,0,False,200,600
+41,100,14000,Hello_there,Hello_there,0,Hello_there,0,False,200,600
+42,100,14000,Hello_there, $$'0  0 ,25, $$'0  0 ,25,False,200,600
+43,100,14000,Hello_there,Hello_there,0,Hello_there,0,False,200,600
+44,100,14000,Hello_there,Hello_there,0,Hello_there,0,False,200,600
+45,100,14000,Hello_there, $$'0  0 ,25, $$'0  0 ,25,False,200,600
+46,100,14000,Hello_there,Hello_there,0,Hello_there,0,False,200,600
+47,100,14000,Hello_there,Hello_there,0,Hello_there,0,False,200,600
+48,100,14000,Hello_there,Hehho^thEre,4,  0 !!8,45,False,200,600
+49,100,14000,Hello_there,Hehho^thEre,4,Ehlo^`hEbE,9,False,200,600
+50,200,14000,Hello_there,HellO_dhere,2,Hello_dhere,1,False,200,600
+51,200,14000,Hello_there,Hello_there,0,Hello_there,0,False,200,600
+52,200,14000,Hello_there,Hello_ther%,1,`ddg0($0 ,18,False,200,600
+53,200,14000,Hello_there,HelLN_dhEre,5,HehLN_dHEbe,8,False,200,600
+54,200,14000,Hello_there,Hello_there,0,Hello_there,0,False,200,600
+55,200,14000,Hello_there,Hello_there,0,Hello_there,0,False,200,600
+56,200,14000,Hello_there,Hello_dhere,1,Hello_there,0,False,200,600
+57,200,14000,Hello_there,Hello_there,0,Hello_there,0,False,200,600
+58,200,14000,Hello_there,Hello_there,0,Hello_there,0,False,200,600
+59,200,14000,Hello_there,Hello_there,0,Hello_there,0,False,200,600
+60,200,14000,Hello_there,HD@@@@@B`,31," ""0""!!8",47,False,200,600
+61,200,14000,Hello_there,@add'0( p!,16, $$'0( 0 ,24,False,200,600
+62,200,14000,Hello_there,@`dd'0( 0!,19,  0 !!8,45,False,200,600
+63,200,14000,Hello_there,Hello_dhere,1,Hello_dhere,1,False,200,600
+64,200,14000,Hello_there,Hello_dhere,1,Hello_dhere,1,False,200,600
+65,200,14000,Hello_there,( 0 !!8,44,  0 !!8,45,False,200,600
+66,200,14000,Hello_there,Hello_there,0,Hello_there,0,False,200,600
+67,200,14000,Hello_there,Hello_there,0,Hello_there,0,False,200,600
+68,200,14000,Hello_there,Hello_dhere,1,Hello_dhere,1,False,200,600
+69,200,14000,Hello_there,Hello_there,0,Hello_there,0,False,200,600
+70,200,14000,Hello_there,HellN_dhere,3,HehLN_dHEbe,8,False,200,600
+71,200,14000,Hello_there,Hello_dhere,1,Hello_dhere,1,False,200,600
+72,200,14000,Hello_there,Hello_there,0,Hello_there,0,False,200,600
+73,200,14000,Hello_there,Hello_there,0,Hello_there,0,False,200,600
+74,200,14000,Hello_there,Hello_there,0,@ello_ther%,2,False,200,600
+75,200,14000,Hello_there,Hello_there,0,Hello_there,0,False,200,600
+76,200,14000,Hello_there,Hello_there,0,Hello_there,0,False,200,600
+77,200,14000,Hello_there,Hello_there,0,Hello_there,0,False,200,600
+78,200,14000,Hello_there,Hello_ther%,1,@ello_4hep%,4,False,200,600
+79,200,14000,Hello_there,Hello_there,0,Hello_there,0,False,200,600
+80,200,14000,Hello_there,Hello_there,0,Hello_there,0,False,200,600
+81,200,14000,Hello_there,Hello_dhere,1,Hello_dhere,1,False,200,600
+82,200,14000,Hello_there,@adlg0(ap!,12, $d'0  0 ,24,False,200,600
+83,200,14000,Hello_there,HehLN_dHEre,7,"HD`e""""BBr",35,False,200,600
+84,200,14000,Hello_there,HellO_dhere,2,Hello_dhere,1,False,200,600
+85,200,14000,Hello_there,HehLN_dHere,6,"HD`e""""BBr",35,False,200,600
+86,200,14000,Hello_there,Hello_dhere,1,Hello_dhere,1,False,200,600
+87,200,14000,Hello_there,Hello_there,0,Hello_there,0,False,200,600
+88,200,14000,Hello_there,Hello_there,0,Hello_there,0,False,200,600
+89,200,14000,Hello_there,HehLN_dHere,6,"HD`e""""BBr",35,False,200,600
+90,200,14000,Hello_there,HellN_dhere,3,HelLO_dhere,3,False,200,600
+91,200,14000,Hello_there,Hello_dhere,1,Hello_dhere,1,False,200,600
+92,200,14000,Hello_there,Hello_there,0,Hello_there,0,False,200,600
+93,200,14000,Hello_there,Hello_dhere,1,Hello_there,0,False,200,600
+94,200,14000,Hello_there,"  0""!!8",45,"  0""!!8",46,False,200,600
+95,200,14000,Hello_there,Hello_dhere,1,Hello_dhere,1,False,200,600
+96,200,14000,Hello_there,Hello_dhere,1,Hello_there,0,False,200,600
+97,200,14000,Hello_there,Hello_dhere,1,Hello_there,0,False,200,600
+98,200,14000,Hello_there,HehLN_dHere,6,"HD`E""""BBp",35,False,200,600
+99,200,14000,Hello_there,Hello_there,0,Hello_there,0,False,200,600
+100,300,14000,Hello_there,Hello_there,0,Hello_there,0,False,200,600
+101,300,14000,Hello_there,HeHHN^dHEbE,12,HEHHN^dhEbE,12,False,200,600
+102,300,14000,Hello_there,Hello_there,0,Hello_there,0,False,200,600
+103,300,14000,Hello_there,Hehlo^thebe,3,Hello_there,0,False,200,600
+104,300,14000,Hello_there,Hello_there,0,Hello_there,0,False,200,600
+105,300,14000,Hello_there,Hello_there,0,Hello_there,0,False,200,600
+106,300,14000,Hello_there,Hello_there,0,Hello_there,0,False,200,600
+107,300,14000,Hello_there,,51,T,47,False,200,600
+108,300,14000,Hello_there,Hehlo^thebe,3,Hehlo^there,2,False,200,600
+109,300,14000,Hello_there,Hello_there,0,Hello_there,0,False,200,600
+110,300,14000,Hello_there,Hello_there,0,Hello_there,0,False,200,600
+111,300,14000,Hello_there,Hello_there,0,Hello_there,0,False,200,600
+112,300,14000,Hello_there,Hello_there,0,Hello_there,0,False,200,600
+113,300,14000,Hello_there,Hehlo^thebe,3,Hello_there,0,False,200,600
+114,300,14000,Hello_there,Hehho^thebe,4,Hehlo^there,2,False,200,600
+115,300,14000,Hello_there,Hello_there,0,Hello_there,0,False,200,600
+116,300,14000,Hello_there,Hello_there,0,Hello_there,0,False,200,600
+117,300,14000,Hello_there,HeHHN^dHEbE,12,HEHHN^thEbE,11,False,200,600
+118,300,14000,Hello_there,Hello_there,0,Hello_there,0,False,200,600
+119,300,14000,Hello_there,Hellothere,1,Hello_there,0,False,200,600
+120,300,14000,Hello_there,"!,$'0(!0`",19,"!,$'0ha0d",16,False,200,600
+121,300,14000,Hello_there,!$$'0(!0`,21,!$$'0 !0 ,22,False,200,600
+122,300,14000,Hello_there,Hellothere,1,Hello_there,0,False,200,600
+123,300,14000,Hello_there,Hello_there,0,Hello_there,0,False,200,600
+124,300,14000,Hello_there,Hello^there,1,Hello_there,0,False,200,600
+125,300,14000,Hello_there,Hehho^thebe,4,Hehlo^there,2,False,200,600
+126,300,14000,Hello_there,Hellothere,1,Hello_there,0,False,200,600
+127,300,14000,Hello_there,Hello_there,0,Hello_there,0,False,200,600
+128,300,14000,Hello_there,"!$$'0  0""",25,  0 !!8,45,False,200,600
+129,300,14000,Hello_there,"He,,/0he0e",9,"He,d/0he0e",9,False,200,600
+130,300,14000,Hello_there,"He,lothe2e",3,Hellothere,1,False,200,600
+131,300,14000,Hello_there,HeHHo^thebe,6,HeHho^there,4,False,200,600
+132,300,14000,Hello_there,Hehlo^thebe,3,Hello_there,0,False,200,600
+133,300,14000,Hello_there,Hello_there,0,Hello_there,0,False,200,600
+134,300,14000,Hello_there,Hello^thebe,2,Hello_there,0,False,200,600
+135,300,14000,Hello_there,Hello_there,0,Hello_there,0,False,200,600
+136,300,14000,Hello_there,"He,lo4he2e",4,"He,lophe2e",4,False,200,600
+137,300,14000,Hello_there,!$$'0 !0`,22,!$$'0 !0 ,22,False,200,600
+138,300,14000,Hello_there,Hello_there,0,Hello_there,0,False,200,600
+139,300,14000,Hello_there,,,HeHho^thEbe,6,False,200,600
+140,300,14000,Hello_there,Hellothere,1,Hello_there,0,False,200,600
+141,300,14000,Hello_there,HeHho^thebe,5,Hehho^there,3,False,200,600
+142,300,14000,Hello_there,Hehlo^thebe,3,Hello_there,0,False,200,600
+143,300,14000,Hello_there,HEHHN^dHEbE,13,HEHHN^dHEbE,13,False,200,600
+144,300,14000,Hello_there,HeHHN^dHEbE,12,HeHHn^thEbE,9,False,200,600
+145,300,14000,Hello_there,"$""$$'0  1""",30,"$ $$'0  1""",29,False,200,600
+146,300,14000,Hello_there,!$$'0(!0`,20,!$$'0(a0 ,20,False,200,600
+147,300,14000,Hello_there,Hello^there,1,Hello_there,0,False,200,600
+148,300,14000,Hello_there,HeHHn^tHebe,8,HeHHn^thEbe,8,False,200,600
+149,300,14000,Hello_there,"  1""!!!8",46,,46,False,200,600

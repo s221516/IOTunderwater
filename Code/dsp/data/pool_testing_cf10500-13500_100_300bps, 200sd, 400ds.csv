@@ -1,0 +1,38 @@
+ID,Bitrate,Carrier Frequency,Original Message,Decoded without bandpass,Hamming Dist without bandpass,Decoded with bandpass,Hamming Dist with bandpass,Hamming Encoding,Speaker depth,Distance to speaker
+0,100,10000,Hello_there,Wiic9qW)\,39,Wiic9qW-\,38,False,200,400
+1,100,10500,Hello_there,XYBB,45,JJj,48,False,200,400
+2,100,11000,Hello_there,>!a,47,6L00:5:!,45,False,200,400
+3,100,11500,Hello_there,@ello_th%r%,3,Hello_there,0,False,200,400
+4,100,12000,Hello_there,Hello_there,0,Hello_there,0,False,200,400
+5,100,12500,Hello_there,,,"(P,I",49,False,200,400
+6,100,13000,Hello_there,ere*B+``z,32,ere*C+``z,33,False,200,400
+7,100,13500,Hello_there,`dreC#ccz,38,`dre#ccz,39,False,200,400
+0,100,10000,Hello_there,iac9q_),40,K,48,False,200,400
+1,100,10500,Hello_there,XUBB,45,JJXj,47,False,200,400
+2,100,11000,Hello_there,C!`,43,>C! ,49,False,200,400
+3,100,11500,Hello_there,Hello_there,0,Hello_there,0,False,200,400
+4,100,12000,Hello_there,Hello_there,0,Hello_there,0,False,200,400
+5,100,12500,Hello_there,ePI,47,"P,I",49,False,200,400
+6,100,13000,Hello_there,HElLO_tHErE,6,HElLO_THErE,7,False,200,400
+7,100,13500,Hello_there,$vfgp $s ,20,,51,False,200,400
+0,100,11500,Hello_there,@eLlo_there,2,@ELLO_tHEre,7,False,200,400
+1,100,12000,Hello_there,Hallo_thapa,4,Hallo_thapa,4,False,200,400
+2,100,12500,Hello_there,"""R<!",50,kj,49,False,200,400
+3,100,13000,Hello_there,HEl_tere,7,HElLO_tEre,6,False,200,400
+4,100,13500,Hello_there,F,40,`dre#ccz,39,False,200,400
+0,100,12000,Hello_there,dllo_thdre,3,dllop`dre,7,False,200,400
+1,100,12000,Hello_there,Hello_there,0,Hello_there,0,False,200,400
+2,100,12000,Hello_there,Hello_there,0,Hello_there,0,False,200,400
+3,100,12000,Hello_there,Hello_there,0,Hello_there,0,False,200,400
+4,100,12000,Hello_there,Hello_there,0,Hello_there,0,False,200,400
+5,100,12000,Hello_there,T,43,@allo0hap!,9,False,200,400
+6,100,12000,Hello_there,`CTF,39, ap!!8,44,False,200,400
+7,100,12000,Hello_there,Hello_there,0,Hello_there,0,False,200,400
+8,100,12000,Hello_there,Hello_there,0,Hello_there,0,False,200,400
+9,100,12000,Hello_there,Hello_there,0,Hello_there,0,False,200,400
+10,100,12000,Hello_there,Hello_there,0,Hello_there,0,False,200,400
+11,100,12000,Hello_there,dllo_thdre,3,0292!,45,False,200,400
+12,100,12000,Hello_there,Hello_there,0,Hello_there,0,False,200,400
+13,100,12000,Hello_there,Hello_there,0,Hello_there,0,False,200,400
+14,100,12000,Hello_there,Hello_there,0,Hello_there,0,False,200,400
+15,100,12000,Hello_there,Hello_there,0,Hello_there,0,False,200,400

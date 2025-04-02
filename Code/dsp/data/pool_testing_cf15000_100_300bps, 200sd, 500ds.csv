@@ -1,0 +1,25 @@
+ID,Bitrate,Carrier Frequency,Original Message,Decoded without bandpass,Hamming Dist without bandpass,Decoded with bandpass,Hamming Dist with bandpass,Hamming Encoding,Speaker depth,Distance to speaker
+0,100,12000,Hello_there,Hello_t`ere,1,Hel|_txere,3,False,200,500
+1,100,12500,Hello_there,],30,,51,False,200,500
+2,100,13000,Hello_there,allo_pherA,5,ello_phere,2,False,200,500
+3,100,13500,Hello_there,,51,A'';,46,False,200,500
+4,100,14000,Hello_there,"H`rA""bbz",38,Here*C*bbz,31,False,200,500
+5,100,14500,Hello_there,,47,,46,False,200,500
+6,100,15000,Hello_there,,46,x@bG,25,False,200,500
+7,100,12000,Hello_there,dllo_t`dr$,6,He||_txere,4,False,200,500
+8,100,12500,Hello_there,,52,,50,False,200,500
+9,100,13000,Hello_there,ello_there,1,ello_phere,2,False,200,500
+10,100,13500,Hello_there,@#/;,46,HLOHEE,14,False,200,500
+11,100,14000,Hello_there,$$2dA!!!8,41,"($$$'2,$2d",21,False,200,500
+12,100,14500,Hello_there,  0`!!8,44,  0 !!8,45,False,200,500
+13,100,15000,Hello_there,Pd,41,`E,40,False,200,500
+14,100,12000,Hello_there,`ere*bbr,34,Hel|_txere,3,False,200,500
+15,100,12500,Hello_there,"@%m,/_t(%r$",9,"@%m,/_t(%r$",9,False,200,500
+16,100,13000,Hello_there,-,48,ello_phere,2,False,200,500
+17,100,13500,Hello_there,HlLOHDrE,13,HlLOHEvE,12,False,200,500
+18,100,14000,Hello_there,PAHHN^dH@pA,19,HMt*bbz,34,False,200,500
+19,100,14500,Hello_there,"dl,/_thdrd",6,dllo_thdre,3,False,200,500
+20,100,15000,Hello_there,Pd,39,`E,40,False,200,500
+21,100,12000,Hello_there,Hello_t`ere,1,Hel|_txere,3,False,200,500
+22,100,12500,Hello_there,"@%m,/_t(-r%",9,"@%m,/_t(-p$",11,False,200,500
+23,100,13000,Hello_there,-,49,ello_phere,2,False,200,500

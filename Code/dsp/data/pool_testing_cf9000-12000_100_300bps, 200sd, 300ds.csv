@@ -1,0 +1,42 @@
+ID,Bitrate,Carrier Frequency,Original Message,Decoded without bandpass,Hamming Dist without bandpass,Decoded with bandpass,Hamming Dist with bandpass,Hamming Encoding,Speaker depth,Distance to speaker
+0,100,9500,Hello_there,ello_there,1,dllo_vhdre,4,False,200,300
+1,100,10000,Hello_there,HElLO_tHErE,6,Hello_therE,1,False,200,300
+2,100,10500,Hello_there,`nnop``pq,14,@qnnop`qpq,13,False,200,300
+3,100,11000,Hello_there,FzD ,45,88::!,39,False,200,300
+4,100,11500,Hello_there,Hello_there,0,Hello_there,0,False,200,300
+5,100,12000,Hello_there,pbc,36,pbc,36,False,200,300
+6,200,9500,Hello_there,Hahhk_thara,6,Hallk_thara,4,False,200,300
+7,200,10000,Hello_there,@al|o_thara,5,@!llo_th!ra,6,False,200,300
+8,200,10500,Hello_there,"l,-|8`m",18,,47,False,200,300
+9,200,11000,Hello_there,xN?,47,SDr8,45,False,200,300
+10,200,11500,Hello_there,Hallothara,4,\~c,46,False,200,300
+11,200,12000,Hello_there,@f,41,],48,False,200,300
+12,300,9500,Hello_there,DHX]TD`,22,:0|N,53,False,200,300
+13,300,10000,Hello_there,H1l|_x5ru,11,Hu||_xure,8,False,200,300
+14,300,10500,Hello_there,@4tgOp S,26,@%$dgMp %W%,16,False,200,300
+15,300,11000,Hello_there,jnn,43,c|08Y,41,False,200,300
+16,300,11500,Hello_there,@ n>/_|p pq,18, n./_|p pq,18,False,200,300
+17,300,12000,Hello_there,u,45,"@,lo>3",19,False,200,300
+0,100,9500,Hello_there,dllo_vhdre,4,dllo_vhdre,4,False,200,300
+1,100,10000,Hello_there,Hello_there,0,Hello_there,0,False,200,300
+0,100,9500,Hello_there,ello_there,1,dllo_vhdre,4,False,200,300
+1,100,10000,Hello_there,Hello_there,0,Hello_there,0,False,200,300
+2,100,10500,Hello_there,``pccp,40,0`llnp``p,29,False,200,300
+0,100,9500,Hello_there,Hlllo_thmve,4,lllo_thlve,6,False,200,300
+1,100,10000,Hello_there,"H%l,/t,%re",7,"H%l,/v,%2e",10,False,200,300
+2,100,10500,Hello_there,002,52,000,53,False,200,300
+3,100,11000,Hello_there,FzD ,43,8::!,42,False,200,300
+4,100,11500,Hello_there,Hello_there,0,Hello_there,0,False,200,300
+5,100,12000,Hello_there,Pbc,37,pbcT,35,False,200,300
+6,100,9500,Hello_there,Hlllo_thlve,5,lllo_thlve,6,False,200,300
+7,100,10000,Hello_there,Hello_there,0,Hello_there,0,False,200,300
+8,100,10500,Hello_there,70888,48,@pv&w0`ppq,22,False,200,300
+9,100,11000,Hello_there,FzD,45,(34,45,False,200,300
+10,100,11500,Hello_there,Hello_there,0,Hello_there,0,False,200,300
+11,100,12000,Hello_there,"p""c",37,_,47,False,200,300
+12,100,9500,Hello_there,Hvcggz,38,1,54,False,200,300
+13,100,10000,Hello_there,Hello_there,0,Hello_there,0,False,200,300
+14,100,10500,Hello_there,000,53,088,50,False,200,300
+15,100,11000,Hello_there,88**!T,37,88::!,39,False,200,300
+16,100,11500,Hello_there,Hello_there,0,Hello_there,0,False,200,300
+17,100,12000,Hello_there,pbc,36,pbc,36,False,200,300

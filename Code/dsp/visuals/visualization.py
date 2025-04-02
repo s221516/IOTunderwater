@@ -157,7 +157,7 @@ def create_processing_visualization(receiver, message, debug_info):
     ax1.set_title("Received & Processed Signal", fontsize=10)
     ax2.set_title("Signal in Frequency Domain", fontsize=10)
     ax4.set_title("Normalized & Threshold", fontsize=10)
-    ax5.set_title("Intermediate Frequency", fontsize=10)
+    ax5.set_title("Envelope", fontsize=10)
     ax7.set_title("Extracted Bits", fontsize=10)
     ax8.set_title("Filtered Frequency", fontsize=10)
     ax6.set_title("Decoded Message", fontsize=10)
