@@ -36,7 +36,7 @@ def signal_generator_testing():
 
     # all_letters = "the quick brown fox jumps over the lazy dog while vexd zebras fight for joy!>*"
     
-    messages = ["Hello_there"]
+    messages = ["Hello_world"]
 
     n = 50
     bitrates = [100] * n + [200] * n + [300] * n
@@ -67,7 +67,9 @@ def signal_generator_testing():
 
                 # NOTE: to make the time of recording dynamic 
                 # 5
+                # 5
                 record_seconds = round((len_of_data_bits / bitrate) * 5)
+                # record_seconds = 10
                 # record_seconds = 10
 
                 if (config.MAKE_NEW_RECORDING):
@@ -76,6 +78,7 @@ def signal_generator_testing():
 
                 time.sleep(0.1)
                 
+                # stopTransmission()
                 # stopTransmission()
 
                 nonCoherentReceiver = NonCoherentReceiver(bitrate, carrierfreq, band_pass=False)      
@@ -110,6 +113,7 @@ def signal_generator_testing():
                     message_nc = "No preamble found"
                     message_nc_bandpass = "No preamble found"
 
+                logInCsv(id, bitrate, carrierfreq, message, message_nc, hamming_dist, message_nc_bandpass, hamming_dist_bandpass, speaker_depth, distance_to_speaker)
                 logInCsv(id, bitrate, carrierfreq, message, message_nc, hamming_dist, message_nc_bandpass, hamming_dist_bandpass, speaker_depth, distance_to_speaker)
                 id+=1
 
