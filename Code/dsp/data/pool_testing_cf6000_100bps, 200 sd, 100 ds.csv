@@ -1,0 +1,51 @@
+ID,Bitrate,Carrier Frequency,Original Message,Decoded without bandpass,Hamming Dist without bandpass,Decoded with bandpass,Hamming Dist with bandpass,Hamming Encoding,Speaker depth,Distance to speaker
+0,100,6000,Hello_there,Hello_there,0,Helo_t`ee,3,False,200,70
+1,100,6000,Hello_there,Hello_there,0,Helo_thee,2,False,200,70
+2,100,6000,Hello_there,Hello_t`ere,1,|~o,42,False,200,70
+3,100,6000,Hello_there,Hello_t`ere,1,Helo_thee,2,False,200,70
+4,100,6000,Hello_there,,46,|,53,False,200,70
+5,100,6000,Hello_there,Hello_t`ere,1,Helo_t`ee,3,False,200,70
+6,100,6000,Hello_there,Hello_there,0,Helo_there,1,False,200,70
+7,100,6000,Hello_there,@H !,30,|H>rE,38,False,200,70
+8,100,6000,Hello_there,helo_there,2,Helg_t`erd,4,False,200,70
+9,100,6000,Hello_there,t,44,,,False,200,70
+10,100,6000,Hello_there,Hello_t`ere,1,elo_t`ee,4,False,200,70
+11,100,6000,Hello_there,Hello_t`ere,1,Helo_t`ee,3,False,200,70
+12,100,6000,Hello_there,Hello_t`ere,1,|~g,45,False,200,70
+13,100,6000,Hello_there,dlg_~`d$,14,H%dg_t %r$,9,False,200,70
+14,100,6000,Hello_there,,47, $ '##:,43,False,200,70
+15,100,6000,Hello_there,,50,<H>rE,39,False,200,70
+16,100,6000,Hello_there,Hello_there,0,Helo_thee,2,False,200,70
+17,100,6000,Hello_there,Hello_t`ere,1,|~g,45,False,200,70
+18,100,6000,Hello_there,Hello_t`ere,1,|~o,43,False,200,70
+19,100,6000,Hello_there,,,h%dg_t`%$,10,False,200,70
+20,100,6000,Hello_there,Hello_t`ere,1,|~g,47,False,200,70
+21,100,6000,Hello_there,helg_v`ee,6,Helg_t`ed,5,False,200,70
+22,100,6000,Hello_there,helo_~hee,6,H%lg_t`e$,7,False,200,70
+23,100,6000,Hello_there,,,h$dg_t %$,12,False,200,70
+24,100,6000,Hello_there,,,`$dg_t %$,14,False,200,70
+25,100,6000,Hello_there,Hello_t`ere,1,|~o,42,False,200,70
+26,100,6000,Hello_there,Hello_there,0,Helo_there,1,False,200,70
+27,100,6000,Hello_there,Hello_t`ere,1,Helo_t`ee,3,False,200,70
+28,100,6000,Hello_there,Hello_t`ere,1,elo`ee,6,False,200,70
+29,100,6000,Hello_there,@ello_t`ere,2,{3;,44,False,200,70
+30,100,6000,Hello_there,,,`$dg_t %$,14,False,200,70
+31,100,6000,Hello_there,helg_v`ee,7,H%lg_t`erd,5,False,200,70
+32,100,6000,Hello_there,Hello_t`ere,1,elo_t`ee,4,False,200,70
+33,100,6000,Hello_there,Hello_there,0,Helo_there,1,False,200,70
+34,100,6000,Hello_there,Hello_t`ere,1,elo_t`ee,4,False,200,70
+35,100,6000,Hello_there,hdlg_~`ee,8, %r$A/c#:,38,False,200,70
+36,100,6000,Hello_there,Hello_t`ere,1,elot`ee,5,False,200,70
+37,100,6000,Hello_there,Hello_t`ere,1,Helo_t`ee,3,False,200,70
+38,100,6000,Hello_there,Hello_t`ere,1,Helo_t`ee,3,False,200,70
+39,100,6000,Hello_there,Hello_t`ere,1,Helo_t`ee,3,False,200,70
+40,100,6000,Hello_there,Hello_t`ere,1,//{3;,43,False,200,70
+41,100,6000,Hello_there,,48, % '##;,41,False,200,70
+42,100,6000,Hello_there,@eLlot`evA,7,8<`,48,False,200,70
+43,100,6000,Hello_there,hello_there,1,Hellg_t`ere,2,False,200,70
+44,100,6000,Hello_there,,,H$dg_t %r$,10,False,200,70
+45,100,6000,Hello_there,t,42,B2s23,37,False,200,70
+46,100,6000,Hello_there,@ello_t`ere,2,H>rE,40,False,200,70
+47,100,6000,Hello_there,Hello_t`ere,1,elo_t`ee,4,False,200,70
+48,100,6000,Hello_there,Hello_t`ere,1,elot`ee,5,False,200,70
+49,100,6000,Hello_there,Hello_t`ere,1,|~g,43,False,200,70

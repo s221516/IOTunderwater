@@ -1,0 +1,2 @@
+source /Users/mathiasmarkvardsen/bachelor/IOTunderwater/Code/esp32-signal-genertor/build/bootloader/gdbinit/symbols
+source /Users/mathiasmarkvardsen/bachelor/IOTunderwater/Code/esp32-signal-genertor/build/bootloader/gdbinit/connect

@@ -1,2 +1,0 @@
-ID,Bitrate,Carrier Frequency,Original Message,Decoded without bandpass,Hamming Dist without bnadpass,Decoded with bandpass,Hamming Dist with bandpass,Encoding
-0,100,6000,Hello_there,vkP@,,pAluk ,,Hamming Encoding

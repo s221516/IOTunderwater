@@ -9,7 +9,7 @@ def compute_BER(file_path):
     total_transmissions = len(df)
     
     # Get Hamming distances (total bit errors)
-    ham_dist_no_bp = df["Hamming Dist without bnadpass"].sum()
+    ham_dist_no_bp = df["Hamming Dist without bandpass"].sum()
     ham_dist_with_bp = df["Hamming Dist with bandpass"].sum()
     
     # Calculate total bits transmitted
@@ -32,11 +32,15 @@ def compute_BER(file_path):
 
 if __name__ == "__main__":
     # Test with both files
-    files = ["c:/Users/morte/OneDrive - Danmarks Tekniske Universitet/Bachelor/IOTunderwater/Code/dsp/data/large_test_no_encoding, 100bps, 50 cm.csv"
-            ,"c:/Users/morte/OneDrive - Danmarks Tekniske Universitet/Bachelor/IOTunderwater/Code/dsp/data/large_test_no_encoding, 200bps, 50 cm.csv"
-            ,"c:/Users/morte/OneDrive - Danmarks Tekniske Universitet/Bachelor/IOTunderwater/Code/dsp/data/large_test_no_encoding, 300bps, 50 cm.csv" 
+    # files = ["c:/Users/morte/OneDrive - Danmarks Tekniske Universitet/Bachelor/IOTunderwater/Code/dsp/data/large_test_no_encoding, 100bps, 50 cm.csv"
+    #         ,"c:/Users/morte/OneDrive - Danmarks Tekniske Universitet/Bachelor/IOTunderwater/Code/dsp/data/large_test_no_encoding, 200bps, 50 cm.csv"
+    #         ,"c:/Users/morte/OneDrive - Danmarks Tekniske Universitet/Bachelor/IOTunderwater/Code/dsp/data/large_test_no_encoding, 300bps, 50 cm.csv" 
 
-            ,"c:/Users/morte/OneDrive - Danmarks Tekniske Universitet/Bachelor/IOTunderwater/Code/dsp/data/large_test_hamming_encoding, 100bps, 50 cm.csv" ]
+    #         ,"c:/Users/morte/OneDrive - Danmarks Tekniske Universitet/Bachelor/IOTunderwater/Code/dsp/data/large_test_hamming_encoding, 100bps, 50 cm.csv" ]
 
+    files = ["C:/Users/morte/OneDrive - Danmarks Tekniske Universitet/Bachelor/IOTunderwater/Code/dsp/data/pool_testing_100bps, 45 sd, 70 ds.csv", 
+             "C:/Users/morte/OneDrive - Danmarks Tekniske Universitet/Bachelor/IOTunderwater/Code/dsp/data/pool_testing_100bps, 200 sd, 70 ds.csv",
+             "C:/Users/morte/OneDrive - Danmarks Tekniske Universitet/Bachelor/IOTunderwater/Code/dsp/data/pool_testing_100bps, 200 sd, 100 ds.csv"]
+    
     for file in files:
         ber_no_bp, ber_with_bp = compute_BER(file)

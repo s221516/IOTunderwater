@@ -1,0 +1,151 @@
+ID,Bitrate,Carrier Frequency,Original Message,Decoded without bandpass,Hamming Dist without bandpass,Decoded with bandpass,Hamming Dist with bandpass,Hamming Encoding,Speaker depth,Distance to speaker
+0,100,6000,Hello_world,#6|,50,0 m0),47,False,200,600
+1,100,6000,Hello_world,pM,42,\?,49,False,200,600
+2,100,6000,Hello_world,,52,'4z5,53,False,200,600
+3,100,6000,Hello_world,P<,54,'4z5,53,False,200,600
+4,100,6000,Hello_world,(`,42,#4z5,55,False,200,600
+5,100,6000,Hello_world,'$z%,50,'4z%,52,False,200,600
+6,100,6000,Hello_world,X<,52,#4z5,53,False,200,600
+7,100,6000,Hello_world,#6|,46,#6U,57,False,200,600
+8,100,6000,Hello_world,P<,56,'4z5,53,False,200,600
+9,100,6000,Hello_world,$`E,39,,,False,200,600
+10,100,6000,Hello_world,X<,51, F(i`k,43,False,200,600
+11,100,6000,Hello_world,'$ z!,52,0'%0z),49,False,200,600
+12,100,6000,Hello_world,#4z%,50,'4z5,53,False,200,600
+13,100,6000,Hello_world,'4z!,56,'4z!,53,False,200,600
+14,100,6000,Hello_world,,,'5z%,50,False,200,600
+15,100,6000,Hello_world,,,'4z%,52,False,200,600
+16,100,6000,Hello_world,"',0x)",48,2'-0z),49,False,200,600
+17,100,6000,Hello_world,"""$0x!",50,2e0z),50,False,200,600
+18,100,6000,Hello_world,#6|P,46,#6u,55,False,200,600
+19,100,6000,Hello_world,$q,43,,,False,200,600
+20,100,6000,Hello_world,'Tz%,51,'4z%,51,False,200,600
+21,100,6000,Hello_world,#6|,45,#6U,56,False,200,600
+22,100,6000,Hello_world,,,$G(ipk,43,False,200,600
+23,100,6000,Hello_world,#4x,47,#6~,55,False,200,600
+24,100,6000,Hello_world,Fm0 ),43,#6u,55,False,200,600
+25,100,6000,Hello_world,P,54,'4z%,51,False,200,600
+26,100,6000,Hello_world,0'$0z!,49,2'%0z),49,False,200,600
+27,100,6000,Hello_world,'$0x),51,2'-0z),49,False,200,600
+28,100,6000,Hello_world,2'$0z!,50,2'%0z),51,False,200,600
+29,100,6000,Hello_world,,,0'%0z!,48,False,200,600
+30,100,6000,Hello_world,:,49,G%0z+,46,False,200,600
+31,100,6000,Hello_world,,,Z\?@,45,False,200,600
+32,100,6000,Hello_world,#B4~,40,#6t,51,False,200,600
+33,100,6000,Hello_world,,,2'0z),51,False,200,600
+34,100,6000,Hello_world,\<@,53,,,False,200,600
+35,100,6000,Hello_world,R@<,52,#D4J5,55,False,200,600
+36,100,6000,Hello_world,/P00d,40,'j%,47,False,200,600
+37,100,6000,Hello_world,'!z-,50,2'%J!,53,False,200,600
+38,100,6000,Hello_world,,,3'$Z!,50,False,200,600
+39,100,6000,Hello_world,2 z/,48,'%0J),49,False,200,600
+40,100,6000,Hello_world,,,#J%,54,False,200,600
+41,100,6000,Hello_world,,, H,56,False,200,600
+42,100,6000,Hello_world,'z-,51,'0j),48,False,200,600
+43,100,6000,Hello_world,`@08d,36,'z-,49,False,200,600
+44,100,6000,Hello_world,`@00d,39,'z-,49,False,200,600
+45,100,6000,Hello_world,,,L#@,50,False,200,600
+46,100,6000,Hello_world,#|,47,e0),47,False,200,600
+47,100,6000,Hello_world,B08d,39,'j%,49,False,200,600
+48,100,6000,Hello_world,,,#z%,52,False,200,600
+49,100,6000,Hello_world,$`@0 ,40,#J%,52,False,200,600
+50,200,6000,Hello_world,E#,44,*D[jdI,46,False,200,600
+51,200,6000,Hello_world,,,d*@,50,False,200,600
+52,200,6000,Hello_world,,,,,False,200,600
+53,200,6000,Hello_world,,48,,,False,200,600
+54,200,6000,Hello_world,,47,$@,50,False,200,600
+55,200,6000,Hello_world,:[jD,45,,,False,200,600
+56,200,6000,Hello_world,@!p,45,UMQ97$*DD,34,False,200,600
+57,200,6000,Hello_world,D!,44,,,False,200,600
+58,200,6000,Hello_world,,,d@,51,False,200,600
+59,200,6000,Hello_world,!,43,"T""B",44,False,200,600
+60,200,6000,Hello_world,,,D]lHd,33,False,200,600
+61,200,6000,Hello_world,,47,"""B",47,False,200,600
+62,200,6000,Hello_world,@,44,T#rBDE,38,False,200,600
+63,200,6000,Hello_world,!,47,,,False,200,600
+64,200,6000,Hello_world,,,d*:@,48,False,200,600
+65,200,6000,Hello_world,@,48, D_ld,34,False,200,600
+66,200,6000,Hello_world,PIA? ,38,,,False,200,600
+67,200,6000,Hello_world,D#,43,T#DE,38,False,200,600
+68,200,6000,Hello_world,,,D!DE,41,False,200,600
+69,200,6000,Hello_world,,,D_lHd,32,False,200,600
+70,200,6000,Hello_world,E!D,42,,,False,200,600
+71,200,6000,Hello_world,#@,42,IQ)7$*@,38,False,200,600
+72,200,6000,Hello_world,!,45,$,49,False,200,600
+73,200,6000,Hello_world,,50,,,False,200,600
+74,200,6000,Hello_world,!,44,D#DE,39,False,200,600
+75,200,6000,Hello_world,!D,43,,,False,200,600
+76,200,6000,Hello_world,,45,T#rB,42,False,200,600
+77,200,6000,Hello_world,,,D!rDE,41,False,200,600
+78,200,6000,Hello_world,D!r,46,,,False,200,600
+79,200,6000,Hello_world, C,47, D_lHd,33,False,200,600
+80,200,6000,Hello_world, C,48, D_ld,34,False,200,600
+81,200,6000,Hello_world,,, dD]dHd,32,False,200,600
+82,200,6000,Hello_world,,48,"""rB",49,False,200,600
+83,200,6000,Hello_world,#,43,"""rB",45,False,200,600
+84,200,6000,Hello_world,,52,`+H,47,False,200,600
+85,200,6000,Hello_world,,46,@8H,46,False,200,600
+86,200,6000,Hello_world,,46,"T""rB",43,False,200,600
+87,200,6000,Hello_world,#,47,$*@J@,49,False,200,600
+88,200,6000,Hello_world,,,`*@,49,False,200,600
+89,200,6000,Hello_world,#,44,"T""DE",41,False,200,600
+90,200,6000,Hello_world,!,48,L!DE,41,False,200,600
+91,200,6000,Hello_world,,49,`*@,48,False,200,600
+92,200,6000,Hello_world,#,45,d*H@,47,False,200,600
+93,200,6000,Hello_world,,,,,False,200,600
+94,200,6000,Hello_world,,,@:H,46,False,200,600
+95,200,6000,Hello_world,#D,43,,,False,200,600
+96,200,6000,Hello_world,,,,,False,200,600
+97,200,6000,Hello_world,#,44,%D j,44,False,200,600
+98,200,6000,Hello_world,@!D,44,D!DE,39,False,200,600
+99,200,6000,Hello_world,,49,TMQ)6 *DD,36,False,200,600
+100,300,6000,Hello_world,FP-*,47,SURP,49,False,200,600
+101,300,6000,Hello_world,,,SWRP,51,False,200,600
+102,300,6000,Hello_world,,,{UYF,48,False,200,600
+103,300,6000,Hello_world,,,SUXP,48,False,200,600
+104,300,6000,Hello_world,,,2_:Q,48,False,200,600
+105,300,6000,Hello_world,X@,43,2Q,51,False,200,600
+106,300,6000,Hello_world,Ad(,49,{UXFh,48,False,200,600
+107,300,6000,Hello_world,{T,53,{UXFh,48,False,200,600
+108,300,6000,Hello_world,"""nGq",45,2^Q,48,False,200,600
+109,300,6000,Hello_world,,51,SrP,53,False,200,600
+110,300,6000,Hello_world,aNj,46,{UYFh,47,False,200,600
+111,300,6000,Hello_world,AN+,51,{UYFh,47,False,200,600
+112,300,6000,Hello_world,E PFP*,44,SURP,47,False,200,600
+113,300,6000,Hello_world,{QBK,54,"F0!Q?""",47,False,200,600
+114,300,6000,Hello_world,,,Q,49,False,200,600
+115,300,6000,Hello_world,[WT,47,SURP,49,False,200,600
+116,300,6000,Hello_world,,,SWRP,48,False,200,600
+117,300,6000,Hello_world,@$!,44,SURP,47,False,200,600
+118,300,6000,Hello_world,,,[W:P,51,False,200,600
+119,300,6000,Hello_world,,,"""q",47,False,200,600
+120,300,6000,Hello_world,,,SRP,50,False,200,600
+121,300,6000,Hello_world,,,] H,43,False,200,600
+122,300,6000,Hello_world,"w^`I""",44,ef+b`z,38,False,200,600
+123,300,6000,Hello_world,5c>,53,,,False,200,600
+124,300,6000,Hello_world,! haz,47,,,False,200,600
+125,300,6000,Hello_world,,,,,False,200,600
+126,300,6000,Hello_world,,,,,False,200,600
+127,300,6000,Hello_world,,,,,False,200,600
+128,300,6000,Hello_world,,,,,False,200,600
+129,300,6000,Hello_world,,,aa9s,41,False,200,600
+130,300,6000,Hello_world,?,47,,,False,200,600
+131,300,6000,Hello_world,,,.A`@~,43,False,200,600
+132,300,6000,Hello_world,p1,55,,,False,200,600
+133,300,6000,Hello_world,,,{yC6cvx,37,False,200,600
+134,300,6000,Hello_world,,,,,False,200,600
+135,300,6000,Hello_world,,,Nrl@*BBr,37,False,200,600
+136,300,6000,Hello_world,,,,,False,200,600
+137,300,6000,Hello_world,orlD*bbz,38,@LLO_worlD,7,False,200,600
+138,300,6000,Hello_world,&D!1=M,46,orlDB)bcz,36,False,200,600
+139,300,6000,Hello_world,,,olD@+``~,34,False,200,600
+140,300,6000,Hello_world,orlD#b`z,36,H$lLO_worlD,5,False,200,600
+141,300,6000,Hello_world,,53,"E,/",52,False,200,600
+142,300,6000,Hello_world,_H;*,47,n0,47,False,200,600
+143,300,6000,Hello_world,I$,52,ol$*kC~,40,False,200,600
+144,300,6000,Hello_world,,,"?rL""`J",48,False,200,600
+145,300,6000,Hello_world,ovl*+`z,35,ol*+`~,35,False,200,600
+146,300,6000,Hello_world,,,,47,False,200,600
+147,300,6000,Hello_world,"&""l15m",42,,,False,200,600
+148,300,6000,Hello_world,g$l!a,45,,,False,200,600
+149,300,6000,Hello_world,,,g1n&Y3a:,37,False,200,600

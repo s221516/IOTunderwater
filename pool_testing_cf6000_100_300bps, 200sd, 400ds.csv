@@ -1,0 +1,151 @@
+ID,Bitrate,Carrier Frequency,Original Message,Decoded without bandpass,Hamming Dist without bandpass,Decoded with bandpass,Hamming Dist with bandpass,Hamming Encoding,Speaker depth,Distance to speaker
+0,100,6000,Hello_there,,,`ereC+c#:,37,False,200,400
+1,100,6000,Hello_there,Hello_t`ere,1,Hello_there,0,False,200,400
+2,100,6000,Hello_there,`ereC+##:,37,!,51,False,200,400
+3,100,6000,Hello_there,@EHN^teve,13,HEHN^teve,11,False,200,400
+4,100,6000,Hello_there,Hello^t`ere,2,Hello_t`ere,1,False,200,400
+5,100,6000,Hello_there,Hello^t`ere,2,Hello^t`ere,2,False,200,400
+6,100,6000,Hello_there,Hello^t`ere,2,Hello^t`ere,2,False,200,400
+7,100,6000,Hello_there,`ereC+ccz,34,Hello_t`ere,1,False,200,400
+8,100,6000,Hello_there,Heldg[t`ere,4,`ereC+c#:,37,False,200,400
+9,100,6000,Hello_there,Hello_there,0,Hello_there,0,False,200,400
+10,100,6000,Hello_there,02:!,51,FW&_223,40,False,200,400
+11,100,6000,Hello_there,@e`dk@ ab`,18,\^b,49,False,200,400
+12,100,6000,Hello_there,@ML_tEve,12,@EL^t`ere,8,False,200,400
+13,100,6000,Hello_there,%'N,43,02:,53,False,200,400
+14,100,6000,Hello_there,`ereC+ccz,34,`ereC+ccz,34,False,200,400
+15,100,6000,Hello_there,`ereC+cc:,35,),51,False,200,400
+16,100,6000,Hello_there,HEhLn^t@ebe,8,EhLN^t`ebe,9,False,200,400
+17,100,6000,Hello_there,`ereC+ccz,34,`ereC+ccz,34,False,200,400
+18,100,6000,Hello_there,HEh_hEve,10,HEHHN^tHEve,11,False,200,400
+19,100,6000,Hello_there,@EHN^t@Eve,13,HeHHn^t`ebe,8,False,200,400
+20,100,6000,Hello_there,"e`da@ a"" ",23,,,False,200,400
+21,100,6000,Hello_there,1LN,45,,,False,200,400
+22,100,6000,Hello_there,Hello^t`ere,2,Hello^t`ere,2,False,200,400
+23,100,6000,Hello_there,,,,,False,200,400
+24,100,6000,Hello_there,`ereC+##:,38,`ereC+c#:,38,False,200,400
+25,100,6000,Hello_there,,,HEllo^t`ebe,4,False,200,400
+26,100,6000,Hello_there,,,Heldg_t`ere,3,False,200,400
+27,100,6000,Hello_there,),52,Heddgt`ere,5,False,200,400
+28,100,6000,Hello_there,Hello_t`ere,1,`ereC+ccz,34,False,200,400
+29,100,6000,Hello_there,,,!,49,False,200,400
+30,100,6000,Hello_there,Helln^t`ere,3,Helln^t`ere,3,False,200,400
+31,100,6000,Hello_there,Hello_t`ere,1,ello_t`ere,2,False,200,400
+32,100,6000,Hello_there,,,`ereC)c#:,37,False,200,400
+33,100,6000,Hello_there,Helln_t`ere,2,Helln^t`ere,3,False,200,400
+34,100,6000,Hello_there,Hello_t`ere,1,ello^t`ebe,4,False,200,400
+35,100,6000,Hello_there,HElln^t`Ere,5,ElLN^t`ebe,8,False,200,400
+36,100,6000,Hello_there,d$dg_t`dre,8,FS&[223,44,False,200,400
+37,100,6000,Hello_there,,,`e2eC)##:,39,False,200,400
+38,100,6000,Hello_there,Heldg_t`ere,3,"@e`da@ a"" ",23,False,200,400
+39,100,6000,Hello_there, ,43,Hello^t`ere,2,False,200,400
+40,100,6000,Hello_there,Hello^t`ere,2,HelLN^t`ere,5,False,200,400
+41,100,6000,Hello_there,eldg_p`e2e,6,!,48,False,200,400
+42,100,6000,Hello_there,,,H^pfe,24,False,200,400
+43,100,6000,Hello_there,Hello_t`ere,1,Hallo_t`ere,2,False,200,400
+44,100,6000,Hello_there,,,,,False,200,400
+45,100,6000,Hello_there,Elln^t`Ebe,7,HElLN^t@Ebe,9,False,200,400
+46,100,6000,Hello_there,,,HEllo^thebe,3,False,200,400
+47,100,6000,Hello_there,,,`ebeC+ccz,33,False,200,400
+48,100,6000,Hello_there,`ebeC+c#:,37,eldg_t`ere,4,False,200,400
+49,100,6000,Hello_there,@EHN^tEf,17,HEHN^dEfM,18,False,200,400
+50,200,6000,Hello_there,,,`  a,40,False,200,400
+51,200,6000,Hello_there,~2,44,8080,51,False,200,400
+52,200,6000,Hello_there, 4vw0xp0 ,26,pc,40,False,200,400
+53,200,6000,Hello_there,0p pa,44,~2,47,False,200,400
+54,200,6000,Hello_there,<8|r!,37,8|r,39,False,200,400
+55,200,6000,Hello_there,8088Q,48,D`\~tp`pa,16,False,200,400
+56,200,6000,Hello_there,t2,46,tp`pa#,41,False,200,400
+57,200,6000,Hello_there,P0,46,Px|tppa,17,False,200,400
+58,200,6000,Hello_there,`<vw0pp0!,23,`ttw8ppp ,24,False,200,400
+59,200,6000,Hello_there,<q0C,49,8~~,39,False,200,400
+60,200,6000,Hello_there,<88|e!,42,,,False,200,400
+61,200,6000,Hello_there,pp`Pa,44,8080uQ,48,False,200,400
+62,200,6000,Hello_there,tppa,43,,,False,200,400
+63,200,6000,Hello_there,8080u,48,8080u,49,False,200,400
+64,200,6000,Hello_there,<0(0u1,48,|:,44,False,200,400
+65,200,6000,Hello_there,8(8eQ,46,80(8u,49,False,200,400
+66,200,6000,Hello_there,@`vw8pp0,28,`t|8ppp ,22,False,200,400
+67,200,6000,Hello_there,` Paa,35,P`t|tpPa,17,False,200,400
+68,200,6000,Hello_there,<8|w,44,,,False,200,400
+69,200,6000,Hello_there,;<8|v!,40,88|d0,43,False,200,400
+70,200,6000,Hello_there,80(ua,45,<0(|wQ,44,False,200,400
+71,200,6000,Hello_there,tp`pa,42,tpPa,45,False,200,400
+72,200,6000,Hello_there,,,`<|xp00,24,False,200,400
+73,200,6000,Hello_there,8|r ,39,8|r ,39,False,200,400
+74,200,6000,Hello_there,80(0E,47,Da\~tp`Pa,16,False,200,400
+75,200,6000,Hello_there,,,,,False,200,400
+76,200,6000,Hello_there,,,,,False,200,400
+77,200,6000,Hello_there,,,D`T|tp`Pa,17,False,200,400
+78,200,6000,Hello_there,,,<8|v0,40,False,200,400
+79,200,6000,Hello_there,88ua,43,,,False,200,400
+80,200,6000,Hello_there,`t|tpPa,18,P`||tppa,15,False,200,400
+81,200,6000,Hello_there,`t|tpPa,18,P`||tpPa,16,False,200,400
+82,200,6000,Hello_there,8|r ,38,8~r,41,False,200,400
+83,200,6000,Hello_there,<8|v0,45,,,False,200,400
+84,200,6000,Hello_there,(0(u,45,(8(~w,46,False,200,400
+85,200,6000,Hello_there,<088u,47,<88u,48,False,200,400
+86,200,6000,Hello_there,,,8~r,40,False,200,400
+87,200,6000,Hello_there,@plppa,20,<8|v1,39,False,200,400
+88,200,6000,Hello_there,,,,,False,200,400
+89,200,6000,Hello_there,pppa,43,ppPa,44,False,200,400
+90,200,6000,Hello_there,8|b!,40,8|r,38,False,200,400
+91,200,6000,Hello_there,80(uq,46,88(|uQ,46,False,200,400
+92,200,6000,Hello_there,,,8088u,48,False,200,400
+93,200,6000,Hello_there,<8|v ,44,<8|w,48,False,200,400
+94,200,6000,Hello_there,80(xEQ,45,8088u,49,False,200,400
+95,200,6000,Hello_there,<8|b!,36,8|r,40,False,200,400
+96,200,6000,Hello_there,<0|u!,43,\>;,47,False,200,400
+97,200,6000,Hello_there,80(0uq,48,80(uQ,47,False,200,400
+98,200,6000,Hello_there,@ ,45,8~v,41,False,200,400
+99,200,6000,Hello_there,<8|v!,39,>:x,45,False,200,400
+100,300,6000,Hello_there,X0d`A,43,x4df,40,False,200,400
+101,300,6000,Hello_there,x E,40,h0Xdb@,41,False,200,400
+102,300,6000,Hello_there,>X(,45,"(X$""@",44,False,200,400
+103,300,6000,Hello_there,",X& @B",40,"(X4""@p",44,False,200,400
+104,300,6000,Hello_there, \,40,x4pdfA,38,False,200,400
+105,300,6000,Hello_there,",x40db ",39,<x4l!,38,False,200,400
+106,300,6000,Hello_there,,,&@0,43,False,200,400
+107,300,6000,Hello_there, <,45,,,False,200,400
+108,300,6000,Hello_there,@',48,HZ^_,45,False,200,400
+109,300,6000,Hello_there,H4z\_,43,',50,False,200,400
+110,300,6000,Hello_there,,,<x ipd,36,False,200,400
+111,300,6000,Hello_there,g2,45,x4mfA,38,False,200,400
+112,300,6000,Hello_there,x0pd,40,x4pd,41,False,200,400
+113,300,6000,Hello_there,,,<82|q q,38,False,200,400
+114,300,6000,Hello_there,,,(`iE,39,False,200,400
+115,300,6000,Hello_there,,,H4X^,42,False,200,400
+116,300,6000,Hello_there,,,xtpdfA,36,False,200,400
+117,300,6000,Hello_there,"Co&,",43,"<X4""`",44,False,200,400
+118,300,6000,Hello_there,,,xtptbA,40,False,200,400
+119,300,6000,Hello_there,@',54,V,50,False,200,400
+120,300,6000,Hello_there,(x`iD,40,"<X4""@@",46,False,200,400
+121,300,6000,Hello_there,H4x^,38,H4x^,40,False,200,400
+122,300,6000,Hello_there,($,44,x iE,39,False,200,400
+123,300,6000,Hello_there," X ,kZPA`",35,0A loZP`,36,False,200,400
+124,300,6000,Hello_there,',48,x4pdfA,37,False,200,400
+125,300,6000,Hello_there,,,,,False,200,400
+126,300,6000,Hello_there,@ d,41,cg2,41,False,200,400
+127,300,6000,Hello_there,8 iDE,39,,,False,200,400
+128,300,6000,Hello_there,,,,50,False,200,400
+129,300,6000,Hello_there,c'2,47,'2,52,False,200,400
+130,300,6000,Hello_there,"@@$""",44,x0xtfA,36,False,200,400
+131,300,6000,Hello_there,'2,48,@ $,44,False,200,400
+132,300,6000,Hello_there,,,"|Xt""@",44,False,200,400
+133,300,6000,Hello_there,xDE,38,xDE,39,False,200,400
+134,300,6000,Hello_there,,,xtmfA$,33,False,200,400
+135,300,6000,Hello_there,Q,57,x(E,41,False,200,400
+136,300,6000,Hello_there,xE,40,,,False,200,400
+137,300,6000,Hello_there,,,",X$""@@",44,False,200,400
+138,300,6000,Hello_there,,,"<X4""@@",44,False,200,400
+139,300,6000,Hello_there,,,X^_,46,False,200,400
+140,300,6000,Hello_there,8 ,44,8 ,44,False,200,400
+141,300,6000,Hello_there,,,<<:|3 iy,37,False,200,400
+142,300,6000,Hello_there,a0_P``,37,i _xi`,34,False,200,400
+143,300,6000,Hello_there,xiE,40,HY^_,46,False,200,400
+144,300,6000,Hello_there,`@,43,',50,False,200,400
+145,300,6000,Hello_there,<X$b`,44,<X4r@,46,False,200,400
+146,300,6000,Hello_there,G-,43,<X6x2`,43,False,200,400
+147,300,6000,Hello_there,A'W,47,x4xdb@,41,False,200,400
+148,300,6000,Hello_there,,,<x itE,35,False,200,400
+149,300,6000,Hello_there,@'2,49,',49,False,200,400

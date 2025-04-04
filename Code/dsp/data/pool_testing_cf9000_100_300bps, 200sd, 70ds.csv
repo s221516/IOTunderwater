@@ -1,0 +1,151 @@
+ID,Bitrate,Carrier Frequency,Original Message,Decoded without bandpass,Hamming Dist without bandpass,Decoded with bandpass,Hamming Dist with bandpass,Hamming Encoding,Speaker depth,Distance to speaker
+0,100,9000,Hello_there,Hello_there,0,Hello_there,0,False,200,70
+1,100,9000,Hello_there,Hello_theze,1, $$'0  0 ,25,False,200,70
+2,100,9000,Hello_there,Hello_there,0,Hello_there,0,False,200,70
+3,100,9000,Hello_there,Hello_there,0,,,False,200,70
+4,100,9000,Hello_there,Hello_there,0,Hello_there,0,False,200,70
+5,100,9000,Hello_there,Hello_there,0,Hello_there,0,False,200,70
+6,100,9000,Hello_there,Hello_there,0,Hello_there,0,False,200,70
+7,100,9000,Hello_there,Hello_there,0,Hello_there,0,False,200,70
+8,100,9000,Hello_there,Hello_there,0,,,False,200,70
+9,100,9000,Hello_there,Hello_there,0,Hello_there,0,False,200,70
+10,100,9000,Hello_there,Hello_there,0,Hello_there,0,False,200,70
+11,100,9000,Hello_there,Hello_there,0,Hello_there,0,False,200,70
+12,100,9000,Hello_there,Hello_there,0,dllo_there,2,False,200,70
+13,100,9000,Hello_there,Hello_there,0,Hello_there,0,False,200,70
+14,100,9000,Hello_there,Hello_there,0,Hello_there,0,False,200,70
+15,100,9000,Hello_there,Hello_there,0,Hello_there,0,False,200,70
+16,100,9000,Hello_there,Hello_there,0,@eLlo_there,2,False,200,70
+17,100,9000,Hello_there,Hello_there,0,Hello_there,0,False,200,70
+18,100,9000,Hello_there,Hello_there,0,Hello_there,0,False,200,70
+19,100,9000,Hello_there,Hello_there,0,Hello_there,0,False,200,70
+20,100,9000,Hello_there,Hello_there,0,Hello_there,0,False,200,70
+21,100,9000,Hello_there,Hello_there,0,Hello_there,0,False,200,70
+22,100,9000,Hello_there,Hello_there,0,Hello_there,0,False,200,70
+23,100,9000,Hello_there,Hello_there,0,Hello_there,0,False,200,70
+24,100,9000,Hello_there,Hello_there,0,Hello_there,0,False,200,70
+25,100,9000,Hello_there,Hello_there,0, $$'0  0 ,25,False,200,70
+26,100,9000,Hello_there,Hello_there,0,Hello_there,0,False,200,70
+27,100,9000,Hello_there,Hello_there,0,Hello_there,0,False,200,70
+28,100,9000,Hello_there,Hello_there,0,,,False,200,70
+29,100,9000,Hello_there,Hello_there,0,Hello_there,0,False,200,70
+30,100,9000,Hello_there,Hello_there,0,,53,False,200,70
+31,100,9000,Hello_there,Hello_there,0,@HHN`HDbE,20,False,200,70
+32,100,9000,Hello_there,Hello_there,0,Hello_there,0,False,200,70
+33,100,9000,Hello_there,Hello_there,0,Hello_there,0,False,200,70
+34,100,9000,Hello_there,Hello_there,0,  0 !!8,45,False,200,70
+35,100,9000,Hello_there,Hello_there,0,Hello_there,0,False,200,70
+36,100,9000,Hello_there,Hello_there,0,Hello_there,0,False,200,70
+37,100,9000,Hello_there,Hello_there,0,dllo_thdrd,4,False,200,70
+38,100,9000,Hello_there,Hello_there,0,Hello_there,0,False,200,70
+39,100,9000,Hello_there,Hello_there,0,Hello_there,0,False,200,70
+40,100,9000,Hello_there,Hello_there,0,Hello_there,0,False,200,70
+41,100,9000,Hello_there,Hello_there,0,,49,False,200,70
+42,100,9000,Hello_there,Hello_there,0,Hello_there,0,False,200,70
+43,100,9000,Hello_there,Hello_there,0,Hello_there,0,False,200,70
+44,100,9000,Hello_there,Hello_there,0,Hello_there,0,False,200,70
+45,100,9000,Hello_there,Hello_there,0,,,False,200,70
+46,100,9000,Hello_there,Hello_there,0,Hello_there,0,False,200,70
+47,100,9000,Hello_there,Hello_there,0,Hello_there,0,False,200,70
+48,100,9000,Hello_there,Hello_there,0,Hello_there,0,False,200,70
+49,100,9000,Hello_there,Hello_there,0,Hello_thdpe,2,False,200,70
+50,200,9000,Hello_there,Hello_there,0,Hello_there,0,False,200,70
+51,200,9000,Hello_there,Hello_there,0,,,False,200,70
+52,200,9000,Hello_there,Hello_there,0,e$l/the2e,7,False,200,70
+53,200,9000,Hello_there,Hhlo_theb,4,,47,False,200,70
+54,200,9000,Hello_there,Hello_there,0,ellot`e2a,5,False,200,70
+55,200,9000,Hello_there,Hello_there,0,Hello_there,0,False,200,70
+56,200,9000,Hello_there,Hello_there,0,Hello_there,0,False,200,70
+57,200,9000,Hello_there,Hello^there,1,,,False,200,70
+58,200,9000,Hello_there,Hello_there,0,Hello_there,0,False,200,70
+59,200,9000,Hello_there,Hello_thera,1,a   !  ,34,False,200,70
+60,200,9000,Hello_there,Hello_there,0,He$dgt`a0a,10,False,200,70
+61,200,9000,Hello_there,Hello_there,0,Hello_there,0,False,200,70
+62,200,9000,Hello_there,Hedlgt`epa,6,,48,False,200,70
+63,200,9000,Hello_there,Heddgt`cpa,9,  0 !!8,45,False,200,70
+64,200,9000,Hello_there,Hello_there,0,Hello_there,0,False,200,70
+65,200,9000,Hello_there,@u4vgpps1a,22, $$'0  0 ,25,False,200,70
+66,200,9000,Hello_there,Hll_there,2, $$'0  0 ,25,False,200,70
+67,200,9000,Hello_there,Hello_there,0,Hello_there,0,False,200,70
+68,200,9000,Hello_there,Hello_there,0,Hello_there,0,False,200,70
+69,200,9000,Hello_there,Hello_there,0,Hello_there,0,False,200,70
+70,200,9000,Hello_there,Hello_there,0,Hello_there,0,False,200,70
+71,200,9000,Hello_there,Hellothera,2,a$$'0 !0 ,22,False,200,70
+72,200,9000,Hello_there,Hello_there,0,Hello_there,0,False,200,70
+73,200,9000,Hello_there,Hello_there,0,Hedlot`apa,6,False,200,70
+74,200,9000,Hello_there,Hello_there,0,Hallgp`apa,8,False,200,70
+75,200,9000,Hello_there,Hello_there,0,ello^p`ebe,5,False,200,70
+76,200,9000,Hello_there,Hello_there,0,Hello_there,0,False,200,70
+77,200,9000,Hello_there,Hello_there,0,Hello_there,0,False,200,70
+78,200,9000,Hello_there,Hello_there,0,Hello_there,0,False,200,70
+79,200,9000,Hello_there,Hello_there,0,Hedlgt`apa,7,False,200,70
+80,200,9000,Hello_there,Hello_there,0,Ehlo^phEbe,7,False,200,70
+81,200,9000,Hello_there,Hello_there,0,Hello_there,0,False,200,70
+82,200,9000,Hello_there,Hello_there,0,Hello_there,0,False,200,70
+83,200,9000,Hello_there,Hello_there,0,Hello_there,0,False,200,70
+84,200,9000,Hello_there,Hello_there,0,Hello_there,0,False,200,70
+85,200,9000,Hello_there,Hello_there,0,Hello_there,0,False,200,70
+86,200,9000,Hello_there,Hedlot`ere,3, $$'0  0 ,25,False,200,70
+87,200,9000,Hello_there,Hello_there,0,,48,False,200,70
+88,200,9000,Hello_there,Hello_there,0,Hello_there,0,False,200,70
+89,200,9000,Hello_there,Hello_there,0,Hello_there,0,False,200,70
+90,200,9000,Hello_there,Hello_there,0,Hello_there,0,False,200,70
+91,200,9000,Hello_there,Hello_there,0,Hello_there,0,False,200,70
+92,200,9000,Hello_there,Hello_there,0,Hello_there,0,False,200,70
+93,200,9000,Hello_there,Hello_there,0,Hello_there,0,False,200,70
+94,200,9000,Hello_there,Hello_there,0,Hello_there,0,False,200,70
+95,200,9000,Hello_there,Hello_there,0,Hello_there,0,False,200,70
+96,200,9000,Hello_there,Hello_there,0,Hello_there,0,False,200,70
+97,200,9000,Hello_there,Hello_there,0,Hello_there,0,False,200,70
+98,200,9000,Hello_there,ellothe2e,3,  0 !!8,45,False,200,70
+99,200,9000,Hello_there,Hello_there,0,Hello_there,0,False,200,70
+100,300,9000,Hello_there,Hello_there,0,Hello_there,0,False,200,70
+101,300,9000,Hello_there,Hello_there,0,Hedlo_there,1,False,200,70
+102,300,9000,Hello_there,Hello_there,0,Hello_there,0,False,200,70
+103,300,9000,Hello_there,Hello_there,0,Hello_there,0,False,200,70
+104,300,9000,Hello_there,Hello_there,0,Hello_there,0,False,200,70
+105,300,9000,Hello_there,h,45, $$'0  p ,24,False,200,70
+106,300,9000,Hello_there,lo_the,6,,42,False,200,70
+107,300,9000,Hello_there,Hedlo_there,1, ,50,False,200,70
+108,300,9000,Hello_there,Hello_thebe,1,dllo_thebe,3,False,200,70
+109,300,9000,Hello_there,x,40, 0    0 ,37,False,200,70
+110,300,9000,Hello_there,Hello_there,0,Hello_there,0,False,200,70
+111,300,9000,Hello_there,@edlo_there,2,$d$'0 $p ,21,False,200,70
+112,300,9000,Hello_there,Hello_there,0,Hello_thebe,1,False,200,70
+113,300,9000,Hello_there,Hello_there,0,Hello_there,0,False,200,70
+114,300,9000,Hello_there,Hello_there,0,Hello_there,0,False,200,70
+115,300,9000,Hello_there,Hello_there,0,Hello_there,0,False,200,70
+116,300,9000,Hello_there,Hello_there,0,Hello_there,0,False,200,70
+117,300,9000,Hello_there,Hello_there,0,Hello_there,0,False,200,70
+118,300,9000,Hello_there,Hello_there,0,Hello_thebe,1,False,200,70
+119,300,9000,Hello_there,Hello_there,0,Hello_there,0,False,200,70
+120,300,9000,Hello_there,Hello_there,0,Hello_there,0,False,200,70
+121,300,9000,Hello_there,Hello_there,0,Hello_there,0,False,200,70
+122,300,9000,Hello_there,Hello_there,0,,55,False,200,70
+123,300,9000,Hello_there,Hello_there,0,Hello_there,0,False,200,70
+124,300,9000,Hello_there,Hello_there,0,Hedlo_there,1,False,200,70
+125,300,9000,Hello_there,Hello_there,0,Hello_thebe,1,False,200,70
+126,300,9000,Hello_there,Hello_there,0,Hello_there,0,False,200,70
+127,300,9000,Hello_there,Hello_there,0,Hello_thebe,1,False,200,70
+128,300,9000,Hello_there,Hello_there,0,ello_thebe,2,False,200,70
+129,300,9000,Hello_there,Hello_there,0,Hello_there,0,False,200,70
+130,300,9000,Hello_there,lo_the,6,,47,False,200,70
+131,300,9000,Hello_there,Hello_there,0,Hello_there,0,False,200,70
+132,300,9000,Hello_there,Hello_there,0,Hello_there,0,False,200,70
+133,300,9000,Hello_there,Hello_there,0,Hello_there,0,False,200,70
+134,300,9000,Hello_there,Hello_there,0,Hello_there,0,False,200,70
+135,300,9000,Hello_there,Hello_there,0,Hello_there,0,False,200,70
+136,300,9000,Hello_there,Hello_there,0,Hello_there,0,False,200,70
+137,300,9000,Hello_there,Hello_there,0,Hello_there,0,False,200,70
+138,300,9000,Hello_there,Hello_there,0,Hello_there,0,False,200,70
+139,300,9000,Hello_there,Hello_there,0,Hello_there,0,False,200,70
+140,300,9000,Hello_there,Hello_there,0,ello_thebe,2,False,200,70
+141,300,9000,Hello_there,Hello_there,0,Hello_there,0,False,200,70
+142,300,9000,Hello_there,llo_thbe,4,,53,False,200,70
+143,300,9000,Hello_there,Hello_there,0,Hello_there,0,False,200,70
+144,300,9000,Hello_there,Hello_there,0,Hello_thebe,1,False,200,70
+145,300,9000,Hello_there,Hello_there,0,Hello_there,0,False,200,70
+146,300,9000,Hello_there,Hello_there,0,Hello_thebe,1,False,200,70
+147,300,9000,Hello_there,lg,16,      0 ,36,False,200,70
+148,300,9000,Hello_there,Hello_there,0,Hello_there,0,False,200,70
+149,300,9000,Hello_there,Hello_there,0,Hello_there,0,False,200,70

@@ -11,9 +11,10 @@ from encoding.hamming_codes import hamming_encode
 
 import csv
 
-def logInCsv(id, bitrate, carrierfreq, original_message, decoded_message1, hamming_dist_without, decod_msg2, ham_dist_with, filename="large_test_hamming_encoding.csv"):
+def logInCsv(id, bitrate, carrierfreq, original_message, decoded_message1, hamming_dist_without, decod_msg2, ham_dist_with, speaker_depth, distance_to_speaker, 
+             filename="pool_testing_cf12000_100_300bps, 200sd, 400ds.csv"):
 
-    headers = ["ID", "Bitrate", "Carrier Frequency", "Original Message", "Decoded without bandpass", "Hamming Dist without bandpass", "Decoded with bandpass", "Hamming Dist with bandpass", "Encoding"]
+    headers = ["ID", "Bitrate", "Carrier Frequency", "Original Message", "Decoded without bandpass", "Hamming Dist without bandpass", "Decoded with bandpass", "Hamming Dist with bandpass" , "Hamming Encoding", "Speaker depth" , "Distance to speaker"]
 
     # Check if the file exists to determine if we need to write headers
     try:
@@ -29,17 +30,22 @@ def logInCsv(id, bitrate, carrierfreq, original_message, decoded_message1, hammi
             writer.writerow(headers)
         
         # Write the log entry
-        writer.writerow([id, bitrate, carrierfreq, original_message, decoded_message1, hamming_dist_without, decod_msg2, ham_dist_with, "Hamming Encoding"])
+        writer.writerow([id, bitrate, carrierfreq, original_message, decoded_message1, hamming_dist_without, decod_msg2, ham_dist_with, config.HAMMING_CODING,  speaker_depth, distance_to_speaker])
 
 def signal_generator_testing():
 
-    all_letters = "the quick brown fox jumps over the lazy dog while vexd zebras fight for joy!>*"
+    # all_letters = "the quick brown fox jumps over the lazy dog while vexd zebras fight for joy!>*"
     
     messages = ["Hello_there"]
 
-    bitrates = [100]
+    n = 50
+    bitrates = [100] * n + [200] * n + [300] * n
 
-    carrierfreqs = [6000]
+    carrierfreqs = [12000]
+
+    speaker_depth = 200 # in cm
+
+    distance_to_speaker = 400 # in cm
 
     id = 0
     for message in messages:
@@ -60,7 +66,9 @@ def signal_generator_testing():
                 time.sleep(0.75)
 
                 # NOTE: to make the time of recording dynamic 
+                # 5
                 record_seconds = round((len_of_data_bits / bitrate) * 5)
+                # record_seconds = 10
 
                 if (config.MAKE_NEW_RECORDING):
                     print(f"Recording for: {record_seconds} seconds")
@@ -68,7 +76,7 @@ def signal_generator_testing():
 
                 time.sleep(0.1)
                 
-                stopTransmission()
+                # stopTransmission()
 
                 nonCoherentReceiver = NonCoherentReceiver(bitrate, carrierfreq, band_pass=False)      
                 nonCoherentReceiver.set_len_of_data_bits(len_of_data_bits)    
@@ -102,7 +110,7 @@ def signal_generator_testing():
                     message_nc = "No preamble found"
                     message_nc_bandpass = "No preamble found"
 
-                logInCsv(id, bitrate, carrierfreq, message, message_nc, hamming_dist, message_nc_bandpass, hamming_dist_bandpass)
+                logInCsv(id, bitrate, carrierfreq, message, message_nc, hamming_dist, message_nc_bandpass, hamming_dist_bandpass, speaker_depth, distance_to_speaker)
                 id+=1
 
 
