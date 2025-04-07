@@ -1,14 +1,15 @@
 {
-    "C_Cpp.intelliSenseEngine": "default",
-    "idf.espIdfPathWin": "C:\\Users\\felim\\esp\\v5.4\\esp-idf",
-    "idf.pythonInstallPath": "C:\\Users\\felim\\.espressif\\tools\\idf-python\\3.11.2\\python.exe",
-    "idf.openOcdConfigs": [
-        "board/esp32-wrover-kit-3.3v.cfg"
-    ],
-    "idf.portWin": "COM7",
-    "idf.toolsPathWin": "C:\\Users\\felim\\.espressif",
-    "idf.flashType": "UART",
-    "files.associations": {
-        "transmitter.h": "c"
-    }
+  // "C_Cpp.intelliSenseEngine": "default",
+  // "idf.espIdfPathWin": "C:\\Users\\felim\\esp\\v5.4\\esp-idf",
+  "idf.pythonInstallPath": "/opt/anaconda3/bin/python",
+  "idf.openOcdConfigs": ["board/esp32-wrover-kit-3.3v.cfg"],
+  // "idf.portWin": "COM7",
+  // "idf.toolsPathWin": "C:\\Users\\felim\\.espressif",
+  "idf.flashType": "UART",
+  // "files.associations": {
+  //   "transmitter.h": "c"
+  // },
+  "idf.espIdfPath": "/Users/mathiasmarkvardsen/esp/esp-idf",
+  "idf.toolsPath": "/Users/mathiasmarkvardsen/.espressif",
+  "idf.port": "/dev/tty.usbserial-014351BC"
 }
