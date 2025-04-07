@@ -9,6 +9,11 @@
     "idf.toolsPathWin": "C:\\Users\\felim\\.espressif",
     "idf.flashType": "UART",
     "files.associations": {
-        "transmitter.h": "c"
+        "transmitter.h": "c",
+        "esp_task_wdt.h": "c",
+        "system_error": "c",
+        "freertos.h": "c",
+        "string.h": "c",
+        "stdlib.h": "c"
     }
 }
