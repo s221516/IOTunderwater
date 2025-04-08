@@ -16,8 +16,9 @@ from config import (
     REPETITIONS,
     SAMPLE_RATE,
 )
-from encoding.convolutional_encoding import *
+
 from encoding.hamming_codes import hamming_decode
+from encoding.conv_encoding_scikit import conv_decode
 from errors import PreambleNotFoundError
 from scipy.io import wavfile
 from visuals.visualization import create_processing_visualization
@@ -83,8 +84,8 @@ class Receiver:
 
     def threshold_signal(self, normalized_signal: np.ndarray) -> np.ndarray:
         # this is called hyperestesis thresholding, essentially you have a memory while checking
-        low = 0.4
-        high = 0.6
+        low = 0.5
+        high = 0.5
         thresholded = np.zeros_like(normalized_signal)
         state = 0
         for i in range(len(normalized_signal)):
@@ -166,25 +167,21 @@ class Receiver:
 
         data_bits = []
         for i in range(len(peak_indices) - 1):
-            if (
-                len_of_data_bits == diff_in_peaks[i]
-            ):  # NOTE: we tested less than equal but it makes a big difference with just a few bits, it needs to be exactly equal, as one bit makes a huge difference when decoding
-                data_bits.append(
-                    bits[peak_indices[i] + len(BINARY_BARKER) : peak_indices[i + 1]]
-                )
+            if (len_of_data_bits == diff_in_peaks[i]):  # NOTE: we tested less than equal but it makes a big difference with just a few bits, it needs to be exactly equal, as one bit makes a huge difference when decoding
+                data_bits.append(bits[peak_indices[i] + len(BINARY_BARKER) : peak_indices[i + 1]])
+  
 
         # NOTE: this is to plot the decodins of each entry of data bits
-        # for i in range(len(data_bits)):
-        #     if CONVOLUTIONAL_CODING:
-        #         print(self.decode_bytes_to_bits(conv_decode(data_bits[i])))
-        #     elif HAMMING_CODING:
-        #         print(self.decode_bytes_to_bits(hamming_decode(data_bits[i])))
-        #         pass
-        #     else:
-        #         bits = self.decode_bytes_to_bits(data_bits[i])
-        #         print(bits, len(bits))
+        for i in range(len(data_bits)):
+            if CONVOLUTIONAL_CODING:
+                bits_array = np.array(data_bits[i])
+                print(self.decode_bytes_to_bits(conv_decode(bits_array, None)[:-2]))
+            elif HAMMING_CODING:
+                print(self.decode_bytes_to_bits(hamming_decode(data_bits[i])))
+            else:
+                bits = self.decode_bytes_to_bits(data_bits[i])
+                print(bits, len(bits))
 
-        avg = [int(round((sum(col)) / len(col))) for col in zip(*data_bits)]
 
         # NOTE: this plots the correlation of the preamble and the received signal
         plt.figure(figsize=(14, 8))
@@ -208,6 +205,9 @@ class Receiver:
         plt.grid()
         plt.show()
 
+        avg = [int(round((sum(col)) / len(col))) for col in zip(*data_bits)]
+        if avg == []:
+            avg = -1
         return avg
 
     def remove_preamble_naive(self, bits):
@@ -305,14 +305,7 @@ class NonCoherentReceiver(Receiver):
             raise PreambleNotFoundError("No preamble found in signal")
 
         if CONVOLUTIONAL_CODING:
-            generator_matrix = np.array([[5, 7]])  # Rate 1/2 generators (octal)
-            memory = np.array(
-                [2]
-            )  # Memory matches generator constraint length-1 (3-1=2)
-            trellis = cc.Trellis(memory, generator_matrix)
-            bits_without_preamble = cc.viterbi_decode(bits_without_preamble, trellis)[
-                :-2
-            ]
+            bits_without_preamble = conv_decode(bits_without_preamble)
 
         if HAMMING_CODING:
             bits_without_preamble = hamming_decode(bits_without_preamble)

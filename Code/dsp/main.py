@@ -11,10 +11,13 @@ from encoding.hamming_codes import hamming_encode
 
 import csv
 
-def logInCsv(id, bitrate, carrierfreq, original_message, decoded_message1, hamming_dist_without, decod_msg2, ham_dist_with, speaker_depth, distance_to_speaker, 
-             filename="pool_testing_cf12000_100_300bps, 200sd, 400ds.csv"):
+def logInCsv(id, bitrate, carrierfreq, original_message, decoded_message1, hamming_dist_without, decod_msg2, ham_dist_with, 
+             filename=None):
 
-    headers = ["ID", "Bitrate", "Carrier Frequency", "Original Message", "Decoded without bandpass", "Hamming Dist without bandpass", "Decoded with bandpass", "Hamming Dist with bandpass" , "Hamming Encoding", "Speaker depth" , "Distance to speaker"]
+    if filename is None:
+        filename = f"plastic_testing_hamming_encoding_cf{carrierfreq}_600bps, {speaker_depth}sd, {distance_to_speaker}ds.csv"
+
+    headers = ["ID", "Bitrate", "Carrier Frequency", "Original Message", "Decoded without bandpass", "Hamming Dist without bandpass", "Decoded with bandpass", "Hamming Dist with bandpass" , "Encoding", "Speaker depth" , "Distance to speaker"]
 
     # Check if the file exists to determine if we need to write headers
     try:
@@ -30,22 +33,22 @@ def logInCsv(id, bitrate, carrierfreq, original_message, decoded_message1, hammi
             writer.writerow(headers)
         
         # Write the log entry
-        writer.writerow([id, bitrate, carrierfreq, original_message, decoded_message1, hamming_dist_without, decod_msg2, ham_dist_with, config.HAMMING_CODING,  speaker_depth, distance_to_speaker])
+        writer.writerow([id, bitrate, carrierfreq, original_message, decoded_message1, hamming_dist_without, decod_msg2, ham_dist_with, config.ENCODING,  speaker_depth, distance_to_speaker])
 
 def signal_generator_testing():
-
-    # all_letters = "the quick brown fox jumps over the lazy dog while vexd zebras fight for joy!>*"
     
-    messages = ["Hello_world"]
+    messages = ["Hello_there"]
 
     n = 50
-    bitrates = [100] * n + [200] * n + [300] * n
+    bitrates = [600] * n
 
-    carrierfreqs = [12000]
-
-    speaker_depth = 200 # in cm
-
-    distance_to_speaker = 400 # in cm
+    carrierfreqs = [6000]
+    
+    global speaker_depth
+    speaker_depth = 5 # in cm
+    
+    global distance_to_speaker
+    distance_to_speaker = 40 # in cm
 
     id = 0
     for message in messages:
@@ -57,20 +60,17 @@ def signal_generator_testing():
                 len_of_data_bits = len(message) * 8 
                 len_of_preamble = len(config.BINARY_BARKER)
                 if (config.CONVOLUTIONAL_CODING):
-                    len_of_data_bits = len_of_data_bits * 3 + len_of_preamble
+                    len_of_data_bits = len_of_data_bits * 2 + len_of_preamble + 12 #NOTE talk with Mathias here
                 elif (config.HAMMING_CODING):
                     len_of_data_bits = len_of_data_bits * 3/2 + len_of_preamble
                 else:
                     len_of_data_bits = len_of_data_bits + len_of_preamble
 
+                print("Len of data bits (receiver): ", len_of_data_bits)
                 time.sleep(0.75)
 
                 # NOTE: to make the time of recording dynamic 
-                # 5
-                # 5
                 record_seconds = round((len_of_data_bits / bitrate) * 5)
-                # record_seconds = 10
-                # record_seconds = 10
 
                 if (config.MAKE_NEW_RECORDING):
                     print(f"Recording for: {record_seconds} seconds")
@@ -78,8 +78,7 @@ def signal_generator_testing():
 
                 time.sleep(0.1)
                 
-                # stopTransmission()
-                # stopTransmission()
+                stopTransmission()
 
                 nonCoherentReceiver = NonCoherentReceiver(bitrate, carrierfreq, band_pass=False)      
                 nonCoherentReceiver.set_len_of_data_bits(len_of_data_bits)    
@@ -113,32 +112,33 @@ def signal_generator_testing():
                     message_nc = "No preamble found"
                     message_nc_bandpass = "No preamble found"
 
-                logInCsv(id, bitrate, carrierfreq, message, message_nc, hamming_dist, message_nc_bandpass, hamming_dist_bandpass, speaker_depth, distance_to_speaker)
-                logInCsv(id, bitrate, carrierfreq, message, message_nc, hamming_dist, message_nc_bandpass, hamming_dist_bandpass, speaker_depth, distance_to_speaker)
+                logInCsv(id, bitrate, carrierfreq, message, message_nc, hamming_dist, message_nc_bandpass, hamming_dist_bandpass)
                 id+=1
 
 
 def esp32_testing():
     if (config.MAKE_NEW_RECORDING):
-       create_wav_file_from_recording(config.RECORD_SECONDS)
+       create_wav_file_from_recording(5)
 
     time.sleep(0.1)
 
-    nonCoherentReceiver = NonCoherentReceiver(config.BIT_RATE, config.CARRIER_FREQ, band_pass=False)       
+    nonCoherentReceiver = NonCoherentReceiver(config.BIT_RATE, config.CARRIER_FREQ, band_pass=False)   
+    print("Bit rate:     ", config.BIT_RATE)
+    print("Carrier freq: ", config.CARRIER_FREQ)    
     
     try:
+        nonCoherentReceiver.set_len_of_data_bits(101)
         message_nc, debug_nc = nonCoherentReceiver.decode()
         decoded_bits = debug_nc["bits_without_preamble"]
         print(f"Bits received: {decoded_bits}")
-        print(len(decoded_bits))
         print(f"Decoded message, no pass: {message_nc}")
-        nonCoherentReceiver.plot_simulation_steps()
+        # nonCoherentReceiver.plot_simulation_steps()
         
     except PreambleNotFoundError:
         message_nc = "No preamble found"
 
 
 if __name__ == "__main__":
-    signal_generator_testing()
+    esp32_testing()
 
 

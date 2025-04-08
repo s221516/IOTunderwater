@@ -1,0 +1,151 @@
+ID,Bitrate,Carrier Frequency,Original Message,Decoded without bandpass,Hamming Dist without bandpass,Decoded with bandpass,Hamming Dist with bandpass,Encoding,Speaker depth,Distance to speaker
+0,100,6000,Hello_there,,51,x~,44,No Encoding,200,150
+1,100,6000,Hello_there,,56,@!l|`!a,13,No Encoding,200,150
+2,100,6000,Hello_there, 2,42,x~,46,No Encoding,200,150
+3,100,6000,Hello_there,,51,r,39,No Encoding,200,150
+4,100,6000,Hello_there,-,50,@!l|`aa,12,No Encoding,200,150
+5,100,6000,Hello_there,",",54,@!l|`aa,12,No Encoding,200,150
+6,100,6000,Hello_there,,49,x~,45,No Encoding,200,150
+7,100,6000,Hello_there,-,53,@!l|`aa,12,No Encoding,200,150
+8,100,6000,Hello_there,,52,@0<?| 0 ,25,No Encoding,200,150
+9,100,6000,Hello_there,),48,9,48,No Encoding,200,150
+10,100,6000,Hello_there,@!llo|h!pa,9,@!l|`aa,12,No Encoding,200,150
+11,100,6000,Hello_there,8~,44,x~,44,No Encoding,200,150
+12,100,6000,Hello_there,",",51,@!l|`!a,13,No Encoding,200,150
+13,100,6000,Hello_there,,52, r,39,No Encoding,200,150
+14,100,6000,Hello_there,,53,@!l|`aa,12,No Encoding,200,150
+15,100,6000,Hello_there,,55,@!l|`aa,12,No Encoding,200,150
+16,100,6000,Hello_there,,53,=,54,No Encoding,200,150
+17,100,6000,Hello_there,,53,@!l|`aa,12,No Encoding,200,150
+18,100,6000,Hello_there,,54,@!l|`!a,13,No Encoding,200,150
+19,100,6000,Hello_there,-,51,@!l|`aa,12,No Encoding,200,150
+20,100,6000,Hello_there,,53,@ l|  `,18,No Encoding,200,150
+21,100,6000,Hello_there,@!Lho_|H!pa,11,!l|`aa,13,No Encoding,200,150
+22,100,6000,Hello_there,,52,@ ||  `,19,No Encoding,200,150
+23,100,6000,Hello_there,,53,@0<?| 0 ,24,No Encoding,200,150
+24,100,6000,Hello_there,,55,@!|o|`aa,12,No Encoding,200,150
+25,100,6000,Hello_there, ),50,!x|`aa,15,No Encoding,200,150
+26,100,6000,Hello_there,-,53,@!l|`aa,12,No Encoding,200,150
+27,100,6000,Hello_there,2,42,x~,45,No Encoding,200,150
+28,100,6000,Hello_there,@!lho|H!pa,11,=,52,No Encoding,200,150
+29,100,6000,Hello_there,@!Lho|h!pa,11,=,52,No Encoding,200,150
+30,100,6000,Hello_there,,55,>?,43,No Encoding,200,150
+31,100,6000,Hello_there,,53,"@0,?| 0 ",23,No Encoding,200,150
+32,100,6000,Hello_there,),51,=,52,No Encoding,200,150
+33,100,6000,Hello_there,,53,=,52,No Encoding,200,150
+34,100,6000,Hello_there,,49,x~,45,No Encoding,200,150
+35,100,6000,Hello_there,@!Lho_tH!pa,10,!l|`aa,13,No Encoding,200,150
+36,100,6000,Hello_there,,,=,54,No Encoding,200,150
+37,100,6000,Hello_there, 2,41,x~,46,No Encoding,200,150
+38,100,6000,Hello_there,,53,x~,45,No Encoding,200,150
+39,100,6000,Hello_there,9,48,ah|@aA,19,No Encoding,200,150
+40,100,6000,Hello_there,-,51,@!l|`aa,12,No Encoding,200,150
+41,100,6000,Hello_there,,,@!l|`!a,13,No Encoding,200,150
+42,100,6000,Hello_there,@!llo|h!pa,9,@!l|`aa,12,No Encoding,200,150
+43,100,6000,Hello_there,",",52,67,39,No Encoding,200,150
+44,100,6000,Hello_there,,54,=,54,No Encoding,200,150
+45,100,6000,Hello_there,@!lloth!pa,8,@!lo|`aa,11,No Encoding,200,150
+46,100,6000,Hello_there,-,51,@!||`aa,13,No Encoding,200,150
+47,100,6000,Hello_there,|~,41,9,48,No Encoding,200,150
+48,100,6000,Hello_there,,53,"@0,?| 0`",23,No Encoding,200,150
+49,100,6000,Hello_there,@!lho|H!pa,11,@!l|`aa,12,No Encoding,200,150
+50,200,6000,Hello_there,,,ZI),49,No Encoding,200,150
+51,200,6000,Hello_there,,,S]8^,43,No Encoding,200,150
+52,200,6000,Hello_there,:PQ,49,Z!JjkW:R,24,No Encoding,200,150
+53,200,6000,Hello_there,,,I)]J,25,No Encoding,200,150
+54,200,6000,Hello_there,:PxZ,48,ZJjkW:R,24,No Encoding,200,150
+55,200,6000,Hello_there,F0$@,37,H .'o> ,34,No Encoding,200,150
+56,200,6000,Hello_there,,,~t{bv,38,No Encoding,200,150
+57,200,6000,Hello_there,,,O$S,46,No Encoding,200,150
+58,200,6000,Hello_there,2PQ,50,Z!JjkW:R,24,No Encoding,200,150
+59,200,6000,Hello_there,*PxRZ,48,I)]U,25,No Encoding,200,150
+60,200,6000,Hello_there,H*#wz2P,35,J *cG:,33,No Encoding,200,150
+61,200,6000,Hello_there,,,J!*cG:2,29,No Encoding,200,150
+62,200,6000,Hello_there,\0~c,45,hE,47,No Encoding,200,150
+63,200,6000,Hello_there,Pg@,45,J!*cG:,30,No Encoding,200,150
+64,200,6000,Hello_there,+HuI),48,ZAJjkWu:R,22,No Encoding,200,150
+65,200,6000,Hello_there,2PQ,50,J!*cG:,30,No Encoding,200,150
+66,200,6000,Hello_there, *#w{6p ,35,J!*gG:2,29,No Encoding,200,150
+67,200,6000,Hello_there,"*,",47,|tIbv,37,No Encoding,200,150
+68,200,6000,Hello_there,*PxSZ,46,ZJjkW:R,24,No Encoding,200,150
+69,200,6000,Hello_there,*PhSSR,44,:R{SSZ,44,No Encoding,200,150
+70,200,6000,Hello_there,:PxSZ,47,:RySSZ,43,No Encoding,200,150
+71,200,6000,Hello_there,,,Z!*cG:,31,No Encoding,200,150
+72,200,6000,Hello_there,+:HuI),48,RAJjkW:R,24,No Encoding,200,150
+73,200,6000,Hello_there,:PQ,48,Z!jkW:R,26,No Encoding,200,150
+74,200,6000,Hello_there,,,ZJjkW:R,24,No Encoding,200,150
+75,200,6000,Hello_there,:huA),48,I)]J,24,No Encoding,200,150
+76,200,6000,Hello_there,:PxS,47,Z!JjkW:R,24,No Encoding,200,150
+77,200,6000,Hello_there,:huI),49,I)]J,25,No Encoding,200,150
+78,200,6000,Hello_there,:PxS,47,Z!JjkW:R,24,No Encoding,200,150
+79,200,6000,Hello_there,2PxS,48,Z!JjkW:R,24,No Encoding,200,150
+80,200,6000,Hello_there,AaY,30,zp{RR,42,No Encoding,200,150
+81,200,6000,Hello_there,: huI),49,ZI),48,No Encoding,200,150
+82,200,6000,Hello_there,:PxS,46,Z!JjkW:R,24,No Encoding,200,150
+83,200,6000,Hello_there,,,H .'g:,34,No Encoding,200,150
+84,200,6000,Hello_there,Xw`H,39,J!*cG:,30,No Encoding,200,150
+85,200,6000,Hello_there,huA),50,I)]U,26,No Encoding,200,150
+86,200,6000,Hello_there,,,zp{RV,42,No Encoding,200,150
+87,200,6000,Hello_there,:PxZ,48,ZJjkW:R,24,No Encoding,200,150
+88,200,6000,Hello_there,jPxBZ,45,zp{SR,43,No Encoding,200,150
+89,200,6000,Hello_there, *#wz6p ,34,H!.'g:2,30,No Encoding,200,150
+90,200,6000,Hello_there,,,H)JBP,33,No Encoding,200,150
+91,200,6000,Hello_there,*PxS,45,ZJjkW:R,24,No Encoding,200,150
+92,200,6000,Hello_there,+*huI),47,:RySSZ,45,No Encoding,200,150
+93,200,6000,Hello_there,"lpy""#r",42,$S,48,No Encoding,200,150
+94,200,6000,Hello_there,*PxBZ,46,I)],25,No Encoding,200,150
+95,200,6000,Hello_there,*PxSSR,45,RAJjkWu:R,23,No Encoding,200,150
+96,200,6000,Hello_there,Ai]PC,25,I)],26,No Encoding,200,150
+97,200,6000,Hello_there,huI),51,:R{SZ,44,No Encoding,200,150
+98,200,6000,Hello_there,:huI),49,I)]J,25,No Encoding,200,150
+99,200,6000,Hello_there,+: huI),47,I)]J,25,No Encoding,200,150
+100,300,6000,Hello_there,,,"t"" %",44,No Encoding,200,150
+101,300,6000,Hello_there,B!@@JSeJR-,25,B#H@JgJ!R%,25,No Encoding,200,150
+102,300,6000,Hello_there,,,|$4|h=$,29,No Encoding,200,150
+103,300,6000,Hello_there,(H$iJ,45,Qn,49,No Encoding,200,150
+104,300,6000,Hello_there,",LL ",32,|$4|h=$,29,No Encoding,200,150
+105,300,6000,Hello_there, X> pH,42,|$4|h=$,29,No Encoding,200,150
+106,300,6000,Hello_there,B!%*#R,42,F!%##R,39,No Encoding,200,150
+107,300,6000,Hello_there,i,50,F!%##V,38,No Encoding,200,150
+108,300,6000,Hello_there,,,|$4|h5$,29,No Encoding,200,150
+109,300,6000,Hello_there,( d,38,,54,No Encoding,200,150
+110,300,6000,Hello_there,,,CHHJgR-,28,No Encoding,200,150
+111,300,6000,Hello_there,J@*A,37,Rn,49,No Encoding,200,150
+112,300,6000,Hello_there,JR-BR,37,B#H@JgJ!-,27,No Encoding,200,150
+113,300,6000,Hello_there,(D(JLD*E,27,J!%:V,40,No Encoding,200,150
+114,300,6000,Hello_there,,,B#HHJgJ!R-,25,No Encoding,200,150
+115,300,6000,Hello_there,(H$@)J,44,cHHJgJ!R-,26,No Encoding,200,150
+116,300,6000,Hello_there,B%%*#R,41,F!%##V,39,No Encoding,200,150
+117,300,6000,Hello_there,,,J!%;#V,38,No Encoding,200,150
+118,300,6000,Hello_there,B%%#R,41,F!%##R,39,No Encoding,200,150
+119,300,6000,Hello_there,,,|$4|h<$,29,No Encoding,200,150
+120,300,6000,Hello_there,,,|$4|h$,33,No Encoding,200,150
+121,300,6000,Hello_there,B!R%R,40,J!%;#V,40,No Encoding,200,150
+122,300,6000,Hello_there,,,J!%:BV,39,No Encoding,200,150
+123,300,6000,Hello_there,,,J!%:BV,40,No Encoding,200,150
+124,300,6000,Hello_there,,,CHHJGR-,29,No Encoding,200,150
+125,300,6000,Hello_there,J!R-*R,39,B#H@JgJ!%,26,No Encoding,200,150
+126,300,6000,Hello_there,"(,KLhDD",25,F!%##R,39,No Encoding,200,150
+127,300,6000,Hello_there,B!R%R,42,B!%##V,37,No Encoding,200,150
+128,300,6000,Hello_there,#},51,|$4|h<$,28,No Encoding,200,150
+129,300,6000,Hello_there,(D(KLD*D,27,"J!%:C""V",38,No Encoding,200,150
+130,300,6000,Hello_there,(H$(@)J,43,cHHJgJ!R-,25,No Encoding,200,150
+131,300,6000,Hello_there,B%%#R,40,F!%##R,40,No Encoding,200,150
+132,300,6000,Hello_there,(H$@)J,45,cHHJgJ!R-,25,No Encoding,200,150
+133,300,6000,Hello_there,B!R%*R,42,"B!%;""V",39,No Encoding,200,150
+134,300,6000,Hello_there,rU,50,|$4|h=$,29,No Encoding,200,150
+135,300,6000,Hello_there,JR-*BR,39,B#HHJgJ!R-,25,No Encoding,200,150
+136,300,6000,Hello_there,,,J!%;#V,39,No Encoding,200,150
+137,300,6000,Hello_there,0Z@*A,37,|$4|h5$,31,No Encoding,200,150
+138,300,6000,Hello_there,,,CHHJR-,30,No Encoding,200,150
+139,300,6000,Hello_there,!Y,49,l$4lh<D,27,No Encoding,200,150
+140,300,6000,Hello_there,,,CHHJGJR-,28,No Encoding,200,150
+141,300,6000,Hello_there,B!R%R,41,J!%;#V,39,No Encoding,200,150
+142,300,6000,Hello_there,!I,49,|4lh<D,29,No Encoding,200,150
+143,300,6000,Hello_there,,,B#HHJgJ!R-,26,No Encoding,200,150
+144,300,6000,Hello_there,(H$)J,44,CHHZR-,31,No Encoding,200,150
+145,300,6000,Hello_there,(H$)J,44,Rn,48,No Encoding,200,150
+146,300,6000,Hello_there,1rT,50,|$4|h=$,31,No Encoding,200,150
+147,300,6000,Hello_there,,,|$4|h=$,30,No Encoding,200,150
+148,300,6000,Hello_there,B%%R,40,F!%##V,38,No Encoding,200,150
+149,300,6000,Hello_there,(H$(@J,44,CHHJGR-,29,No Encoding,200,150
