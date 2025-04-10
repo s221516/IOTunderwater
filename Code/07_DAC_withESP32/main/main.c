@@ -9,13 +9,16 @@
 #include <math.h>
 #include "esp_task_wdt.h"
 #include <stdlib.h>
+#include "esp_timer.h"
+#include "driver/uart.h"
+
 
 #define PI 3.14159265
 
 void send_wave_DAC(int* wave, int samples, int sample_rate_dac) {
     for (int i = 0; i < samples; i++) {
         dac_output_voltage(DAC_CHAN_0, wave[i]);
-        ets_delay_us(1000000 / sample_rate_dac);
+        //ets_delay_us(1000000 / sample_rate_dac); //sample rate + instructioner delay
     }
 }
 
@@ -55,7 +58,6 @@ void create_silence_symbol(int* buffer, int samples_per_symbol) {
     }
 }
 
-
 void append_barker13(int** bits, int* length) {
     // Barker 13 sequence as bits: +1 -> 1, -1 -> 0
     int barker13[] = {1,1,1,1,1,0,0,1,1,0,1,0,1};
@@ -77,12 +79,11 @@ void append_barker13(int** bits, int* length) {
 
 
 void app_main() {
-    printf("Starting memory-efficient DAC modulation...\n");
+    printf("HELLO LIL N...\n");
     esp_task_wdt_deinit();  // Turn off watchdog for testing
-
     dac_output_enable(DAC_CHAN_0);
 
-    const char* message = "U";
+    const char* message = "Hello there";
     int* message_bits = NULL;
     int message_length = 0;
 
@@ -90,28 +91,28 @@ void app_main() {
     string_to_bits(message, &message_bits, &message_length);
     append_barker13(&message_bits, &message_length);
 
-
-
+    //print the bit array
+    printf("Message bits: ");
+    for (int i = 0; i < message_length; i++) {
+        printf("%d", message_bits[i]);
+    }
 
     int sampleRates[] = {
-        //50000, 100000, 200000, (400000), 800000, 1600000, 3200000
-        400000
-    };
+        110000
+    }; 
     int sampleRatesLength = sizeof(sampleRates) / sizeof(sampleRates[0]);
     
-    int bitRates[] = { 200 };
+    int bitRates[] = {100};
     int bitRatesLength = sizeof(bitRates) / sizeof(bitRates[0]);
 
-    int carrierFrequencies[] = {12000};
+    int carrierFrequencies[] = {2000};
     int carrierFrequenciesLength = sizeof(carrierFrequencies) / sizeof(carrierFrequencies[0]);
 
     //sweep over the above
 
     
     for (int i = 0; i < sampleRatesLength; i++) {
-
         for (int j = 0; j < bitRatesLength; j++) {
-
             for (int k = 0; k < carrierFrequenciesLength; k++) {
                 
                 //print whats about to be send
@@ -134,7 +135,16 @@ void app_main() {
                 create_silence_symbol(symbol_zero, samples_per_symbol);
 
                 //send message many times
-                for (int i1 = 0; i1 < 100; i1++) {
+                for (int i1 = 0; i1 < 30; i1++) {
+                    
+                    // int64_t start_time = esp_timer_get_time(); // microseconds
+                    // send_wave_DAC(symbol_one, samples_per_symbol, sampleRates[i]);
+                    // int64_t end_time = esp_timer_get_time();
+
+                    // double duration_sec = (end_time - start_time) / 1000000.0;
+                
+                    // printf("%lld,%d,%d\n", end_time - start_time, bitRates[j], sampleRates[i]);
+
 
                     for (int j1 = 0; j1 < message_length; j1++) {
                         if (message_bits[j1]) {
@@ -144,8 +154,8 @@ void app_main() {
                         }
                     }
                 }
-                printf("Done.\n");
 
+                printf("Done.\n");
                 free(symbol_one);
                 free(symbol_zero);
             }
