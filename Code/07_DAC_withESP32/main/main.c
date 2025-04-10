@@ -116,21 +116,14 @@ void send_signal() {
     
     float sampleRate_after_allocations = measureSampleRateOfDAC(); 
 
-    printf("\n");
-    printf("Sample rate before allocations: %.2f\n", sample_rate);
-    printf("Sample rate after allocations: %.2f\n", sampleRate_after_allocations);
-    printf("Samples per symbol: %d\n", samples_per_symbol);
-    printf("Carrier frequency: %d\n", carrier_freq);
-    printf("Bit rate: %d\n", bit_rate);
-    printf("Message length: %d\n", message_length);
-    printf("Message: %s\n", message);
-    printf("Message bits: ");
+    //Send information on all settings to the UART
+    char settings_message[256];
+    snprintf(settings_message, sizeof(settings_message), "Carrier Frequency: %d Hz, Bit Rate: %d bps, Sample Rate: %.2f Hz, Samples per Symbol: %d\r\n", carrier_freq, bit_rate, sampleRate_after_allocations, samples_per_symbol);
+    uart_write_bytes(UART_NUM, settings_message, strlen(settings_message));
     
     for (int i = 0; i < message_length; i++) {
         printf("%d", message_bits[i]);
     }
-    printf("\n");
-    printf("\n");
 
     for (int i1 = 0; i1 < repetitions; i1++) {
         for (int j1 = 0; j1 < message_length; j1++) {
@@ -142,7 +135,9 @@ void send_signal() {
         }
     }
     
-    printf("Done.\n");
+    //Respond that the signal is done to UART
+    const char *done_message = "Signal transmission completed.\r\n";
+    uart_write_bytes(UART_NUM, done_message, strlen(done_message));
     free(symbol_one);
     free(symbol_zero);
     free(message_bits);
@@ -152,9 +147,6 @@ void process_input(char *input) {
     int value;
     char valueStr[100];
     
-
-    printf("\n");
-
     if (sscanf(input, "FREQ %d", &value) == 1) {
         carrier_freq = value;
     
@@ -164,35 +156,21 @@ void process_input(char *input) {
     } else if (sscanf(input, "REP %d", &value) == 1) {
         repetitions = value;
 
-    } else if (strcmp(input, "INFO") == 0 || strcmp(input, "") == 0) {
-        //print info on settings
-        printf("Current settings:\n");
-        printf("Carrier frequency: %d\n", carrier_freq);
-        printf("Bit rate: %d\n", bit_rate);
-        printf("Wave Repetitions: %d\n", repetitions);
-    
-    } else if (strcmp(input, "HELP") == 0 || strcmp(input, "") == 0) {
-        //List of commands
-        printf("Commands:\n");
-        printf("FREQ <value>    - Set carrier frequency         (default: 6000)\n");
-        printf("BITRATE <value> - Set bit rate                  (default: 100)\n");
-        printf("REP <value>     - Set number of repetitions     (default: 10)\n");
-        printf("INFO            - Show current settings\n");
-        printf("anything else to send a message (finish with enter)\n");
-
-    
-    }
-     else {
-
+    } else {
         if (sscanf(input, "%99s", valueStr) == 1) {
             strncpy(message, valueStr, sizeof(message) - 1);    
             message[sizeof(message) - 1] = '\0';  // Ensure null termination
-            printf("Sending message: %s\n", message);
             send_signal();
         } else {
-            printf("Failed to parse message from input: %s\n", input);
+            //write error message to UART
+            const char *error_message = "Invalid input. Please enter a valid command.\r\n";
+            uart_write_bytes(UART_NUM, error_message, strlen(error_message));
         }
     }
+
+    //Response with OK to UART
+    const char *ok_message = "OK\r\n";
+    uart_write_bytes(UART_NUM, ok_message, strlen(ok_message));
 }
 
 void init_uart() {
@@ -208,7 +186,6 @@ void init_uart() {
 }
 
 void app_main() {
-
     dac_output_enable(DAC_CHAN_0);
     //deinit watchdog
     esp_task_wdt_deinit();
@@ -217,30 +194,22 @@ void app_main() {
 
     char line_buffer[MAX_LINE_LENGTH];
     int idx = 0;
-
-    //type HELP to see the commands
-    printf("\n MORTIII type HELP to see commands\n");
-
     while (1) {
         uint8_t byte;
+        // Read a byte from UART
         int len = uart_read_bytes(UART_NUM, &byte, 1, 20 / portTICK_PERIOD_MS);
         if (len > 0) {
+            // Check for end of line characters
             if (byte == '\r' || byte == '\n') {
                 uart_write_bytes(UART_NUM, "\r\n", 2); 
                 line_buffer[idx] = '\0';
                 if (idx > 0) {
                     process_input(line_buffer);
                 }
-                idx = 0;
-            } else if (byte == 0x08 || byte == 0x7F) {
-                if (idx > 0) {
-                    idx--;
-                    const char *bs_seq = "\b \b";
-                    uart_write_bytes(UART_NUM, bs_seq, strlen(bs_seq));
-                }
-            } else if (idx < MAX_LINE_LENGTH - 1) {
+                idx = 0; // Reset index for the next line
+
+            }  else if (idx < MAX_LINE_LENGTH - 1) {
                 line_buffer[idx++] = byte;
-                uart_write_bytes(UART_NUM, (const char *)&byte, 1); 
             }
         }
         vTaskDelay(10 / portTICK_PERIOD_MS);
