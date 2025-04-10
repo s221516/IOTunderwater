@@ -1,6 +1,4 @@
 import time
-
-import commpy.channelcoding.convcode as cc
 import numpy as np
 from config import (
     APPLY_BAKER_PREAMBLE,
@@ -11,6 +9,7 @@ from config import (
     PREAMBLE_PATTERN,
 )
 from encoding.hamming_codes import hamming_encode
+from encoding.conv_encoding_scikit import conv_encode
 from initPorts import initPort
 
 ser = initPort(PORT)
@@ -76,11 +75,8 @@ def transmitPhysical(message, carrier, bitrate):
         bits = message_toBitArray(message)
 
     if CONVOLUTIONAL_CODING:
-        generator_matrix = np.array([[5, 7]])  # Rate 1/2 generators (octal)
-        memory = np.array([2])  # Memory matches generator constraint length-1 (3-1=2)
-        trellis = cc.Trellis(memory, generator_matrix)
-        # Encode the message (appends 2 tail bits, encoded length = (10+2)*2=24)
-        bits = cc.conv_encode(bits, trellis)
+        bits = conv_encode(bits)
+        bits = bits.tolist()
 
     if APPLY_BAKER_PREAMBLE:
         bits = BINARY_BARKER + bits
@@ -99,7 +95,7 @@ def transmitPhysical(message, carrier, bitrate):
 
     freq = bitrate / len_of_bits
 
-    print("Transmitted bits: ", len_of_bits)
+    print("Transmitted bits (transmitter): ", len_of_bits)
 
     name = "COCK"
     command = f"""

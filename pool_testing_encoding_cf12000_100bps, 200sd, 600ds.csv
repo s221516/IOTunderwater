@@ -1,0 +1,138 @@
+ID,Bitrate,Carrier Frequency,Original Message,Decoded without bandpass,Hamming Dist without bandpass,Decoded with bandpass,Hamming Dist with bandpass,Encoding,Speaker depth,Distance to speaker
+0,100,12000,Hello_there,Hello_there,0,Hello_there,0,No Encoding,200,600
+1,100,12000,Hello_there,dllo``dbe,8,A,53,No Encoding,200,600
+2,100,12000,Hello_there,`ar!ccz,39,Hedlg_there,2,No Encoding,200,600
+3,100,12000,Hello_there,`dreC#ccz,38,`dreC#ccz,37,No Encoding,200,600
+4,100,12000,Hello_there,`ar!cc:,40,Heddg_t`ere,4,No Encoding,200,600
+5,100,12000,Hello_there,`dreC#ccz,38,`dbeC#ccz,37,No Encoding,200,600
+6,100,12000,Hello_there,Hello_t`ere,1,Hello_there,0,No Encoding,200,600
+7,100,12000,Hello_there,hdreC#ccz,37,hdreC#ccz,37,No Encoding,200,600
+8,100,12000,Hello_there,`ar!ccz,39,Hedlg_there,2,No Encoding,200,600
+9,100,12000,Hello_there,,52,,55,No Encoding,200,600
+10,100,12000,Hello_there,Hello_there,0,Hello_there,0,No Encoding,200,600
+11,100,12000,Hello_there,"(,",49,`!p!##:,42,No Encoding,200,600
+12,100,12000,Hello_there,Hello_there,0,Hello_there,0,No Encoding,200,600
+13,100,12000,Hello_there,"(,",49,`ap!##:,42,No Encoding,200,600
+14,100,12000,Hello_there,Hello_there,0,Hello_there,0,No Encoding,200,600
+15,100,12000,Hello_there,@!$$g0 !0!,19,`!q###:,44,No Encoding,200,600
+16,100,12000,Hello_there,Hello_there,0,Hello_there,0,No Encoding,200,600
+17,100,12000,Hello_there, &&'0  0 ,26, #q#!18,46,No Encoding,200,600
+18,100,12000,Hello_there,Hello_there,0,Hello_there,0,No Encoding,200,600
+19,100,12000,Hello_there,hdreC#ccz,37,`dreC#ccz,37,No Encoding,200,600
+20,100,12000,Hello_there,Hello_there,0,Hello_there,0,No Encoding,200,600
+21,100,12000,Hello_there, &&'0  0 ,26, #q#!18,46,No Encoding,200,600
+22,100,12000,Hello_there,Hello_there,0,Hello_there,0,No Encoding,200,600
+23,100,12000,Hello_there,F,40," ""q""!18",47,No Encoding,200,600
+24,100,12000,Hello_there,Hello_there,0,Hello_there,0,No Encoding,200,600
+25,100,12000,Hello_there,hdreC#ccz,38,`dreC#ccz,38,No Encoding,200,600
+26,100,12000,Hello_there,"(,",47,`ap!##:,41,No Encoding,200,600
+27,100,12000,Hello_there,Hello_there,0,Hello_there,0,No Encoding,200,600
+28,100,12000,Hello_there, !0 !!8,42,(l,45,No Encoding,200,600
+29,100,12000,Hello_there,Hello_there,0,Hello_there,0,No Encoding,200,600
+30,100,12000,Hello_there,`dreC#ccz,38,`dreC#ccz,38,No Encoding,200,600
+31,100,12000,Hello_there,Hello_t`ere,1,Hedlg_there,2,No Encoding,200,600
+32,100,12000,Hello_there, !p!!#8,40,`!p!##:,42,No Encoding,200,600
+33,100,12000,Hello_there,Hello_there,0,Hello_there,0,No Encoding,200,600
+34,100,12000,Hello_there,,," ""q#!18",48,No Encoding,200,600
+35,100,12000,Hello_there,Hello_there,0,Hello_there,0,No Encoding,200,600
+36,100,12000,Hello_there,`dreC#ccz,38,`dreC#ccz,38,No Encoding,200,600
+37,100,12000,Hello_there,"(,",48,`ap!##:,41,No Encoding,200,600
+38,100,12000,Hello_there,Hello_there,0,Hello_there,0,No Encoding,200,600
+39,100,12000,Hello_there,F,40," ""q""!18",46,No Encoding,200,600
+40,100,12000,Hello_there,Hello_there,0,Hello_there,0,No Encoding,200,600
+41,100,12000,Hello_there, !0 !!8,42,(l,45,No Encoding,200,600
+42,100,12000,Hello_there,Hello_there,0,Hello_there,0,No Encoding,200,600
+43,100,12000,Hello_there,F,40,"0""12!",48,No Encoding,200,600
+44,100,12000,Hello_there,Hello_there,0,Hello_there,0,No Encoding,200,600
+45,100,12000,Hello_there,,53,,55,No Encoding,200,600
+46,100,12000,Hello_there,`ap!#c:,40,`ere+##:,38,No Encoding,200,600
+47,100,12000,Hello_there,Hello_there,0,Hello_there,0,No Encoding,200,600
+48,100,12000,Hello_there, !0 !!8,42,(l,44,No Encoding,200,600
+49,100,12000,Hello_there,Hello_there,0,Hello_there,0,No Encoding,200,600
+0,100,12000,Hello_there,Hello_there,0,Hello_there,0,Hamming Encoding,200,600
+1,100,12000,Hello_there,Hello_there,0,Hello_there,0,Hamming Encoding,200,600
+2,100,12000,Hello_there,Hello_there,0,Hello_there,0,Hamming Encoding,200,600
+3,100,12000,Hello_there,Hello_there,0,Hello_there,0,Hamming Encoding,200,600
+4,100,12000,Hello_there,Hello_there,0,Hello_there,0,Hamming Encoding,200,600
+5,100,12000,Hello_there,Hello_there,0,Hello_there,0,Hamming Encoding,200,600
+6,100,12000,Hello_there,Hello_there,0,Hello_there,0,Hamming Encoding,200,600
+7,100,12000,Hello_there,Hdl%/_there,5,Hello_there,0,Hamming Encoding,200,600
+8,100,12000,Hello_there,Hello_there,0,Hello_there,0,Hamming Encoding,200,600
+9,100,12000,Hello_there,Hello_there,0,Hello_there,0,Hamming Encoding,200,600
+10,100,12000,Hello_there,Hello_there,0,Hello_there,0,Hamming Encoding,200,600
+11,100,12000,Hello_there,Hello_there,0,Hello_there,0,Hamming Encoding,200,600
+12,100,12000,Hello_there,Hello_there,0,Hello_there,0,Hamming Encoding,200,600
+13,100,12000,Hello_there,Hello_there,0,Hello_there,0,Hamming Encoding,200,600
+14,100,12000,Hello_there,Hello_there,0,Hello_there,0,Hamming Encoding,200,600
+15,100,12000,Hello_there,Hello_there,0,Hello_there,0,Hamming Encoding,200,600
+16,100,12000,Hello_there,Hello_there,0,Hello_there,0,Hamming Encoding,200,600
+17,100,12000,Hello_there,HH,49,,,Hamming Encoding,200,600
+18,100,12000,Hello_there,1],42,0,40,Hamming Encoding,200,600
+19,100,12000,Hello_there,1],42,1],44,Hamming Encoding,200,600
+20,100,12000,Hello_there,Hello_there,0,Hello_there,0,Hamming Encoding,200,600
+21,100,12000,Hello_there,HH,49,HH,49,Hamming Encoding,200,600
+22,100,12000,Hello_there,1],43,0,41,Hamming Encoding,200,600
+23,100,12000,Hello_there,HH,49,Hello_there,0,Hamming Encoding,200,600
+24,100,12000,Hello_there,,,H,47,Hamming Encoding,200,600
+25,100,12000,Hello_there,1],43,1],44,Hamming Encoding,200,600
+26,100,12000,Hello_there,1],42,,,Hamming Encoding,200,600
+27,100,12000,Hello_there,1],42,,,Hamming Encoding,200,600
+28,100,12000,Hello_there,1],43,0,41,Hamming Encoding,200,600
+29,100,12000,Hello_there,1],43,HH,49,Hamming Encoding,200,600
+30,100,12000,Hello_there,Hello_there,0,Hello_there,0,Hamming Encoding,200,600
+31,100,12000,Hello_there,HI,47,Hello_there,0,Hamming Encoding,200,600
+32,100,12000,Hello_there,Hello_there,0,Hello_there,0,Hamming Encoding,200,600
+33,100,12000,Hello_there,Hello_there,0,Hello_there,0,Hamming Encoding,200,600
+34,100,12000,Hello_there,Hello_there,0,Hello_there,0,Hamming Encoding,200,600
+35,100,12000,Hello_there,Hello_there,0,Hello_there,0,Hamming Encoding,200,600
+36,100,12000,Hello_there,Hello_there,0,Hello_there,0,Hamming Encoding,200,600
+37,100,12000,Hello_there,Hello_there,0,Hello_there,0,Hamming Encoding,200,600
+38,100,12000,Hello_there,Hello_there,0,Hello_there,0,Hamming Encoding,200,600
+39,100,12000,Hello_there,Hello_there,0,Hello_there,0,Hamming Encoding,200,600
+40,100,12000,Hello_there,Hello_there,0,Hello_there,0,Hamming Encoding,200,600
+41,100,12000,Hello_there,Hello_there,0,Hello_there,0,Hamming Encoding,200,600
+42,100,12000,Hello_there,Hello_there,0,Hello_there,0,Hamming Encoding,200,600
+43,100,12000,Hello_there,Hello_there,0,Hello_there,0,Hamming Encoding,200,600
+44,100,12000,Hello_there,Hello_there,0,Hello_there,0,Hamming Encoding,200,600
+45,100,12000,Hello_there,Hello_there,0,Hello_there,0,Hamming Encoding,200,600
+46,100,12000,Hello_there,Hello_there,0,Hello_there,0,Hamming Encoding,200,600
+47,100,12000,Hello_there,Hello_there,0,Hello_there,0,Hamming Encoding,200,600
+48,100,12000,Hello_there,Hello_there,0,Hello_there,0,Hamming Encoding,200,600
+49,100,12000,Hello_there,Hello_there,0,Hello_there,0,Hamming Encoding,200,600
+0,100,12000,Hello_there,A!@p5,40,OZ@ (,48,Convolutional Encoding,200,600
+1,100,12000,Hello_there,Hello_there,0,Hello_there,0,Convolutional Encoding,200,600
+2,100,12000,Hello_there,Hello_there,0,Hello_there,0,Convolutional Encoding,200,600
+3,100,12000,Hello_there,Hello_there,0,Hello_there,0,Convolutional Encoding,200,600
+4,100,12000,Hello_there,Hello_there,0,Hello_there,0,Convolutional Encoding,200,600
+5,100,12000,Hello_there,Hello_there,0,Hello_there,0,Convolutional Encoding,200,600
+6,100,12000,Hello_there,Hello_there,0,Hello_there,0,Convolutional Encoding,200,600
+7,100,12000,Hello_there,bA!@p5,37,O}Ck,42,Convolutional Encoding,200,600
+8,100,12000,Hello_there,Hello_there,0,Hello_there,0,Convolutional Encoding,200,600
+9,100,12000,Hello_there,Hello_there,0,Hello_there,0,Convolutional Encoding,200,600
+10,100,12000,Hello_there,Hello_there,0,Hello_there,0,Convolutional Encoding,200,600
+11,100,12000,Hello_there,NI@Ck,39,OI5Ck,37,Convolutional Encoding,200,600
+12,100,12000,Hello_there,No preamble found,39,No preamble found,37,Convolutional Encoding,200,600
+13,100,12000,Hello_there,NzCk,41,OCk,44,Convolutional Encoding,200,600
+14,100,12000,Hello_there,Hello_there,0,Hello_there,0,Convolutional Encoding,200,600
+15,100,12000,Hello_there,Hello_there,0,Hello_there,0,Convolutional Encoding,200,600
+16,100,12000,Hello_there,No preamble found,0,No preamble found,0,Convolutional Encoding,200,600
+17,100,12000,Hello_there,Hello_there,0,Hello_there,0,Convolutional Encoding,200,600
+18,100,12000,Hello_there,Hello_there,0,Hello_there,0,Convolutional Encoding,200,600
+19,100,12000,Hello_there,NI@Ck,39,NI5Ck,35,Convolutional Encoding,200,600
+20,100,12000,Hello_there,Hello_there,0,Hello_there,0,Convolutional Encoding,200,600
+21,100,12000,Hello_there,Hello_there,0,Hello_there,0,Convolutional Encoding,200,600
+22,100,12000,Hello_there,Hello_there,0,Hello_there,0,Convolutional Encoding,200,600
+23,100,12000,Hello_there,bA!@9}p5,36,OI5Ck,37,Convolutional Encoding,200,600
+24,100,12000,Hello_there,Hello_there,0,Hello_there,0,Convolutional Encoding,200,600
+25,100,12000,Hello_there,Hello_there,0,Hello_there,0,Convolutional Encoding,200,600
+26,100,12000,Hello_there,Hello_there,0,Hello_there,0,Convolutional Encoding,200,600
+27,100,12000,Hello_there,No preamble found,0,No preamble found,0,Convolutional Encoding,200,600
+28,100,12000,Hello_there,Hello_there,0,Hello_there,0,Convolutional Encoding,200,600
+29,100,12000,Hello_there,Hello_there,0,Hello_there,0,Convolutional Encoding,200,600
+30,100,12000,Hello_there,No preamble found,0,No preamble found,0,Convolutional Encoding,200,600
+31,100,12000,Hello_there,Hello_there,0,Hello_there,0,Convolutional Encoding,200,600
+32,100,12000,Hello_there,NIAk,39,NI5Ck,35,Convolutional Encoding,200,600
+33,100,12000,Hello_there,NI@Ck,39,NI5Ck,35,Convolutional Encoding,200,600
+34,100,12000,Hello_there,Hello_there,0,Hello_there,0,Convolutional Encoding,200,600
+35,100,12000,Hello_there,No preamble found,0,No preamble found,0,Convolutional Encoding,200,600
+36,100,12000,Hello_there,NI@Ck,38,NI5Ck,35,Convolutional Encoding,200,600

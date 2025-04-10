@@ -31,7 +31,7 @@ def __hamming_common(src: List[List[int]], s_num: int, encode=True) -> None:
         if (not encode) and sindrome:
             if 0 < sindrome <= len(block):
                 block[sindrome - 1] ^= 1  # Correct the error by flipping the bit
-                # print(f"Corrected error at position {sindrome}")
+                print(f"Corrected error at position {sindrome}")
 
 def hamming_encode(msg: str, mode: int=8) -> str:
     """

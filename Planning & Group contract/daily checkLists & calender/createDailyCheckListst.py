@@ -21,7 +21,7 @@ def generate_weekly_markdown(week_offset=0):
         file_path = os.path.join(relative_folder, f"{base_filename}_{file_counter}.md")
         file_counter += 1
     
-    markdown = "# Task Checklist (Week of {}/{}/{})\n\n".format(start_of_week.day, start_of_week.month, start_0of_week.year)
+    markdown = "# Task Checklist (Week of {}/{}/{})\n\n".format(start_of_week.day, start_of_week.month, start_of_week.year)
     
     for i in range(7):  # Loop through the 7 days of the week
         day = start_of_week + timedelta(days=i)

@@ -1,0 +1,101 @@
+ID,Bitrate,Carrier Frequency,Original Message,Decoded without bandpass,Hamming Dist without bandpass,Decoded with bandpass,Hamming Dist with bandpass,Encoding,Speaker depth,Distance to speaker
+0,600,6000,Hello_there,Hello_there,0,Hello_there,0,Hamming Encoding,5,40
+1,600,6000,Hello_there,Hpllopicr,12,H,49,Hamming Encoding,5,40
+2,600,6000,Hello_there,Hello_there,0,Hello_there,0,Hamming Encoding,5,40
+3,600,6000,Hello_there,k[-,43,q8],46,Hamming Encoding,5,40
+4,600,6000,Hello_there,Hello_there,0,HH,50,Hamming Encoding,5,40
+5,600,6000,Hello_there,88],49,Hcllo_thcr,7,Hamming Encoding,5,40
+6,600,6000,Hello_there,HH,50,HH,50,Hamming Encoding,5,40
+7,600,6000,Hello_there,Hplloticr,11,H,50,Hamming Encoding,5,40
+8,600,6000,Hello_there,qq8],41,Hdllo_thexe,3,Hamming Encoding,5,40
+9,600,6000,Hello_there,+88},45,H,49,Hamming Encoding,5,40
+10,600,6000,Hello_there,No preamble found,45,No preamble found,49,Hamming Encoding,5,40
+11,600,6000,Hello_there,sb278,54,88[},43,Hamming Encoding,5,40
+12,600,6000,Hello_there,qq8],41,Hdllo_thexe,3,Hamming Encoding,5,40
+13,600,6000,Hello_there,HH,49,H,50,Hamming Encoding,5,40
+14,600,6000,Hello_there,Hplloticr,11,H,50,Hamming Encoding,5,40
+15,600,6000,Hello_there,Hello_there,0,Hello_thcre,2,Hamming Encoding,5,40
+16,600,6000,Hello_there,k[-,44,q8[,44,Hamming Encoding,5,40
+17,600,6000,Hello_there,Helloothere,2,Hello_there,0,Hamming Encoding,5,40
+18,600,6000,Hello_there,HH,50,Hello_there,0,Hamming Encoding,5,40
+19,600,6000,Hello_there,HH,49,H,50,Hamming Encoding,5,40
+20,600,6000,Hello_there,Helloothere,2,Hello_thcre,2,Hamming Encoding,5,40
+21,600,6000,Hello_there,No preamble found,2,No preamble found,2,Hamming Encoding,5,40
+22,600,6000,Hello_there,Hello_there,0,Hcllo_thcre,4,Hamming Encoding,5,40
+23,600,6000,Hello_there,n,38,G8~8,48,Hamming Encoding,5,40
+24,600,6000,Hello_there,q8],47,Hcllo_there,2,Hamming Encoding,5,40
+25,600,6000,Hello_there,No preamble found,47,No preamble found,2,Hamming Encoding,5,40
+26,600,6000,Hello_there,HH,49,H,48,Hamming Encoding,5,40
+27,600,6000,Hello_there,k[-,44,q8[,44,Hamming Encoding,5,40
+28,600,6000,Hello_there,88[,47,H,49,Hamming Encoding,5,40
+29,600,6000,Hello_there,HH,50,HH,50,Hamming Encoding,5,40
+30,600,6000,Hello_there,2q8[,47,H,49,Hamming Encoding,5,40
+31,600,6000,Hello_there,2q8[,47,Hpllo_thcr,8,Hamming Encoding,5,40
+32,600,6000,Hello_there,88n,44,G88-],44,Hamming Encoding,5,40
+33,600,6000,Hello_there,q8],50,Hcllo_thcre,4,Hamming Encoding,5,40
+34,600,6000,Hello_there,Hclloothere,4,H,48,Hamming Encoding,5,40
+35,600,6000,Hello_there,HH,49,HH,50,Hamming Encoding,5,40
+36,600,6000,Hello_there,88[,47,H,49,Hamming Encoding,5,40
+37,600,6000,Hello_there,HH,49,H,50,Hamming Encoding,5,40
+38,600,6000,Hello_there,HH,50,HH,50,Hamming Encoding,5,40
+39,600,6000,Hello_there,No preamble found,50,No preamble found,50,Hamming Encoding,5,40
+40,600,6000,Hello_there,Hdlloothere,3,Hcllo_thcre,4,Hamming Encoding,5,40
+41,600,6000,Hello_there,88],50,H,49,Hamming Encoding,5,40
+42,600,6000,Hello_there,Hdlloothere,3,Hcllo_thcre,4,Hamming Encoding,5,40
+43,600,6000,Hello_there,,42,88[},45,Hamming Encoding,5,40
+44,600,6000,Hello_there,Hello_there,0,HH,50,Hamming Encoding,5,40
+45,600,6000,Hello_there,88],44,HH,50,Hamming Encoding,5,40
+46,600,6000,Hello_there,Hdlloothere,3,Hello_there,0,Hamming Encoding,5,40
+47,600,6000,Hello_there,No preamble found,3,No preamble found,0,Hamming Encoding,5,40
+48,600,6000,Hello_there,k[,43,q8],46,Hamming Encoding,5,40
+49,600,6000,Hello_there,k[-,43,88[n,44,Hamming Encoding,5,40
+0,600,6000,Hello_there,``paccz,41,`apaccz,37,No Encoding,5,40
+1,600,6000,Hello_there,pp,43,,45,No Encoding,5,40
+2,600,6000,Hello_there,@allo_t`pa,7,`apagcz,36,No Encoding,5,40
+3,600,6000,Hello_there,`pggz,40,pggx,40,No Encoding,5,40
+4,600,6000,Hello_there,``pacz,42,`qxascz,37,No Encoding,5,40
+5,600,6000,Hello_there,@allo_thpa,6,`pagcz,37,No Encoding,5,40
+6,600,6000,Hello_there,@a|lo_t`pa,8,`apaccz,37,No Encoding,5,40
+7,600,6000,Hello_there,7080~,44,,45,No Encoding,5,40
+8,600,6000,Hello_there,?800|,41,,44,No Encoding,5,40
+9,600,6000,Hello_there,`p`i```,30,aaxascz,38,No Encoding,5,40
+10,600,6000,Hello_there,hpaccz,37,@l_t`pa,10,No Encoding,5,40
+11,600,6000,Hello_there,@allo_thpa,6,`pagcz,37,No Encoding,5,40
+12,600,6000,Hello_there,@allo_thpa,6,@alo_t`pa,8,No Encoding,5,40
+13,600,6000,Hello_there,``pacz,42,`axascz,36,No Encoding,5,40
+14,600,6000,Hello_there,;888~,40,pfgx,41,No Encoding,5,40
+15,600,6000,Hello_there,`pagz,40,pggx,39,No Encoding,5,40
+16,600,6000,Hello_there,No preamble found,40,No preamble found,39,No Encoding,5,40
+17,600,6000,Hello_there,@allo_thpa,6,@alo_t`pa,8,No Encoding,5,40
+18,600,6000,Hello_there,`|lo_t``pa,10,@allo_taapa,7,No Encoding,5,40
+19,600,6000,Hello_there,@allo_thpa,6,`pagcz,37,No Encoding,5,40
+20,600,6000,Hello_there,@allo_t`pa,7,`apagcz,36,No Encoding,5,40
+21,600,6000,Hello_there,;888~,40,pfgx,40,No Encoding,5,40
+22,600,6000,Hello_there,;888~,40,pffx,38,No Encoding,5,40
+23,600,6000,Hello_there,@alo_t`pa,8,@l_tbpa,11,No Encoding,5,40
+24,600,6000,Hello_there,@allo_t`pa,7,aapagcz,37,No Encoding,5,40
+25,600,6000,Hello_there,No preamble found,7,No preamble found,37,No Encoding,5,40
+26,600,6000,Hello_there,xp,41,,46,No Encoding,5,40
+27,600,6000,Hello_there,@allo_thpa,6,`pagcz,37,No Encoding,5,40
+28,600,6000,Hello_there,`paccz,38,`paggz,37,No Encoding,5,40
+29,600,6000,Hello_there,  0,49,"(,",43,No Encoding,5,40
+30,600,6000,Hello_there,,42,,47,No Encoding,5,40
+31,600,6000,Hello_there,`pgx,40,pggx,40,No Encoding,5,40
+32,600,6000,Hello_there,p,42,,48,No Encoding,5,40
+33,600,6000,Hello_there,`,41,,47,No Encoding,5,40
+34,600,6000,Hello_there,,50,`axascz,36,No Encoding,5,40
+35,600,6000,Hello_there,@allo_t`pa,7,@allo_t`apa,6,No Encoding,5,40
+36,600,6000,Hello_there,;88~,41,pggx,39,No Encoding,5,40
+37,600,6000,Hello_there,7000,44,,45,No Encoding,5,40
+38,600,6000,Hello_there,@`llo_t`pa,9,@alo_taapa,8,No Encoding,5,40
+39,600,6000,Hello_there,`paccz,38,@l_t`pa,10,No Encoding,5,40
+40,600,6000,Hello_there,`pagx,39,pggx,40,No Encoding,5,40
+41,600,6000,Hello_there,``pacz,42,@allo_t`apa,6,No Encoding,5,40
+42,600,6000,Hello_there,,42,.,46,No Encoding,5,40
+43,600,6000,Hello_there,`paccz,38,`paggz,37,No Encoding,5,40
+44,600,6000,Hello_there,`paccz,38,`paggz,37,No Encoding,5,40
+45,600,6000,Hello_there,,42,aaxascz,38,No Encoding,5,40
+46,600,6000,Hello_there,?888|,42,pffx,39,No Encoding,5,40
+47,600,6000,Hello_there,@F,37,@anlo_taaxa,9,No Encoding,5,40
+48,600,6000,Hello_there,@l_t`pa,12,@ltp,15,No Encoding,5,40
+49,600,6000,Hello_there,7080~,44,.,44,No Encoding,5,40

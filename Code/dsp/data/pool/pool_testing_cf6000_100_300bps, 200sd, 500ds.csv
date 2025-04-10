@@ -1,0 +1,151 @@
+ID,Bitrate,Carrier Frequency,Original Message,Decoded without bandpass,Hamming Dist without bandpass,Decoded with bandpass,Hamming Dist with bandpass,Encoding,Speaker depth,Distance to speaker
+0,100,6000,Hello_there,@edlo_Ther%,4,@elln_thepe,3,No Encoding,200,500
+1,100,6000,Hello_there,($p #!az,39,$$$'0$$p$,22,No Encoding,200,500
+2,100,6000,Hello_there,@EHHN_THEpE,13,@EHHN_dHEpE,13,No Encoding,200,500
+3,100,6000,Hello_there,(%p%+#cz,38,`$p$##cz,39,No Encoding,200,500
+4,100,6000,Hello_there,her%+#cz,37,@ello_thdp%,4,No Encoding,200,500
+5,100,6000,Hello_there,@EHHN_DHDpE,15,@EHHN_dHEpE,13,No Encoding,200,500
+6,100,6000,Hello_there,@edlo_4h%p%,6,hdp$##cz,37,No Encoding,200,500
+7,100,6000,Hello_there,@edlnWTher%,6,@elln_thepe,3,No Encoding,200,500
+8,100,6000,Hello_there,$d$'0  p ,22,@LHHN^dHL`E,19,No Encoding,200,500
+9,100,6000,Hello_there,"@$d,o_4($p ",13,$ddg0 $p$,18,No Encoding,200,500
+10,100,6000,Hello_there,$d$'O0 $p ,20,HHHN^dHH`E,22,No Encoding,200,500
+11,100,6000,Hello_there,@EHHN_THEpE,13,@EHHN_dHEpE,13,No Encoding,200,500
+12,100,6000,Hello_there,@EHHN_THDpE,14,@EHHN_dHEpE,13,No Encoding,200,500
+13,100,6000,Hello_there,her%##cr,37,@ello_thepe,2,No Encoding,200,500
+14,100,6000,Hello_there,@d`$h( b ,25,@ello_thepe,2,No Encoding,200,500
+15,100,6000,Hello_there,@$d$'0 $p ,20,@HHHN^dHH`E,21,No Encoding,200,500
+16,100,6000,Hello_there,"@%d,o_4($p%",10,@ddloO4`$p$,11,No Encoding,200,500
+17,100,6000,Hello_there,h%r%+#cz,38,hdp$##cz,38,No Encoding,200,500
+18,100,6000,Hello_there,@EHLN_THepE,11,@EHLN_tHepe,9,No Encoding,200,500
+19,100,6000,Hello_there,DHHN_dHDA,18,@EHHN^dHD`E,16,No Encoding,200,500
+20,100,6000,Hello_there,@DHN_dHDE,17,@EHHN^dHD`E,16,No Encoding,200,500
+21,100,6000,Hello_there,$d$'0 $p ,21,@LHHN^dHL`E,19,No Encoding,200,500
+22,100,6000,Hello_there,($p #!az,39,$ddg0 $p$,18,No Encoding,200,500
+23,100,6000,Hello_there,@elln_There,3,@elln_thepe,3,No Encoding,200,500
+24,100,6000,Hello_there,($p #!az,39,$ddg4 $p$,17,No Encoding,200,500
+25,100,6000,Hello_there,h%r%+ccz,37,@ello_thep%,3,No Encoding,200,500
+26,100,6000,Hello_there,"@%d,o_t(%p%",8,@dddoO4`$p$,12,No Encoding,200,500
+27,100,6000,Hello_there,($p%#!cz,38,`$p$###z,39,No Encoding,200,500
+28,100,6000,Hello_there,@ello_there,1,,,No Encoding,200,500
+29,100,6000,Hello_there,@edlo_th%r%,4,@edlo_thep%,4,No Encoding,200,500
+30,100,6000,Hello_there,$d$'O0($p ,19,$$0 !!!9,42,No Encoding,200,500
+31,100,6000,Hello_there,h%p%+#cz,36,hdp$##cz,37,No Encoding,200,500
+32,100,6000,Hello_there,"@%d,/_4($p ",13,$ddg0 $p$,18,No Encoding,200,500
+33,100,6000,Hello_there,her%+ccz,37,hepe+ccr,34,No Encoding,200,500
+34,100,6000,Hello_there,($p!#!az,40,$d$'0$$p$,21,No Encoding,200,500
+35,100,6000,Hello_there,,51,@MHHN^dHL`E,18,No Encoding,200,500
+36,100,6000,Hello_there,@ellnWthdr%,5,@elln_thepe,3,No Encoding,200,500
+37,100,6000,Hello_there,,,@elln_thepe,3,No Encoding,200,500
+38,100,6000,Hello_there,@elln_There,3,@elln_thepe,3,No Encoding,200,500
+39,100,6000,Hello_there,here+#cr,35,@elln_thepe,3,No Encoding,200,500
+40,100,6000,Hello_there,HellnWThere,3,@elln_thepe,3,No Encoding,200,500
+41,100,6000,Hello_there,HeHLN_THere,7,@EHLN_tHepe,9,No Encoding,200,500
+42,100,6000,Hello_there,HeLLNWTHere,7,@eLLN_tHepe,7,No Encoding,200,500
+43,100,6000,Hello_there,@DHHN_dHDpA,16,@EHHN^dHE`E,15,No Encoding,200,500
+44,100,6000,Hello_there,@DHHN_DHDE,17,@EHHN_dHE`E,14,No Encoding,200,500
+45,100,6000,Hello_there, d$'   p ,24,@LHHN^dHL`E,19,No Encoding,200,500
+46,100,6000,Hello_there,,,@elln_thepe,3,No Encoding,200,500
+47,100,6000,Hello_there,@edlo_4(%p%,7,hdp$##cz,37,No Encoding,200,500
+48,100,6000,Hello_there,($p #aax,38,$$0 !!!9,42,No Encoding,200,500
+49,100,6000,Hello_there,Helln_There,2,@elln_thepe,3,No Encoding,200,500
+50,200,6000,Hello_there,@bLln^p`hpa,14,@`Mln^t``ra,11,No Encoding,200,500
+51,200,6000,Hello_there,B@@N `@`@,29,0p01x5,45,No Encoding,200,500
+52,200,6000,Hello_there,T`@@,33,@`Mln^t``ra,11,No Encoding,200,500
+53,200,6000,Hello_there,`ldnVp``pa,14,@`Lln^t``ra,10,No Encoding,200,500
+54,200,6000,Hello_there,@addgN `p!,17,(0D,47,No Encoding,200,500
+55,200,6000,Hello_there,bHiN0``p`,21,/80090x5,45,No Encoding,200,500
+56,200,6000,Hello_there,`HhnVp``pa,16,@`Mln^t``ra,11,No Encoding,200,500
+57,200,6000,Hello_there,`ldnVp``pa,14,/:00901,49,No Encoding,200,500
+58,200,6000,Hello_there,bHiN `@p`,24,80080x5,45,No Encoding,200,500
+59,200,6000,Hello_there,HN @`B,36,@ %,42,No Encoding,200,500
+60,200,6000,Hello_there,`ddfV``pa,17,^b,48,No Encoding,200,500
+61,200,6000,Hello_there,`ddfVP``pa,17,@`lln^t``ra,9,No Encoding,200,500
+62,200,6000,Hello_there,,,(0D,46,No Encoding,200,500
+63,200,6000,Hello_there,bHiN `@pb,25,0080x5,46,No Encoding,200,500
+64,200,6000,Hello_there,@hN `@p`,26,80090x5,44,No Encoding,200,500
+65,200,6000,Hello_there,`ddfVT``pa,16,/:0090,51,No Encoding,200,500
+66,200,6000,Hello_there,`HHNp`@p`,20,|`,46,No Encoding,200,500
+67,200,6000,Hello_there,B@@N @`B,32,@ %,39,No Encoding,200,500
+68,200,6000,Hello_there,,,"^""",44,No Encoding,200,500
+69,200,6000,Hello_there,`HlnVp``pa,15,^b,48,No Encoding,200,500
+70,200,6000,Hello_there,bHhN0`@p`,21,|`,47,No Encoding,200,500
+71,200,6000,Hello_there,`HhnVp``pa,16,@`Mmn^t``ra,12,No Encoding,200,500
+72,200,6000,Hello_there,aldfVP``pa,15,@`lln^t``ra,9,No Encoding,200,500
+73,200,6000,Hello_there,0@,46,(0D,46,No Encoding,200,500
+74,200,6000,Hello_there,bHiN `@p`,24,80080x5,45,No Encoding,200,500
+75,200,6000,Hello_there,V`@@,33,@`Mmn^t``ra,12,No Encoding,200,500
+76,200,6000,Hello_there,bHiN0`@p`,23,80080x5,45,No Encoding,200,500
+77,200,6000,Hello_there,@$,42,@%,41,No Encoding,200,500
+78,200,6000,Hello_there,bIiN `Hp`,25,80090x5,44,No Encoding,200,500
+79,200,6000,Hello_there,bHiN `@p`,24,80080x5,45,No Encoding,200,500
+80,200,6000,Hello_there,Ad`f^ `p ,21,^b,45,No Encoding,200,500
+81,200,6000,Hello_there,b@AN @``,30,0p81x5,43,No Encoding,200,500
+82,200,6000,Hello_there,addf^``p`,17,alln^T``pa,11,No Encoding,200,500
+83,200,6000,Hello_there,,,@ %,39,No Encoding,200,500
+84,200,6000,Hello_there,BI`F `@``,28,0p80x5,45,No Encoding,200,500
+85,200,6000,Hello_there,`HiNp``p`,19,|`,46,No Encoding,200,500
+86,200,6000,Hello_there,addf^``pa,16,@alln^T``pa,10,No Encoding,200,500
+87,200,6000,Hello_there,,,/*008,49,No Encoding,200,500
+88,200,6000,Hello_there,,,@ %,39,No Encoding,200,500
+89,200,6000,Hello_there,@@N @@`@,31,@%,40,No Encoding,200,500
+90,200,6000,Hello_there,V`@P@,32,@`Mln^t``ra,11,No Encoding,200,500
+91,200,6000,Hello_there,`ddfF `p!,21,^b,45,No Encoding,200,500
+92,200,6000,Hello_there,B@aN `@p`,27,0080xu,45,No Encoding,200,500
+93,200,6000,Hello_there,ad`'N `0!,21,(0D,47,No Encoding,200,500
+94,200,6000,Hello_there,`ddfVP``pa,17,@alln^t``pa,9,No Encoding,200,500
+95,200,6000,Hello_there,`ddn^P``p!,16,alln^T``pa,11,No Encoding,200,500
+96,200,6000,Hello_there,`hdnVp``pa,15,@`Mmn^t``ra,12,No Encoding,200,500
+97,200,6000,Hello_there,bHiN `@p`,23,80090x5,44,No Encoding,200,500
+98,200,6000,Hello_there,"@ ,",45,@ %,41,No Encoding,200,500
+99,200,6000,Hello_there,@ddf^``p!,19,alln^T``p!,12,No Encoding,200,500
+100,300,6000,Hello_there,@8V!PA,25,c8vL+P,28,No Encoding,200,500
+101,300,6000,Hello_there,|,47,,44,No Encoding,200,500
+102,300,6000,Hello_there,v@,33,c8LA,29,No Encoding,200,500
+103,300,6000,Hello_there,,,,49,No Encoding,200,500
+104,300,6000,Hello_there,!H@,28,La`l,36,No Encoding,200,500
+105,300,6000,Hello_there,,,#8La,29,No Encoding,200,500
+106,300,6000,Hello_there,,,!La,28,No Encoding,200,500
+107,300,6000,Hello_there,@!8)!PA,24,C8)vL)P,28,No Encoding,200,500
+108,300,6000,Hello_there,,,!Da,32,No Encoding,200,500
+109,300,6000,Hello_there,@8VPA,28,c8vH)PI,26,No Encoding,200,500
+110,300,6000,Hello_there,@8VPA,29,c8vL!A,26,No Encoding,200,500
+111,300,6000,Hello_there,,,@:A,42,No Encoding,200,500
+112,300,6000,Hello_there,!vH@,28,!La,28,No Encoding,200,500
+113,300,6000,Hello_there,VA,33,c8HA,27,No Encoding,200,500
+114,300,6000,Hello_there,,,C8vLP,31,No Encoding,200,500
+115,300,6000,Hello_there,!$`,40,@zA,43,No Encoding,200,500
+116,300,6000,Hello_there,H@,30,1,46,No Encoding,200,500
+117,300,6000,Hello_there,@(VPA,27,c8vL+P,29,No Encoding,200,500
+118,300,6000,Hello_there,,,!La,30,No Encoding,200,500
+119,300,6000,Hello_there,@8PA,32,c8vL!A,26,No Encoding,200,500
+120,300,6000,Hello_there,@@@,36,c8vLP,30,No Encoding,200,500
+121,300,6000,Hello_there,@8VPA,26,c8)vL+,29,No Encoding,200,500
+122,300,6000,Hello_there,@8VA,30,c8vHA,26,No Encoding,200,500
+123,300,6000,Hello_there,@VPA,28,C8vLA,28,No Encoding,200,500
+124,300,6000,Hello_there,H@:A,42,c8vL+P,29,No Encoding,200,500
+125,300,6000,Hello_there,@,37,,,No Encoding,200,500
+126,300,6000,Hello_there,,,C8v@,32,No Encoding,200,500
+127,300,6000,Hello_there,vH@,30,#La,28,No Encoding,200,500
+128,300,6000,Hello_there,@89PA,28,c8vH)A,26,No Encoding,200,500
+129,300,6000,Hello_there,@,31,1,48,No Encoding,200,500
+130,300,6000,Hello_there,@8VPA,29,c8vH!A,25,No Encoding,200,500
+131,300,6000,Hello_there,v@@,32,c8LA,27,No Encoding,200,500
+132,300,6000,Hello_there,,,`O,46,No Encoding,200,500
+133,300,6000,Hello_there,@!VPA,29,c8vHA,26,No Encoding,200,500
+134,300,6000,Hello_there,8VA,32,c8vHA,27,No Encoding,200,500
+135,300,6000,Hello_there,@V!PA,31,c8vH!A,25,No Encoding,200,500
+136,300,6000,Hello_there,,,#La,30,No Encoding,200,500
+137,300,6000,Hello_there,@jA,44,!De,32,No Encoding,200,500
+138,300,6000,Hello_there,@A8VP,26,c8vL+P,29,No Encoding,200,500
+139,300,6000,Hello_there,,,@,41,No Encoding,200,500
+140,300,6000,Hello_there,,,@>A,41,No Encoding,200,500
+141,300,6000,Hello_there,8A,33,c8vHA,26,No Encoding,200,500
+142,300,6000,Hello_there,@:AL,37,LP>A,40,No Encoding,200,500
+143,300,6000,Hello_there,!$`,40,P>A,41,No Encoding,200,500
+144,300,6000,Hello_there,@:AX,41,+@>A,40,No Encoding,200,500
+145,300,6000,Hello_there,,,,,No Encoding,200,500
+146,300,6000,Hello_there,!`,42,@>A,40,No Encoding,200,500
+147,300,6000,Hello_there,,,LP>A,41,No Encoding,200,500
+148,300,6000,Hello_there,@jA,44,!Fe,33,No Encoding,200,500
+149,300,6000,Hello_there,,,C8v@,33,No Encoding,200,500

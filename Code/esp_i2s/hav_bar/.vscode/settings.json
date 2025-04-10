@@ -1,0 +1,12 @@
+{
+  "C_Cpp.intelliSenseEngine": "default",
+  "idf.espIdfPath": "/Users/mathiasmarkvardsen/esp/esp-idf",
+  "idf.pythonInstallPath": "/opt/anaconda3/bin/python",
+  "idf.openOcdConfigs": [
+    "interface/ftdi/esp32_devkitj_v1.cfg",
+    "target/esp32.cfg"
+  ],
+  "idf.toolsPath": "/Users/mathiasmarkvardsen/.espressif",
+  "idf.port": "/dev/tty.usbserial-0232D158",
+  "idf.flashType": "UART"
+}

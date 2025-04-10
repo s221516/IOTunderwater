@@ -1,0 +1,11 @@
+ID,Bitrate,Carrier Frequency,Original Message,Decoded without bandpass,Hamming Dist without bandpass,Decoded with bandpass,Hamming Dist with bandpass,Encoding,Speaker depth,Distance to speaker
+0,100,2000,Hello_there,hdpabrx,35,,,No Encoding,200,150
+1,100,2000,Hello_there,,49,l`p,36,No Encoding,200,150
+2,100,2000,Hello_there,`h`p,35,`l`p,34,No Encoding,200,150
+3,100,2000,Hello_there,lNOpHp,31,,44,No Encoding,200,150
+4,100,2000,Hello_there,`h`p,35,l`p,35,No Encoding,200,150
+5,100,2000,Hello_there,nNOpHx,34,lOp@x,33,No Encoding,200,150
+6,100,2000,Hello_there,`pff,37,`Ff,38,No Encoding,200,150
+7,100,2000,Hello_there,,,lpp,36,No Encoding,200,150
+8,100,2000,Hello_there,h`p,37,l`p,36,No Encoding,200,150
+9,100,2000,Hello_there,h`pacrx,35,4282,49,No Encoding,200,150
