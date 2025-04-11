@@ -1,21 +1,30 @@
 #include <stdio.h>
 #include <string.h>
 #include "freertos/FreeRTOS.h"
-#include "freertos/task.h"
 #include "esp_log.h"
-#include "esp_err.h"
 #include "driver/dac.h"
 #include "rom/ets_sys.h"
 #include <math.h>
+#include "esp_timer.h"
+#include "driver/uart.h"
+#include "esp_system.h"
 #include "esp_task_wdt.h"
-#include <stdlib.h>
 
+#define UART_NUM UART_NUM_0
+#define BUF_SIZE (1024)
+#define MAX_LINE_LENGTH 128
 #define PI 3.14159265
 
-void send_wave_DAC(int* wave, int samples, int sample_rate_dac) {
-    for (int i = 0; i < samples; i++) {
+int bit_rate = 100;
+int carrier_freq = 6000;
+char message[100] = "Hello World!"; 
+int samples_per_symbol = 0;
+float sample_rate = 0;
+int repetitions = 10;
+
+void transmit_symbol(int* wave) {
+    for (int i = 0; i < samples_per_symbol; i++) {
         dac_output_voltage(DAC_CHAN_0, wave[i]);
-        ets_delay_us(1000000 / sample_rate_dac);
     }
 }
 
@@ -31,127 +40,178 @@ void string_to_bits(const char* str, int** bits, int* length) {
     }
 }
 
-void create_carrier_symbol(int* buffer, int samples_per_symbol, int carrier_freq, int sample_rate) {
-    
+void create_carrier_symbol(int* buffer) {
     for (int i = 0; i < samples_per_symbol; i++) {
-
-        //find time
         float t = (float)i / sample_rate;
-
-        //find sin value, and scale it to 0-255
         float s = sin(2 * PI * carrier_freq * t);
         int val = (int)(s * 127.0f + 128.0f);
         if (val < 0) val = 0;
         if (val > 255) val = 255;
-
-        //add wave value to the buffer
         buffer[i] = val;
     }
 }
 
-void create_silence_symbol(int* buffer, int samples_per_symbol) {
+void create_silence_symbol(int* buffer) {
     for (int i = 0; i < samples_per_symbol; i++) {
         buffer[i] = 128;  // Midpoint (zero amplitude)
     }
 }
 
-
-void append_barker13(int** bits, int* length) {
-    // Barker 13 sequence as bits: +1 -> 1, -1 -> 0
-    int barker13[] = {1,1,1,1,1,0,0,1,1,0,1,0,1};
+void prepend_barker13(int** bits, int* length) {
+    int barker13[] = {1, 1, 1, 1, 1, 0, 0, 1, 1, 0, 1, 0, 1};
     int barker_len = sizeof(barker13) / sizeof(barker13[0]);
 
     int new_length = *length + barker_len;
     *bits = realloc(*bits, new_length * sizeof(int));
     if (*bits == NULL) {
-        ESP_LOGE("append_barker13", "Failed to realloc bits buffer.");
+        ESP_LOGE("prepend_barker13", "Failed to realloc bits buffer.");
         return;
     }
 
+    for (int i = *length - 1; i >= 0; i--) {
+        (*bits)[i + barker_len] = (*bits)[i];
+    }
+
     for (int i = 0; i < barker_len; i++) {
-        (*bits)[*length + i] = barker13[i];
+        (*bits)[i] = barker13[i];
     }
 
     *length = new_length;
 }
 
+float measureSampleRateOfDAC() {
+    const int num_samples = 100000;
+    int64_t start_us = esp_timer_get_time();
 
-void app_main() {
-    printf("Starting memory-efficient DAC modulation...\n");
-    esp_task_wdt_deinit();  // Turn off watchdog for testing
+    for (int i = 0; i < num_samples; i++) {
+        uint8_t value = i % 255;
+        dac_output_voltage(DAC_CHAN_0, value);
+    }
 
-    dac_output_enable(DAC_CHAN_0);
+    int64_t end_us = esp_timer_get_time();
+    float elapsed_seconds = (end_us - start_us) / 1e6;
+    float sample_rate = num_samples / elapsed_seconds;
 
-    const char* message = "U";
+    return sample_rate;
+}
+
+void send_signal() {
     int* message_bits = NULL;
     int message_length = 0;
 
-
     string_to_bits(message, &message_bits, &message_length);
-    append_barker13(&message_bits, &message_length);
+    prepend_barker13(&message_bits, &message_length);
 
-
-
-
-    int sampleRates[] = {
-        //50000, 100000, 200000, (400000), 800000, 1600000, 3200000
-        400000
-    };
-    int sampleRatesLength = sizeof(sampleRates) / sizeof(sampleRates[0]);
+    samples_per_symbol = (int) roundf(sample_rate / bit_rate);
+    int* symbol_one = malloc(samples_per_symbol * sizeof(int));
+    int* symbol_zero = malloc(samples_per_symbol * sizeof(int));
     
-    int bitRates[] = { 200 };
-    int bitRatesLength = sizeof(bitRates) / sizeof(bitRates[0]);
+    if (!symbol_one || !symbol_zero) {
+        ESP_LOGE("main", "Failed to allocate symbol buffers.");
+        return;
+    }
 
-    int carrierFrequencies[] = {12000};
-    int carrierFrequenciesLength = sizeof(carrierFrequencies) / sizeof(carrierFrequencies[0]);
-
-    //sweep over the above
-
+    create_carrier_symbol(symbol_one);
+    create_silence_symbol(symbol_zero);
     
-    for (int i = 0; i < sampleRatesLength; i++) {
+    float sampleRate_after_allocations = measureSampleRateOfDAC(); 
 
-        for (int j = 0; j < bitRatesLength; j++) {
+    //Send information on all settings to the UART
+    char settings_message[256];
+    snprintf(settings_message, sizeof(settings_message), "Carrier Frequency: %d Hz, Bit Rate: %d bps, Sample Rate: %.2f Hz, Samples per Symbol: %d\r\n", carrier_freq, bit_rate, sampleRate_after_allocations, samples_per_symbol);
+    uart_write_bytes(UART_NUM, settings_message, strlen(settings_message));
+    
+    for (int i = 0; i < message_length; i++) {
+        printf("%d", message_bits[i]);
+    }
 
-            for (int k = 0; k < carrierFrequenciesLength; k++) {
-                
-                //print whats about to be send
-                printf("Sample Rate: %d, Bit Rate: %d, Carrier Frequency: %d\n", sampleRates[i], bitRates[j], carrierFrequencies[k]);
-                vTaskDelay(1000 / portTICK_PERIOD_MS);
-                
-
-                int samples_per_symbol = sampleRates[i] / bitRates[j];
-
-                // Allocate just two waveforms: one for bit '1', one for bit '0'
-                int* symbol_one = malloc(samples_per_symbol * sizeof(int));
-                int* symbol_zero = malloc(samples_per_symbol * sizeof(int));
-
-                if (!symbol_one || !symbol_zero) {
-                    ESP_LOGE("main", "Failed to allocate symbol buffers.");
-                    return;
-                }
-
-                create_carrier_symbol(symbol_one, samples_per_symbol, carrierFrequencies[k], sampleRates[i]);
-                create_silence_symbol(symbol_zero, samples_per_symbol);
-
-                //send message many times
-                for (int i1 = 0; i1 < 100; i1++) {
-
-                    for (int j1 = 0; j1 < message_length; j1++) {
-                        if (message_bits[j1]) {
-                            send_wave_DAC(symbol_one, samples_per_symbol, sampleRates[i]);
-                        } else {
-                            send_wave_DAC(symbol_zero, samples_per_symbol, sampleRates[i]);
-                        }
-                    }
-                }
-                printf("Done.\n");
-
-                free(symbol_one);
-                free(symbol_zero);
+    for (int i1 = 0; i1 < repetitions; i1++) {
+        for (int j1 = 0; j1 < message_length; j1++) {
+            if (message_bits[j1]) {
+                transmit_symbol(symbol_one);
+            } else {
+                transmit_symbol(symbol_zero);
             }
         }
-    } 
+    }
     
-    
+    //Respond that the signal is done to UART
+    const char *done_message = "Signal transmission completed.\r\n";
+    uart_write_bytes(UART_NUM, done_message, strlen(done_message));
+    free(symbol_one);
+    free(symbol_zero);
     free(message_bits);
+}
+
+void process_input(char *input) {
+    int value;
+    char valueStr[100];
+    
+    if (sscanf(input, "FREQ %d", &value) == 1) {
+        carrier_freq = value;
+    
+    } else if (sscanf(input, "BITRATE %d", &value) == 1) {
+        bit_rate = value;
+
+    } else if (sscanf(input, "REP %d", &value) == 1) {
+        repetitions = value;
+
+    } else {
+        if (sscanf(input, "%99s", valueStr) == 1) {
+            strncpy(message, valueStr, sizeof(message) - 1);    
+            message[sizeof(message) - 1] = '\0';  // Ensure null termination
+            send_signal();
+        } else {
+            //write error message to UART
+            const char *error_message = "Invalid input. Please enter a valid command.\r\n";
+            uart_write_bytes(UART_NUM, error_message, strlen(error_message));
+        }
+    }
+
+    //Response with OK to UART
+    const char *ok_message = "OK\r\n";
+    uart_write_bytes(UART_NUM, ok_message, strlen(ok_message));
+}
+
+void init_uart() {
+    uart_config_t uart_config = {
+        .baud_rate = 115200,
+        .data_bits = UART_DATA_8_BITS,
+        .parity = UART_PARITY_DISABLE,
+        .stop_bits = UART_STOP_BITS_1,
+        .flow_ctrl = UART_HW_FLOWCTRL_DISABLE,
+    };
+    uart_driver_install(UART_NUM, BUF_SIZE * 2, 0, 0, NULL, 0);
+    uart_param_config(UART_NUM, &uart_config);
+}
+
+void app_main() {
+    dac_output_enable(DAC_CHAN_0);
+    //deinit watchdog
+    esp_task_wdt_deinit();
+    sample_rate = measureSampleRateOfDAC();
+    init_uart();
+
+    char line_buffer[MAX_LINE_LENGTH];
+    int idx = 0;
+    while (1) {
+        uint8_t byte;
+        // Read a byte from UART
+        int len = uart_read_bytes(UART_NUM, &byte, 1, 20 / portTICK_PERIOD_MS);
+        if (len > 0) {
+            // Check for end of line characters
+            if (byte == '\r' || byte == '\n') {
+                uart_write_bytes(UART_NUM, "\r\n", 2); 
+                line_buffer[idx] = '\0';
+                if (idx > 0) {
+                    process_input(line_buffer);
+                }
+                idx = 0; // Reset index for the next line
+
+            }  else if (idx < MAX_LINE_LENGTH - 1) {
+                line_buffer[idx++] = byte;
+            }
+        }
+        vTaskDelay(10 / portTICK_PERIOD_MS);
+    }
 }
