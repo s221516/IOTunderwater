@@ -42,8 +42,8 @@ def set_carrierfreq(value):
 PORT = "COM11"
 SAMPLE_RATE = 96000  # this capped by the soundcard, therefore, this is non-changeable
 
-BIT_RATE = 267
-CARRIER_FREQ = 2000  #  15200 Hz
+BIT_RATE = 101
+CARRIER_FREQ = 6000  #  15200 Hz
 SAMPLES_PER_SYMBOL = int(SAMPLE_RATE / BIT_RATE) 
 CUT_OFF_FREQ = (CARRIER_FREQ + BIT_RATE) // 2  # TODO: check this value
 

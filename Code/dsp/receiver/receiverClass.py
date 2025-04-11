@@ -167,7 +167,7 @@ class Receiver:
 
         data_bits = []
         for i in range(len(peak_indices) - 1):
-            if (len_of_data_bits == diff_in_peaks[i]):  # NOTE: we tested less than equal but it makes a big difference with just a few bits, it needs to be exactly equal, as one bit makes a huge difference when decoding
+            # if (len_of_data_bits == diff_in_peaks[i]):  # NOTE: we tested less than equal but it makes a big difference with just a few bits, it needs to be exactly equal, as one bit makes a huge difference when decoding
                 data_bits.append(bits[peak_indices[i] + len(BINARY_BARKER) : peak_indices[i + 1]])
   
 
@@ -180,7 +180,7 @@ class Receiver:
                 print(self.decode_bytes_to_bits(hamming_decode(data_bits[i])))
             else:
                 bits = self.decode_bytes_to_bits(data_bits[i])
-                print(bits, len(bits))
+                print(bits)
 
 
         # NOTE: this plots the correlation of the preamble and the received signal

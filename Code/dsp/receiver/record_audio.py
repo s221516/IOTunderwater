@@ -55,13 +55,39 @@ def create_wav_file_from_recording(record_seconds):
     wf.writeframes(b''.join(frames))
     wf.close()
 
-def continuous_recording_with_preamble_detection():
+def calculate_rms(audio_chunk):
+    """Calculate Root Mean Square of audio chunk"""
+    # Convert to float for better precision
+    chunk_float = audio_chunk.astype(np.float32)
+    # Calculate RMS
+    return np.sqrt(np.mean(np.square(chunk_float)))
+
+def continuous_recording_with_threshold():
     p = pyaudio.PyAudio()
     
-    # Create a buffer to store the last few seconds of audio
-    buffer_seconds = 5
-    buffer_size = int(SAMPLE_RATE * buffer_seconds)
-    audio_buffer = deque(maxlen=buffer_size)
+    # Add these constants at the start of the function
+    SAVE_DIR = "Code/dsp/data"
+    SAVE_FILE = "recording_test.wav"
+
+    # Parameters
+    THRESHOLD = 1000  
+    RECORD_TIME = 7.0  # Record for exactly 7 seconds
+    PRE_RECORD_TIME = 0.5
+    PRINT_INTERVAL = 1.0
+    
+    # Moving average for smoothing audio levels
+    WINDOW_SIZE = 10
+    rms_values = deque(maxlen=WINDOW_SIZE)
+    
+    # Create buffers
+    pre_buffer_size = int(SAMPLE_RATE * PRE_RECORD_TIME)
+    pre_buffer = deque(maxlen=pre_buffer_size)
+    recording_buffer = []
+    
+    # State variables
+    is_recording = False
+    recording_start = None
+    last_print_time = datetime.now()
     
     stream = p.open(format=FORMAT, 
                    channels=CHANNELS,
@@ -70,61 +96,60 @@ def continuous_recording_with_preamble_detection():
                    frames_per_buffer=CHUNK,
                    input_device_index=1)
     
-    print('Starting continuous recording...')
-    receiver = NonCoherentReceiver(BIT_RATE, CARRIER_FREQ)
-    receiver.decode()
-
+    print("Listening for audio above threshold...")
+    print("Press Ctrl+C to stop")
+    
     try:
         while True:
-            # Read audio data
             data = stream.read(CHUNK)
-            audio_buffer.extend(np.frombuffer(data, dtype=np.int16))
+            audio_chunk = np.frombuffer(data, dtype=np.int16)
             
-            # Create temporary filename with timestamp
-            temp_filename = f"temp_{datetime.now().strftime('%Y%m%d_%H%M%S')}.wav"
+            current_rms = calculate_rms(audio_chunk)
+            rms_values.append(current_rms)
+            avg_rms = np.mean(rms_values)
             
-            # Save buffer to temporary file
-            wf = wave.open(temp_filename, 'wb')
-            wf.setnchannels(CHANNELS)
-            wf.setsampwidth(p.get_sample_size(FORMAT))
-            wf.setframerate(SAMPLE_RATE)
-            wf.writeframes(np.array(list(audio_buffer)).tobytes())
-            wf.close()
+            # Print audio level once per second
+            current_time = datetime.now()
+            if (current_time - last_print_time).total_seconds() >= PRINT_INTERVAL:
+                print(f"\rAudio Level (RMS): {avg_rms:8.2f} | {'*' * int(avg_rms/100)}", end='', flush=True)
+                last_print_time = current_time
             
-            try:
-                receiver.decode()  # This will raise PreambleNotFoundError if no preamble is found
+            # Always keep recent audio in pre-buffer
+            pre_buffer.extend(audio_chunk)
+            
+            if not is_recording and avg_rms > THRESHOLD:
+                print("\nSound detected! Recording for 7 seconds...")
+                is_recording = True
+                recording_start = datetime.now()
+                recording_buffer = list(pre_buffer)
                 
-                # If we get here, a preamble was found
-                print("Preamble detected! Saving audio...")
+            if is_recording:
+                recording_buffer.extend(audio_chunk)
                 
-                # Record additional data
-                additional_frames = []
-                for _ in range(int(SAMPLE_RATE / CHUNK * 2)):
-                    additional_frames.append(stream.read(CHUNK))
-                
-                # Save final file with additional data
-                wf = wave.open(PATH_TO_WAV_FILE, 'wb')
-                wf.setnchannels(CHANNELS)
-                wf.setsampwidth(p.get_sample_size(FORMAT))
-                wf.setframerate(SAMPLE_RATE)
-                wf.writeframes(np.array(list(audio_buffer)).tobytes())
-                wf.writeframes(b''.join(additional_frames))
-                wf.close()
-                
-                print("Audio saved to final location!")
-                
-            except PreambleNotFoundError:
-                # No preamble found, delete temporary file
-                os.remove(temp_filename)
-                continue
-            finally:
-                # Clean up temporary file if it still exists
-                if os.path.exists(temp_filename):
-                    os.remove(temp_filename)
-                
+                # Check if 7 seconds have elapsed
+                if (datetime.now() - recording_start).total_seconds() >= RECORD_TIME:
+                    print("\nRecording complete, saving...")
+                    
+                    # Save the recording
+                    save_path = os.path.join(SAVE_DIR, SAVE_FILE)
+                    wf = wave.open(save_path, 'wb')
+                    wf.setnchannels(CHANNELS)
+                    wf.setsampwidth(p.get_sample_size(FORMAT))
+                    wf.setframerate(SAMPLE_RATE)
+                    wf.writeframes(np.array(recording_buffer).tobytes())
+                    wf.close()
+                    
+                    print(f"Recording saved as: {save_path}")
+                    
+                    is_recording = False
+                    recording_buffer = []
+            
     except KeyboardInterrupt:
-        print("Stopping recording...")
+        print("\nRecording stopped by user")
     finally:
         stream.stop_stream()
         stream.close()
         p.terminate()
+
+if __name__ == "__main__":
+    continuous_recording_with_threshold()

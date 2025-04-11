@@ -1,7 +1,7 @@
 from receiver.receiverClass import NonCoherentReceiver, CoherentReceiver
 import config
 import time
-from receiver.record_audio import create_wav_file_from_recording
+from receiver.record_audio import create_wav_file_from_recording, continuous_recording_with_threshold
 
 if (config.STAGE_1):
     from transmitterPhysical import transmitPhysical, stopTransmission
@@ -15,9 +15,9 @@ def logInCsv(id, bitrate, carrierfreq, original_message, decoded_message1, hammi
              filename=None):
 
     if filename is None:
-        filename = f"plastic_testing_hamming_encoding_cf{carrierfreq}_600bps, {speaker_depth}sd, {distance_to_speaker}ds.csv"
+        filename = f"plastic_testing_hamming_encoding_v4_cf{carrierfreq}_200bps, {speaker_depth}sd, {distance_to_speaker}ds.csv"
 
-    headers = ["ID", "Bitrate", "Carrier Frequency", "Original Message", "Decoded without bandpass", "Hamming Dist without bandpass", "Decoded with bandpass", "Hamming Dist with bandpass" , "Encoding", "Speaker depth" , "Distance to speaker"]
+    headers = ["ID", "Bitrate", "Carrier Frequency", "Original Message", "Decoded without bandpass", "Hamming Dist without bandpass", "Decoded with bandpass", "Hamming Dist with bandpass" , "Encoding", "Stage 1", "Speaker depth" , "Distance to speaker"]
 
     # Check if the file exists to determine if we need to write headers
     try:
@@ -33,14 +33,14 @@ def logInCsv(id, bitrate, carrierfreq, original_message, decoded_message1, hammi
             writer.writerow(headers)
         
         # Write the log entry
-        writer.writerow([id, bitrate, carrierfreq, original_message, decoded_message1, hamming_dist_without, decod_msg2, ham_dist_with, config.ENCODING,  speaker_depth, distance_to_speaker])
+        writer.writerow([id, bitrate, carrierfreq, original_message, decoded_message1, hamming_dist_without, decod_msg2, ham_dist_with, config.ENCODING, config.STAGE_1 ,speaker_depth, distance_to_speaker])
 
 def signal_generator_testing():
     
     messages = ["Hello_there"]
 
     n = 50
-    bitrates = [600] * n
+    bitrates = [200] * n
 
     carrierfreqs = [6000]
     
@@ -117,8 +117,8 @@ def signal_generator_testing():
 
 
 def esp32_testing():
-    if (config.MAKE_NEW_RECORDING):
-       create_wav_file_from_recording(5)
+    # if (config.MAKE_NEW_RECORDING):
+    #    create_wav_file_from_recording(5)
 
     time.sleep(0.1)
 
@@ -127,7 +127,8 @@ def esp32_testing():
     print("Carrier freq: ", config.CARRIER_FREQ)    
     
     try:
-        nonCoherentReceiver.set_len_of_data_bits(101)
+        len_of_message = 1
+        nonCoherentReceiver.set_len_of_data_bits(len_of_message)
         message_nc, debug_nc = nonCoherentReceiver.decode()
         decoded_bits = debug_nc["bits_without_preamble"]
         print(f"Bits received: {decoded_bits}")
@@ -139,6 +140,13 @@ def esp32_testing():
 
 
 if __name__ == "__main__":
-    esp32_testing()
+    # if config.STAGE_1:
+    #     signal_generator_testing()
+    # else:
+    #     esp32_testing()
+
+    continuous_recording_with_threshold()
+
+    
 
 
