@@ -101,21 +101,27 @@ class Receiver:
 
         if isTransmitterESP:
             adjusting_value = self.adjusting_samples_per_symbol()
-        else: 
+        else:
             adjusting_value = 0
 
-        for i in range(0, len(thresholded_signal), self.samples_per_symbol - adjusting_value):
-            mu = np.mean(thresholded_signal[i : i + self.samples_per_symbol - adjusting_value])
+        adjusting_value = 0
+
+        for i in range(
+            0, len(thresholded_signal), self.samples_per_symbol - adjusting_value
+        ):
+            mu = np.mean(
+                thresholded_signal[i : i + self.samples_per_symbol - adjusting_value]
+            )
             bits.append(1 if mu > 0.5 else 0)
         return bits
-    
+
     def adjusting_samples_per_symbol(self):
-        len_of_data_bits_without_preamble = len_of_data_bits - 13 
-        
+        len_of_data_bits_without_preamble = len_of_data_bits - 13
+
         number_of_chars = 0
         for i in range(0, len_of_data_bits_without_preamble // 8):
             number_of_chars += 1
-        
+
         if self.bit_rate == 100:
             adjusting_value = 10
         elif self.bit_rate == 200:
@@ -123,10 +129,9 @@ class Receiver:
         else:
             adjusting_value = 4
 
-        
         # print(f"Adjusting value is : {adjusting_value} for {number_of_chars} chars")
         return adjusting_value
-    
+
     def remove_preamble_average(self, bits):
         start_index = None
         end_index = None
@@ -177,7 +182,8 @@ class Receiver:
         correlation = signal.correlate(bits, BINARY_BARKER, mode="valid")
         threshold = np.mean(correlation) + std_factor * np.std(correlation)
         peak_indices, _ = signal.find_peaks(
-            correlation, height=threshold, distance=len_of_data_bits-5        )
+            correlation, height=threshold, distance=len_of_data_bits - 5
+        )
 
         if len(peak_indices) < 2:
             if std_factor > 1:
@@ -190,9 +196,10 @@ class Receiver:
 
         data_bits = []
         for i in range(len(peak_indices) - 1):
-            if abs(diff_in_peaks[i] - len_of_data_bits) <= 0: 
-                data_bits.append(bits[peak_indices[i] + len(BINARY_BARKER) : peak_indices[i + 1]])
-  
+            if abs(diff_in_peaks[i] - len_of_data_bits) <= 0:
+                data_bits.append(
+                    bits[peak_indices[i] + len(BINARY_BARKER) : peak_indices[i + 1]]
+                )
 
         # NOTE: this is to plot the decodins of each entry of data bits
         for i in range(len(data_bits)):
@@ -204,7 +211,6 @@ class Receiver:
             else:
                 decoded_bits = self.decode_bytes_to_bits(data_bits[i])
                 print(decoded_bits)
-
 
         # # NOTE: this plots the correlation of the preamble and the received signal
         # plt.figure(figsize=(14, 8))
@@ -288,6 +294,7 @@ class Receiver:
     def set_transmitter(self, bool):
         global isTransmitterESP
         isTransmitterESP = bool
+
 
 class NonCoherentReceiver(Receiver):
     def _demodulate(self) -> Tuple[np.ndarray, Dict]:
