@@ -15,6 +15,8 @@ from config import (
     PREAMBLE_PATTERN,
     REPETITIONS,
     SAMPLE_RATE,
+    RECORD_FOR_LOOP_TESTING, 
+    PLOT_PREAMBLE_CORRELATION
 )
 
 from encoding.hamming_codes import hamming_decode
@@ -84,8 +86,8 @@ class Receiver:
 
     def threshold_signal(self, normalized_signal: np.ndarray) -> np.ndarray:
         # this is called hyperestesis thresholding, essentially you have a memory while checking
-        low = 0.5
-        high = 0.5
+        low = 0.4
+        high = 0.6
         thresholded = np.zeros_like(normalized_signal)
         state = 0
         for i in range(len(normalized_signal)):
@@ -98,10 +100,39 @@ class Receiver:
 
     def get_bits(self, thresholded_signal: np.ndarray) -> list:
         bits = []
-        for i in range(0, len(thresholded_signal), self.samples_per_symbol):
-            mu = np.mean(thresholded_signal[i : i + self.samples_per_symbol])
+
+        if isTransmitterESP:
+            adjusting_value = self.adjusting_samples_per_symbol()
+        else:
+            adjusting_value = 0
+
+        adjusting_value = 0
+
+        for i in range(
+            0, len(thresholded_signal), self.samples_per_symbol - adjusting_value
+        ):
+            mu = np.mean(
+                thresholded_signal[i : i + self.samples_per_symbol - adjusting_value]
+            )
             bits.append(1 if mu > 0.5 else 0)
         return bits
+
+    def adjusting_samples_per_symbol(self):
+        len_of_data_bits_without_preamble = len_of_data_bits - 13
+
+        number_of_chars = 0
+        for i in range(0, len_of_data_bits_without_preamble // 8):
+            number_of_chars += 1
+
+        if self.bit_rate == 100:
+            adjusting_value = 10
+        elif self.bit_rate == 200:
+            adjusting_value = 6
+        else:
+            adjusting_value = 4
+
+        # print(f"Adjusting value is : {adjusting_value} for {number_of_chars} chars")
+        return adjusting_value
 
     def remove_preamble_average(self, bits):
         start_index = None
@@ -152,9 +183,7 @@ class Receiver:
     def remove_preamble_baker_code(self, bits, std_factor=4):
         correlation = signal.correlate(bits, BINARY_BARKER, mode="valid")
         threshold = np.mean(correlation) + std_factor * np.std(correlation)
-        peak_indices, _ = signal.find_peaks(
-            correlation, height=threshold, distance=len_of_data_bits
-        )
+        peak_indices, _ = signal.find_peaks(correlation, height=threshold, distance=20)
 
         if len(peak_indices) < 2:
             if std_factor > 1:
@@ -163,47 +192,47 @@ class Receiver:
                 return -1
 
         diff_in_peaks = np.diff(peak_indices)
-        print("Diff in peaks: ", diff_in_peaks)
 
         data_bits = []
         for i in range(len(peak_indices) - 1):
-            if (len_of_data_bits == diff_in_peaks[i]):  # NOTE: we tested less than equal but it makes a big difference with just a few bits, it needs to be exactly equal, as one bit makes a huge difference when decoding
+            # if abs(diff_in_peaks[i] - len_of_data_bits) <= 0:
                 data_bits.append(bits[peak_indices[i] + len(BINARY_BARKER) : peak_indices[i + 1]])
-  
 
-        # NOTE: this is to plot the decodins of each entry of data bits
-        for i in range(len(data_bits)):
-            if CONVOLUTIONAL_CODING:
-                bits_array = np.array(data_bits[i])
-                print(self.decode_bytes_to_bits(conv_decode(bits_array, None)[:-2]))
-            elif HAMMING_CODING:
-                print(self.decode_bytes_to_bits(hamming_decode(data_bits[i])))
-            else:
-                bits = self.decode_bytes_to_bits(data_bits[i])
-                print(bits, len(bits))
+        if RECORD_FOR_LOOP_TESTING:
+            # NOTE: this is to plot the decodins of each entry of data bits
+            print("Diff in peaks: ", diff_in_peaks)
+            for i in range(len(data_bits)):
+                if CONVOLUTIONAL_CODING:
+                    bits_array = np.array(data_bits[i])
+                    print(self.decode_bytes_to_bits(conv_decode(bits_array, None)[:-2]))
+                elif HAMMING_CODING:
+                    print(self.decode_bytes_to_bits(hamming_decode(data_bits[i])))
+                else:
+                    decoded_bits = self.decode_bytes_to_bits(data_bits[i])
+                    print(decoded_bits)
 
-
-        # NOTE: this plots the correlation of the preamble and the received signal
-        plt.figure(figsize=(14, 8))
-        plt.plot(correlation, color="#FF3300", label="Correlation Value", linewidth=2)
-        plt.scatter(
-            peak_indices,
-            correlation[peak_indices],
-            color="#000000",
-            label="Detected Preambles",
-            zorder=3,
-            s=100,
-            marker="D",
-        )
-        plt.axhline(
-            threshold, color="gray", linestyle="--", label="Threshold", linewidth=2
-        )
-        plt.xlabel("Bits from received signal")
-        plt.ylabel("Correlation Value")
-        plt.title("Cross-Correlation with Preamble")
-        plt.legend()
-        plt.grid()
-        plt.show()
+        if PLOT_PREAMBLE_CORRELATION:
+            # NOTE: this plots the correlation of the preamble and the received signal
+            plt.figure(figsize=(14, 8))
+            plt.plot(correlation, color="#FF3300", label="Correlation Value", linewidth=2)
+            plt.scatter(
+                peak_indices,
+                correlation[peak_indices],
+                color="#000000",
+                label="Detected Preambles",
+                zorder=3,
+                s=100,
+                marker="D",
+            )
+            plt.axhline(
+                threshold, color="gray", linestyle="--", label="Threshold", linewidth=2
+            )
+            plt.xlabel("Bits from received signal")
+            plt.ylabel("Correlation Value")
+            plt.title("Cross-Correlation with Preamble")
+            plt.legend()
+            plt.grid()
+            plt.show()
 
         avg = [int(round((sum(col)) / len(col))) for col in zip(*data_bits)]
         if avg == []:
@@ -262,6 +291,10 @@ class Receiver:
         global len_of_data_bits
         len_of_data_bits = value
 
+    def set_transmitter(self, bool):
+        global isTransmitterESP
+        isTransmitterESP = bool
+
 
 class NonCoherentReceiver(Receiver):
     def _demodulate(self) -> Tuple[np.ndarray, Dict]:
@@ -292,6 +325,8 @@ class NonCoherentReceiver(Receiver):
         normalized = self.normalize_signal(cleaned_signal)
         thresholded = self.threshold_signal(normalized)
         bits = self.get_bits(thresholded)
+
+        # print("Received bits:", bits)
 
         if APPLY_AVERAGING_PREAMBLE:
             bits_without_preamble = self.remove_preamble_average(bits)

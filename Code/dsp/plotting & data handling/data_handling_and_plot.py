@@ -232,9 +232,6 @@ def compute_ber(file_path):
         
         # Print results for each encoding
         print(f"\nBER Analysis for {encoding}:")
-        print(f"Total transmissions analyzed: {total_entries}")
-        print(f"Valid transmissions (No BP): {len(valid_entries_no_bp)}")
-        print(f"Valid transmissions (BP): {len(valid_entries_bp)}")
         print(f"\nWithout Bandpass:")
         print(f"Total errors: {total_errors_no_bp}")
         print(f"Total bits: {total_bits_no_bp}")
@@ -341,33 +338,216 @@ def plot_ber_vs_bitrate(results_df, distance=40, carrier_freq=6000):
     plt.grid(True, linestyle='--', alpha=0.7)
     plt.legend(loc='center left', bbox_to_anchor=(1, 0.5))
     
+    plt.gca().invert_yaxis()
     # Show plot
     plt.tight_layout()
     plt.show()
 
+def plot_ber_comparison_across_files(file_paths):
+    """
+    Compute BER for multiple files and create a scatter plot comparing
+    Hamming encoding and no encoding, with and without bandpass filtering.
+    """
+    all_results = []
 
+    for file_path in file_paths:
+        # Extract short file name for labeling
+        file_label = "v1"  # default
+        if "_v2_" in file_path:
+            file_label = "v2"
+        elif "_v3_" in file_path:
+            file_label = "v3"
+        elif "v4" in file_path:
+            file_label = "v4"
+        
+        # Compute BER for the file
+        results = compute_ber(file_path)
+        
+        # Add results to the list
+        for encoding_type, data in results.items():
+            # Keep as percentage
+            ber_no_bp = data['ber_no_bp']
+            ber_with_bp = data['ber_bp']
+            
+            all_results.append({
+                'File': file_label,
+                'Encoding': encoding_type,
+                'BER_No_BP': ber_no_bp,
+                'BER_With_BP': ber_with_bp
+            })
 
-if __name__ == "__main__":
-    file_paths = [
-        "Code/dsp/data/plastic/plastic_testing_hamming_encoding_cf6000_100bps, 5sd, 40ds.csv",
-        "Code/dsp/data/plastic/plastic_testing_hamming_encoding_cf6000_200bps, 5sd, 40ds.csv",
-        "Code/dsp/data/plastic/plastic_testing_hamming_encoding_cf6000_300bps, 5sd, 40ds.csv",
-        "Code/dsp/data/plastic/plastic_testing_hamming_encoding_cf6000_400bps, 5sd, 40ds.csv",
-        "Code/dsp/data/plastic/plastic_testing_hamming_encoding_cf6000_500bps, 5sd, 40ds.csv",
-        "Code/dsp/data/plastic/plastic_testing_hamming_encoding_cf6000_600bps, 5sd, 40ds.csv"
-    ]
+    # Convert results to a DataFrame
+    results_df = pd.DataFrame(all_results)
+
+    # Create scatter plot
+    plt.figure(figsize=(10, 6))
     
-    output_path = "Code/dsp/data/plastic/combined_ber_results.csv"
-    results_df = compute_and_save_multiple_bers(file_paths, output_path)
-    plot_ber_vs_bitrate(results_df)
+    # Plot No Encoding
+    no_encoding = results_df[results_df['Encoding'] == 'No Encoding']
+    plt.scatter(no_encoding['File'], no_encoding['BER_No_BP'], 
+                color='red', marker='o', s=100, label='No Encoding (No BP)')
+    plt.scatter(no_encoding['File'], no_encoding['BER_With_BP'], 
+                color='blue', marker='o', s=100, label='No Encoding (BP)')
+    
+    # Plot Hamming Encoding
+    hamming = results_df[results_df['Encoding'] == 'Hamming Encoding']
+    plt.scatter(hamming['File'], hamming['BER_No_BP'], 
+                color='red', marker='^', s=100, label='Hamming (No BP)')
+    plt.scatter(hamming['File'], hamming['BER_With_BP'], 
+                color='blue', marker='^', s=100, label='Hamming (BP)')
+    
+    # Add value labels
+    for df, marker_offset in [(no_encoding, 10), (hamming, -15)]:
+        for idx, row in df.iterrows():
+            # Label for No BP
+            plt.annotate(f'{row["BER_No_BP"]:.1f}%', 
+                        (row['File'], row['BER_No_BP']),
+                        xytext=(0, 10), textcoords="offset points",
+                        ha='center', color='red')
+            # Label for With BP
+            plt.annotate(f'{row["BER_With_BP"]:.1f}%',
+                        (row['File'], row['BER_With_BP']),
+                        xytext=(0, -15), textcoords="offset points",
+                        ha='center', color='blue')
+    
+    # Add labels and title
+    plt.xlabel('Version')
+    plt.ylabel('Bit Error Rate (%)')
+    plt.title('BER Comparison Across Different Versions')
+    
+    # Set y-axis limits and grid
+    plt.ylim(0, 15)  # 0% to 100%
+    plt.grid(True, linestyle='--', alpha=0.7)
+    plt.legend(bbox_to_anchor=(1.05, 1), loc='upper left')
+    
+    # Adjust layout and display
+    plt.tight_layout()
+    plt.show()
+
+def combine_csv_versions():
+    """Combine v1 and v2 CSV files into a single file without version numbers"""
+    base_path = "Code/dsp/data/plastic"
+    
+    # Read both CSV files
+    df1 = pd.read_csv(f"{base_path}/SG_plastic_testing_cf6000_100-300bps, 5sd, 50ds.csv")
+    df2 = pd.read_csv(f"{base_path}/SG_plastic_testing_cf6000_400bps, 5sd, 50ds.csv")
+    
+    # Combine the dataframes
+    combined_df = pd.concat([df1, df2], ignore_index=True)
+    
+    # Create new filename without version number
+    new_filename = f"{base_path}/ESP_plastic_testing_cf6000_100-400bps, 5sd, 50ds.csv"
+    
+    # Save combined data
+    combined_df.to_csv(new_filename, index=False)
+    print(f"Combined file saved as: {new_filename}")
+
+def compare_esp_and_sg_ber():
+    """Compare BER between ESP and Signal Generator implementations"""
+    # Read both CSV files
+    base_path = "Code/dsp/data/plastic"
+    esp_df = pd.read_csv(f"{base_path}/ESP_plastic_testing_cf6000_100-300bps, 5sd, 50ds.csv")
+    sg_df = pd.read_csv(f"{base_path}/SG_plastic_testing_cf6000_100-400bps, 5sd, 50ds.csv")
+
+    # Filter out 400 bps from Signal Generator data
+    sg_df = sg_df[sg_df['Bitrate'] != 400]
+
+    # Process each dataframe
+    def process_df(df, message_length=88):
+        results = []
+        for bitrate in sorted(df['Bitrate'].unique()):
+            bitrate_data = df[df['Bitrate'] == bitrate]
+            total_entries = len(bitrate_data)
+            
+            # Calculate BER for without bandpass
+            valid_no_bp = bitrate_data[bitrate_data['Decoded without bandpass'] != 'No preamble found']
+            total_bits_no_bp = len(valid_no_bp) * message_length
+            total_errors_no_bp = valid_no_bp['Hamming Dist without bandpass'].sum()
+            ber_no_bp = (total_errors_no_bp / total_bits_no_bp * 100) if total_bits_no_bp > 0 else 100
+            invalid_no_bp = total_entries - len(valid_no_bp)
+
+            # Calculate BER for with bandpass
+            valid_bp = bitrate_data[bitrate_data['Decoded with bandpass'] != 'No preamble found']
+            total_bits_bp = len(valid_bp) * message_length
+            total_errors_bp = valid_bp['Hamming Dist with bandpass'].sum()
+            ber_bp = (total_errors_bp / total_bits_bp * 100) if total_bits_bp > 0 else 100
+            invalid_bp = total_entries - len(valid_bp)
+
+
+            print(f"\nBitrate {bitrate} bps:")
+            print(f"Total entries: {total_entries}")
+            print(f"Invalid entries (No BP): {invalid_no_bp}")
+            print(f"Invalid entries (BP): {invalid_bp}")
+        
+            results.append({
+                'Bitrate': bitrate,
+                'BER_No_BP': ber_no_bp,
+                'BER_With_BP': ber_bp
+            })
+        return pd.DataFrame(results)
+
+    # Process both datasets
+    esp_results = process_df(esp_df)
+    sg_results = process_df(sg_df)
+
+    # Create plot
+    plt.figure(figsize=(12, 8))
+    
+    # Plot SG data
+    plt.plot(sg_results['Bitrate'], sg_results['BER_No_BP'], 'r.-', label='SG (No BP)', markersize=10)
+    plt.plot(sg_results['Bitrate'], sg_results['BER_With_BP'], 'b.-', label='SG (With BP)', markersize=10)
+    
+    # Plot ESP data
+    plt.plot(esp_results['Bitrate'], esp_results['BER_No_BP'], 'g.-', label='ESP (No BP)', markersize=10)
+    plt.plot(esp_results['Bitrate'], esp_results['BER_With_BP'], 'k.-', label='ESP (With BP)', markersize=10)
+    
+    # Add labels and annotations
+    for df, color1, color2 in [(sg_results, 'red', 'blue'), (esp_results, 'green', 'black')]:
+        for x, y1, y2 in zip(df['Bitrate'], df['BER_No_BP'], df['BER_With_BP']):
+            plt.annotate(f'{y1:.1f}%', (x, y1), textcoords="offset points", 
+                        xytext=(0,10), ha='center', color=color1)
+            plt.annotate(f'{y2:.1f}%', (x, y2), textcoords="offset points", 
+                        xytext=(0,-15), ha='center', color=color2)
+
+    plt.xlabel('Bitrate (bps)')
+    plt.ylabel('Bit Error Rate (%)')
+    plt.title('BER Comparison: ESP vs Signal Generator')
+    plt.grid(True, linestyle='--', alpha=0.7)
+    plt.legend(bbox_to_anchor=(1.05, 1), loc='upper left')
+
+    
+    plt.tight_layout()
+    plt.show()
+
+if __name__ == "__main__":  
+    # combine_csv_versions()
+    compare_esp_and_sg_ber()
+    # file_paths = [
+    #     "Code/dsp/data/plastic/plastic_testing_hamming_encoding_cf6000_100bps, 5sd, 40ds.csv",
+    #     "Code/dsp/data/plastic/plastic_testing_hamming_encoding_cf6000_200bps, 5sd, 40ds.csv",
+    #     "Code/dsp/data/plastic/plastic_testing_hamming_encoding_cf6000_300bps, 5sd, 40ds.csv",
+    #     "Code/dsp/data/plastic/plastic_testing_hamming_encoding_cf6000_400bps, 5sd, 40ds.csv",
+    #     "Code/dsp/data/plastic/plastic_testing_hamming_encoding_cf6000_500bps, 5sd, 40ds.csv",
+    #     "Code/dsp/data/plastic/plastic_testing_hamming_encoding_cf6000_600bps, 5sd, 40ds.csv"
+    # ]
+    
+    # output_path = "Code/dsp/data/plastic/combined_ber_results.csv"
+    # results_df = compute_and_save_multiple_bers(file_paths, output_path)
+    # plot_ber_vs_bitrate(results_df)
 
     # carrier_freq_input = 12000
     # combining_pool_data_sweep(carrier_freq_input)
     # plotting_pool_data_from_csv(carrier_freq_input)
 
 
+    # file_paths = ["Code/dsp/data/plastic/plastic_testing_hamming_encoding_cf6000_200bps, 5sd, 40ds.csv", 
+    #             "Code/dsp/data/plastic/plastic_testing_hamming_encoding_v2_cf6000_200bps, 5sd, 40ds.csv", 
+    #             "Code/dsp/data/plastic/plastic_testing_hamming_encoding_v3_cf6000_200bps, 5sd, 40ds.csv",
+    #             "Code/dsp/data/plastic/plastic_testing_hamming_encoding_v4_cf6000_200bps, 5sd, 40ds.csv"]
+    
+    # file_paths = ["Code/dsp/data/plastic/esp_plastic_testing_v1_cf6000_100-300bps, 5sd, 5ds.csv", 
+    #             "Code/dsp/data/plastic/esp_plastic_testing_v2_cf6000_100-300bps, 5sd, 5ds.csv", 
+    #             "Code/dsp/data/plastic/esp_plastic_testing_v3_cf6000_100-300bps, 5sd, 5ds.csv",
+    #             "Code/dsp/data/plastic/esp_plastic_testing_v4_cf6000_100-300bps, 5sd, 5ds.csv"]
 
-
-
-
-
+    # plot_ber_comparison_across_files(file_paths)

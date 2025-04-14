@@ -95,7 +95,7 @@ def transmitPhysical(message, carrier, bitrate):
 
     freq = bitrate / len_of_bits
 
-    print("Transmitted bits (transmitter): ", len_of_bits)
+    # print("Transmitted bits (transmitter): ", len_of_bits)
 
     name = "COCK"
     command = f"""
