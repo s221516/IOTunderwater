@@ -1,4 +1,5 @@
 import time
+from datetime import datetime
 import config
 
 
@@ -7,29 +8,38 @@ class MessageSender:
         """Initialize the message sender"""
         self.use_esp = use_esp
 
+    def get_is_transmitting():
+        return IS_TRANSMITTING
+
     def transmit_message(self, message):
         """Transmit a message using either ESP32 or signal generator"""
+        global IS_TRANSMITTING
+        IS_TRANSMITTING = True
+        transmission_start = datetime.now()
+        print("Transmitting: ", IS_TRANSMITTING)
+        
         try:
             if self.use_esp:
                 import esp32test
-
-                print(f"Transmitting '{message}' via ESP32...")
                 esp32test.transmit_to_esp32(
                     message, config.CARRIER_FREQ, config.BIT_RATE
                 )
             else:
                 from transmitterPhysical import transmitPhysical, stopTransmission
-
-                print(f"Transmitting '{message}' via signal generator...")
                 transmitPhysical(message, config.CARRIER_FREQ, config.BIT_RATE)
-                time.sleep(2)  # Allow time for transmission
                 stopTransmission()
 
-            print("Transmission complete")
+            # Wait until 4 seconds have passed since transmission start
+            while (datetime.now() - transmission_start).total_seconds() < 6:
+                pass  # Non-blocking wait
+                
             return True
         except Exception as e:
             print(f"Transmission error: {e}")
             return False
+        finally:
+            IS_TRANSMITTING = False
+            print("Transmitting: ", IS_TRANSMITTING)
 
     def run_interactive_mode(self):
         """Run the interactive command interface"""
@@ -39,14 +49,11 @@ class MessageSender:
         print("  'esp' to switch to ESP32 transmitter")
         print("  'sg' to switch to signal generator")
         print("  'cf=<freq>' to set carrier frequency (e.g., 'cf=6000')")
-        print("  'br=<rate>' to set bit rate (e.g., 'br=100')")
+        print("  'br=<rate>' to set bit rate (e.g., 'br=100') \n")
 
         try:
             while True:
-                user_input = input("\n> ")
-
-                if not user_input.strip():
-                    continue
+                user_input = input("")
 
                 if user_input.lower() == "exit":
                     break
@@ -77,13 +84,9 @@ class MessageSender:
 
                 else:
                     # Transmit the message
+                    IS_TRANSMITTING = True
                     self.transmit_message(user_input)
 
         except KeyboardInterrupt:
             print("\nExiting interactive mode...")
 
-
-if __name__ == "__main__":
-    # Default to ESP32 transmission
-    sender = MessageSender(use_esp=True)
-    sender.run_interactive_mode()
