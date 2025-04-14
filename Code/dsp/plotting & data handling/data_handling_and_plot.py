@@ -457,19 +457,28 @@ def compare_esp_and_sg_ber():
         results = []
         for bitrate in sorted(df['Bitrate'].unique()):
             bitrate_data = df[df['Bitrate'] == bitrate]
+            total_entries = len(bitrate_data)
             
             # Calculate BER for without bandpass
             valid_no_bp = bitrate_data[bitrate_data['Decoded without bandpass'] != 'No preamble found']
             total_bits_no_bp = len(valid_no_bp) * message_length
             total_errors_no_bp = valid_no_bp['Hamming Dist without bandpass'].sum()
             ber_no_bp = (total_errors_no_bp / total_bits_no_bp * 100) if total_bits_no_bp > 0 else 100
-            
+            invalid_no_bp = total_entries - len(valid_no_bp)
+
             # Calculate BER for with bandpass
             valid_bp = bitrate_data[bitrate_data['Decoded with bandpass'] != 'No preamble found']
             total_bits_bp = len(valid_bp) * message_length
             total_errors_bp = valid_bp['Hamming Dist with bandpass'].sum()
             ber_bp = (total_errors_bp / total_bits_bp * 100) if total_bits_bp > 0 else 100
-            
+            invalid_bp = total_entries - len(valid_bp)
+
+
+            print(f"\nBitrate {bitrate} bps:")
+            print(f"Total entries: {total_entries}")
+            print(f"Invalid entries (No BP): {invalid_no_bp}")
+            print(f"Invalid entries (BP): {invalid_bp}")
+        
             results.append({
                 'Bitrate': bitrate,
                 'BER_No_BP': ber_no_bp,

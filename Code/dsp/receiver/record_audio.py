@@ -5,7 +5,7 @@ import pyaudio
 import numpy as np
 import os
 from collections import deque
-from config import PATH_TO_WAV_FILE, SAMPLE_RATE, BIT_RATE, CARRIER_FREQ
+from config import PATH_TO_WAV_FILE, SAMPLE_RATE
 from datetime import datetime
 from receiver.receiverClass import NonCoherentReceiver
 from errors import PreambleNotFoundError
@@ -16,7 +16,9 @@ CHUNK = 1024  # the amount of frames read per buffer, 1024 to balance between la
 
 FORMAT = pyaudio.paInt16
 CHANNELS = 1  # this is either mono or stereo // mono = 1, stereo = 2, we do mono
-
+INDEX_FOR_MIC = 1 # change this if Mathias or Morten
+LAST_PRINT_TIME = datetime.now()
+print(LAST_PRINT_TIME)
 
 def create_wav_file_from_recording(record_seconds):
     p = pyaudio.PyAudio()
@@ -44,7 +46,7 @@ def create_wav_file_from_recording(record_seconds):
         rate=SAMPLE_RATE,
         input=True,
         frames_per_buffer=CHUNK,
-        input_device_index=2,
+        input_device_index=INDEX_FOR_MIC,
     )
 
     print("Recording...")
@@ -65,7 +67,6 @@ def create_wav_file_from_recording(record_seconds):
     wf.writeframes(b"".join(frames))
     wf.close()
 
-
 def calculate_rms(audio_chunk):
     """Calculate Root Mean Square of audio chunk"""
     # Convert to float for better precision
@@ -73,19 +74,12 @@ def calculate_rms(audio_chunk):
     # Calculate RMS
     return np.sqrt(np.mean(np.square(chunk_float)))
 
-
-def continuous_recording_with_threshold():
+def continuous_recording_with_threshold(threshold_val):
     p = pyaudio.PyAudio()
 
-    # Add these constants at the start of the function
-    SAVE_DIR = "Code/dsp/data"
-    SAVE_FILE = "recording_test.wav"
-
-    # Parameters
-    THRESHOLD = 3500
+    THRESHOLD = threshold_val
     RECORD_TIME = 5.0  # Record for exactly 7 seconds
     PRE_RECORD_TIME = 0.5
-    PRINT_INTERVAL = 1.0
 
     # Moving average for smoothing audio levels
     WINDOW_SIZE = 100
@@ -99,7 +93,6 @@ def continuous_recording_with_threshold():
     # State variables
     is_recording = False
     recording_start = None
-    last_print_time = datetime.now()
 
     stream = p.open(
         format=FORMAT,
@@ -107,11 +100,8 @@ def continuous_recording_with_threshold():
         rate=SAMPLE_RATE,
         input=True,
         frames_per_buffer=CHUNK,
-        input_device_index=2,
+        input_device_index=INDEX_FOR_MIC,
     )
-
-    print("Listening for audio above threshold...")
-    print("Press Ctrl+C to stop")
 
     try:
         while True:
@@ -120,23 +110,15 @@ def continuous_recording_with_threshold():
 
             current_rms = calculate_rms(audio_chunk)
             rms_values.append(current_rms)
+            
+            global avg_rms
             avg_rms = np.mean(rms_values)
-
-            # Print audio level once per second
-            current_time = datetime.now()
-            if (current_time - last_print_time).total_seconds() >= PRINT_INTERVAL:
-                print(
-                    f"\rAudio Level (RMS): {avg_rms:8.2f} | {'*' * int(avg_rms/100)}",
-                    end="",
-                    flush=True,
-                )
-                last_print_time = current_time
 
             # Always keep recent audio in pre-buffer
             pre_buffer.extend(audio_chunk)
 
             if not is_recording and avg_rms > THRESHOLD:
-                print("\nSound detected! Recording for x seconds...")
+                print("Incoming message detected! Recording...")
                 is_recording = True
                 recording_start = datetime.now()
                 recording_buffer = list(pre_buffer)
@@ -144,12 +126,12 @@ def continuous_recording_with_threshold():
             if is_recording:
                 recording_buffer.extend(audio_chunk)
 
-                # Check if 7 seconds have elapsed
+                # check if recording time has elapsed
                 if (datetime.now() - recording_start).total_seconds() >= RECORD_TIME:
-                    print("\nRecording complete, saving...")
+                    # print("\nRecording complete, saving...")
 
                     # Save the recording
-                    save_path = os.path.join(SAVE_DIR, SAVE_FILE)
+                    save_path = PATH_TO_WAV_FILE
                     wf = wave.open(save_path, "wb")
                     wf.setnchannels(CHANNELS)
                     wf.setsampwidth(p.get_sample_size(FORMAT))
@@ -157,7 +139,7 @@ def continuous_recording_with_threshold():
                     wf.writeframes(np.array(recording_buffer).tobytes())
                     wf.close()
 
-                    print(f"Recording saved as: {save_path}")
+                    # print(f"Recording saved as: {save_path}")
 
                     is_recording = False
                     recording_buffer = []
@@ -167,12 +149,27 @@ def continuous_recording_with_threshold():
                     break
 
     except KeyboardInterrupt:
-        print("\nRecording stopped by user")
+        # print("\nRecording stopped by user")
+        pass
     finally:
         stream.stop_stream()
         stream.close()
         p.terminate()
 
+def get_avg_rms_value():
+    global LAST_PRINT_TIME
+    print_interval = 0.5
+    current_time = datetime.now()
+    if (current_time - LAST_PRINT_TIME).total_seconds() >= print_interval:
+        print(
+            f"\rAudio Level (RMS): {avg_rms:8.2f} | {'*' * int(avg_rms/100)}",
+            end="",
+            flush=True,
+        )
+        LAST_PRINT_TIME = current_time
+    return avg_rms
+        
+    
 
 if __name__ == "__main__":
     continuous_recording_with_threshold()
