@@ -1,5 +1,6 @@
 import csv
 import time
+import threading
 
 import config
 from receiver.receiverClass import NonCoherentReceiver, CoherentReceiver
@@ -217,21 +218,24 @@ def main():
     isTransmitterESP = True
     transmit_signal(isTransmitterESP)
 
+def aqua_chat():
+    print("Welcome to AquaChat!")
+    print("Type a message to your aqua-friend!")
+    try:
+        while True:
+            threshold_val = 10
+            continuous_recording_with_threshold(threshold_val)
+            if get_avg_rms_value() > threshold_val:
+                main()
+            else:
+                msg_to_transmit = input("You: ")
+    except KeyboardInterrupt:
+        print("Left the chat...")
+    
 
+    
 if __name__ == "__main__":
     if config.RECORD_FOR_LOOP_TESTING:
         main()
     else:
-        print("Welcome to AquaChat!")
-        print("Type a message to your aqua-friend!")
-        try:
-            while True:
-                threshold_val = 10
-                continuous_recording_with_threshold(threshold_val)
-                if get_avg_rms_value() > threshold_val:
-                    main()
-                else:
-                    msg_to_transmit = input("You: ")
-        except KeyboardInterrupt:
-            print("Left the chat...")
-    
+        main()

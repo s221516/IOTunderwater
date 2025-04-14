@@ -6,6 +6,7 @@ import numpy as np
 import os
 from datetime import datetime
 from collections import deque
+from main import main
 
 import config
 from receiver.receiverClass import NonCoherentReceiver
@@ -108,16 +109,16 @@ class AudioReceiver:
                     self.rms_values.append(current_rms)
                     avg_rms = np.mean(self.rms_values)
 
-                    # Print audio level periodically
-                    current_time = datetime.now()
-                    if (
-                        current_time - last_print_time
-                    ).total_seconds() >= print_interval:
-                        print(
-                            f"\rAudio Level: {avg_rms:8.2f} | {'*' * int(avg_rms/100)}",
-                            end="",
-                        )
-                        last_print_time = current_time
+                    # # Print audio level periodically
+                    # current_time = datetime.now()
+                    # if (
+                    #     current_time - last_print_time
+                    # ).total_seconds() >= print_interval:
+                    #     print(
+                    #         f"\rAudio Level: {avg_rms:8.2f} | {'*' * int(avg_rms/100)}",
+                    #         end="",
+                    #     )
+                    #     last_print_time = current_time
 
                     # Always keep recent audio in pre-buffer
                     self.pre_buffer.extend(audio_chunk)
@@ -156,9 +157,7 @@ class AudioReceiver:
 
                             print(f"Recording saved as: {save_path}")
 
-                            # Process the recording
-                            self.process_recording(save_path)
-
+                            main()
                             # Reset recording state
                             self.is_recording = False
                             self.recording_buffer = []
@@ -174,38 +173,6 @@ class AudioReceiver:
                 stream.stop_stream()
                 stream.close()
             print("Audio monitoring stopped")
-
-    def process_recording(self, recording_path):
-        """Process a recorded audio file"""
-        try:
-            # Update config path for the decoder
-            config.PATH_TO_WAV_FILE = recording_path
-
-            # Create non-coherent receivers
-            receiver = NonCoherentReceiver(
-                config.BIT_RATE, config.CARRIER_FREQ, band_pass=False
-            )
-            receiver_bandpass = NonCoherentReceiver(
-                config.BIT_RATE, config.CARRIER_FREQ, band_pass=True
-            )
-
-            # Decode the signal
-            message, debug = receiver.decode()
-            message_bp, debug_bp = receiver_bandpass.decode()
-
-            print("\n--- DECODED MESSAGE ---")
-            print(f"Without bandpass: {message}")
-            print(f"With bandpass: {message_bp}")
-            print("")  # Add a blank line after results
-
-        except PreambleNotFoundError:
-            print("\nNo preamble found in the recording")
-        except Exception as e:
-            print(f"\nError processing recording: {e}")
-
-    def stop(self):
-        """Stop audio monitoring"""
-        self.stop_requested.set()
 
 
 if __name__ == "__main__":
