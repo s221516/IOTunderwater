@@ -2,13 +2,17 @@
 #include <string.h>
 #include "freertos/FreeRTOS.h"
 #include "esp_log.h"
-#include "driver/dac.h"
 #include "rom/ets_sys.h"
 #include <math.h>
 #include "esp_timer.h"
 #include "driver/uart.h"
 #include "esp_system.h"
 #include "esp_task_wdt.h"
+#include "esp_pm.h"
+#include "driver/dac_oneshot.h"
+
+static dac_oneshot_handle_t dac_handle;
+
 
 #define UART_NUM UART_NUM_0
 #define BUF_SIZE (1024)
@@ -17,14 +21,14 @@
 
 int bit_rate = 100;
 int carrier_freq = 6000;
-char message[100] = "Hello World!"; 
+char message[100] = "Hello World!";
 int samples_per_symbol = 0;
 float sample_rate = 0;
 int repetitions = 10;
 
 void transmit_symbol(int* wave) {
     for (int i = 0; i < samples_per_symbol; i++) {
-        dac_output_voltage(DAC_CHAN_0, wave[i]);
+        dac_oneshot_output_voltage(dac_handle, wave[i]);
     }
 }
 
@@ -80,14 +84,13 @@ void prepend_barker13(int** bits, int* length) {
 }
 
 float measureSampleRateOfDAC() {
-    const int num_samples = 100000;
-    int64_t start_us = esp_timer_get_time();
 
+    const int num_samples = 1000000;
+    int64_t start_us = esp_timer_get_time();
     for (int i = 0; i < num_samples; i++) {
         uint8_t value = i % 255;
-        dac_output_voltage(DAC_CHAN_0, value);
+        dac_oneshot_output_voltage(dac_handle, value);  // <-- pass by pointer
     }
-
     int64_t end_us = esp_timer_get_time();
     float elapsed_seconds = (end_us - start_us) / 1e6;
     float sample_rate = num_samples / elapsed_seconds;
@@ -102,7 +105,7 @@ void send_signal() {
     string_to_bits(message, &message_bits, &message_length);
     prepend_barker13(&message_bits, &message_length);
 
-    samples_per_symbol = (int) roundf(sample_rate / bit_rate);
+    samples_per_symbol = roundf(sample_rate / bit_rate);
     int* symbol_one = malloc(samples_per_symbol * sizeof(int));
     int* symbol_zero = malloc(samples_per_symbol * sizeof(int));
     
@@ -113,12 +116,10 @@ void send_signal() {
 
     create_carrier_symbol(symbol_one);
     create_silence_symbol(symbol_zero);
-    
-    float sampleRate_after_allocations = measureSampleRateOfDAC(); 
 
     //Send information on all settings to the UART
     char settings_message[256];
-    snprintf(settings_message, sizeof(settings_message), "Carrier Frequency: %d Hz, Bit Rate: %d bps, Sample Rate: %.2f Hz, Samples per Symbol: %d\r\n", carrier_freq, bit_rate, sampleRate_after_allocations, samples_per_symbol);
+    snprintf(settings_message, sizeof(settings_message), "Carrier Frequency: %d Hz, Bit Rate: %d bps, Sample Rate: %.2f Hz, Samples per Symbol: %d\r\n", carrier_freq, bit_rate, sample_rate, samples_per_symbol);
     uart_write_bytes(UART_NUM, settings_message, strlen(settings_message));
     
     for (int i = 0; i < message_length; i++) {
@@ -147,9 +148,17 @@ void process_input(char *input) {
     int value;
     char valueStr[100];
     
+    
+
     if (sscanf(input, "FREQ %d", &value) == 1) {
         carrier_freq = value;
     
+    // } else if (sscanf(input, "%d", &value) == 1) {
+    //     //value is a time in microseconds
+    //     //convert to seconds and set sample rate
+    //     sample_rate = (float) 1 / ((float) value / 1000000.0f);
+    //     printf("Sample rate set to: %f\n", sample_rate);
+
     } else if (sscanf(input, "BITRATE %d", &value) == 1) {
         bit_rate = value;
 
@@ -158,7 +167,11 @@ void process_input(char *input) {
 
     } else {
         if (sscanf(input, "%99s", valueStr) == 1) {
-            strncpy(message, valueStr, sizeof(message) - 1);    
+
+            sample_rate = measureSampleRateOfDAC(); // Measure the sample rate of the DAC
+
+
+            strncpy(message, valueStr, sizeof(message) - 1);
             message[sizeof(message) - 1] = '\0';  // Ensure null termination
             send_signal();
         } else {
@@ -186,11 +199,17 @@ void init_uart() {
 }
 
 void app_main() {
-    dac_output_enable(DAC_CHAN_0);
-    //deinit watchdog
-    esp_task_wdt_deinit();
-    sample_rate = measureSampleRateOfDAC();
+
+    
     init_uart();
+
+    dac_oneshot_config_t dac_cfg = {
+        .chan_id = DAC_CHAN_0,
+    };
+    ESP_ERROR_CHECK(dac_oneshot_new_channel(&dac_cfg, &dac_handle));
+    
+    esp_task_wdt_deinit();
+        
 
     char line_buffer[MAX_LINE_LENGTH];
     int idx = 0;
