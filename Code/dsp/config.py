@@ -53,8 +53,6 @@ CARRIER_FREQ = 6000  #  15200 Hz
 SAMPLES_PER_SYMBOL = int(SAMPLE_RATE / BIT_RATE)
 CUT_OFF_FREQ = (CARRIER_FREQ + BIT_RATE) // 2  # TODO: check this value
 
-PATH_TO_WAV_FILE = "Code/dsp/data/recording_test.wav"
-
 PREAMBLE_BASE = message_toBitArray("G")
 REPETITIONS = 3
 PREAMBLE_PATTERN = PREAMBLE_BASE * REPETITIONS
@@ -64,7 +62,14 @@ BINARY_BARKER = [1, 1, 1, 1, 1, 0, 0, 1, 1, 0, 1, 0, 1]
 APPLY_BAKER_PREAMBLE = True
 APPLY_AVERAGING_PREAMBLE = False
 
-MAKE_NEW_RECORDING = False
+RECORD_FOR_LOOP_TESTING = False
+
+PLOT_PREAMBLE_CORRELATION = False
+
+if RECORD_FOR_LOOP_TESTING:
+    PATH_TO_WAV_FILE = "Code/dsp/data/testing_and_logging_recording.wav"
+else:
+    PATH_TO_WAV_FILE = "Code/dsp/data/chatting_recording.wav"
 
 STAGE_1 = False
 

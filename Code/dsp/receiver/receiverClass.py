@@ -15,6 +15,8 @@ from config import (
     PREAMBLE_PATTERN,
     REPETITIONS,
     SAMPLE_RATE,
+    RECORD_FOR_LOOP_TESTING, 
+    PLOT_PREAMBLE_CORRELATION
 )
 
 from encoding.hamming_codes import hamming_decode
@@ -181,9 +183,7 @@ class Receiver:
     def remove_preamble_baker_code(self, bits, std_factor=4):
         correlation = signal.correlate(bits, BINARY_BARKER, mode="valid")
         threshold = np.mean(correlation) + std_factor * np.std(correlation)
-        peak_indices, _ = signal.find_peaks(
-            correlation, height=threshold, distance=len_of_data_bits - 5
-        )
+        peak_indices, _ = signal.find_peaks(correlation, height=threshold, distance=20)
 
         if len(peak_indices) < 2:
             if std_factor > 1:
@@ -192,47 +192,47 @@ class Receiver:
                 return -1
 
         diff_in_peaks = np.diff(peak_indices)
-        print("Diff in peaks: ", diff_in_peaks)
 
         data_bits = []
         for i in range(len(peak_indices) - 1):
-            if abs(diff_in_peaks[i] - len_of_data_bits) <= 0:
-                data_bits.append(
-                    bits[peak_indices[i] + len(BINARY_BARKER) : peak_indices[i + 1]]
-                )
+            # if abs(diff_in_peaks[i] - len_of_data_bits) <= 0:
+                data_bits.append(bits[peak_indices[i] + len(BINARY_BARKER) : peak_indices[i + 1]])
 
-        # NOTE: this is to plot the decodins of each entry of data bits
-        for i in range(len(data_bits)):
-            if CONVOLUTIONAL_CODING:
-                bits_array = np.array(data_bits[i])
-                print(self.decode_bytes_to_bits(conv_decode(bits_array, None)[:-2]))
-            elif HAMMING_CODING:
-                print(self.decode_bytes_to_bits(hamming_decode(data_bits[i])))
-            else:
-                decoded_bits = self.decode_bytes_to_bits(data_bits[i])
-                print(decoded_bits)
+        if RECORD_FOR_LOOP_TESTING:
+            # NOTE: this is to plot the decodins of each entry of data bits
+            print("Diff in peaks: ", diff_in_peaks)
+            for i in range(len(data_bits)):
+                if CONVOLUTIONAL_CODING:
+                    bits_array = np.array(data_bits[i])
+                    print(self.decode_bytes_to_bits(conv_decode(bits_array, None)[:-2]))
+                elif HAMMING_CODING:
+                    print(self.decode_bytes_to_bits(hamming_decode(data_bits[i])))
+                else:
+                    decoded_bits = self.decode_bytes_to_bits(data_bits[i])
+                    print(decoded_bits)
 
-        # # NOTE: this plots the correlation of the preamble and the received signal
-        # plt.figure(figsize=(14, 8))
-        # plt.plot(correlation, color="#FF3300", label="Correlation Value", linewidth=2)
-        # plt.scatter(
-        #     peak_indices,
-        #     correlation[peak_indices],
-        #     color="#000000",
-        #     label="Detected Preambles",
-        #     zorder=3,
-        #     s=100,
-        #     marker="D",
-        # )
-        # plt.axhline(
-        #     threshold, color="gray", linestyle="--", label="Threshold", linewidth=2
-        # )
-        # plt.xlabel("Bits from received signal")
-        # plt.ylabel("Correlation Value")
-        # plt.title("Cross-Correlation with Preamble")
-        # plt.legend()
-        # plt.grid()
-        # plt.show()
+        if PLOT_PREAMBLE_CORRELATION:
+            # NOTE: this plots the correlation of the preamble and the received signal
+            plt.figure(figsize=(14, 8))
+            plt.plot(correlation, color="#FF3300", label="Correlation Value", linewidth=2)
+            plt.scatter(
+                peak_indices,
+                correlation[peak_indices],
+                color="#000000",
+                label="Detected Preambles",
+                zorder=3,
+                s=100,
+                marker="D",
+            )
+            plt.axhline(
+                threshold, color="gray", linestyle="--", label="Threshold", linewidth=2
+            )
+            plt.xlabel("Bits from received signal")
+            plt.ylabel("Correlation Value")
+            plt.title("Cross-Correlation with Preamble")
+            plt.legend()
+            plt.grid()
+            plt.show()
 
         avg = [int(round((sum(col)) / len(col))) for col in zip(*data_bits)]
         if avg == []:
