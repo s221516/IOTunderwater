@@ -16,5 +16,5 @@
   },
   "idf.espIdfPath": "/Users/mathiasmarkvardsen/esp/esp-idf",
   "idf.toolsPath": "/Users/mathiasmarkvardsen/.espressif",
-  "idf.port": "/dev/tty.usbserial-014351BC"
+  "idf.port": "/dev/tty.usbserial-0232D158"
 }
