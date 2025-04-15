@@ -1,22 +1,16 @@
 import csv
 import time
 import threading
-import os
-from datetime import datetime
 
 import config
 from receiver.receiverClass import NonCoherentReceiver, CoherentReceiver
 from receiver.record_audio import (
     create_wav_file_from_recording,
     continuous_recording_with_threshold,
-    get_avg_rms_value,
+    get_avg_rms_value
 )
 from errors import PreambleNotFoundError
 from encoding.hamming_codes import hamming_encode
-
-# Global control flags
-recording_active = False
-stop_requested = False
 
 
 def transmitter_setting_to_string():
@@ -25,22 +19,19 @@ def transmitter_setting_to_string():
     else:
         return "SG"
 
-
 def compute_len_of_bits(message):
     # NOTE: this is just to give the recieverClass the length of the transmitted bits, so you dont have to do it in config
     len_of_data_bits = len(message) * 8
     len_of_preamble = len(config.BINARY_BARKER)
     if config.CONVOLUTIONAL_CODING:
-        len_of_data_bits = (
-            len_of_data_bits * 2 + len_of_preamble + 12
-        )  # NOTE talk with Mathias here
+        len_of_data_bits = (len_of_data_bits * 2 + len_of_preamble + 12)  # NOTE talk with Mathias here
     elif config.HAMMING_CODING:
         len_of_data_bits = len_of_data_bits * 3 / 2 + len_of_preamble
     else:
         len_of_data_bits = len_of_data_bits + len_of_preamble
 
+    # print("Len of data bits (receiver): ", len_of_data_bits)
     return len_of_data_bits
-
 
 def logInCsv(
     id,
@@ -53,7 +44,7 @@ def logInCsv(
     ham_dist_with,
     filename=None,
 ):
-    # Existing implementation...
+
     if filename is None:
         transmitter_string = transmitter_setting_to_string()
         filename = f"{transmitter_string}_plastic_testing_cf{carrierfreq}_400bps, {speaker_depth}sd, {distance_to_speaker}ds.csv"
@@ -104,33 +95,8 @@ def logInCsv(
             ]
         )
 
-
-def transmit_message(message, carrierfreq=None, bitrate=None):
-    """Transmit a single message"""
-    global isTransmitterESP
-
-    # Use provided parameters or defaults from config
-    cf = carrierfreq if carrierfreq is not None else config.CARRIER_FREQ
-    br = bitrate if bitrate is not None else config.BIT_RATE
-
-    # Load the appropriate transmitter module
-    if isTransmitterESP:
-        import esp32test
-
-        print(f"Transmitting '{message}' via ESP32...")
-        esp32test.transmit_to_esp32(message, cf, br)
-    else:
-        from transmitterPhysical import transmitPhysical
-
-        print(f"Transmitting '{message}' via signal generator...")
-        transmitPhysical(message, cf, br)
-
-    # Process the transmission
-    process_signal(message, cf, br, 0)
-
-
 def transmit_signal(isTransmitterESP: bool):
-    # Existing implementation...
+
     # NOTE: a bit cursed to have this here
     if isTransmitterESP:
         import esp32test
@@ -164,11 +130,10 @@ def transmit_signal(isTransmitterESP: bool):
                         print("Transmitting to signal generator...")
                         transmitPhysical(message, carrierfreq, bitrate)
 
+
                 process_signal(message, carrierfreq, bitrate, id)
 
-
 def process_signal(message, carrierfreq, bitrate, id):
-    # Existing implementation...
     # NOTE: a bit cursed to have this here
     if not isTransmitterESP:
         from transmitterPhysical import stopTransmission
@@ -194,42 +159,20 @@ def process_signal(message, carrierfreq, bitrate, id):
     nonCoherentReceiver = NonCoherentReceiver(bitrate, carrierfreq, band_pass=False)
     nonCoherentReceiver.set_len_of_data_bits(len_of_bits)
     nonCoherentReceiver.set_transmitter(isTransmitterESP)
-    nonCoherentReceiverWithBandPass = NonCoherentReceiver(
-        bitrate, carrierfreq, band_pass=True
-    )
+    nonCoherentReceiverWithBandPass = NonCoherentReceiver(bitrate, carrierfreq, band_pass=True)
     nonCoherentReceiverWithBandPass.set_len_of_data_bits(len_of_bits)
     nonCoherentReceiverWithBandPass.set_transmitter(isTransmitterESP)
 
     # try:
     message_nc, debug_nc = nonCoherentReceiver.decode()
-    message_nc_bandpass, debug_nc_bandpass = nonCoherentReceiverWithBandPass.decode()
-
+    message_nc_bandpass, debug_nc_bandpass = (nonCoherentReceiverWithBandPass.decode())
+    
     if config.RECORD_FOR_LOOP_TESTING:
-        logging_and_printing(
-            message_nc,
-            message_nc_bandpass,
-            message,
-            debug_nc,
-            debug_nc_bandpass,
-            bitrate,
-            carrierfreq,
-            id,
-        )
+        logging_and_printing(message_nc, message_nc_bandpass, message, debug_nc, debug_nc_bandpass, bitrate, carrierfreq, id)
     else:
         chatting(message_nc, message_nc_bandpass)
-
-
-def logging_and_printing(
-    message_nc,
-    message_nc_bandpass,
-    message,
-    debug_nc,
-    debug_nc_bandpass,
-    bitrate,
-    carrierfreq,
-    id,
-):
-    # Existing implementation...
+     
+def logging_and_printing(message_nc, message_nc_bandpass, message, debug_nc, debug_nc_bandpass, bitrate, carrierfreq, id):
     print("Decoded message: no pass    ", message_nc)
     print("Decoded message, with pass: ", message_nc_bandpass)
 
@@ -245,9 +188,7 @@ def logging_and_printing(
         decoded_bits_bandpass = list(map(int, decoded_bits_bandpass))
 
     hamming_dist = config.hamming_distance(decoded_bits, original_message_in_bits)
-    hamming_dist_bandpass = config.hamming_distance(
-        decoded_bits_bandpass, original_message_in_bits
-    )
+    hamming_dist_bandpass = config.hamming_distance(decoded_bits_bandpass, original_message_in_bits)
 
     print("Hamming distance of msgs, no pass:   ", hamming_dist)
     print("Hamming distance of msgs, with pass  ", hamming_dist_bandpass)
@@ -266,14 +207,10 @@ def logging_and_printing(
         message_nc_bandpass,
         hamming_dist_bandpass,
     )
-    id += 1
+    id += 1    
 
-
-def chatting(message_nc, message_nc_bandpass):
-    # Enhanced implementation for better display
-    print("\n--- RECEIVED MESSAGE ---")
-    print(f"Without bandpass: {message_nc}")
-    print(f"With bandpass: {message_nc_bandpass}")
+def chatting(message_nc, message_nc_bandpass): 
+    print(f"Mathias: {message_nc}") 
 
 
 def main():
@@ -281,127 +218,24 @@ def main():
     isTransmitterESP = True
     transmit_signal(isTransmitterESP)
 
-
-def recording_thread():
-    """Thread for continuous audio monitoring"""
-    global recording_active, stop_requested
-
-    print("Recording thread started - listening for signals...")
-
-    while not stop_requested:
-        if not recording_active:
-            threshold_val = 1000  # Adjust as needed
-            continuous_recording_with_threshold(threshold_val)
-
-            # If threshold was exceeded, process the recording
-            if get_avg_rms_value() > threshold_val:
-                recording_active = True
-                print("\nProcessing recorded audio...")
-
-                # Use existing NonCoherentReceiver to decode the signal
-                config.PATH_TO_WAV_FILE = os.path.join(
-                    "Code/dsp/data", "recording_test.wav"
-                )
-                receiver = NonCoherentReceiver(
-                    config.BIT_RATE, config.CARRIER_FREQ, band_pass=False
-                )
-                receiver_bp = NonCoherentReceiver(
-                    config.BIT_RATE, config.CARRIER_FREQ, band_pass=True
-                )
-
-                try:
-                    message, _ = receiver.decode()
-                    message_bp, _ = receiver_bp.decode()
-                    chatting(message, message_bp)
-                except PreambleNotFoundError:
-                    print("No preamble found in the recording")
-                except Exception as e:
-                    print(f"Error processing recording: {e}")
-
-                recording_active = False
-
-        # Small delay to prevent tight loop
-        time.sleep(0.1)
-
-
-def interactive_mode():
-    """Run the interactive communication interface"""
-    global isTransmitterESP, recording_active, stop_requested
-
-    # Start recording thread
-    rec_thread = threading.Thread(target=recording_thread)
-    rec_thread.daemon = True
-    rec_thread.start()
-
-    print("\n--- INTERACTIVE UNDERWATER COMMUNICATOR ---")
-    print("Enter messages to transmit or commands:")
-    print("  'exit' to quit")
-    print("  'esp' to switch to ESP32 transmitter")
-    print("  'sg' to switch to signal generator")
-    print("  'cf=<freq>' to set carrier frequency (e.g., 'cf=6000')")
-    print("  'br=<rate>' to set bit rate (e.g., 'br=100')")
-
-    # Main input loop
+def aqua_chat():
+    print("Welcome to AquaChat!")
+    print("Type a message to your aqua-friend!")
     try:
-        while not stop_requested:
-            # Get user input
-            user_input = input("\n> ")
-
-            if not user_input.strip():
-                continue
-
-            if user_input.lower() == "exit":
-                stop_requested = True
-                break
-
-            elif user_input.lower() == "esp":
-                isTransmitterESP = True
-                print("Switched to ESP32 transmitter")
-
-            elif user_input.lower() == "sg":
-                isTransmitterESP = False
-                print("Switched to signal generator")
-
-            elif user_input.lower().startswith("cf="):
-                try:
-                    freq = int(user_input[3:])
-                    config.CARRIER_FREQ = freq
-                    print(f"Carrier frequency set to {freq} Hz")
-                except ValueError:
-                    print("Invalid frequency format. Use 'cf=6000' format.")
-
-            elif user_input.lower().startswith("br="):
-                try:
-                    rate = int(user_input[3:])
-                    config.BIT_RATE = rate
-                    print(f"Bit rate set to {rate} bps")
-                except ValueError:
-                    print("Invalid bit rate format. Use 'br=100' format.")
-
+        while True:
+            threshold_val = 10
+            continuous_recording_with_threshold(threshold_val)
+            if get_avg_rms_value() > threshold_val:
+                main()
             else:
-                # Don't transmit if currently recording
-                if recording_active:
-                    print("Please wait, currently recording...")
-                else:
-                    # Transmit the message using the existing methods
-                    transmit_message(user_input)
-
+                msg_to_transmit = input("You: ")
     except KeyboardInterrupt:
-        print("\nExiting...")
-    finally:
-        stop_requested = True
-        rec_thread.join(timeout=1)
-        print("Done.")
+        print("Left the chat...")
+    
 
-
+    
 if __name__ == "__main__":
-    # Global variables
-    global isTransmitterESP, speaker_depth, distance_to_speaker
-    isTransmitterESP = True
-    speaker_depth = 5  # in cm
-    distance_to_speaker = 50  # in cm
-
     if config.RECORD_FOR_LOOP_TESTING:
         main()
     else:
-        interactive_mode()
+        main()
