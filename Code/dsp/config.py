@@ -69,7 +69,7 @@ PLOT_PREAMBLE_CORRELATION = False
 if RECORD_FOR_LOOP_TESTING:
     PATH_TO_WAV_FILE = "Code/dsp/data/testing_and_logging_recording.wav"
 else:
-    PATH_TO_WAV_FILE = "Code/dsp/data/recording_test.wav"
+    PATH_TO_WAV_FILE = "Code/dsp/data/chatting_recording.wav"
 
 STAGE_1 = False
 
