@@ -189,7 +189,9 @@ class Receiver:
         data_bits = []
         for i in range(len(peak_indices) - 1):
             # if abs(diff_in_peaks[i] - len_of_data_bits) <= 0:
-                data_bits.append(bits[peak_indices[i] + len(BINARY_BARKER) : peak_indices[i + 1]])
+            data_bits.append(
+                bits[peak_indices[i] + len(BINARY_BARKER) : peak_indices[i + 1]]
+            )
 
         # NOTE: this is to plot the decodins of each entry of data bits
         print("Diff in peaks: ", diff_in_peaks)
@@ -206,7 +208,9 @@ class Receiver:
         if PLOT_PREAMBLE_CORRELATION:
             # NOTE: this plots the correlation of the preamble and the received signal
             plt.figure(figsize=(14, 8))
-            plt.plot(correlation, color="#FF3300", label="Correlation Value", linewidth=2)
+            plt.plot(
+                correlation, color="#FF3300", label="Correlation Value", linewidth=2
+            )
             plt.scatter(
                 peak_indices,
                 correlation[peak_indices],

@@ -16,8 +16,9 @@ CHUNK = 1024  # the amount of frames read per buffer, 1024 to balance between la
 
 FORMAT = pyaudio.paInt16
 CHANNELS = 1  # this is either mono or stereo // mono = 1, stereo = 2, we do mono
-INDEX_FOR_MIC = 1 # change this if Mathias or Morten
+INDEX_FOR_MIC = 2  # change this if Mathias or Morten
 LAST_PRINT_TIME = datetime.now()
+
 
 def create_wav_file_from_recording(record_seconds):
     p = pyaudio.PyAudio()
@@ -66,12 +67,14 @@ def create_wav_file_from_recording(record_seconds):
     wf.writeframes(b"".join(frames))
     wf.close()
 
+
 def calculate_rms(audio_chunk):
     """Calculate Root Mean Square of audio chunk"""
     # Convert to float for better precision
     chunk_float = audio_chunk.astype(np.float32)
     # Calculate RMS
     return np.sqrt(np.mean(np.square(chunk_float)))
+
 
 def continuous_recording_with_threshold(threshold_val):
     p = pyaudio.PyAudio()
@@ -109,7 +112,7 @@ def continuous_recording_with_threshold(threshold_val):
 
             current_rms = calculate_rms(audio_chunk)
             rms_values.append(current_rms)
-            
+
             global avg_rms
             avg_rms = np.mean(rms_values)
 
@@ -155,6 +158,7 @@ def continuous_recording_with_threshold(threshold_val):
         stream.close()
         p.terminate()
 
+
 def get_avg_rms_value():
     global LAST_PRINT_TIME
     print_interval = 0.5
@@ -167,8 +171,7 @@ def get_avg_rms_value():
         )
         LAST_PRINT_TIME = current_time
     return avg_rms
-        
-    
+
 
 if __name__ == "__main__":
     continuous_recording_with_threshold()
