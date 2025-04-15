@@ -6,7 +6,7 @@ from interactive_sender import MessageSender
 # Configuration variables - modify these as needed
 OPERATION_MODE = "both"    # Options: "receive", "send", "both"
 USE_ESP = True            # True for ESP32, False for signal generator
-THRESHOLD = 1000          # Audio detection threshold
+THRESHOLD = 10          # Audio detection threshold
 MIC_INDEX = 1            # Audio input device index
 
 def run_receiver():

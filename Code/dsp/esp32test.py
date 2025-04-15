@@ -3,8 +3,8 @@ import time
 
 # Set up the UART connection (adjust 'COM5' as needed)
 
-ser = serial.Serial("/dev/cu.usbserial-0232D158", 115200, timeout=1)
-# ser = serial.Serial("COM12", 115200, timeout=1)
+# ser = serial.Serial("/dev/cu.usbserial-0232D158", 115200, timeout=1)
+ser = serial.Serial("COM12", 115200, timeout=1)
 
 
 def read_line():
@@ -28,7 +28,7 @@ def send_command(command):
     # RESPONSE IS NONSENCE RIGHT NOW
 
 
-def transmit_to_esp32(message, carrierfreq, bitrate):
+def transmit_to_esp32(message, carrierfreq, bitrate, reps):
 
     # print("""
     #     Available commands:
@@ -38,11 +38,7 @@ def transmit_to_esp32(message, carrierfreq, bitrate):
     #     <text>           - Send a text message to transmit
     #     """)
 
-    bitrate_factor = (bitrate // 100) * 3
-    if bitrate == 400:
-        bitrate_factor = bitrate_factor - 6
-    reps = 4 + bitrate_factor
-    
+
 
     # send_command("11")
     send_command("FREQ" + str(carrierfreq))

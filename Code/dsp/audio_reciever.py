@@ -45,7 +45,7 @@ def calculate_rms(audio_chunk):
 def monitor_audio(threshold_val=THRESHOLD):
     """Monitor audio input and record when threshold is exceeded"""
     p = pyaudio.PyAudio()
-
+    msg_sender = MessageSender()
     # Moving average for smoothing audio levels
     rms_values = deque(maxlen=WINDOW_SIZE)
     
@@ -80,7 +80,8 @@ def monitor_audio(threshold_val=THRESHOLD):
             # Always keep recent audio in pre-buffer
             pre_buffer.extend(audio_chunk)
 
-            if not is_recording and avg_rms > threshold_val and not MessageSender.get_is_transmitting():
+            if not is_recording and avg_rms > threshold_val and not msg_sender.get_is_transmitting():
+                print("Incoming message.. Recording!")
                 is_recording = True
                 recording_start = datetime.now()
                 recording_buffer = list(pre_buffer)

@@ -1,0 +1,4 @@
+ID,Bitrate,Carrier Frequency,Original Message,Decoded without bandpass,Hamming Dist without bandpass,Decoded with bandpass,Hamming Dist with bandpass,Encoding,Transmitter,Speaker depth,Distance to speaker
+0,100,6000,Hell_there,Hell_there,0,Hell_there,0,No Encoding,SG,5,50
+0,100,6000,Cocks_for_life,Cocks_for_life,0,Cocks_for_life,0,No Encoding,SG,5,50
+0,100,6000,Cocks_for_life,Cocks_for_life,0,""" ",,No Encoding,SG,5,50

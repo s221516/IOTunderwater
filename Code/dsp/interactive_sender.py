@@ -7,16 +7,16 @@ class MessageSender:
     def __init__(self, use_esp=True):
         """Initialize the message sender"""
         self.use_esp = use_esp
+        self.AM_I_TRANSMITTING = False
 
-    def get_is_transmitting():
-        return AM_I_TRANSMITTING
+    def get_is_transmitting(self):
+        return self.AM_I_TRANSMITTING
 
     def transmit_message(self, message):
         """Transmit a message using either ESP32 or signal generator"""
-        global AM_I_TRANSMITTING
-        AM_I_TRANSMITTING = True
+        self.AM_I_TRANSMITTING = True
         transmission_start = datetime.now()
-        print("Transmitting: ", AM_I_TRANSMITTING)
+        print("Transmitting: ", self.AM_I_TRANSMITTING)
 
         # NOTE: Make this less reliant on config.SOME_VALUE        
         try:
@@ -26,19 +26,19 @@ class MessageSender:
             else:
                 from transmitterPhysical import transmitPhysical, stopTransmission
                 transmitPhysical(message, config.CARRIER_FREQ, config.BIT_RATE)
-                stopTransmission()
 
             # NOTE: Compute the actual time is takes to transmit something - this is also needed in esp32test
             while (datetime.now() - transmission_start).total_seconds() < 10:
                 pass  # Non-blocking wait
+                # stopTransmission()
                 
             return True
         except Exception as e:
             print(f"Transmission error: {e}")
             return False
         finally:
-            AM_I_TRANSMITTING = False
-            print("Transmitting: ", AM_I_TRANSMITTING)
+            self.AM_I_TRANSMITTING = False
+            print("Transmitting: ", self.AM_I_TRANSMITTING)
 
     def run_interactive_mode(self):
         """Run the interactive command interface"""
