@@ -15,8 +15,8 @@ from config import (
     PREAMBLE_PATTERN,
     REPETITIONS,
     SAMPLE_RATE,
-    RECORD_FOR_LOOP_TESTING, 
-    PLOT_PREAMBLE_CORRELATION
+    RECORD_FOR_LOOP_TESTING,
+    PLOT_PREAMBLE_CORRELATION,
 )
 
 from encoding.hamming_codes import hamming_decode
@@ -118,11 +118,6 @@ class Receiver:
         return bits
 
     def adjusting_samples_per_symbol(self):
-        len_of_data_bits_without_preamble = len_of_data_bits - 13
-
-        number_of_chars = 0
-        for i in range(0, len_of_data_bits_without_preamble // 8):
-            number_of_chars += 1
 
         if self.bit_rate == 100:
             adjusting_value = 10
@@ -196,7 +191,9 @@ class Receiver:
         data_bits = []
         for i in range(len(peak_indices) - 1):
             # if abs(diff_in_peaks[i] - len_of_data_bits) <= 0:
-                data_bits.append(bits[peak_indices[i] + len(BINARY_BARKER) : peak_indices[i + 1]])
+            data_bits.append(
+                bits[peak_indices[i] + len(BINARY_BARKER) : peak_indices[i + 1]]
+            )
 
         if RECORD_FOR_LOOP_TESTING:
             # NOTE: this is to plot the decodins of each entry of data bits
@@ -214,7 +211,9 @@ class Receiver:
         if PLOT_PREAMBLE_CORRELATION:
             # NOTE: this plots the correlation of the preamble and the received signal
             plt.figure(figsize=(14, 8))
-            plt.plot(correlation, color="#FF3300", label="Correlation Value", linewidth=2)
+            plt.plot(
+                correlation, color="#FF3300", label="Correlation Value", linewidth=2
+            )
             plt.scatter(
                 peak_indices,
                 correlation[peak_indices],

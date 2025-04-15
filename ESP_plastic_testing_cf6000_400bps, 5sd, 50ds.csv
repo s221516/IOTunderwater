@@ -48,3 +48,6 @@ ID,Bitrate,Carrier Frequency,Original Message,Decoded without bandpass,Hamming D
 0,100,6000,Hello_there,Hello_there,0,Hello_there,0,No Encoding,ESP,5,50
 0,100,6000,Hello_there,Hello_there,0,Hello_there,0,No Encoding,ESP,5,50
 0,100,6000,Suggma_balls,Suggma_balls,0,Suggma_balls,0,No Encoding,ESP,5,50
+0,100,6000,Hell_there,Hell_there,0,Hell_there,0,No Encoding,ESP,5,50
+0,100,6000,Hello_there,Hello_there,0,Hello_there,0,No Encoding,ESP,5,50
+0,100,6000,Hello_there,Hello_there,0,Hello_there,0,No Encoding,ESP,5,50
