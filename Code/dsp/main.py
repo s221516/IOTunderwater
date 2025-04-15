@@ -103,7 +103,7 @@ def transmit_signal(isTransmitterESP: bool):
     else:
         from transmitterPhysical import transmitPhysical
     
-    messages = ["Hello_there"]
+    messages = ["Hell_there"]
 
     n = 100
     bitrates = [100]

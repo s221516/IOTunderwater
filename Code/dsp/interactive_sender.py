@@ -9,28 +9,27 @@ class MessageSender:
         self.use_esp = use_esp
 
     def get_is_transmitting():
-        return IS_TRANSMITTING
+        return AM_I_TRANSMITTING
 
     def transmit_message(self, message):
         """Transmit a message using either ESP32 or signal generator"""
-        global IS_TRANSMITTING
-        IS_TRANSMITTING = True
+        global AM_I_TRANSMITTING
+        AM_I_TRANSMITTING = True
         transmission_start = datetime.now()
-        print("Transmitting: ", IS_TRANSMITTING)
-        
+        print("Transmitting: ", AM_I_TRANSMITTING)
+
+        # NOTE: Make this less reliant on config.SOME_VALUE        
         try:
             if self.use_esp:
                 import esp32test
-                esp32test.transmit_to_esp32(
-                    message, config.CARRIER_FREQ, config.BIT_RATE
-                )
+                esp32test.transmit_to_esp32(message, config.CARRIER_FREQ, config.BIT_RATE)
             else:
                 from transmitterPhysical import transmitPhysical, stopTransmission
                 transmitPhysical(message, config.CARRIER_FREQ, config.BIT_RATE)
                 stopTransmission()
 
-            # Wait until 4 seconds have passed since transmission start
-            while (datetime.now() - transmission_start).total_seconds() < 6:
+            # NOTE: Compute the actual time is takes to transmit something - this is also needed in esp32test
+            while (datetime.now() - transmission_start).total_seconds() < 10:
                 pass  # Non-blocking wait
                 
             return True
@@ -38,8 +37,8 @@ class MessageSender:
             print(f"Transmission error: {e}")
             return False
         finally:
-            IS_TRANSMITTING = False
-            print("Transmitting: ", IS_TRANSMITTING)
+            AM_I_TRANSMITTING = False
+            print("Transmitting: ", AM_I_TRANSMITTING)
 
     def run_interactive_mode(self):
         """Run the interactive command interface"""
@@ -52,8 +51,9 @@ class MessageSender:
         print("  'br=<rate>' to set bit rate (e.g., 'br=100') \n")
 
         try:
+            print("Write a message below!")
             while True:
-                user_input = input("")
+                user_input = input("You: ")
 
                 if user_input.lower() == "exit":
                     break
@@ -84,7 +84,6 @@ class MessageSender:
 
                 else:
                     # Transmit the message
-                    IS_TRANSMITTING = True
                     self.transmit_message(user_input)
 
         except KeyboardInterrupt:

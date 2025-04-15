@@ -42,6 +42,7 @@ def transmit_to_esp32(message, carrierfreq, bitrate):
     if bitrate == 400:
         bitrate_factor = bitrate_factor - 6
     reps = 4 + bitrate_factor
+    
 
     # send_command("11")
     send_command("FREQ" + str(carrierfreq))
