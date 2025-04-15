@@ -1,15 +1,9 @@
 import csv
 import time
-import threading
-
-from numpy import record
-
 import config
-from receiver.receiverClass import NonCoherentReceiver, CoherentReceiver
+from receiver.receiverClass import NonCoherentReceiver
 from receiver.record_audio import (
-    create_wav_file_from_recording,
-    continuous_recording_with_threshold,
-    get_avg_rms_value,
+    create_wav_file_from_recording
 )
 from errors import PreambleNotFoundError
 from encoding.hamming_codes import hamming_encode
@@ -20,7 +14,6 @@ def transmitter_setting_to_string():
         return "ESP"
     else:
         return "SG"
-
 
 def compute_len_of_bits(message):
     # NOTE: this is just to give the recieverClass the length of the transmitted bits, so you dont have to do it in config
@@ -37,7 +30,6 @@ def compute_len_of_bits(message):
 
     # print("Len of data bits (receiver): ", len_of_data_bits)
     return len_of_data_bits
-
 
 def logInCsv(
     id,
@@ -101,7 +93,6 @@ def logInCsv(
             ]
         )
 
-
 def transmit_signal(isTransmitterESP: bool):
     if isTransmitterESP:
         import esp32test
@@ -127,37 +118,26 @@ def transmit_signal(isTransmitterESP: bool):
             for carrierfreq in carrierfreqs:
                 if isTransmitterESP:
                     print("Transmitting to ESP...")
-                    reps = compute_reps(bitrate)
-                    esp32test.transmit_to_esp32(message, carrierfreq, bitrate, reps)
+                    esp32test.transmit_to_esp32(message, carrierfreq, bitrate)
+                    record_seconds = esp32test.compute_record_time_for_esp(message, bitrate)
                 else:
                     print("Transmitting to signal generator...")
                     transmitPhysical(message, carrierfreq, bitrate)
+                    message_in_bits = compute_len_of_bits(message)
+                    record_seconds = round((message_in_bits / bitrate) * 5)
                 
-                process_signal(message, carrierfreq, bitrate, id)
+                process_signal_for_testing(message, carrierfreq, bitrate, id, record_seconds)
 
-def compute_reps(bitrate):
-    bitrate_factor = (bitrate // 100) * 3
-    if bitrate == 400:
-        bitrate_factor = bitrate_factor - 6
-    reps = 4 + bitrate_factor
 
-    return reps
+def process_signal_for_chat(carrierfreq, bitrate):
+    nonCoherentReceiver = NonCoherentReceiver(bitrate, carrierfreq, band_pass=False)
+    nonCoherentReceiver.set_transmitter(True)
+    msg_nc, _ = nonCoherentReceiver.decode()
+    return msg_nc
 
-def compute_record_time_for_esp(message, bitrate, reps):
-    message_in_bits = compute_len_of_bits(message)
-    sec_estimated = (message_in_bits / bitrate) * reps
 
-    # print("Estimated time: ", sec_estimated)
-    return sec_estimated
-
-def process_signal(message, carrierfreq, bitrate, id):
-    
-    if isTransmitterESP:
-        reps = compute_reps(bitrate)
-        record_seconds = round(compute_record_time_for_esp(message, bitrate, reps))
-    else:
-        message_in_bits = compute_len_of_bits(message)
-        record_seconds = round((message_in_bits / bitrate) * 5)
+def process_signal_for_testing(message, carrierfreq, bitrate, id, record_seconds):
+    if not isTransmitterESP:
         from transmitterPhysical import stopTransmission
 
     print(f"Recording for: {record_seconds} seconds")
@@ -213,7 +193,6 @@ def logging_and_printing(message_nc, message_nc_bandpass, message, debug_nc, deb
 
     logInCsv(id,bitrate,carrierfreq,message,message_nc,hamming_dist,message_nc_bandpass,hamming_dist_bandpass,)
     id += 1    
-
 
 
 if __name__ == "__main__":

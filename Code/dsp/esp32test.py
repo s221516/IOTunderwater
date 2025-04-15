@@ -28,7 +28,7 @@ def send_command(command):
     # RESPONSE IS NONSENCE RIGHT NOW
 
 
-def transmit_to_esp32(message, carrierfreq, bitrate, reps):
+def transmit_to_esp32(message, carrierfreq, bitrate):
 
     # print("""
     #     Available commands:
@@ -37,10 +37,7 @@ def transmit_to_esp32(message, carrierfreq, bitrate, reps):
     #     REP <value>      - Set wave repetitions (default is 10)
     #     <text>           - Send a text message to transmit
     #     """)
-
-
-
-    # send_command("11")
+    reps = compute_reps(bitrate)
     send_command("FREQ" + str(carrierfreq))
     send_command("BITRATE" + str(bitrate))
     send_command("REP" + str(reps))
@@ -48,6 +45,20 @@ def transmit_to_esp32(message, carrierfreq, bitrate, reps):
     # message last so we put the specs of the wave first
     send_command(message)
 
+
+def compute_reps(bitrate):
+    bitrate_factor = (bitrate // 100) * 3
+    if bitrate == 400:
+        bitrate_factor = bitrate_factor - 6
+    reps = 4 + bitrate_factor
+    return reps
+
+def compute_record_time_for_esp(message, bitrate):
+    # length of the message * 8 to get it in bits, added 13 for the binary barker
+    message_in_bits = len(message) * 8 + 13
+    sec_estimated = (message_in_bits / bitrate) * compute_reps(bitrate)
+    # print("Estimated time: ", sec_estimated)
+    return sec_estimated
 
 if __name__ == "__main__":
     transmit_to_esp32()
