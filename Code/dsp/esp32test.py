@@ -1,5 +1,6 @@
 import serial
 import time
+import config
 
 # Set up the UART connection (adjust 'COM5' as needed)
 
@@ -42,16 +43,15 @@ def transmit_to_esp32(message, carrierfreq, bitrate):
     if bitrate == 400:
         bitrate_factor = bitrate_factor - 6
     reps = 4 + bitrate_factor
-    
 
     # send_command("11")
     send_command("FREQ" + str(carrierfreq))
     send_command("BITRATE" + str(bitrate))
-    send_command("REP" + str(reps))
+    send_command("REP" + str(config.REP_ESP))
 
     # message last so we put the specs of the wave first
     send_command(message)
 
 
-if __name__ == "__main__":
-    transmit_to_esp32()
+# if __name__ == "__main__":
+#     transmit_to_esp32()

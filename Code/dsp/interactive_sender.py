@@ -6,16 +6,15 @@ import threading
 
 class MessageSender(threading.Thread):
     def __init__(self, shared_state, use_esp=True):
-        super().__init__()
+        super().__init__(name="MessageSenderThread")
         """Initialize the message sender"""
         self.use_esp = use_esp
         self.shared_state = shared_state
 
     def transmit_message(self, message):
-        """Transmit a message using either ESP32 or signal generator"""
         self.shared_state["is_transmitting"] = True
 
-        print("Transmitting: ", self.shared_state["is_transmitting"])
+        # print("Transmitting: ", self.shared_state["is_transmitting"])
 
         # NOTE: Make this less reliant on config.SOME_VALUE
         try:
@@ -32,13 +31,18 @@ class MessageSender(threading.Thread):
                 stopTransmission()
 
             # Wait for the transmission to complete
-            time.sleep(10)
+            len_of_bits = len(message) * 8 + 13
+            transmission_time = (
+                config.REP_ESP * (len_of_bits / config.BIT_RATE)
+                + (1 / 240000) * 1000000
+            )
+            time.sleep(transmission_time)
 
         except Exception as e:
             print(f"Transmission error: {e}")
         finally:
             self.shared_state["is_transmitting"] = False
-            print("Transmitting: ", self.shared_state["is_transmitting"])
+            # print("Transmitting: ", self.shared_state["is_transmitting"])
 
     def run(self):
         while True:

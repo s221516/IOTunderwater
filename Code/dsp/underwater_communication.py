@@ -48,9 +48,24 @@ def run_chat(shared_state):
                     print(f"Bit rate set to {rate} bps")
                 except ValueError:
                     print("Invalid bit rate format. Use 'br=100' format.")
+            elif user_input.lower().startswith("rep="):
+                try:
+                    reps = int(user_input[4:])
+                    config.REP_ESP = reps
+                    print(f"Repetitions set to {reps}")
+                except ValueError:
+                    print("Invalid repetitions format. Use 'rep=3' format.")
 
             else:
                 # Transmit the message
+                ## replace spaces with underscores
+                user_input = user_input.replace(" ", "_")
+                ## Essure user input is always 32 characters long if less than append '_'
+                max_len = 32
+                if len(user_input) < max_len:
+                    user_input = user_input.ljust(max_len, "_")
+                elif len(user_input) > max_len:
+                    user_input = user_input[:max_len]
                 shared_state["msg"] = user_input
 
     except KeyboardInterrupt:

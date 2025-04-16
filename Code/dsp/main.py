@@ -3,6 +3,7 @@ import time
 import threading
 
 from numpy import record
+from sympy import N
 
 import config
 from receiver.receiverClass import NonCoherentReceiver, CoherentReceiver
@@ -144,7 +145,10 @@ def process_signal_for_chat(carrierfreq, bitrate):
     nonCoherentReceiver = NonCoherentReceiver(bitrate, carrierfreq, band_pass=False)
     nonCoherentReceiver.set_transmitter(True)
     msg_nc, _ = nonCoherentReceiver.decode()
-    return msg_nc
+    nonCoherentReceiverBP = NonCoherentReceiver(bitrate, carrierfreq, band_pass=True)
+    nonCoherentReceiverBP.set_transmitter(True)
+    msg_nc_bp, _ = nonCoherentReceiverBP.decode()
+    return msg_nc, msg_nc_bp
 
 
 def process_signal(carrierfreq, bitrate, id):
