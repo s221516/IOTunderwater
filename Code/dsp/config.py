@@ -63,16 +63,9 @@ BINARY_BARKER = [1, 1, 1, 1, 1, 0, 0, 1, 1, 0, 1, 0, 1]
 APPLY_BAKER_PREAMBLE = True
 APPLY_AVERAGING_PREAMBLE = False
 
-RECORD_FOR_LOOP_TESTING = False
-
 PLOT_PREAMBLE_CORRELATION = False
 
-if RECORD_FOR_LOOP_TESTING:
-    PATH_TO_WAV_FILE = "Code/dsp/data/testing_and_logging_recording.wav"
-else:
-    PATH_TO_WAV_FILE = "Code/dsp/data/chatting_recording.wav"
-
-STAGE_1 = False
+PATH_TO_WAV_FILE = "Code/dsp/data/testing_and_logging_recording.wav"
 
 HAMMING_CODING = False
 CONVOLUTIONAL_CODING = False

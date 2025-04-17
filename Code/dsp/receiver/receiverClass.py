@@ -15,8 +15,7 @@ from config import (
     PREAMBLE_PATTERN,
     REPETITIONS,
     SAMPLE_RATE,
-    RECORD_FOR_LOOP_TESTING,
-    PLOT_PREAMBLE_CORRELATION,
+    PLOT_PREAMBLE_CORRELATION
 )
 
 from encoding.hamming_codes import hamming_decode
@@ -118,7 +117,6 @@ class Receiver:
         return bits
 
     def adjusting_samples_per_symbol(self):
-
         if self.bit_rate == 100:
             adjusting_value = 10
         elif self.bit_rate == 200:
@@ -195,18 +193,17 @@ class Receiver:
                 bits[peak_indices[i] + len(BINARY_BARKER) : peak_indices[i + 1]]
             )
 
-        if RECORD_FOR_LOOP_TESTING:
-            # NOTE: this is to plot the decodins of each entry of data bits
-            print("Diff in peaks: ", diff_in_peaks)
-            for i in range(len(data_bits)):
-                if CONVOLUTIONAL_CODING:
-                    bits_array = np.array(data_bits[i])
-                    print(self.decode_bytes_to_bits(conv_decode(bits_array, None)[:-2]))
-                elif HAMMING_CODING:
-                    print(self.decode_bytes_to_bits(hamming_decode(data_bits[i])))
-                else:
-                    decoded_bits = self.decode_bytes_to_bits(data_bits[i])
-                    print(decoded_bits)
+        # NOTE: this is to plot the decodins of each entry of data bits
+        print("Diff in peaks: ", diff_in_peaks)
+        for i in range(len(data_bits)):
+            if CONVOLUTIONAL_CODING:
+                bits_array = np.array(data_bits[i])
+                print(self.decode_bytes_to_bits(conv_decode(bits_array, None)[:-2]))
+            elif HAMMING_CODING:
+                print(self.decode_bytes_to_bits(hamming_decode(data_bits[i])))
+            else:
+                decoded_bits = self.decode_bytes_to_bits(data_bits[i])
+                print(decoded_bits)
 
         if PLOT_PREAMBLE_CORRELATION:
             # NOTE: this plots the correlation of the preamble and the received signal

@@ -6,12 +6,8 @@ from numpy import record
 from sympy import N
 
 import config
-from receiver.receiverClass import NonCoherentReceiver, CoherentReceiver
-from receiver.record_audio import (
-    create_wav_file_from_recording,
-    continuous_recording_with_threshold,
-    get_avg_rms_value,
-)
+from receiver.receiverClass import NonCoherentReceiver
+from receiver.record_audio import create_wav_file_from_recording
 from errors import PreambleNotFoundError
 from encoding.hamming_codes import hamming_encode
 
@@ -104,8 +100,6 @@ def logInCsv(
 
 
 def transmit_signal(isTransmitterESP: bool):
-
-    # NOTE: a bit cursed to have this here
     if isTransmitterESP:
         import esp32test
     else:
@@ -128,17 +122,21 @@ def transmit_signal(isTransmitterESP: bool):
     for message in messages:
         for bitrate in bitrates:
             for carrierfreq in carrierfreqs:
+                if isTransmitterESP:
+                    print("Transmitting to ESP...")
+                    esp32test.transmit_to_esp32(message, carrierfreq, bitrate)
+                    record_seconds = esp32test.compute_record_time_for_esp(
+                        message, bitrate
+                    )
+                else:
+                    print("Transmitting to signal generator...")
+                    transmitPhysical(message, carrierfreq, bitrate)
+                    message_in_bits = compute_len_of_bits(message)
+                    record_seconds = round((message_in_bits / bitrate) * 5)
 
-                if config.RECORD_FOR_LOOP_TESTING:
-                    # ESP OR SIGNAL GENRATOR
-                    if isTransmitterESP:
-                        print("Transmitting to ESP...")
-                        esp32test.transmit_to_esp32(message, carrierfreq, bitrate)
-                    else:
-                        print("Transmitting to signal generator...")
-                        transmitPhysical(message, carrierfreq, bitrate)
-
-                process_signal(carrierfreq, bitrate, id)
+                process_signal_for_testing(
+                    message, carrierfreq, bitrate, id, record_seconds
+                )
 
 
 def process_signal_for_chat(carrierfreq, bitrate):
@@ -151,16 +149,12 @@ def process_signal_for_chat(carrierfreq, bitrate):
     return msg_nc, msg_nc_bp
 
 
-def process_signal(carrierfreq, bitrate, id):
-    # NOTE: a bit cursed to have this here
+def process_signal_for_testing(message, carrierfreq, bitrate, id, record_seconds):
     if not isTransmitterESP:
         from transmitterPhysical import stopTransmission
 
-    # record_seconds = round((len_of_bits / bitrate) * 5)
-    record_seconds = 5
-    if config.RECORD_FOR_LOOP_TESTING:
-        print(f"Recording for: {record_seconds} seconds")
-        create_wav_file_from_recording(record_seconds)
+    print(f"Recording for: {record_seconds} seconds")
+    create_wav_file_from_recording(record_seconds)
 
     if bitrate == 300 or bitrate == 400:
         time.sleep(1)
@@ -177,23 +171,25 @@ def process_signal(carrierfreq, bitrate, id):
     )
     nonCoherentReceiverWithBandPass.set_transmitter(isTransmitterESP)
 
-    # try:
-    message_nc, debug_nc = nonCoherentReceiver.decode()
-    message_nc_bandpass, debug_nc_bandpass = nonCoherentReceiverWithBandPass.decode()
-
-    if config.RECORD_FOR_LOOP_TESTING:
-        logging_and_printing(
-            message_nc,
-            message_nc_bandpass,
-            message,
-            debug_nc,
-            debug_nc_bandpass,
-            bitrate,
-            carrierfreq,
-            id,
+    try:
+        message_nc, debug_nc = nonCoherentReceiver.decode()
+        message_nc_bandpass, debug_nc_bandpass = (
+            nonCoherentReceiverWithBandPass.decode()
         )
-    else:
-        chatting(message_nc, message_nc_bandpass)
+    except PreambleNotFoundError:
+        message_nc = "No preamble found"
+        message_nc_bandpass = "No preamble found"
+
+    logging_and_printing(
+        message_nc,
+        message_nc_bandpass,
+        message,
+        debug_nc,
+        debug_nc_bandpass,
+        bitrate,
+        carrierfreq,
+        id,
+    )
 
 
 def logging_and_printing(
@@ -228,10 +224,6 @@ def logging_and_printing(
     print("Hamming distance of msgs, no pass:   ", hamming_dist)
     print("Hamming distance of msgs, with pass  ", hamming_dist_bandpass)
 
-    # except PreambleNotFoundError:
-    #     message_nc = "No preamble found"
-    #     message_nc_bandpass = "No preamble found"
-
     logInCsv(
         id,
         bitrate,
@@ -245,18 +237,6 @@ def logging_and_printing(
     id += 1
 
 
-def chatting(message_nc, message_nc_bandpass):
-    print(f"Mathias: {message_nc}")
-
-
-def main():
-    global isTransmitterESP
+if __name__ == "__main__":
     isTransmitterESP = True
     transmit_signal(isTransmitterESP)
-
-
-if __name__ == "__main__":
-    if config.RECORD_FOR_LOOP_TESTING:
-        main()
-    else:
-        main()

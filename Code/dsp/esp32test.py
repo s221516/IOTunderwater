@@ -4,8 +4,8 @@ import config
 
 # Set up the UART connection (adjust 'COM5' as needed)
 
-ser = serial.Serial("/dev/cu.usbserial-0232D158", 115200, timeout=1)
-# ser = serial.Serial("COM12", 115200, timeout=1)
+# ser = serial.Serial("/dev/cu.usbserial-0232D158", 115200, timeout=1)
+ser = serial.Serial("COM12", 115200, timeout=1)
 
 
 def read_line():
@@ -31,27 +31,9 @@ def send_command(command):
 
 def transmit_to_esp32(message, carrierfreq, bitrate):
 
-    # print("""
-    #     Available commands:
-    #     FREQ <value>     - Set the carrier frequency (default is 6000)
-    #     BITRATE <value>  - Set the bitrate (default is 100)
-    #     REP <value>      - Set wave repetitions (default is 10)
-    #     <text>           - Send a text message to transmit
-    #     """)
-
-    bitrate_factor = (bitrate // 100) * 3
-    if bitrate == 400:
-        bitrate_factor = bitrate_factor - 6
-    reps = 4 + bitrate_factor
-
-    # send_command("11")
     send_command("FREQ" + str(carrierfreq))
     send_command("BITRATE" + str(bitrate))
     send_command("REP" + str(config.REP_ESP))
 
     # message last so we put the specs of the wave first
     send_command(message)
-
-
-# if __name__ == "__main__":
-#     transmit_to_esp32()

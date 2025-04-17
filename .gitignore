@@ -1,5 +1,6 @@
 /Code/dsp/data/signal.wav
 /Code/dsp/data/recording.wav
+/Code/dsp/__pycache__/
 /Code/ESP32
 /Code/esp32-espressif
 /.vscode/settings.json

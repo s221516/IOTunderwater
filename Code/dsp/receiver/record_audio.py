@@ -18,7 +18,6 @@ FORMAT = pyaudio.paInt16
 CHANNELS = 1  # this is either mono or stereo // mono = 1, stereo = 2, we do mono
 INDEX_FOR_MIC = 2  # change this if Mathias or Morten
 LAST_PRINT_TIME = datetime.now()
-print(LAST_PRINT_TIME)
 
 
 def create_wav_file_from_recording(record_seconds):

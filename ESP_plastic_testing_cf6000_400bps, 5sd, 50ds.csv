@@ -48,6 +48,21 @@ ID,Bitrate,Carrier Frequency,Original Message,Decoded without bandpass,Hamming D
 0,100,6000,Hello_there,Hello_there,0,Hello_there,0,No Encoding,ESP,5,50
 0,100,6000,Hello_there,Hello_there,0,Hello_there,0,No Encoding,ESP,5,50
 0,100,6000,Suggma_balls,Suggma_balls,0,Suggma_balls,0,No Encoding,ESP,5,50
+<<<<<<< HEAD
+0,100,6000,Cocks_for_life,Cocks_for_life,0,Cocks_for_life,0,No Encoding,ESP,5,50
+0,100,6000,Hello_ther,Hello_ther,0,Hello_ther,0,No Encoding,ESP,5,50
+0,100,6000,cocks_for_life,,,cocks_for_life,0,No Encoding,ESP,5,50
+0,100,6000,cocks_for_life, ,,"!""",,No Encoding,ESP,5,50
+0,100,6000,Hello_there,Hello_there,0,Hello_there,0,No Encoding,ESP,5,50
+0,200,6000,Hello_there,@allo_thapa,5,"@ l,/_t( pa",12,No Encoding,ESP,5,50
+0,300,6000,Hello_there,@a|l`,,@,,No Encoding,ESP,5,50
+0,100,6000,Hello_there,He`d,,@ello_there,1,No Encoding,ESP,5,50
+0,100,6000,Hello_there,Hello_there,0,Hello_there,0,No Encoding,ESP,5,50
+0,100,6000,Hello_world,H`ld,,H`ld,,No Encoding,ESP,5,50
+0,100,6000,WORLD,WORLD,0,WORLD,0,No Encoding,ESP,5,50
+0,100,6000,JUICEWORLD,JUICEWORLD,0,JUICEWORLD,0,No Encoding,ESP,5,50
+=======
 0,100,6000,Hell_there,Hell_there,0,Hell_there,0,No Encoding,ESP,5,50
 0,100,6000,Hello_there,Hello_there,0,Hello_there,0,No Encoding,ESP,5,50
 0,100,6000,Hello_there,Hello_there,0,Hello_there,0,No Encoding,ESP,5,50
+>>>>>>> ca2dfff2e2bea225f06c470e01cb230df0813134

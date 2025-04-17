@@ -28,7 +28,6 @@ class MessageSender(threading.Thread):
                 from transmitterPhysical import transmitPhysical, stopTransmission
 
                 transmitPhysical(message, config.CARRIER_FREQ, config.BIT_RATE)
-                stopTransmission()
 
             # Wait for the transmission to complete
             len_of_bits = len(message) * 8 + 13
