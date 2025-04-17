@@ -14,7 +14,6 @@ import config
 FORMAT = pyaudio.paInt16
 CHANNELS = 1
 CHUNK = 1024
-SAVE_DIR = "Code/dsp/data"
 PRE_RECORD_TIME = 0.5
 WINDOW_SIZE = 100
 
@@ -24,7 +23,6 @@ class AudioReceiver(threading.Thread):
         super().__init__(name="AudioReceiverThread")
         self.threshold = 500
         self.shared_state = shared_state
-        self.new_recording = flag
 
     def list_audio_devices(self):
         """List all available audio input devices"""

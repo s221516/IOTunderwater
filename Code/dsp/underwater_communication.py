@@ -2,11 +2,6 @@ from audio_reciever import AudioReceiver
 from interactive_sender import MessageSender
 import config
 
-# Configuration variables - modify these as needed
-OPERATION_MODE = "both"  # Options: "receive", "send", "both"
-USE_ESP = True  # True for ESP32, False for signal generator
-MIC_INDEX = 2  # Audio input device index
-
 
 def run_chat(shared_state):
     print("Enter messages to transmit or commands:")
@@ -66,7 +61,7 @@ def main():
     shared_state = {"is_transmitting": False, "msg": None}
     receiver = AudioReceiver(shared_state)
     # Create sender
-    sender = MessageSender(shared_state, use_esp=USE_ESP)
+    sender = MessageSender(shared_state)
     # Start the threads
     receiver.start()
     sender.start()

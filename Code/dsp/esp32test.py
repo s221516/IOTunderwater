@@ -2,10 +2,7 @@ import serial
 import time
 import config
 
-# Set up the UART connection (adjust 'COM5' as needed)
-
-ser = serial.Serial("/dev/cu.usbserial-0232D158", 115200, timeout=1)
-# ser = serial.Serial("COM12", 115200, timeout=1)
+ser = serial.Serial(config.TRANSMITTER_PORT, 115200, timeout=1)
 
 
 def read_line():

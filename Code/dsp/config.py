@@ -45,7 +45,8 @@ def set_carrierfreq(value):
     CARRIER_FREQ = value
 
 
-PORT = "COM11"
+# TRANSMITTER_PORT = "COM11"
+TRANSMITTER_PORT = "/dev/cu.usbserial-0232D158"
 SAMPLE_RATE = 96000  # this capped by the soundcard, therefore, this is non-changeable
 
 BIT_RATE = 100
@@ -63,9 +64,9 @@ BINARY_BARKER = [1, 1, 1, 1, 1, 0, 0, 1, 1, 0, 1, 0, 1]
 APPLY_BAKER_PREAMBLE = True
 APPLY_AVERAGING_PREAMBLE = False
 MIC_INDEX = 2  # Mathias, 1 Morten
-
+USE_ESP = True
 PLOT_PREAMBLE_CORRELATION = False
-
+SAVE_DIR = "Code/dsp/data"
 PATH_TO_WAV_FILE = "Code/dsp/data/testing_and_logging_recording.wav"
 
 HAMMING_CODING = False
