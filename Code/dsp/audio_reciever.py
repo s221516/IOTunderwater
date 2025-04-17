@@ -19,7 +19,7 @@ CHANNELS = 1
 CHUNK = 1024
 SAMPLE_RATE = config.SAMPLE_RATE
 SAVE_DIR = "Code/dsp/data"
-INDEX_FOR_MIC = 1  # Change this depending on your setup
+INDEX_FOR_MIC = 2  # Change this depending on your setup
 RECORD_TIME = 5.0
 PRE_RECORD_TIME = 0.5
 WINDOW_SIZE = 100
@@ -125,10 +125,13 @@ class AudioReceiver(threading.Thread):
                     not self.shared_state["is_transmitting"]
                 ):
 
+                    print("Debug: Started new recording")
+                    print(f"Avg RMS: {current_rms}")
+
                     if self.shared_state["msg"] is not None:
 
-                        print("Debug: Started new recording")
-                        print(f"Avg RMS: {current_rms}")
+                        # print("Debug: Started new recording")
+                        # print(f"Avg RMS: {current_rms}")
                         # Start recording
                         len_of_bits = len(self.shared_state["msg"]) * 8 + 13
                         record_time = config.REP_ESP * (len_of_bits / config.BIT_RATE)

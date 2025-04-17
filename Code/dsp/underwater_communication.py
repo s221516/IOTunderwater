@@ -7,13 +7,12 @@ import threading
 import time
 from audio_reciever import AudioReceiver
 from interactive_sender import MessageSender
-from main import process_signal
 import config
 
 # Configuration variables - modify these as needed
 OPERATION_MODE = "both"  # Options: "receive", "send", "both"
 USE_ESP = True  # True for ESP32, False for signal generator
-MIC_INDEX = 1  # Audio input device index
+MIC_INDEX = 2  # Audio input device index
 global is_transmitting
 is_transmitting = False
 
