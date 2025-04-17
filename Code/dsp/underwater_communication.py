@@ -1,10 +1,3 @@
-from concurrent.futures import thread
-from email.mime import audio
-from multiprocessing import process
-from pdb import run
-from re import M
-import threading
-import time
 from audio_reciever import AudioReceiver
 from interactive_sender import MessageSender
 import config
@@ -13,8 +6,6 @@ import config
 OPERATION_MODE = "both"  # Options: "receive", "send", "both"
 USE_ESP = True  # True for ESP32, False for signal generator
 MIC_INDEX = 2  # Audio input device index
-global is_transmitting
-is_transmitting = False
 
 
 def run_chat(shared_state):

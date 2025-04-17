@@ -15,7 +15,7 @@ from config import (
     PREAMBLE_PATTERN,
     REPETITIONS,
     SAMPLE_RATE,
-    PLOT_PREAMBLE_CORRELATION
+    PLOT_PREAMBLE_CORRELATION,
 )
 
 from encoding.hamming_codes import hamming_decode
@@ -193,17 +193,17 @@ class Receiver:
                 bits[peak_indices[i] + len(BINARY_BARKER) : peak_indices[i + 1]]
             )
 
-        # NOTE: this is to plot the decodins of each entry of data bits
-        print("Diff in peaks: ", diff_in_peaks)
-        for i in range(len(data_bits)):
-            if CONVOLUTIONAL_CODING:
-                bits_array = np.array(data_bits[i])
-                print(self.decode_bytes_to_bits(conv_decode(bits_array, None)[:-2]))
-            elif HAMMING_CODING:
-                print(self.decode_bytes_to_bits(hamming_decode(data_bits[i])))
-            else:
-                decoded_bits = self.decode_bytes_to_bits(data_bits[i])
-                print(decoded_bits)
+        # # NOTE: this is to plot the decodins of each entry of data bits
+        # print("Diff in peaks: ", diff_in_peaks)
+        # for i in range(len(data_bits)):
+        #     if CONVOLUTIONAL_CODING:
+        #         bits_array = np.array(data_bits[i])
+        #         print(self.decode_bytes_to_bits(conv_decode(bits_array, None)[:-2]))
+        #     elif HAMMING_CODING:
+        #         print(self.decode_bytes_to_bits(hamming_decode(data_bits[i])))
+        #     else:
+        #         decoded_bits = self.decode_bytes_to_bits(data_bits[i])
+        #         print(decoded_bits)
 
         if PLOT_PREAMBLE_CORRELATION:
             # NOTE: this plots the correlation of the preamble and the received signal

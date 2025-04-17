@@ -2,12 +2,9 @@ import time
 import wave
 import pyaudio
 import numpy as np
-import os
 import threading
-from datetime import datetime
 from collections import deque
 
-from sympy import N
 from main import process_signal_for_chat
 import config
 
@@ -17,10 +14,7 @@ import config
 FORMAT = pyaudio.paInt16
 CHANNELS = 1
 CHUNK = 1024
-SAMPLE_RATE = config.SAMPLE_RATE
 SAVE_DIR = "Code/dsp/data"
-INDEX_FOR_MIC = 2  # Change this depending on your setup
-RECORD_TIME = 5.0
 PRE_RECORD_TIME = 0.5
 WINDOW_SIZE = 100
 
@@ -30,11 +24,6 @@ class AudioReceiver(threading.Thread):
         super().__init__(name="AudioReceiverThread")
         self.threshold = 500
         self.shared_state = shared_state
-
-    def get_is_new_recording(self):
-        return self.new_recording
-
-    def set_is_new_recording(self, flag):
         self.new_recording = flag
 
     def list_audio_devices(self):
@@ -58,16 +47,15 @@ class AudioReceiver(threading.Thread):
         wf = wave.open(config.PATH_TO_WAV_FILE, "wb")
         wf.setnchannels(CHANNELS)
         wf.setsampwidth(sample_size_format)
-        wf.setframerate(SAMPLE_RATE)
+        wf.setframerate(config.SAMPLE_RATE)
 
-        print("Recording...")
+        print("Incoming signal detected! Recording...")
         frames = []
 
         # Read and store audio data
-        for _ in range(0, int(SAMPLE_RATE / CHUNK * record_seconds)):
+        for _ in range(0, int(config.SAMPLE_RATE / CHUNK * record_seconds)):
             data = stream.read(CHUNK)
             frames.append(data)
-        print("Done recording")
 
         # Stop and close the stream
 
@@ -87,7 +75,7 @@ class AudioReceiver(threading.Thread):
         rms_values = deque(maxlen=WINDOW_SIZE)
 
         # Create buffers
-        pre_buffer_size = int(SAMPLE_RATE * PRE_RECORD_TIME)
+        pre_buffer_size = int(config.SAMPLE_RATE * PRE_RECORD_TIME)
         pre_buffer = deque(maxlen=pre_buffer_size)
 
         stream = None
@@ -99,10 +87,10 @@ class AudioReceiver(threading.Thread):
                 stream = p.open(
                     format=FORMAT,
                     channels=CHANNELS,
-                    rate=SAMPLE_RATE,
+                    rate=config.SAMPLE_RATE,
                     input=True,
                     frames_per_buffer=CHUNK,
-                    input_device_index=INDEX_FOR_MIC,
+                    input_device_index=config.MIC_INDEX,
                 )
 
                 data = stream.read(CHUNK, exception_on_overflow=False)
@@ -111,42 +99,29 @@ class AudioReceiver(threading.Thread):
                 # Calculate audio levels
                 current_rms = self.calculate_rms(audio_chunk)
                 avg_rms = np.mean(current_rms)
-                # print(f"Avg RMS: {avg_rms}")
-                # print(f"in transmit: {self.shared_state['is_transmitting']}")
 
                 # Always keep recent audio in pre-buffer
                 pre_buffer.extend(audio_chunk)
-
-                # print the values of the boolean
-                # print(f"Avg RMS: {avg_rms}")
-                # print(f"Threshold: {self.threshold}")
 
                 if current_rms > self.threshold and (
                     not self.shared_state["is_transmitting"]
                 ):
 
-                    print("Debug: Started new recording")
-                    print(f"Avg RMS: {current_rms}")
+                    # len_of_bits = len(self.shared_state["msg"]) * 8 + 13
+                    # record_time = config.REP_ESP * (len_of_bits / config.BIT_RATE)
+                    record_time = 15
+                    self.create_wav_file_from_recording(
+                        record_time, stream, p.get_sample_size(FORMAT)
+                    )
 
-                    if self.shared_state["msg"] is not None:
-
-                        # print("Debug: Started new recording")
-                        # print(f"Avg RMS: {current_rms}")
-                        # Start recording
-                        len_of_bits = len(self.shared_state["msg"]) * 8 + 13
-                        record_time = config.REP_ESP * (len_of_bits / config.BIT_RATE)
-                        self.create_wav_file_from_recording(
-                            record_time, stream, p.get_sample_size(FORMAT)
-                        )
-
-                        msg, msg_bp = process_signal_for_chat(
-                            config.CARRIER_FREQ,
-                            config.BIT_RATE,
-                        )
-                        print("----------------")
-                        print(f"Received             : {msg}")
-                        print(f"Received w. band-pass: {msg_bp}")
-                        print("----------------")
+                    msg, msg_bp = process_signal_for_chat(
+                        config.CARRIER_FREQ,
+                        config.BIT_RATE,
+                    )
+                    print("----------------")
+                    print(f"Received             : {msg}")
+                    print(f"Received w. band-pass: {msg_bp}")
+                    print("----------------")
 
                     time.sleep(2)
 
