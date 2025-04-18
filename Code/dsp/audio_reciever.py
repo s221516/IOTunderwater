@@ -80,9 +80,7 @@ class AudioReceiver(threading.Thread):
         stream = None
 
         try:
-
             while True:
-
                 stream = p.open(
                     format=FORMAT,
                     channels=CHANNELS,
@@ -101,13 +99,7 @@ class AudioReceiver(threading.Thread):
 
                 # Always keep recent audio in pre-buffer
                 pre_buffer.extend(audio_chunk)
-
-                # Once in a while print the RMS value
-                # counter = 0
-                # if counter % 10000 == 0:
-                #     print(f"RMS: {avg_rms:.2f}")
-                #     counter = 0
-                # counter += 1
+                # print("Avg_rms: ", avg_rms, end = "", flush = True)
 
                 if current_rms > self.threshold and (
                     not self.shared_state["is_transmitting"]
@@ -122,7 +114,7 @@ class AudioReceiver(threading.Thread):
                     )
 
                     msg, msg_bp = process_signal_for_chat(
-                        12000,
+                        config.CARRIER_FREQ,
                         config.BIT_RATE,
                     )
                     print("----------------")

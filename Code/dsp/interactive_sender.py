@@ -36,6 +36,7 @@ class MessageSender(threading.Thread):
             )
             # Wait for the transmission to complete
             time.sleep(transmission_time)
+
             if not config.USE_ESP:
                 stopTransmission()
 

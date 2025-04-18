@@ -5,14 +5,14 @@ from config import (
     BINARY_BARKER,
     CONVOLUTIONAL_CODING,
     HAMMING_CODING,
-    PORT,
+    TRANSMITTER_PORT,
     PREAMBLE_PATTERN,
 )
 from encoding.hamming_codes import hamming_encode
 from encoding.conv_encoding_scikit import conv_encode
 from initPorts import initPort
 
-ser = initPort(PORT)
+ser = initPort(TRANSMITTER_PORT)
 
 
 def send_command(command):

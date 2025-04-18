@@ -5,7 +5,7 @@ import pyaudio
 import numpy as np
 import os
 from collections import deque
-from config import PATH_TO_WAV_FILE, SAMPLE_RATE
+from config import PATH_TO_WAV_FILE, SAMPLE_RATE, MIC_INDEX
 from datetime import datetime
 from receiver.receiverClass import NonCoherentReceiver
 from errors import PreambleNotFoundError
@@ -16,7 +16,6 @@ CHUNK = 1024  # the amount of frames read per buffer, 1024 to balance between la
 
 FORMAT = pyaudio.paInt16
 CHANNELS = 1  # this is either mono or stereo // mono = 1, stereo = 2, we do mono
-INDEX_FOR_MIC = 2  # change this if Mathias or Morten
 LAST_PRINT_TIME = datetime.now()
 
 
@@ -46,7 +45,7 @@ def create_wav_file_from_recording(record_seconds):
         rate=SAMPLE_RATE,
         input=True,
         frames_per_buffer=CHUNK,
-        input_device_index=INDEX_FOR_MIC,
+        input_device_index=MIC_INDEX,
     )
 
     print("Recording...")
@@ -102,7 +101,7 @@ def continuous_recording_with_threshold(threshold_val):
         rate=SAMPLE_RATE,
         input=True,
         frames_per_buffer=CHUNK,
-        input_device_index=INDEX_FOR_MIC,
+        input_device_index=MIC_INDEX,
     )
 
     try:

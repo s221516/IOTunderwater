@@ -6,8 +6,8 @@ import config
 def run_chat(shared_state):
     print("Enter messages to transmit or commands:")
     print("  'exit' to quit")
-    print("  'cf=<freq>' to set carrier frequency (e.g., 'cf=6000')")
-    print("  'br=<rate>' to set bit rate (e.g., 'br=100') \n")
+    print(f"  'cf=<freq>' to set carrier frequency (e.g., 'cf={config.CARRIER_FREQ}')")
+    print(f"  'br=<rate>' to set bit rate (e.g., 'br={config.BIT_RATE}') \n")
 
     try:
         print("Write a message below!")
