@@ -39,8 +39,6 @@ class MessageSender(threading.Thread):
             if not config.USE_ESP:
                 stopTransmission()
 
-                esp32test.send_command("STOP")
-
         except Exception as e:
             print(f"Transmission error: {e}")
         finally:

@@ -47,9 +47,9 @@ def run_chat(shared_state):
                 user_input = user_input.replace(" ", "_")
                 ## Essure user input is always 32 characters long if less than append '_'
                 max_len = 32
-                if len(user_input) < max_len:
-                    user_input = user_input.ljust(max_len, "_")
-                elif len(user_input) > max_len:
+                # if len(user_input) < max_len:
+                #     user_input = user_input.ljust(max_len, "_")
+                if len(user_input) > max_len:
                     user_input = user_input[:max_len]
                 shared_state["msg"] = user_input
 

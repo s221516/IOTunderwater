@@ -1,7 +1,8 @@
 import csv
 import time
 import threading
-
+from tkinter import W
+import numpy as np
 from numpy import record
 from sympy import N
 
@@ -50,7 +51,7 @@ def logInCsv(
 
     if filename is None:
         transmitter_string = transmitter_setting_to_string()
-        filename = f"{transmitter_string}_plastic_testing_cf{carrierfreq}_400bps, {speaker_depth}sd, {distance_to_speaker}ds.csv"
+        filename = f"{transmitter_string}_plastic_testing_cf_1k15k21k_100bps, {speaker_depth}sd, {distance_to_speaker}ds.csv"
 
     headers = [
         "ID",
@@ -107,16 +108,16 @@ def transmit_signal(isTransmitterESP: bool):
 
     messages = ["Hello_there"]
 
-    n = 100
-    bitrates = [100]
+    n = 10
+    bitrates = [100] * n
 
-    carrierfreqs = [6000]
+    carrierfreqs = np.arange(1000, 16000, 1000)
 
     global speaker_depth
-    speaker_depth = 5  # in cm
+    speaker_depth = 200  # in cm
 
     global distance_to_speaker
-    distance_to_speaker = 50  # in cm
+    distance_to_speaker = 600  # in cm
 
     id = 0
     for message in messages:
@@ -125,9 +126,7 @@ def transmit_signal(isTransmitterESP: bool):
                 if isTransmitterESP:
                     print("Transmitting to ESP...")
                     esp32test.transmit_to_esp32(message, carrierfreq, bitrate)
-                    record_seconds = esp32test.compute_record_time_for_esp(
-                        message, bitrate
-                    )
+                    record_seconds = 6
                 else:
                     print("Transmitting to signal generator...")
                     transmitPhysical(message, carrierfreq, bitrate)
@@ -179,6 +178,8 @@ def process_signal_for_testing(message, carrierfreq, bitrate, id, record_seconds
     except PreambleNotFoundError:
         message_nc = "No preamble found"
         message_nc_bandpass = "No preamble found"
+        debug_nc["bits_without_preamble"] = []
+        debug_nc_bandpass["bits_without_preamble"] = []
 
     logging_and_printing(
         message_nc,
