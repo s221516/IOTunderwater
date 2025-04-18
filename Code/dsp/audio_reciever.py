@@ -79,9 +79,7 @@ class AudioReceiver(threading.Thread):
         stream = None
 
         try:
-
             while True:
-
                 stream = p.open(
                     format=FORMAT,
                     channels=CHANNELS,
@@ -100,6 +98,7 @@ class AudioReceiver(threading.Thread):
 
                 # Always keep recent audio in pre-buffer
                 pre_buffer.extend(audio_chunk)
+                # print("Avg_rms: ", avg_rms, end = "", flush = True)
 
                 if current_rms > self.threshold and (
                     not self.shared_state["is_transmitting"]
@@ -107,21 +106,16 @@ class AudioReceiver(threading.Thread):
 
                     # len_of_bits = len(self.shared_state["msg"]) * 8 + 13
                     # record_time = config.REP_ESP * (len_of_bits / config.BIT_RATE)
-                    record_time = 15
+                    record_time = 10
                     self.create_wav_file_from_recording(
                         record_time, stream, p.get_sample_size(FORMAT)
                     )
 
-                    msg, msg_bp = process_signal_for_chat(
-                        config.CARRIER_FREQ,
-                        config.BIT_RATE,
-                    )
+                    msg, msg_bp = process_signal_for_chat(config.CARRIER_FREQ ,config.BIT_RATE,)
                     print("----------------")
                     print(f"Received             : {msg}")
                     print(f"Received w. band-pass: {msg_bp}")
                     print("----------------")
-
-                    time.sleep(2)
 
                     # reset the pre-buffer after recording
                 stream.stop_stream()

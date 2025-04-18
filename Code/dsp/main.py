@@ -1,8 +1,8 @@
 import csv
 import time
 import threading
+import numpy as np
 
-from numpy import record
 from sympy import N
 
 import config
@@ -50,7 +50,7 @@ def logInCsv(
 
     if filename is None:
         transmitter_string = transmitter_setting_to_string()
-        filename = f"{transmitter_string}_plastic_testing_cf{carrierfreq}_400bps, {speaker_depth}sd, {distance_to_speaker}ds.csv"
+        filename = f"{transmitter_string}_pool_testing_cf_100bps, {speaker_depth}sd, {distance_to_speaker}ds.csv"
 
     headers = [
         "ID",
@@ -108,9 +108,10 @@ def transmit_signal(isTransmitterESP: bool):
     messages = ["Hello_there"]
 
     n = 100
-    bitrates = [100]
+    bitrates = [100] * 10
 
-    carrierfreqs = [6000]
+    # carrierfreqs = np.arange(1000, 13000, 1000)
+    carrierfreqs = [12000]
 
     global speaker_depth
     speaker_depth = 5  # in cm
@@ -166,9 +167,7 @@ def process_signal_for_testing(message, carrierfreq, bitrate, id, record_seconds
 
     nonCoherentReceiver = NonCoherentReceiver(bitrate, carrierfreq, band_pass=False)
     nonCoherentReceiver.set_transmitter(isTransmitterESP)
-    nonCoherentReceiverWithBandPass = NonCoherentReceiver(
-        bitrate, carrierfreq, band_pass=True
-    )
+    nonCoherentReceiverWithBandPass = NonCoherentReceiver(bitrate, carrierfreq, band_pass=True)
     nonCoherentReceiverWithBandPass.set_transmitter(isTransmitterESP)
 
     try:
@@ -189,6 +188,7 @@ def process_signal_for_testing(message, carrierfreq, bitrate, id, record_seconds
         bitrate,
         carrierfreq,
         id,
+        nonCoherentReceiver
     )
 
 
@@ -201,11 +201,12 @@ def logging_and_printing(
     bitrate,
     carrierfreq,
     id,
+    noncoherent_receiver
 ):
     print("Decoded message: no pass    ", message_nc)
     print("Decoded message, with pass: ", message_nc_bandpass)
 
-    # nonCoherentReceiver.plot_simulation_steps()
+    # noncoherent_receiver.plot_simulation_steps()
     # nonCoherentReceiverWithBandPass.plot_simulation_steps()
 
     original_message_in_bits = config.string_to_bin_array(message)
@@ -238,5 +239,5 @@ def logging_and_printing(
 
 
 if __name__ == "__main__":
-    isTransmitterESP = True
+    isTransmitterESP = False
     transmit_signal(isTransmitterESP)

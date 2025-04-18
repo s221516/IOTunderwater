@@ -36,9 +36,10 @@ class MessageSender(threading.Thread):
             )
             # Wait for the transmission to complete
             time.sleep(transmission_time)
+            
             if not config.USE_ESP:
                 stopTransmission()
-
+            else:
                 esp32test.send_command("STOP")
 
         except Exception as e:

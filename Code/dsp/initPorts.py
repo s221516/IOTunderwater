@@ -17,7 +17,8 @@ def initPort(portName):
         
         # Check if the port was opened successfully
         if ser.is_open:
-            print(f"Port {portName} opened successfully.")
+            # print(f"Port {portName} opened successfully.")
+            pass
         else:
             print(f"Failed to open {portName}.")
             exit()

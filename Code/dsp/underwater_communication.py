@@ -6,8 +6,8 @@ import config
 def run_chat(shared_state):
     print("Enter messages to transmit or commands:")
     print("  'exit' to quit")
-    print("  'cf=<freq>' to set carrier frequency (e.g., 'cf=6000')")
-    print("  'br=<rate>' to set bit rate (e.g., 'br=100') \n")
+    print(f"  'cf=<freq>' to set carrier frequency (e.g., 'cf={config.CARRIER_FREQ}')")
+    print(f"  'br=<rate>' to set bit rate (e.g., 'br={config.BIT_RATE}') \n")
 
     try:
         print("Write a message below!")
@@ -47,9 +47,9 @@ def run_chat(shared_state):
                 user_input = user_input.replace(" ", "_")
                 ## Essure user input is always 32 characters long if less than append '_'
                 max_len = 32
-                if len(user_input) < max_len:
-                    user_input = user_input.ljust(max_len, "_")
-                elif len(user_input) > max_len:
+                # if len(user_input) < max_len:
+                #     user_input = user_input.ljust(max_len, "_")
+                if len(user_input) > max_len:
                     user_input = user_input[:max_len]
                 shared_state["msg"] = user_input
 
