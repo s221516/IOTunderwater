@@ -141,7 +141,7 @@ def process_signal_for_testing(message, id):
     logging_and_printing(message_nc,message_nc_bandpass,message,debug_nc,debug_nc_bandpass,id)
 
 
-def logging_and_printing(message_nc,message_nc_bandpass,message,debug_nc,debug_nc_bandpass,bitrate,carrierfreq,id):
+def logging_and_printing(message_nc,message_nc_bandpass,message,debug_nc,debug_nc_bandpass,id):
     print("Decoded message: no pass    ", message_nc)
     print("Decoded message, with pass: ", message_nc_bandpass)
     
@@ -170,7 +170,7 @@ def logging_and_printing(message_nc,message_nc_bandpass,message,debug_nc,debug_n
     print("Hamming distance of msgs, no pass:   ", hamming_dist)
     print("Hamming distance of msgs, with pass  ", hamming_dist_bandpass)
 
-    logInCsv(id,bitrate,carrierfreq,message,message_nc,hamming_dist,message_nc_bandpass,hamming_dist_bandpass, distance_to_speaker, speaker_depth, test_description, original_message_in_bits, data_bits_nc, data_bits_nc_bandpass)
+    logInCsv(id,message,message_nc,hamming_dist,message_nc_bandpass,hamming_dist_bandpass, distance_to_speaker, speaker_depth, test_description, original_message_in_bits, data_bits_nc, data_bits_nc_bandpass)
 
 
 if __name__ == "__main__":

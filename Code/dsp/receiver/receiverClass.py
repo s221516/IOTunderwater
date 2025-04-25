@@ -42,7 +42,7 @@ def plot_wav_signal(sample_rate, wav_signal):
 
 
 class Receiver:
-    def __init__(self, band_pass: bool, id: str):
+    def __init__(self, id: str, band_pass: bool):
         _, self.wav_signal = wavfile.read(SAVE_DIR + "/raw_data/" + id + ".wav")
         self.bit_rate = BIT_RATE
         self.carrier_freq = CARRIER_FREQ
