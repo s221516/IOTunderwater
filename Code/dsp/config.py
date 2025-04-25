@@ -72,10 +72,10 @@ USE_ESP = True
 PLOT_PREAMBLE_CORRELATION = False
 SAVE_DIR = "Code/dsp/data"
 PATH_TO_WAV_FILE = "Code/dsp/data/testing_and_logging_recording.wav"
-
+FILE_NAME_DATA_TESTS = "Received_data_for_tests.csv"
 HAMMING_CODING = False
 CONVOLUTIONAL_CODING = False
-
+LIST_OF_DATA_BITS = []
 if CONVOLUTIONAL_CODING:
     ENCODING = "Convolutional Encoding"
 elif HAMMING_CODING:
