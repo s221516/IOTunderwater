@@ -3,7 +3,7 @@ import wave
 import pyaudio
 import numpy as np
 from collections import deque
-from config import PATH_TO_WAV_FILE, SAMPLE_RATE, MIC_INDEX
+from config import PATH_TO_WAV_FILE, SAMPLE_RATE, MIC_INDEX, SAVE_DIR
 from datetime import datetime
 
 CHUNK = 1024  # the amount of frames read per buffer, 1024 to balance between latency and processing load
@@ -15,11 +15,11 @@ CHANNELS = 1  # this is either mono or stereo // mono = 1, stereo = 2, we do mon
 LAST_PRINT_TIME = datetime.now()
 
 
-def create_wav_file_from_recording(record_seconds):
+def create_wav_file_from_recording(record_seconds, name):
     p = pyaudio.PyAudio()
     
     # Open a new wave file
-    wf = wave.open(PATH_TO_WAV_FILE, "wb")
+    wf = wave.open(SAVE_DIR+"/raw_data/" + name + ".wav", "wb")
     wf.setnchannels(CHANNELS)
     wf.setsampwidth(p.get_sample_size(FORMAT))
     wf.setframerate(SAMPLE_RATE)

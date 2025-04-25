@@ -16,6 +16,7 @@ from config import (
     CARRIER_FREQ,
     SAMPLE_RATE,
     PLOT_PREAMBLE_CORRELATION,
+    SAVE_DIR,
 )
 
 from encoding.hamming_codes import hamming_decode
@@ -41,8 +42,8 @@ def plot_wav_signal(sample_rate, wav_signal):
 
 
 class Receiver:
-    def __init__(self, band_pass: bool):
-        _, self.wav_signal = wavfile.read(PATH_TO_WAV_FILE)
+    def __init__(self, band_pass: bool, id: str):
+        _, self.wav_signal = wavfile.read(SAVE_DIR + "/raw_data/" + id + ".wav")
         self.bit_rate = BIT_RATE
         self.carrier_freq = CARRIER_FREQ
         self.band_pass = band_pass
@@ -113,7 +114,7 @@ class Receiver:
     def remove_preamble_baker_code(self, bits, std_factor=4):
         correlation = signal.correlate(bits, BINARY_BARKER, mode="valid")
         threshold = np.mean(correlation) + std_factor * np.std(correlation)
-        peak_indices, _ = signal.find_peaks(correlation, height=threshold, distance=20)
+        peak_indices, _ = signal.find_peaks(correlation, height=threshold, distance=len_of_data_bits)
         
         if len(peak_indices) < 2:
             if std_factor > 1:
@@ -122,23 +123,24 @@ class Receiver:
                 return -1
 
         diff_in_peaks = np.diff(peak_indices)
-
-        data_bits = []
+        
+        all_data_bits            = []
+        data_bits_of_correct_len = []
         for i in range(len(peak_indices) - 1):
-            # if abs(diff_in_peaks[i] - len_of_data_bits) <= 0:
-            data_bits.append(bits[peak_indices[i] + len(BINARY_BARKER) : peak_indices[i + 1]])
-
+            all_data_bits.append(bits[peak_indices[i] + len(BINARY_BARKER) : peak_indices[i + 1]])
+            if abs(diff_in_peaks[i] - len_of_data_bits) == 0:
+                data_bits_of_correct_len.append(bits[peak_indices[i] + len(BINARY_BARKER) : peak_indices[i + 1]])
 
         # NOTE: this is to plot the decodins of each entry of data bits
         print("Diff in peaks: ", diff_in_peaks)
-        for i in range(len(data_bits)):
+        for i in range(len(data_bits_of_correct_len)):
             if CONVOLUTIONAL_CODING:
-                bits_array = np.array(data_bits[i])
+                bits_array = np.array(data_bits_of_correct_len[i])
                 print(self.decode_bytes_to_bits(conv_decode(bits_array, None)[:-2]))
             elif HAMMING_CODING:
-                print(self.decode_bytes_to_bits(hamming_decode(data_bits[i])))
+                print(self.decode_bytes_to_bits(hamming_decode(data_bits_of_correct_len[i])))
             else:
-                decoded_bits = self.decode_bytes_to_bits(data_bits[i])
+                decoded_bits = self.decode_bytes_to_bits(data_bits_of_correct_len[i])
                 print(decoded_bits)
         if PLOT_PREAMBLE_CORRELATION:
             # NOTE: this plots the correlation of the preamble and the received signal
@@ -165,10 +167,10 @@ class Receiver:
             plt.grid()
             plt.show()
 
-        avg = [int(round((sum(col)) / len(col))) for col in zip(*data_bits)]
+        avg = [int(round((sum(col)) / len(col))) for col in zip(*data_bits_of_correct_len)]
         if avg == []:
             avg = -1
-        return avg
+        return avg, all_data_bits
 
 
     def decode_bytes_to_bits(self, bits: list) -> str:
@@ -241,7 +243,7 @@ class NonCoherentReceiver(Receiver):
         if APPLY_AVERAGING_PREAMBLE:
             bits_without_preamble = self.remove_preamble_average(bits)
         elif APPLY_BAKER_PREAMBLE:
-            bits_without_preamble = self.remove_preamble_baker_code(bits)
+            bits_without_preamble, all_data_bits = self.remove_preamble_baker_code(bits)
         else:
             bits_without_preamble = self.remove_preamble_naive(bits)
 
@@ -258,6 +260,7 @@ class NonCoherentReceiver(Receiver):
         message = self.decode_bytes_to_bits(bits_without_preamble)
         debug_info = {
             **demod_debug,
+            "all_data_bits": all_data_bits if APPLY_BAKER_PREAMBLE else None,
             "normalized": normalized,
             "thresholded": thresholded,
             "bits_without_preamble": bits_without_preamble,
