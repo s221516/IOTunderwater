@@ -1,3 +1,6 @@
+from tkinter import W
+
+
 def message_toBitArray(message: str):
     message_binary = "".join(format(ord(i), "08b") for i in message)
     # TODO: determine the exact number of samples per bit that makes sense in relation to our sample rate
@@ -45,12 +48,12 @@ def set_carrierfreq(value):
     CARRIER_FREQ = value
 
 
-TRANSMITTER_PORT = "COM11"
-# TRANSMITTER_PORT = "/dev/cu.usbserial-0232D158"
+# TRANSMITTER_PORT = "COM11"
+TRANSMITTER_PORT = "/dev/cu.usbserial-0232D158"
 SAMPLE_RATE = 96000  # this capped by the soundcard, therefore, this is non-changeable
 
 BIT_RATE = 100
-CARRIER_FREQ = 12000  #  15200 Hz
+CARRIER_FREQ = 6000  #  15200 Hz
 SAMPLES_PER_SYMBOL = int(SAMPLE_RATE / BIT_RATE)
 CUT_OFF_FREQ = (CARRIER_FREQ + BIT_RATE) // 2  # TODO: check this value
 
@@ -64,8 +67,8 @@ BINARY_BARKER = [1, 1, 1, 1, 1, 0, 0, 1, 1, 0, 1, 0, 1]
 APPLY_BAKER_PREAMBLE = True
 APPLY_AVERAGING_PREAMBLE = False
 
-MIC_INDEX = 1 # Mathias, 1 Morten
-USE_ESP = False
+MIC_INDEX = 2 # Mathias, 1 Morten
+USE_ESP = True
 PLOT_PREAMBLE_CORRELATION = False
 SAVE_DIR = "Code/dsp/data"
 PATH_TO_WAV_FILE = "Code/dsp/data/testing_and_logging_recording.wav"
