@@ -11,9 +11,9 @@ from config import (
     CONVOLUTIONAL_CODING,
     HAMMING_CODING,
     PATH_TO_WAV_FILE,
-    PREAMBLE_BASE,
-    PREAMBLE_PATTERN,
-    REPETITIONS,
+    
+    BIT_RATE,
+    CARRIER_FREQ,
     SAMPLE_RATE,
     PLOT_PREAMBLE_CORRELATION,
 )
@@ -41,13 +41,13 @@ def plot_wav_signal(sample_rate, wav_signal):
 
 
 class Receiver:
-    def __init__(self, bit_rate: int, carrier_freq: int, band_pass: bool):
+    def __init__(self, band_pass: bool):
         _, self.wav_signal = wavfile.read(PATH_TO_WAV_FILE)
-        self.bit_rate = bit_rate
-        self.carrier_freq = carrier_freq
+        self.bit_rate = BIT_RATE
+        self.carrier_freq = CARRIER_FREQ
         self.band_pass = band_pass
-        self.cutoff_freq = bit_rate * 5
-        self.samples_per_symbol = int(SAMPLE_RATE / bit_rate)
+        self.cutoff_freq = self.bit_rate * 5
+        self.samples_per_symbol = int(SAMPLE_RATE / self.bit_rate)
 
     def _demodulate(self) -> Tuple[np.ndarray, Dict]:
         raise NotImplementedError("Subclasses must implement _demodulate")
@@ -100,78 +100,15 @@ class Receiver:
     def get_bits(self, thresholded_signal: np.ndarray) -> list:
         bits = []
 
-        if isTransmitterESP:
-            adjusting_value = self.adjusting_samples_per_symbol()
-        else:
-            adjusting_value = 0
-
-        adjusting_value = 0
-
         for i in range(
-            0, len(thresholded_signal), self.samples_per_symbol - adjusting_value
+            0, len(thresholded_signal), self.samples_per_symbol
         ):
             mu = np.mean(
-                thresholded_signal[i : i + self.samples_per_symbol - adjusting_value]
+                thresholded_signal[i : i + self.samples_per_symbol]
             )
             bits.append(1 if mu > 0.5 else 0)
         return bits
 
-    def adjusting_samples_per_symbol(self):
-        if self.bit_rate == 100:
-            adjusting_value = 10
-        elif self.bit_rate == 200:
-            adjusting_value = 6
-        else:
-            adjusting_value = 4
-
-        # print(f"Adjusting value is : {adjusting_value} for {number_of_chars} chars")
-        return adjusting_value
-
-    def remove_preamble_average(self, bits):
-        start_index = None
-        end_index = None
-
-        base_len = len(PREAMBLE_BASE)
-
-        for i in range(0, len(bits) - (REPETITIONS * base_len), 1):
-            avg_pattern = []
-
-            for j in range(base_len):
-                sum_bit = (
-                    bits[i + j]
-                    + bits[i + base_len + j]
-                    + bits[i + 2 * base_len + j]
-                    + bits[i + 3 * base_len + j]
-                    + bits[i + 4 * base_len + j]
-                )
-                avg_bit = sum_bit / REPETITIONS
-                avg_pattern.append(1 if avg_bit > 0.5 else 0)
-
-            if avg_pattern == PREAMBLE_BASE:
-                start_index = i + REPETITIONS * base_len
-                break
-
-        if start_index == None:
-            return -1
-
-        for i in range(start_index, len(bits) - (REPETITIONS * base_len), 1):
-            avg_pattern = []
-            for j in range(base_len):
-                sum_bit = (
-                    bits[i + j]
-                    + bits[i + base_len + j]
-                    + bits[i + 2 * base_len + j]
-                    + bits[i + 3 * base_len + j]
-                    + bits[i + 4 * base_len + j]
-                )
-                avg_bit = sum_bit / REPETITIONS
-                avg_pattern.append(1 if avg_bit > 0.5 else 0)
-
-            if avg_pattern == PREAMBLE_BASE:
-                end_index = i
-                break
-
-            return bits[start_index:end_index]
 
     def remove_preamble_baker_code(self, bits, std_factor=4):
         correlation = signal.correlate(bits, BINARY_BARKER, mode="valid")
@@ -233,23 +170,6 @@ class Receiver:
             avg = -1
         return avg
 
-    def remove_preamble_naive(self, bits):
-        start_index = None
-        end_index = None
-        for i in range(0, len(bits), 1):
-            if bits[i : i + len(PREAMBLE_PATTERN)] == PREAMBLE_PATTERN:
-                start_index = i + len(PREAMBLE_PATTERN)
-                break
-
-        if start_index == None:
-            return -1
-
-        for i in range(start_index, len(bits), 1):
-            if bits[i : i + len(PREAMBLE_PATTERN)] == PREAMBLE_PATTERN:
-                end_index = i
-                break
-
-        return bits[start_index:end_index]
 
     def decode_bytes_to_bits(self, bits: list) -> str:
         if len(bits) % 8 != 0:
@@ -284,10 +204,6 @@ class Receiver:
     def set_len_of_data_bits(self, value):
         global len_of_data_bits
         len_of_data_bits = value
-
-    def set_transmitter(self, bool):
-        global isTransmitterESP
-        isTransmitterESP = bool
 
 
 class NonCoherentReceiver(Receiver):

@@ -4,6 +4,7 @@ import config
 from receiver.receiverClass import NonCoherentReceiver
 from receiver.record_audio import create_wav_file_from_recording
 from errors import PreambleNotFoundError
+from Transmitter import Transmitter
 
 
 def transmitter_setting_to_string():
@@ -34,12 +35,12 @@ def compute_len_of_bits(message):
     # print("Len of data bits (receiver): ", len_of_data_bits)
     return len_of_data_bits
 
-def logInCsv(id,bitrate,carrierfreq,original_message,decoded_message1,hamming_dist_without,decod_msg2,ham_dist_with,filename=None,):
+def logInCsv(id,original_message,decoded_message1,hamming_dist_without,decod_msg2,ham_dist_with,filename=None,):
 
     if filename is None:
         transmitter_string = transmitter_setting_to_string()
         water_string = testing_water_to_string()
-        filename = f"{transmitter_string}_{water_string}_testing_cf_{carrierfreq}_400bps, {speaker_depth}sd, {distance_to_speaker}ds.csv"
+        filename = f"{transmitter_string}_{water_string}_testing_cf_{config.CARRIER_FREQ}_400bps, {speaker_depth}sd, {distance_to_speaker}ds.csv"
 
     headers = ["ID","Bitrate","Carrier Frequency","Original Message","Decoded without bandpass","Hamming Dist without bandpass","Decoded with bandpass","Hamming Dist with bandpass","Encoding","Transmitter","Speaker depth","Distance to speaker",]
 
@@ -57,22 +58,18 @@ def logInCsv(id,bitrate,carrierfreq,original_message,decoded_message1,hamming_di
             writer.writerow(headers)
 
         # Write the log entry
-        writer.writerow([id,bitrate,carrierfreq,original_message,decoded_message1,hamming_dist_without,decod_msg2,ham_dist_with,config.ENCODING,transmitter_setting_to_string(),speaker_depth,distance_to_speaker,])
+        writer.writerow([id,config.BIT_RATE,config.CARRIER_FREQ,original_message,decoded_message1,hamming_dist_without,decod_msg2,ham_dist_with,config.ENCODING,transmitter_setting_to_string(),speaker_depth,distance_to_speaker,])
 
 def transmit_signal():
-    if config.USE_ESP:
-        import esp32test
-    else:
-        from transmitterPhysical import transmitPhysical
+
+    
+    transmitter = Transmitter(None, config.USE_ESP)
 
     messages = ["Hello_there"]
 
     n = 100
     bitrates = [100] * 100
-
-    # carrierfreqs = np.arange(1000, 13000, 1000)
     carrierfreqs = [6000]
-
     global speaker_depth
     speaker_depth = 200  # in cm
 
@@ -82,56 +79,42 @@ def transmit_signal():
     id = 0
     for message in messages:
         for bitrate in bitrates:
+            config.set_bitrate(bitrate)
             for carrierfreq in carrierfreqs:
-                len_of_data_bits = compute_len_of_bits(message)
-                if config.USE_ESP:
-                    print("Transmitting to ESP...")
-                    esp32test.transmit_to_esp32(message, carrierfreq, bitrate)
-                    record_seconds = 6
-                else:
-                    print("Transmitting to signal generator...")
-                    transmitPhysical(message, carrierfreq, bitrate)
-                    record_seconds = round((len_of_data_bits / bitrate) * 5)
+                config.set_carrierfreq(carrierfreq)
+            
+                transmitter.transmit(message, carrierfreq, bitrate)
+                record_seconds = transmitter.calculate_transmission_time(message)
 
-                process_signal_for_testing(message, carrierfreq, bitrate, id, record_seconds, len_of_data_bits)
+                #todo: ESP WILL STOP ON ITS OWN
+                print(f"Recording for: {record_seconds} seconds")
+                create_wav_file_from_recording(record_seconds)
+            
+                transmitter.stopTransmission()
 
+                process_signal_for_testing(message, id)
 
-
-def process_signal_for_chat(carrierfreq, bitrate):
+def process_signal_for_chat():
     # the minimum guaranteed length between two peaks of a premable is 20
     min_len_of_data_bits = 20
     
-    nonCoherentReceiver = NonCoherentReceiver(bitrate, carrierfreq, band_pass=False)
+    nonCoherentReceiver = NonCoherentReceiver(config.BIT_RATE, config.CARRIER_FREQ, band_pass=False)
     nonCoherentReceiver.set_transmitter(True)
     nonCoherentReceiver.set_len_of_data_bits(min_len_of_data_bits)
     msg_nc, _ = nonCoherentReceiver.decode()
     
-    nonCoherentReceiverWithBandPass = NonCoherentReceiver(bitrate, carrierfreq, band_pass=True)
+    nonCoherentReceiverWithBandPass = NonCoherentReceiver(config.BIT_RATE, config.CARRIER_FREQ, band_pass=True)
     nonCoherentReceiverWithBandPass.set_transmitter(True)
     nonCoherentReceiverWithBandPass.set_len_of_data_bits(min_len_of_data_bits)
     msg_nc_bp, _ = nonCoherentReceiverWithBandPass.decode()
     return msg_nc, msg_nc_bp
 
+def process_signal_for_testing(message, id):
 
-def process_signal_for_testing(message, carrierfreq, bitrate, id, record_seconds, len_of_data_bits):
-    if not config.USE_ESP:
-        from transmitterPhysical import stopTransmission
-
-    # print("Transmitting no bits: ", len_of_data_bits)
-    print(f"Recording for: {record_seconds} seconds")
-    create_wav_file_from_recording(record_seconds)
-
-    if config.USE_ESP and (bitrate == 300 or bitrate == 400):
-        time.sleep(1)
-    else:
-        time.sleep(0.1)
-
-    if not config.USE_ESP:
-        stopTransmission()
-
-    nonCoherentReceiver = NonCoherentReceiver(bitrate, carrierfreq, band_pass=False)
-    nonCoherentReceiver.set_transmitter(config.USE_ESP)
+    len_of_data_bits = compute_len_of_bits(message)
+    nonCoherentReceiver = NonCoherentReceiver(band_pass=False)
     nonCoherentReceiver.set_len_of_data_bits(len_of_data_bits)
+
     try:
         message_nc, debug_nc = nonCoherentReceiver.decode()
         # noncoherent_receiver.plot_simulation_steps()
@@ -139,9 +122,7 @@ def process_signal_for_testing(message, carrierfreq, bitrate, id, record_seconds
         message_nc = "No preamble found"
         debug_nc = {}
 
-
-    nonCoherentReceiverWithBandPass = NonCoherentReceiver(bitrate, carrierfreq, band_pass=True)
-    nonCoherentReceiverWithBandPass.set_transmitter(config.USE_ESP)
+    nonCoherentReceiverWithBandPass = NonCoherentReceiver(band_pass=True)
     nonCoherentReceiverWithBandPass.set_len_of_data_bits(len_of_data_bits)
     try:
         message_nc_bandpass, debug_nc_bandpass = nonCoherentReceiverWithBandPass.decode()
@@ -151,13 +132,13 @@ def process_signal_for_testing(message, carrierfreq, bitrate, id, record_seconds
         debug_nc_bandpass = {}
     
 
-    logging_and_printing(message_nc,message_nc_bandpass,message,debug_nc,debug_nc_bandpass,bitrate,carrierfreq,id,)
+    logging_and_printing(message_nc,message_nc_bandpass,message,debug_nc,debug_nc_bandpass,id,)
 
-
-def logging_and_printing(message_nc,message_nc_bandpass,message,debug_nc,debug_nc_bandpass,bitrate,carrierfreq,id,):
+def logging_and_printing(message_nc,message_nc_bandpass,message,debug_nc,debug_nc_bandpass,id):
+    
     print("Decoded message: no pass    ", message_nc)
     print("Decoded message, with pass: ", message_nc_bandpass)
-
+    
     original_message_in_bits = config.string_to_bin_array(message)
 
     decoded_bits = []
@@ -181,8 +162,7 @@ def logging_and_printing(message_nc,message_nc_bandpass,message,debug_nc,debug_n
     print("Hamming distance of msgs, with pass  ", hamming_dist_bandpass)
 
     id += 1
-    logInCsv(id,bitrate,carrierfreq,message,message_nc,hamming_dist,message_nc_bandpass,hamming_dist_bandpass,)
-
+    logInCsv(id,message,message_nc,hamming_dist,message_nc_bandpass,hamming_dist_bandpass)
 
 if __name__ == "__main__":
     isWaterThePool = False

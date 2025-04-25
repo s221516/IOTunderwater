@@ -1,20 +1,5 @@
-from tkinter import W
 
-
-def message_toBitArray(message: str):
-    message_binary = "".join(format(ord(i), "08b") for i in message)
-    # TODO: determine the exact number of samples per bit that makes sense in relation to our sample rate
-    # and bits per second and also how this is done in the signal generator
-
-    square_wave = []
-    for bit in message_binary:
-        if bit == "0":
-            square_wave += [0]
-        elif bit == "1":
-            square_wave += [1]
-
-    return square_wave
-
+ 
 
 def hamming_distance(received, expected):
     """Computes Hamming distance between received bits and expected bits."""
@@ -58,9 +43,6 @@ SAMPLES_PER_SYMBOL = int(SAMPLE_RATE / BIT_RATE)
 CUT_OFF_FREQ = (CARRIER_FREQ + BIT_RATE) // 2  # TODO: check this value
 
 REP_ESP = 5
-PREAMBLE_BASE = message_toBitArray("G")
-REPETITIONS = 3
-PREAMBLE_PATTERN = PREAMBLE_BASE * REPETITIONS
 # BINARY_BARKER = [1, 1, 1, 0, 0, 1, 0]
 # BINARY_BARKER = [1, 1, 1, 0, 0, 0, 1, 0, 0, 1, 0]
 BINARY_BARKER = [1, 1, 1, 1, 1, 0, 0, 1, 1, 0, 1, 0, 1]

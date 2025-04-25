@@ -1,5 +1,5 @@
 from audio_reciever import AudioReceiver
-from interactive_sender import MessageSender
+from Code.dsp.Transmitter import Transmitter
 import config
 
 
@@ -56,12 +56,12 @@ def run_chat(shared_state):
     except KeyboardInterrupt:
         print("\nExiting interactive mode...")
 
-
 def main():
     shared_state = {"is_transmitting": False, "msg": None}
     receiver = AudioReceiver(shared_state)
     # Create sender
-    sender = MessageSender(shared_state)
+    sender = Transmitter(shared_state)
+    
     # Start the threads
     receiver.start()
     sender.start()
