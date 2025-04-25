@@ -1,6 +1,8 @@
 import time
 import config
 import threading
+import random
+
 
 
 class MessageSender(threading.Thread):
@@ -8,6 +10,20 @@ class MessageSender(threading.Thread):
         super().__init__(name="MessageSenderThread")
         """Initialize the message sender"""
         self.shared_state = shared_state
+
+
+    #sends random message between 50 and 500 bits.
+    def transmit_arbitrary_message(self):
+
+        lowerBound = 50
+        upperBound = 500
+        # Random message length in bits
+        message_length = random.randint(lowerBound, upperBound)
+        # Generate a random bitstring of that length
+        message = [random.choice([0, 1]) for _ in range(message_length)]
+        self.transmit_message(message)
+
+
 
     def transmit_message(self, message):
         # For 1 computer setup and testing set it to False otherwise True

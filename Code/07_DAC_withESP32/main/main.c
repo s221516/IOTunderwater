@@ -101,7 +101,6 @@ float measureSampleRateOfDAC() {
 void send_signal() {
     int* message_bits = NULL;
     int message_length = 0;
-
     string_to_bits(message, &message_bits, &message_length);
     prepend_barker13(&message_bits, &message_length);
 
