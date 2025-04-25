@@ -64,7 +64,7 @@ BINARY_BARKER = [1, 1, 1, 1, 1, 0, 0, 1, 1, 0, 1, 0, 1]
 APPLY_BAKER_PREAMBLE = True
 APPLY_AVERAGING_PREAMBLE = False
 
-MIC_INDEX = 1  # Mathias, 1 Morten
+MIC_INDEX = 1 # Mathias, 1 Morten
 USE_ESP = False
 PLOT_PREAMBLE_CORRELATION = False
 SAVE_DIR = "Code/dsp/data"

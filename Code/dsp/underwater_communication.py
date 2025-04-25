@@ -1,5 +1,5 @@
 from audio_reciever import AudioReceiver
-from interactive_sender import MessageSender
+from Code.dsp.interactive_sender import MessageSender
 import config
 
 

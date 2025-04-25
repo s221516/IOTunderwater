@@ -1,6 +1,7 @@
 import commpy.channelcoding.convcode as cc
 import numpy as np
 import matplotlib.pyplot as plt
+import networkx as nx
 
 def string_to_bits(string_input):
     """Convert a string to a numpy array of bits"""
@@ -150,6 +151,180 @@ def plot_generator_comparison(all_results):
     plt.tight_layout()
     plt.show()
 
+def test_error_correction(message, num_errors, trellis=None):
+    """
+    Test error correction capability by adding specific number of errors
+    and attempting to decode the message
+    
+    Args:
+        message (str): Input message to encode and test
+        num_errors (int): Number of bit errors to introduce
+        trellis: Optional trellis object for encoding/decoding
+    
+    Returns:
+        dict: Results containing error positions, if decoding was successful, etc.
+    """
+    # Convert message to bits and encode
+    message_bits = string_to_bits(message)
+    encoded_bits = conv_encode(message_bits, trellis)
+    
+    # Try different error patterns
+    num_trials = 1000  # Number of different error patterns to try
+    successful_decodes = 0
+    failed_decodes = 0
+    
+    for trial in range(num_trials):
+        # Create copy of encoded bits
+        corrupted_bits = encoded_bits.copy()
+        
+        # Randomly select positions for errors
+        error_positions = np.random.choice(
+            len(encoded_bits), 
+            size=num_errors, 
+            replace=False
+        )
+        
+        # Flip bits at error positions
+        for pos in error_positions:
+            corrupted_bits[pos] = 1 - corrupted_bits[pos]
+        
+        # Try to decode
+        decoded_bits = conv_decode(corrupted_bits, len(message_bits), trellis)
+        
+        # Check if decoded correctly
+        if np.array_equal(decoded_bits, message_bits):
+            successful_decodes += 1
+        else:
+            failed_decodes += 1
+            
+    success_rate = (successful_decodes / num_trials) * 100
+    
+    print(f"\nResults for {num_errors} errors:")
+    print(f"Success rate: {success_rate:.1f}%")
+    print(f"Successful decodes: {successful_decodes}/{num_trials}")
+    print(f"Failed decodes: {failed_decodes}/{num_trials}")
+    
+    return {
+        'num_errors': num_errors,
+        'success_rate': success_rate,
+        'successful_decodes': successful_decodes,
+        'failed_decodes': failed_decodes
+    }
+
+def find_dfree(message="test", max_errors=10, trellis=None):
+    """
+    Find the free distance by testing increasing numbers of errors
+    until decoding consistently fails
+    
+    Args:
+        message (str): Test message
+        max_errors (int): Maximum number of errors to test
+        trellis: Optional trellis object for encoding/decoding
+    """
+    print(f"Testing error correction capability with message: {message}")
+    
+    results = []
+    for num_errors in range(1, max_errors + 1):
+        result = test_error_correction(message, num_errors, trellis)
+        results.append(result)
+        
+        # If success rate drops below 50%, we've likely exceeded d_free/2
+        if result['success_rate'] < 50:
+            estimated_dfree = (num_errors - 1) * 2
+            print(f"\nEstimated d_free ≈ {estimated_dfree}")
+            print(f"Can reliably correct up to {estimated_dfree//2 - 1} errors")
+            break
+    
+    return results
+def plot_trellis_diagram(num_stages=5):
+    """
+    Plot trellis diagram for rate 1/2 convolutional code with generators [5,7]
+    
+    Args:
+        num_stages (int): Number of stages to show in trellis diagram
+    """
+    # Create directed graph
+    G = nx.DiGraph()
+    
+    # For [5,7] with constraint length 3, we have 4 states (00,01,10,11)
+    states = ['00', '01', '10', '11']
+    
+    # Create state to position mapping (reverse order to put 00 at top)
+    state_positions = {state: 3 - int(state, 2) for state in states}
+    
+    # Add nodes for each stage
+    for stage in range(num_stages):
+        for state in states:
+            # Add node with position - using state_positions for y-coordinate
+            G.add_node(f's{stage}_{state}', 
+                      pos=(stage, state_positions[state]))
+    
+    # Add edges between states
+    for stage in range(num_stages-1):
+        for current_state in states:
+            # Convert state to bits
+            reg = [int(b) for b in current_state]
+            
+            # For input bit 0
+            input_bit = 0
+            new_reg = [input_bit] + reg[:-1]
+            next_state_0 = ''.join(map(str, new_reg))
+            output_0 = compute_output(input_bit, reg)
+            
+            # For input bit 1
+            input_bit = 1
+            new_reg = [input_bit] + reg[:-1]
+            next_state_1 = ''.join(map(str, new_reg))
+            output_1 = compute_output(input_bit, reg)
+            
+            # Add edges with output labels
+            G.add_edge(f's{stage}_{current_state}', 
+                      f's{stage+1}_{next_state_0}',
+                      label=f'{output_0}')
+            G.add_edge(f's{stage}_{current_state}', 
+                      f's{stage+1}_{next_state_1}',
+                      label=f'{output_1}')
+    
+    # Draw the trellis diagram
+    plt.figure(figsize=(12, 6))
+    pos = nx.get_node_attributes(G, 'pos')
+    
+    # Draw nodes
+    nx.draw_networkx_nodes(G, pos, node_size=500, node_color='lightblue')
+    nx.draw_networkx_labels(G, pos, labels={node: node.split('_')[1] for node in G.nodes()})
+    
+    # Draw edges with different colors for 0 and 1 input
+    edge_labels = nx.get_edge_attributes(G, 'label')
+    nx.draw_networkx_edge_labels(G, pos, edge_labels)
+    
+    # Draw edges
+    nx.draw_networkx_edges(G, pos)
+    
+    # Add time labels below each column
+    plt.text(0.0, -0.3, 't', ha='center')
+    for i in range(1, num_stages):
+        plt.text(i, -0.3, f't+{i}', ha='center')
+    
+    plt.title('Trellis Diagram for Rate 1/2 Code [5,7]')
+    plt.axis('off')  # Remove all borders and axes
+    
+    plt.tight_layout()
+    plt.show()
+
+def compute_output(input_bit, reg):
+    """Compute output bits for given input and register state"""
+    # Generators [5,7] in binary: [101, 111]
+    g1 = [1, 0, 1]  # 5 in binary
+    g2 = [1, 1, 1]  # 7 in binary
+    
+    state = [input_bit] + reg
+    
+    # Compute outputs
+    out1 = sum(a*b for a,b in zip(state, g1)) % 2
+    out2 = sum(a*b for a,b in zip(state, g2)) % 2
+    
+    return f'{out1}{out2}'
+
 def conv_encode(message_bits, trellis=None):
     if trellis is None:
         trellis = get_trellis()
@@ -174,14 +349,24 @@ def conv_decode(encoded_bits, message_length=None, trellis=None):
 
 # this is just to simulate some BER, maybe this is not even neccessary as we cant really use conv encoding :)
 if __name__ == "__main__":
-    message = "Hello_there"
-    eb_no_range = np.arange(0, 11, 1)
+    ## this simulates some additive white noise to the channel, to see how well it handles that
+    # message = "Hello_there"
+    # eb_no_range = np.arange(0, 20, 1)
     
-    print("\nTesting different generator polynomials...")
-    all_results = test_multiple_generators(
-        message=message,
-        eb_no_range=eb_no_range,
-        num_trials=25
-    )
+    # print("\nTesting different generator polynomials...")
+    # all_results = test_multiple_generators(
+    #     message=message,
+    #     eb_no_range=eb_no_range,
+    #     num_trials=50
+    # )
     
-    plot_generator_comparison(all_results)
+    # plot_generator_comparison(all_results)
+
+    # # this just injects errors straight up
+    # # Test with default rate 1/2 code
+    # MESSAGE = "Hello_there"
+    # print("\nTesting Rate 1/2 Basic Code (generators=[5,7])")
+    # trellis = get_trellis(constraint_length=3, generators=[[5, 7]], rate=2)
+    # results = find_dfree(message=MESSAGE, max_errors=10, trellis=trellis)
+
+    plot_trellis_diagram(5)  # Show 5 stages

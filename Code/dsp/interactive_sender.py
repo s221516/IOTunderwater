@@ -20,9 +20,7 @@ class MessageSender(threading.Thread):
             if config.USE_ESP:
                 import esp32test
 
-                esp32test.transmit_to_esp32(
-                    message, config.CARRIER_FREQ, config.BIT_RATE
-                )
+                esp32test.transmit_to_esp32(message, config.CARRIER_FREQ, config.BIT_RATE)
             else:
                 from transmitterPhysical import transmitPhysical, stopTransmission
 

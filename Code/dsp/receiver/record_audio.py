@@ -1,14 +1,9 @@
-from tkinter import W
-import time
 import wave
 import pyaudio
 import numpy as np
-import os
 from collections import deque
 from config import PATH_TO_WAV_FILE, SAMPLE_RATE, MIC_INDEX
 from datetime import datetime
-from receiver.receiverClass import NonCoherentReceiver
-from errors import PreambleNotFoundError
 
 CHUNK = 1024  # the amount of frames read per buffer, 1024 to balance between latency and processing load
 # small chunk = reduces latency, but increases processing load
@@ -173,4 +168,4 @@ def get_avg_rms_value():
 
 
 if __name__ == "__main__":
-    continuous_recording_with_threshold()
+    create_wav_file_from_recording()

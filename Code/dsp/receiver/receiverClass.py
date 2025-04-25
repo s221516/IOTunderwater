@@ -176,8 +176,11 @@ class Receiver:
     def remove_preamble_baker_code(self, bits, std_factor=4):
         correlation = signal.correlate(bits, BINARY_BARKER, mode="valid")
         threshold = np.mean(correlation) + std_factor * np.std(correlation)
-        peak_indices, _ = signal.find_peaks(correlation, height=threshold, distance=20)
-
+        if len_of_data_bits is None:
+            peak_indices, _ = signal.find_peaks(correlation, height=threshold, distance=20)
+        else: 
+            peak_indices, _ = signal.find_peaks(correlation, height=threshold, distance=len_of_data_bits)
+        
         if len(peak_indices) < 2:
             if std_factor > 1:
                 return self.remove_preamble_baker_code(bits, std_factor - 0.1)
@@ -188,23 +191,23 @@ class Receiver:
 
         data_bits = []
         for i in range(len(peak_indices) - 1):
-            # if abs(diff_in_peaks[i] - len_of_data_bits) <= 0:
-            data_bits.append(
-                bits[peak_indices[i] + len(BINARY_BARKER) : peak_indices[i + 1]]
-            )
+            if abs(diff_in_peaks[i] - len_of_data_bits) <= 0:
+                data_bits.append(
+                    bits[peak_indices[i] + len(BINARY_BARKER) : peak_indices[i + 1]]
+                )
 
-        # # NOTE: this is to plot the decodins of each entry of data bits
-        # print("Diff in peaks: ", diff_in_peaks)
-        # for i in range(len(data_bits)):
-        #     if CONVOLUTIONAL_CODING:
-        #         bits_array = np.array(data_bits[i])
-        #         print(self.decode_bytes_to_bits(conv_decode(bits_array, None)[:-2]))
-        #     elif HAMMING_CODING:
-        #         print(self.decode_bytes_to_bits(hamming_decode(data_bits[i])))
-        #     else:
-        #         decoded_bits = self.decode_bytes_to_bits(data_bits[i])
-        #         print(decoded_bits)
 
+        # NOTE: this is to plot the decodins of each entry of data bits
+        print("Diff in peaks: ", diff_in_peaks)
+        for i in range(len(data_bits)):
+            if CONVOLUTIONAL_CODING:
+                bits_array = np.array(data_bits[i])
+                print(self.decode_bytes_to_bits(conv_decode(bits_array, None)[:-2]))
+            elif HAMMING_CODING:
+                print(self.decode_bytes_to_bits(hamming_decode(data_bits[i])))
+            else:
+                decoded_bits = self.decode_bytes_to_bits(data_bits[i])
+                print(decoded_bits)
         if PLOT_PREAMBLE_CORRELATION:
             # NOTE: this plots the correlation of the preamble and the received signal
             plt.figure(figsize=(14, 8))
