@@ -1,3 +1,4 @@
+import os
 import wave
 import pyaudio
 import numpy as np
@@ -16,7 +17,7 @@ LAST_PRINT_TIME = datetime.now()
 
 def create_wav_file_from_recording(record_seconds):
     p = pyaudio.PyAudio()
-
+    
     # Open a new wave file
     wf = wave.open(PATH_TO_WAV_FILE, "wb")
     wf.setnchannels(CHANNELS)

@@ -148,11 +148,8 @@ class Transmitter(threading.Thread):
             self.send_command(command)
 
     def calculate_transmission_time(self, message):
-
+        len_of_bits = len(message) * 8 + 13
         if self.isESP32:
-           
-    
-            len_of_bits = len(message) * 8 + 13
             transmission_time = (
                 config.REP_ESP * (len_of_bits / config.BIT_RATE)
                 + (1 / 240000) * 1000000

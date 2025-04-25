@@ -1,5 +1,4 @@
 import csv
-import time
 import config
 from receiver.receiverClass import NonCoherentReceiver
 from receiver.record_audio import create_wav_file_from_recording
