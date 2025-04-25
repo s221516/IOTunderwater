@@ -74,10 +74,10 @@ def transmit_signal(isTransmitterESP: bool):
     carrierfreqs = [6000]
 
     global speaker_depth
-    speaker_depth = 5  # in cm
+    speaker_depth = 200  # in cm
 
     global distance_to_speaker
-    distance_to_speaker = 50  # in cm
+    distance_to_speaker = 600  # in cm
 
     id = 0
     for message in messages:
@@ -86,7 +86,7 @@ def transmit_signal(isTransmitterESP: bool):
                 if isTransmitterESP:
                     print("Transmitting to ESP...")
                     esp32test.transmit_to_esp32(message, carrierfreq, bitrate)
-                    record_seconds = 5
+                    record_seconds = 6
                 else:
                     print("Transmitting to signal generator...")
                     transmitPhysical(message, carrierfreq, bitrate)

@@ -1,0 +1,108 @@
+ID,Bitrate,Carrier Frequency,Original Message,Decoded without bandpass,Hamming Dist without bandpass,Decoded with bandpass,Hamming Dist with bandpass,Encoding,Transmitter,Speaker depth,Distance to speaker
+0,100,1000,Hello_there,a`,,Hello_there,0,No Encoding,ESP,200,600
+0,100,2000,Hello_there,@@$,,@H$,,No Encoding,ESP,200,600
+0,100,3000,Hello_there,,,@%de@,,No Encoding,ESP,200,600
+0,100,4000,Hello_there,6,,0B ,,No Encoding,ESP,200,600
+0,100,5000,Hello_there,HEhH,,JCt,36,No Encoding,ESP,200,600
+0,100,6000,Hello_there,,,3,,No Encoding,ESP,200,600
+0,100,7000,Hello_there,H$`$,,h0,,No Encoding,ESP,200,600
+0,100,8000,Hello_there,&dp,,0`,,No Encoding,ESP,200,600
+0,100,9000,Hello_there,Q ,,/@,,No Encoding,ESP,200,600
+0,100,10000,Hello_there,@A`A,,,,No Encoding,ESP,200,600
+0,100,11000,Hello_there,``0`,,`G,39,No Encoding,ESP,200,600
+0,100,12000,Hello_there,,44,"""3`@",42,No Encoding,ESP,200,600
+0,100,13000,Hello_there, E@,,,,No Encoding,ESP,200,600
+0,100,14000,Hello_there,,,`,,No Encoding,ESP,200,600
+0,100,15000,Hello_there,Hallo_therA,3,Hello_there!cczA+PL,,No Encoding,ESP,200,600
+0,100,15000,Hello_there,1Y,,,48,No Encoding,ESP,200,600
+0,100,16000,Hello_there,,44,N0blln,33,No Encoding,ESP,200,600
+0,100,17000,Hello_there,Hello_there,0,Hello_there,0,No Encoding,ESP,200,600
+0,100,18000,Hello_there,@@|p,,00x,,No Encoding,ESP,200,600
+0,100,19000,Hello_there,H@HTHD,24,Hello_there,0,No Encoding,ESP,200,600
+0,100,20000,Hello_there,@@,,Heldg_there,2,No Encoding,ESP,200,600
+0,100,20000,Hello_there,!`,,!@,,No Encoding,ESP,200,600
+0,100,21000,Hello_there,Hello_there,0,Hello_there,0,No Encoding,ESP,200,600
+0,100,22000,Hello_there,,,@ello_p`ara,5,No Encoding,ESP,200,600
+0,100,23000,Hello_there,,43,!1,,No Encoding,ESP,200,600
+0,100,24000,Hello_there,,,"4p0u#_f@vhG8P)5PQH,2[",,No Encoding,ESP,200,600
+0,100,25000,Hello_there,@H,,)#+P`h,,No Encoding,ESP,200,600
+0,100,26000,Hello_there,,,`@,,No Encoding,ESP,200,600
+0,100,27000,Hello_there,,,,,No Encoding,ESP,200,600
+0,100,28000,Hello_there,@@,, LfaW C,,No Encoding,ESP,200,600
+0,100,29000,Hello_there,@,,H:XH,,No Encoding,ESP,200,600
+0,100,30000,Hello_there,,,"Wf924P"" jDxVdh""<>9 0",,No Encoding,ESP,200,600
+0,100,1000,Hello_there,@ Hd,,Hello_there,0,No Encoding,ESP,200,600
+0,100,2000,Hello_there,a@,,aP,,No Encoding,ESP,200,600
+0,100,3000,Hello_there,,,0,,No Encoding,ESP,200,600
+0,100,4000,Hello_there,@,,@,50,No Encoding,ESP,200,600
+0,100,5000,Hello_there,HEllo_tHerE,3,pbgC,34,No Encoding,ESP,200,600
+0,100,6000,Hello_there,pf,,u4,,No Encoding,ESP,200,600
+0,100,7000,Hello_there,dh``aCca,32,d```aCcc,30,No Encoding,ESP,200,600
+0,100,8000,Hello_there,H@`@,37, ,,No Encoding,ESP,200,600
+0,100,9000,Hello_there,eAQ ,,@B,,No Encoding,ESP,200,600
+0,100,10000,Hello_there,Hello_tHerE,2,Hedlo0herE,6,No Encoding,ESP,200,600
+0,100,11000,Hello_there,,,@F,,No Encoding,ESP,200,600
+0,100,12000,Hello_there,h,,`,,No Encoding,ESP,200,600
+0,100,13000,Hello_there,He`l,,p,,No Encoding,ESP,200,600
+0,100,14000,Hello_there,9,58,@,,No Encoding,ESP,200,600
+0,100,15000,Hello_there,AIL,,,,No Encoding,ESP,200,600
+0,100,16000,Hello_there,|    ,,? $$$,,No Encoding,ESP,200,600
+0,100,17000,Hello_there,|@!<,,,,No Encoding,ESP,200,600
+0,100,18000,Hello_there,rt^/,,d]&P,,No Encoding,ESP,200,600
+0,100,19000,Hello_there,$$d,,@edd,,No Encoding,ESP,200,600
+0,100,20000,Hello_there,Hello_there,0,Hello_t`ere,1,No Encoding,ESP,200,600
+0,100,21000,Hello_there,@AHH,,,49,No Encoding,ESP,200,600
+0,100,22000,Hello_there,,,Hello_there,0,No Encoding,ESP,200,600
+0,100,1000,Hello_there,@ D ,,"e,lh",,No Encoding,ESP,200,600
+0,100,2000,Hello_there,,,,,No Encoding,ESP,200,600
+0,100,3000,Hello_there,@,,h0,,No Encoding,ESP,200,600
+0,100,4000,Hello_there,,,@ ,,No Encoding,ESP,200,600
+0,100,5000,Hello_there,0L,, ,,No Encoding,ESP,200,600
+0,100,6000,Hello_there," E\E)$J@zNX`,P",,&,,No Encoding,ESP,200,600
+0,100,7000,Hello_there,u'F p,,,,No Encoding,ESP,200,600
+0,100,8000,Hello_there,D,,0z#leC j@|B{,,No Encoding,ESP,200,600
+0,100,9000,Hello_there, @@@ -,,0,,No Encoding,ESP,200,600
+0,100,10000,Hello_there,D,,9`,,No Encoding,ESP,200,600
+0,100,11000,Hello_there,,,,,No Encoding,ESP,200,600
+0,100,12000,Hello_there,@,,m,,No Encoding,ESP,200,600
+0,100,13000,Hello_there,"""uai",,p!3,,No Encoding,ESP,200,600
+0,100,14000,Hello_there,2@BR,,4,,No Encoding,ESP,200,600
+0,100,15000,Hello_there,"`;#B'+.fbjT, )[%P`[L `R",,Hello_there,0,No Encoding,ESP,200,600
+0,100,16000,Hello_there,X%vG@,41,@,,No Encoding,ESP,200,600
+0,100,17000,Hello_there,,,@,,No Encoding,ESP,200,600
+0,100,18000,Hello_there,D@,,&2!!0,,No Encoding,ESP,200,600
+0,100,19000,Hello_there,abd ,,,,No Encoding,ESP,200,600
+0,100,20000,Hello_there,DJLV,,    ,,No Encoding,ESP,200,600
+0,100,21000,Hello_there,,,rD`,,No Encoding,ESP,200,600
+0,100,22000,Hello_there,(  D,,,,No Encoding,ESP,200,600
+0,100,1000,Hello_there,($7@,45,#N<Li,,No Encoding,ESP,200,600
+0,100,2000,Hello_there,,,,,No Encoding,ESP,200,600
+0,100,3000,Hello_there,@,,,,No Encoding,ESP,200,600
+0,100,4000,Hello_there,FC0  ,,jN. A4db,,No Encoding,ESP,200,600
+0,100,5000,Hello_there,",""r&%`",,,,No Encoding,ESP,200,600
+0,100,6000,Hello_there,@B ,,,,No Encoding,ESP,200,600
+0,100,7000,Hello_there,0`,,@,,No Encoding,ESP,200,600
+0,100,8000,Hello_there,@,,+,,No Encoding,ESP,200,600
+0,100,9000,Hello_there,@I (,,.0,,No Encoding,ESP,200,600
+0,100,10000,Hello_there,"%""@",,,,No Encoding,ESP,200,600
+0,100,11000,Hello_there,@,,b,,No Encoding,ESP,200,600
+0,100,12000,Hello_there,AQ@,, ,,No Encoding,ESP,200,600
+0,100,13000,Hello_there,\,,,,No Encoding,ESP,200,600
+0,100,14000,Hello_there,0,,V&0,,No Encoding,ESP,200,600
+0,100,15000,Hello_there,We,,Hello_there,0,No Encoding,ESP,200,600
+0,100,16000,Hello_there,2d>,,.@ AF,,No Encoding,ESP,200,600
+0,100,17000,Hello_there,"`,",,`,,No Encoding,ESP,200,600
+0,100,18000,Hello_there,Et@%/74~Fb }A'|,,@ @,,No Encoding,ESP,200,600
+0,100,19000,Hello_there, `@@,," @F<hhH7x,S+",,No Encoding,ESP,200,600
+0,100,20000,Hello_there,38$,,` ,,No Encoding,ESP,200,600
+0,100,21000,Hello_there,,,,,No Encoding,ESP,200,600
+0,100,22000,Hello_there,`@,,,,No Encoding,ESP,200,600
+0,100,1000,Hello_there,O#',,PI`,42,No Encoding,ESP,200,600
+0,100,2000,Hello_there, p,,,,No Encoding,ESP,200,600
+0,100,3000,Hello_there,@,,,,No Encoding,ESP,200,600
+0,100,4000,Hello_there,6P,,":Tvt.61Gt0oNDT z""DH",,No Encoding,ESP,200,600
+0,100,5000,Hello_there,A,,,,No Encoding,ESP,200,600
+0,100,6000,Hello_there,,,"B|4$A,U0B\Gqu-0",,No Encoding,ESP,200,600
+0,100,7000,Hello_there,..gQk3(@)Fd8Fy@,,@,,No Encoding,ESP,200,600
+0,100,8000,Hello_there, @,,bT&)AE?|''8+Pf@n~t@,,No Encoding,ESP,200,600
+0,100,9000,Hello_there,,,,,No Encoding,ESP,200,600

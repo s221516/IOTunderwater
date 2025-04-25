@@ -20,7 +20,7 @@ WINDOW_SIZE = 100
 class AudioReceiver(threading.Thread):
     def __init__(self, shared_state):
         super().__init__(name="AudioReceiverThread")
-        self.threshold = 500
+        self.threshold = 50
         self.shared_state = shared_state
 
     def list_audio_devices(self):
@@ -102,6 +102,7 @@ class AudioReceiver(threading.Thread):
                 if current_rms > self.threshold and (
                     not self.shared_state["is_transmitting"]
                 ):
+                    print("RMS values :", current_rms)
 
                     # len_of_bits = len(self.shared_state["msg"]) * 8 + 13
                     # record_time = config.REP_ESP * (len_of_bits / config.BIT_RATE)
@@ -110,7 +111,10 @@ class AudioReceiver(threading.Thread):
                         record_time, stream, p.get_sample_size(FORMAT)
                     )
 
-                    msg, msg_bp = process_signal_for_chat(config.CARRIER_FREQ ,config.BIT_RATE,)
+                    msg, msg_bp = process_signal_for_chat(
+                        config.CARRIER_FREQ,
+                        config.BIT_RATE,
+                    )
                     print("----------------")
                     print(f"Received             : {msg}")
                     print(f"Received w. band-pass: {msg_bp}")
