@@ -7,7 +7,7 @@ from errors import PreambleNotFoundError
 
 
 def transmitter_setting_to_string():
-    if isTransmitterESP:
+    if config.USE_ESP:
         return "ESP"
     else:
         return "SG"
@@ -59,8 +59,8 @@ def logInCsv(id,bitrate,carrierfreq,original_message,decoded_message1,hamming_di
         # Write the log entry
         writer.writerow([id,bitrate,carrierfreq,original_message,decoded_message1,hamming_dist_without,decod_msg2,ham_dist_with,config.ENCODING,transmitter_setting_to_string(),speaker_depth,distance_to_speaker,])
 
-def transmit_signal(isTransmitterESP: bool):
-    if isTransmitterESP:
+def transmit_signal():
+    if config.USE_ESP:
         import esp32test
     else:
         from transmitterPhysical import transmitPhysical
@@ -83,14 +83,14 @@ def transmit_signal(isTransmitterESP: bool):
     for message in messages:
         for bitrate in bitrates:
             for carrierfreq in carrierfreqs:
-                if isTransmitterESP:
+                len_of_data_bits = compute_len_of_bits(message)
+                if config.USE_ESP:
                     print("Transmitting to ESP...")
                     esp32test.transmit_to_esp32(message, carrierfreq, bitrate)
                     record_seconds = 6
                 else:
                     print("Transmitting to signal generator...")
                     transmitPhysical(message, carrierfreq, bitrate)
-                    len_of_data_bits = compute_len_of_bits(message)
                     record_seconds = round((len_of_data_bits / bitrate) * 5)
 
                 process_signal_for_testing(message, carrierfreq, bitrate, id, record_seconds, len_of_data_bits)
@@ -98,33 +98,39 @@ def transmit_signal(isTransmitterESP: bool):
 
 
 def process_signal_for_chat(carrierfreq, bitrate):
+    # the minimum guaranteed length between two peaks of a premable is 20
+    min_len_of_data_bits = 20
+    
     nonCoherentReceiver = NonCoherentReceiver(bitrate, carrierfreq, band_pass=False)
     nonCoherentReceiver.set_transmitter(True)
+    nonCoherentReceiver.set_len_of_data_bits(min_len_of_data_bits)
     msg_nc, _ = nonCoherentReceiver.decode()
-    nonCoherentReceiverBP = NonCoherentReceiver(bitrate, carrierfreq, band_pass=True)
-    nonCoherentReceiverBP.set_transmitter(True)
-    msg_nc_bp, _ = nonCoherentReceiverBP.decode()
+    
+    nonCoherentReceiverWithBandPass = NonCoherentReceiver(bitrate, carrierfreq, band_pass=True)
+    nonCoherentReceiverWithBandPass.set_transmitter(True)
+    nonCoherentReceiverWithBandPass.set_len_of_data_bits(min_len_of_data_bits)
+    msg_nc_bp, _ = nonCoherentReceiverWithBandPass.decode()
     return msg_nc, msg_nc_bp
 
 
 def process_signal_for_testing(message, carrierfreq, bitrate, id, record_seconds, len_of_data_bits):
-    if not isTransmitterESP:
+    if not config.USE_ESP:
         from transmitterPhysical import stopTransmission
 
     # print("Transmitting no bits: ", len_of_data_bits)
     print(f"Recording for: {record_seconds} seconds")
     create_wav_file_from_recording(record_seconds)
 
-    if isTransmitterESP and (bitrate == 300 or bitrate == 400):
+    if config.USE_ESP and (bitrate == 300 or bitrate == 400):
         time.sleep(1)
     else:
         time.sleep(0.1)
 
-    if not isTransmitterESP:
+    if not config.USE_ESP:
         stopTransmission()
 
     nonCoherentReceiver = NonCoherentReceiver(bitrate, carrierfreq, band_pass=False)
-    nonCoherentReceiver.set_transmitter(isTransmitterESP)
+    nonCoherentReceiver.set_transmitter(config.USE_ESP)
     nonCoherentReceiver.set_len_of_data_bits(len_of_data_bits)
     try:
         message_nc, debug_nc = nonCoherentReceiver.decode()
@@ -135,7 +141,7 @@ def process_signal_for_testing(message, carrierfreq, bitrate, id, record_seconds
 
 
     nonCoherentReceiverWithBandPass = NonCoherentReceiver(bitrate, carrierfreq, band_pass=True)
-    nonCoherentReceiverWithBandPass.set_transmitter(isTransmitterESP)
+    nonCoherentReceiverWithBandPass.set_transmitter(config.USE_ESP)
     nonCoherentReceiverWithBandPass.set_len_of_data_bits(len_of_data_bits)
     try:
         message_nc_bandpass, debug_nc_bandpass = nonCoherentReceiverWithBandPass.decode()
@@ -179,6 +185,5 @@ def logging_and_printing(message_nc,message_nc_bandpass,message,debug_nc,debug_n
 
 
 if __name__ == "__main__":
-    isTransmitterESP = False
     isWaterThePool = False
-    transmit_signal(isTransmitterESP)
+    transmit_signal()

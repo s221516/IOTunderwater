@@ -176,10 +176,7 @@ class Receiver:
     def remove_preamble_baker_code(self, bits, std_factor=4):
         correlation = signal.correlate(bits, BINARY_BARKER, mode="valid")
         threshold = np.mean(correlation) + std_factor * np.std(correlation)
-        if len_of_data_bits is None:
-            peak_indices, _ = signal.find_peaks(correlation, height=threshold, distance=20)
-        else: 
-            peak_indices, _ = signal.find_peaks(correlation, height=threshold, distance=len_of_data_bits)
+        peak_indices, _ = signal.find_peaks(correlation, height=threshold, distance=20)
         
         if len(peak_indices) < 2:
             if std_factor > 1:
@@ -191,10 +188,8 @@ class Receiver:
 
         data_bits = []
         for i in range(len(peak_indices) - 1):
-            if abs(diff_in_peaks[i] - len_of_data_bits) <= 0:
-                data_bits.append(
-                    bits[peak_indices[i] + len(BINARY_BARKER) : peak_indices[i + 1]]
-                )
+            # if abs(diff_in_peaks[i] - len_of_data_bits) <= 0:
+            data_bits.append(bits[peak_indices[i] + len(BINARY_BARKER) : peak_indices[i + 1]])
 
 
         # NOTE: this is to plot the decodins of each entry of data bits

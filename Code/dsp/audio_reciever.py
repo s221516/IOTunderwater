@@ -4,6 +4,7 @@ import numpy as np
 import threading
 from collections import deque
 
+from errors import PreambleNotFoundError
 from main import process_signal_for_chat
 import config
 
@@ -93,11 +94,6 @@ class AudioReceiver(threading.Thread):
 
                 # Calculate audio levels
                 current_rms = self.calculate_rms(audio_chunk)
-                avg_rms = np.mean(current_rms)
-
-                # Always keep recent audio in pre-buffer
-                pre_buffer.extend(audio_chunk)
-                # print("Avg_rms: ", avg_rms, end = "", flush = True)
 
                 if current_rms > self.threshold and (
                     not self.shared_state["is_transmitting"]
@@ -110,11 +106,14 @@ class AudioReceiver(threading.Thread):
                     self.create_wav_file_from_recording(
                         record_time, stream, p.get_sample_size(FORMAT)
                     )
-
-                    msg, msg_bp = process_signal_for_chat(
-                        config.CARRIER_FREQ,
-                        config.BIT_RATE,
-                    )
+                    try:
+                        msg, msg_bp = process_signal_for_chat(
+                            config.CARRIER_FREQ,
+                            config.BIT_RATE,
+                        )
+                    except PreambleNotFoundError:
+                        msg = "No preamble found"
+                        msg_bp = "No preamble found"
                     print("----------------")
                     print(f"Received             : {msg}")
                     print(f"Received w. band-pass: {msg_bp}")
