@@ -77,7 +77,7 @@ def transmit_signal():
     carrierfreqs = [6000]
     
     global test_description
-    test_description = f"EXAMPLE : This test aims to create a function of Bit error rates over bit rate"
+    test_description = f"EXAMPLE 2: test 2"
 
     global speaker_depth
     speaker_depth = 200  # in cm
@@ -175,6 +175,8 @@ def logging_and_printing(message_nc,message_nc_bandpass,message,debug_nc,debug_n
     decoded_bits = []
     decoded_bits_bandpass = []
 
+    data_bits_nc = "NaN"
+    data_bits_nc_bandpass = "NaN"
     if debug_nc != {}:
         decoded_bits = debug_nc["bits_without_preamble"]
         data_bits_nc = debug_nc["all_data_bits"]
@@ -182,6 +184,7 @@ def logging_and_printing(message_nc,message_nc_bandpass,message,debug_nc,debug_n
     if debug_nc_bandpass != {}:
         decoded_bits_bandpass = debug_nc_bandpass["bits_without_preamble"]
         data_bits_nc_bandpass = debug_nc_bandpass["all_data_bits"]
+    
     if config.HAMMING_CODING:
         decoded_bits = list(map(int, decoded_bits))
         decoded_bits_bandpass = list(map(int, decoded_bits_bandpass))
