@@ -98,12 +98,18 @@ def transmit_signal(isTransmitterESP: bool):
 
 
 def process_signal_for_chat(carrierfreq, bitrate):
+    # the minimum guaranteed length between two peaks of preamble is 20
+    min_len_of_data_bits = 20
+
     nonCoherentReceiver = NonCoherentReceiver(bitrate, carrierfreq, band_pass=False)
     nonCoherentReceiver.set_transmitter(True)
+    nonCoherentReceiver.set_len_of_data_bits(min_len_of_data_bits)
     msg_nc, _ = nonCoherentReceiver.decode()
-    nonCoherentReceiverBP = NonCoherentReceiver(bitrate, carrierfreq, band_pass=True)
-    nonCoherentReceiverBP.set_transmitter(True)
-    msg_nc_bp, _ = nonCoherentReceiverBP.decode()
+    
+    nonCoherentReceiverWithBandPass = NonCoherentReceiver(bitrate, carrierfreq, band_pass=True)
+    nonCoherentReceiverWithBandPass.set_transmitter(True)
+    nonCoherentReceiverWithBandPass.set_len_of_data_bits(min_len_of_data_bits)
+    msg_nc_bp, _ = nonCoherentReceiverWithBandPass.decode()
     return msg_nc, msg_nc_bp
 
 

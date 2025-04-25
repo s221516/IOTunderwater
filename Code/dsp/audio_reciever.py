@@ -20,7 +20,7 @@ WINDOW_SIZE = 100
 class AudioReceiver(threading.Thread):
     def __init__(self, shared_state):
         super().__init__(name="AudioReceiverThread")
-        self.threshold = 50
+        self.threshold = 10
         self.shared_state = shared_state
 
     def list_audio_devices(self):
@@ -93,11 +93,9 @@ class AudioReceiver(threading.Thread):
 
                 # Calculate audio levels
                 current_rms = self.calculate_rms(audio_chunk)
-                avg_rms = np.mean(current_rms)
 
                 # Always keep recent audio in pre-buffer
                 pre_buffer.extend(audio_chunk)
-                # print("Avg_rms: ", avg_rms, end = "", flush = True)
 
                 if current_rms > self.threshold and (
                     not self.shared_state["is_transmitting"]

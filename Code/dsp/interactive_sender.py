@@ -11,7 +11,7 @@ class MessageSender(threading.Thread):
 
     def transmit_message(self, message):
         # For 1 computer setup and testing set it to False otherwise True
-        self.shared_state["is_transmitting"] = True
+        self.shared_state["is_transmitting"] = False
 
         # print("Transmitting: ", self.shared_state["is_transmitting"])
 
