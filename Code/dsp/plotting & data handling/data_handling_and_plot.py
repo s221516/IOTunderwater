@@ -556,19 +556,18 @@ def compute_ber_for_hamming_encoding_test(file_path):
             'ber_bp': ber_bp
         }
         
-        # Print results
         print(f"\nResults for {encoding}:")
         print(f"Total transmissions: {total_transmissions}")
         print("\nWithout Bandpass:")
         print(f"No preamble found: {no_preamble_no_bp} ({no_preamble_no_bp/total_transmissions*100:.1f}%)")
         print(f"Valid transmissions: {len(valid_no_bp)}")
-        print(f"Total errors: {total_errors_no_bp}")
+        print(f"Error ratio: {total_errors_no_bp}/{total_bits_no_bp} = {total_errors_no_bp/total_bits_no_bp:.4f}")
         print(f"BER: {ber_no_bp:.2f}%")
         
         print("\nWith Bandpass:")
         print(f"No preamble found: {no_preamble_bp} ({no_preamble_bp/total_transmissions*100:.1f}%)")
         print(f"Valid transmissions: {len(valid_bp)}")
-        print(f"Total errors: {total_errors_bp}")
+        print(f"Error ratio: {total_errors_bp}/{total_bits_bp} = {total_errors_bp/total_bits_bp:.4f}")
         print(f"BER: {ber_bp:.2f}%")
         print("-" * 50)
     
@@ -589,7 +588,7 @@ if __name__ == "__main__":
     #     plot_ber_vs_distance_for_the_big_all_distances_files(results_file)
 
     # compute BER for the comparison of hamming encoding, with valid tranmissions
-    file_path = "Code/dsp/data/plastic/SG_plastic_hamming_encoding_testing_cf_6000_400bps, 5sd, 50ds.csv"
+    file_path = "Code/dsp/data/plastic/csv/SG_plastic_hamming_encoding_testing_cf_6000_400bps, 5sd, 50ds.csv"
     results = compute_ber_for_hamming_encoding_test(file_path)
 
     # # NOTE: these file paths are to compare how large the variance is between measurements made at the same settings
