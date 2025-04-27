@@ -118,7 +118,7 @@ class Receiver:
             if std_factor > 1:
                 return self.remove_preamble_baker_code(bits, std_factor - 0.1)
             else:
-                return -1
+                return -1, []
 
         diff_in_peaks = np.diff(peak_indices)
         

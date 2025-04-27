@@ -42,7 +42,7 @@ CARRIER_FREQ = 6000  #  15200 Hz
 SAMPLES_PER_SYMBOL = int(SAMPLE_RATE / BIT_RATE)
 CUT_OFF_FREQ = (CARRIER_FREQ + BIT_RATE) // 2  # TODO: check this value
 
-REP_ESP = 30
+REP_ESP = 5
 # BINARY_BARKER = [1, 1, 1, 0, 0, 1, 0]
 # BINARY_BARKER = [1, 1, 1, 0, 0, 0, 1, 0, 0, 1, 0]
 BINARY_BARKER = [1, 1, 1, 1, 1, 0, 0, 1, 1, 0, 1, 0, 1]

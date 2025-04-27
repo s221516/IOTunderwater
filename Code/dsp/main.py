@@ -77,7 +77,7 @@ def transmit_signal():
     carrierfreqs = [12000]
     
     global test_description
-    test_description = f"EXAMPLE 2: test 2"
+    test_description = f"TO BE DELETED"
 
     global speaker_depth
     speaker_depth = 200  # in cm
