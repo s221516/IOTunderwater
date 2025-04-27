@@ -1,3 +1,0 @@
-[submodule "Code/07_DAC_withESP32/components/esp_littlefs"]
-	path = Code/07_DAC_withESP32/components/esp_littlefs
-	url = https://github.com/joltwallet/esp_littlefs.git
