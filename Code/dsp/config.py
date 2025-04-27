@@ -33,24 +33,24 @@ def set_carrierfreq(value):
     CARRIER_FREQ = value
 
 
-TRANSMITTER_PORT = "COM11"
-# TRANSMITTER_PORT = "/dev/cu.usbserial-0232D158"
+# TRANSMITTER_PORT = "COM11"
+TRANSMITTER_PORT = "/dev/cu.usbserial-0232D158"
 SAMPLE_RATE = 96000  # this capped by the soundcard, therefore, this is non-changeable
 
-BIT_RATE = 100
+BIT_RATE = 50
 CARRIER_FREQ = 6000  #  15200 Hz
 SAMPLES_PER_SYMBOL = int(SAMPLE_RATE / BIT_RATE)
 CUT_OFF_FREQ = (CARRIER_FREQ + BIT_RATE) // 2  # TODO: check this value
 
-REP_ESP = 5
+REP_ESP = 30
 # BINARY_BARKER = [1, 1, 1, 0, 0, 1, 0]
 # BINARY_BARKER = [1, 1, 1, 0, 0, 0, 1, 0, 0, 1, 0]
 BINARY_BARKER = [1, 1, 1, 1, 1, 0, 0, 1, 1, 0, 1, 0, 1]
 APPLY_BAKER_PREAMBLE = True
 APPLY_AVERAGING_PREAMBLE = False
 
-MIC_INDEX = 1 # Mathias, 1 Morten
-USE_ESP = False
+MIC_INDEX = 2 # Mathias, 1 Morten
+USE_ESP = True
 PLOT_PREAMBLE_CORRELATION = False
 SAVE_DIR = "Code/dsp/data"
 PATH_TO_WAV_FILE = "Code/dsp/data/testing_and_logging_recording.wav"
@@ -67,3 +67,11 @@ else:
 
 
 dark_horse_lyrics = """AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC"""
+
+if __name__ == "__main__":
+    import scipy.signal as signal
+    
+    messages = "_me_w"
+    bin_msg = string_to_bin_array(messages)
+    autocorrelate = signal.correlate(BINARY_BARKER, bin_msg, mode='same')
+    print(autocorrelate)
