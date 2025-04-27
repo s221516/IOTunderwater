@@ -556,27 +556,135 @@ def compute_ber_for_hamming_encoding_test(file_path):
             'ber_bp': ber_bp
         }
         
-        # Print results
         print(f"\nResults for {encoding}:")
         print(f"Total transmissions: {total_transmissions}")
         print("\nWithout Bandpass:")
         print(f"No preamble found: {no_preamble_no_bp} ({no_preamble_no_bp/total_transmissions*100:.1f}%)")
         print(f"Valid transmissions: {len(valid_no_bp)}")
-        print(f"Total errors: {total_errors_no_bp}")
+        print(f"Error ratio: {total_errors_no_bp}/{total_bits_no_bp} = {total_errors_no_bp/total_bits_no_bp:.4f}")
         print(f"BER: {ber_no_bp:.2f}%")
         
         print("\nWith Bandpass:")
         print(f"No preamble found: {no_preamble_bp} ({no_preamble_bp/total_transmissions*100:.1f}%)")
         print(f"Valid transmissions: {len(valid_bp)}")
-        print(f"Total errors: {total_errors_bp}")
+        print(f"Error ratio: {total_errors_bp}/{total_bits_bp} = {total_errors_bp/total_bits_bp:.4f}")
         print(f"BER: {ber_bp:.2f}%")
         print("-" * 50)
     
     return results
 
+def compute_bit_flip_tendency(reference_array, received_arrays, filter_type=""):
+    """
+    Analyze and print bit flip tendencies between a reference array and received arrays.
+    
+    Args:
+        reference_array (list): Reference bit array (e.g. [1,0,1,0])
+        received_arrays (list): List of received bit arrays to compare against
+        filter_type (str): String indicating filter type for printing
+    """
+    # Initialize counters and tracking
+    one_to_zero = 0
+    zero_to_one = 0
+    flip_positions = []
+    total_errors = 0
+    valid_arrays = 0
+    
+    # Validate inputs
+    if not isinstance(reference_array, list) or not isinstance(received_arrays, list):
+        print("Error: Inputs must be lists")
+        return
+    
+    if not received_arrays:
+        print("Error: No received arrays provided")
+        return
+        
+    ref_len = len(reference_array)
+    print(f"\nBit Flip Analysis for {filter_type}:")
+    print(f"Reference array length: {ref_len}")
+    print(f"Number of arrays to analyze: {len(received_arrays)}")
+    print("-" * 50)
+    
+    # Process each received array
+    for idx, received in enumerate(received_arrays):
+        # Skip arrays with mismatched length
+        if len(received) != ref_len:
+            print(f"Warning: Array {idx + 1} length mismatch ({len(received)} != {ref_len}), skipping")
+            continue
+            
+        # Initialize per-array counters
+        array_one_to_zero = 0
+        array_zero_to_one = 0
+        array_flips = []
+        array_errors = 0
+            
+        # Compare bits
+        for i in range(ref_len):
+            if reference_array[i] != received[i]:
+                array_errors += 1
+                total_errors += 1
+                
+                if reference_array[i] == 1:
+                    array_one_to_zero += 1
+                    one_to_zero += 1
+                else:
+                    array_zero_to_one += 1
+                    zero_to_one += 1
+                    
+                if i not in flip_positions:
+                    flip_positions.append(i)
+                array_flips.append(i)
+        
+        valid_arrays += 1
+        print(f"\nArray {idx + 1} Results:")
+        print(f"  1->0 flips: {array_one_to_zero}")
+        print(f"  0->1 flips: {array_zero_to_one}")
+        # print(f"  Flip positions: {sorted(array_flips)}")
+        print(f"  Total errors: {array_errors}")
+        print(f"  Error rate: {array_errors/ref_len:.2%}")
+    
+    # Print summary statistics
+    if valid_arrays > 0:
+        error_rate = total_errors / (ref_len * valid_arrays)
+        print(f"\nOverall Statistics for {filter_type}:")
+        print(f"Total 1->0 flips: {one_to_zero}")
+        print(f"Total 0->1 flips: {zero_to_one}")
+        # print(f"All flip positions: {sorted(flip_positions)}")
+        # print(f"Total errors: {total_errors}")
+        # print(f"Average error rate: {error_rate:.2%}")
+        # print(f"Valid arrays processed: {valid_arrays}")
+    else:
+        print(f"\nNo valid arrays were processed for {filter_type}")
+    print("=" * 50)
+
+def analyze_bit_flips_from_csv(file_path, id):
+    """
+    Analyze bit flips for a specific transmission ID from CSV file
+    
+    Args:
+        file_path (str): Path to CSV file
+        id (str): Transmission ID to analyze
+    """
+    try:
+        df = pd.read_csv(file_path)
+        row = df[df['ID'] == id].iloc[0]
+        
+        reference = eval(row['Original message in bits'])
+        # Get all arrays from both columns
+        data_without_bp = eval(row['Data bits without bandpass'])
+        data_with_bp = eval(row['Data bits with bandpass'])
+        
+        print(f"Analysis for transmission ID: {id}")
+        # Pass all arrays for analysis
+        compute_bit_flip_tendency(reference, data_without_bp, "Without Bandpass")
+        compute_bit_flip_tendency(reference, data_with_bp, "With Bandpass")
+        
+    except IndexError:
+        print(f"Error: No transmission found with ID {id}")
+    except Exception as e:
+        print(f"Error analyzing transmission {id}: {str(e)}")
 
 if __name__ == "__main__":  
-    ## used to combine pool sweeps into one file, this only needs to be called once
+    ## NOTE: used to combine pool sweeps into one file, this only needs to be called once
     # combine_csv_by_carrier_freq(12000)
     # the code below also only needs to be called once, it loops through the files
     # for cf in ["6000",  "9000", "12000"]:
@@ -588,9 +696,9 @@ if __name__ == "__main__":
     #     results_file = f"Code/dsp/data/pool/ber_results_by_distance_cf{cf}.csv"
     #     plot_ber_vs_distance_for_the_big_all_distances_files(results_file)
 
-    # compute BER for the comparison of hamming encoding, with valid tranmissions
-    file_path = "Code/dsp/data/plastic/SG_plastic_hamming_encoding_testing_cf_6000_400bps, 5sd, 50ds.csv"
-    results = compute_ber_for_hamming_encoding_test(file_path)
+    # # NOTE: compute BER for the comparison of hamming encoding, with valid tranmissions with below
+    # file_path = "Code/dsp/data/plastic/csv/SG_plastic_hamming_encoding_testing_cf_6000_400bps, 5sd, 50ds.csv"
+    # results = compute_ber_for_hamming_encoding_test(file_path)
 
     # # NOTE: these file paths are to compare how large the variance is between measurements made at the same settings
     # # one with hamming_encoding and one without. Maybe it could be used to determine some variance ???
@@ -604,3 +712,9 @@ if __name__ == "__main__":
     # #             "Code/dsp/data/plastic/esp_plastic_testing_v3_cf6000_100-300bps, 5sd, 5ds.csv",
     # #             "Code/dsp/data/plastic/esp_plastic_testing_v4_cf6000_100-300bps, 5sd, 5ds.csv"]
     # plot_ber_comparison_across_files(file_paths)
+
+    # NOTE: use below to compute bit flip tendency of a given wav file - will compute for all_data_bits, raises an error
+    # if the length of the received does not match the length of the transmitted
+
+    id_to_analyze = "0b777eb3-66d5-455a-8641-b2ea90005ed9"
+    analyze_bit_flips_from_csv("Received_data_for_tests.csv", id_to_analyze)
