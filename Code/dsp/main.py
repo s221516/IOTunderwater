@@ -1,14 +1,11 @@
 import csv
-import time
-from tkinter import W
-
-import test
 import config
 import uuid
 from receiver.receiverClass import NonCoherentReceiver
 from receiver.record_audio import create_wav_file_from_recording
 from errors import PreambleNotFoundError
 from Transmitter import Transmitter
+import generatePayload
 
 
 def transmitter_setting_to_string():
@@ -28,9 +25,7 @@ def compute_len_of_bits(message):
     len_of_data_bits = len(message) * 8
     len_of_preamble = len(config.BINARY_BARKER)
     if config.CONVOLUTIONAL_CODING:
-        len_of_data_bits = (
-            len_of_data_bits * 2 + len_of_preamble + 12
-        )  # NOTE talk with Mathias here
+        len_of_data_bits = (len_of_data_bits * 2 + len_of_preamble + 12)
     elif config.HAMMING_CODING:
         len_of_data_bits = len_of_data_bits * 3 / 2 + len_of_preamble
     else:
@@ -67,9 +62,13 @@ def transmit_signal():
     transmitter = Transmitter(None, config.USE_ESP)
 
     #messages = ["Lick_on_these_big_fat_nuts_and_tell_me_what_you_think"]
-    messages = ["Hello_there"]
-    len__bit = compute_len_of_bits(messages[0])
-    print("Length of bits: ", len__bit)
+
+    size_in_bits = 11 #NOTE: if this is not a multiple of eight, it will be rounded up to be so
+    payload_string = generatePayload.generate_payload(size_in_bits)
+    messages = [payload_string]
+
+    # len_bit = compute_len_of_bits(messages[0])
+    # print("Length of bits: ", len_bit)
     n = 5
     
     bitrates = [1000] * n
