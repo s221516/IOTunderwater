@@ -1,5 +1,6 @@
 import csv
 import time
+from tkinter import W
 
 import test
 import config
@@ -65,15 +66,18 @@ def logInCsv(id,original_message,decoded_message1,hamming_dist_without,decod_msg
 def transmit_signal():
     transmitter = Transmitter(None, config.USE_ESP)
 
+    #messages = ["Lick_on_these_big_fat_nuts_and_tell_me_what_you_think"]
     messages = ["Hello_there"]
+    len__bit = compute_len_of_bits(messages[0])
+    print("Length of bits: ", len__bit)
+    n = 5
+    
+    bitrates = [1000] * n
 
-    n = 10
-    bitrates = [100] * n
-
-    carrierfreqs = [6000]
+    carrierfreqs = [12000]
     
     global test_description
-    test_description = f"EXAMPLE 2: test 2"
+    test_description = f"TO BE DELETED"
 
     global speaker_depth
     speaker_depth = 200  # in cm
@@ -85,15 +89,17 @@ def transmit_signal():
         for bitrate in bitrates:
             config.set_bitrate(bitrate)
             for carrierfreq in carrierfreqs:
+                config.set_carrierfreq(carrierfreq)
                 # create unique id for each test
                 id = create_id()
                 transmitter.transmit(message, carrierfreq, bitrate)
                 record_seconds = transmitter.calculate_transmission_time(message)
 
-                #todo: ESP WILL STOP ON ITS OWN
                 print(f"Recording for: {record_seconds} seconds")
                 create_wav_file_from_recording(record_seconds, name=id)
-            
+                print("Recording done")
+                # NOTE: If distance to speaker is too long add a sleep time here
+                # time.sleep(2)
                 transmitter.stopTransmission()
 
                 process_signal_for_testing(message, id)

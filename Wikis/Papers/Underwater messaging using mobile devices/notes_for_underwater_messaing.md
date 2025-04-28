@@ -1,7 +1,7 @@
 - Made an app that allows two smartphones (android devices) to be able to communicate underwater using their built in microphone and speaker to communicate using acoustic waves. They achieve this by using orthognal frequency-division multiplexing (OFDM), a technique used in digital modulation to encode bits onto several carrier frequencies at the same time. Multiple bits is divided on to multiple different -> multiple bits being transmitted in parallel.
 - When encoding their data they have an algorithm that depending on the distance between the two communicators allocate the power to the frequency that is most suitable
 - Bitrate: 1.8 kbps, range: 30 meters
-- Bitrate 10-20 bps, range 100 meters
+- Bitrate 10-20 bps, range 10bp0 meters
 - To take into account the ambient noise, they measured for 5 seconds in the same location using different devices
 - Doppler shift: the difference in frequency from the transmitter to the reciever depending on the velocity of the transmitter and receiver (could maybe skew the frequency we are expecting to recieve, however since our transmistter / receiver both will have velocity close to 0 m/s and the acoustic waves travel around 1500 m/s underwater, it prolly wont be a problem)
 - Tested in several different locations, with different amount of noise -> (lake, harbour) -> resulted in different bit rates being more effective at different locations ?

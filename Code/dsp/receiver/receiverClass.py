@@ -1,9 +1,11 @@
+from logging import config
 from typing import Dict, Tuple
 
 import commpy.channelcoding.convcode as cc
 import matplotlib.pyplot as plt
 import numpy as np
 import scipy.signal as signal
+import config
 from config import (
     APPLY_AVERAGING_PREAMBLE,
     APPLY_BAKER_PREAMBLE,
@@ -11,9 +13,6 @@ from config import (
     CONVOLUTIONAL_CODING,
     HAMMING_CODING,
     PATH_TO_WAV_FILE,
-    
-    BIT_RATE,
-    CARRIER_FREQ,
     SAMPLE_RATE,
     PLOT_PREAMBLE_CORRELATION,
     SAVE_DIR,
@@ -44,8 +43,8 @@ def plot_wav_signal(sample_rate, wav_signal):
 class Receiver:
     def __init__(self, id: str, band_pass: bool):
         _, self.wav_signal = wavfile.read(SAVE_DIR + "/raw_data/" + id + ".wav")
-        self.bit_rate = BIT_RATE
-        self.carrier_freq = CARRIER_FREQ
+        self.bit_rate = config.BIT_RATE
+        self.carrier_freq = config.CARRIER_FREQ
         self.band_pass = band_pass
         self.cutoff_freq = self.bit_rate * 5
         self.samples_per_symbol = int(SAMPLE_RATE / self.bit_rate)
@@ -115,12 +114,11 @@ class Receiver:
         correlation = signal.correlate(bits, BINARY_BARKER, mode="valid")
         threshold = np.mean(correlation) + std_factor * np.std(correlation)
         peak_indices, _ = signal.find_peaks(correlation, height=threshold, distance=len_of_data_bits)
-        
         if len(peak_indices) < 2:
             if std_factor > 1:
                 return self.remove_preamble_baker_code(bits, std_factor - 0.1)
             else:
-                return -1
+                return -1, []
 
         diff_in_peaks = np.diff(peak_indices)
         

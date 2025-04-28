@@ -75,7 +75,6 @@ class Transmitter(threading.Thread):
             self.send_command("FREQ" + str(carrierfreq))
             self.send_command("BITRATE" + str(bitrate))
             self.send_command("REP" + str(config.REP_ESP))
-        
             # message last so we put the specs of the wave first
             self.send_command(message)
         
@@ -152,7 +151,6 @@ class Transmitter(threading.Thread):
         if self.isESP32:
             transmission_time = (
                 config.REP_ESP * (len_of_bits / config.BIT_RATE)
-                + (1 / 240000) * 1000000
             )
 
         else:
@@ -160,7 +158,6 @@ class Transmitter(threading.Thread):
             
         return transmission_time
     
-
     def chat_transmit(self, message):
         # For 1 computer setup and testing set it to False otherwise True
         self.shared_state["is_transmitting"] = False
