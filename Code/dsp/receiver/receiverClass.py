@@ -51,6 +51,10 @@ class Receiver:
     def _demodulate(self) -> Tuple[np.ndarray, Dict]:
         raise NotImplementedError("Subclasses must implement _demodulate")
 
+    def compute_average_power_of_signal(self) -> float:
+        """Compute the average power of the signal"""
+        return np.mean(self.wav_signal ** 2)
+
     def bandpass_filter(self, input_signal: np.ndarray) -> np.ndarray:
         """Apply a bandpass filter around the carrier frequency"""
         nyquist = SAMPLE_RATE * 0.5
@@ -230,6 +234,7 @@ class NonCoherentReceiver(Receiver):
         }
 
     def decode(self) -> Tuple[str, Dict]:
+        
         filtered_signal, demod_debug = self._demodulate()
         cleaned_signal = self.remove_outliers(filtered_signal)
         normalized = self.normalize_signal(cleaned_signal)
@@ -284,6 +289,9 @@ class CoherentReceiver(Receiver):
         }
 
     def decode(self) -> Tuple[str, Dict]:
+
+        
+        
         filtered_signal, demod_debug = self._demodulate()
         cleaned_signal = self.remove_outliers(filtered_signal)
         normalized = self.normalize_signal(cleaned_signal)

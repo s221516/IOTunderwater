@@ -24,15 +24,15 @@ def create_wav_file_from_recording(record_seconds, name):
     wf.setsampwidth(p.get_sample_size(FORMAT))
     wf.setframerate(SAMPLE_RATE)
 
-    # List available input devices
-    info = p.get_host_api_info_by_index(0)
-    numdevices = info.get("deviceCount")
+    # # List available input devices
+    # info = p.get_host_api_info_by_index(0)
+    # numdevices = info.get("deviceCount")
 
-    # matches over all input devices in your computer, and prints them
-    for i in range(0, numdevices):
-        device_info = p.get_device_info_by_host_api_device_index(0, i)
-        device_name = device_info.get("name")
-        print(f"DEVICE {device_name} {i}")
+    # # matches over all input devices in your computer, and prints them
+    # for i in range(0, numdevices):
+    #     device_info = p.get_device_info_by_host_api_device_index(0, i)
+    #     device_name = device_info.get("name")
+    #     print(f"DEVICE {device_name} {i}")
 
     # Open the audio stream
     stream = p.open(

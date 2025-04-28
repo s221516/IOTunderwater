@@ -45,12 +45,12 @@ def compute_len_of_bits(message):
     return len_of_data_bits
 
 def logInCsv(id,original_message,decoded_message1,hamming_dist_without,decod_msg2,ham_dist_with, distance_to_speaker, 
-             speaker_depth, test_description, original_message_in_bits, data_bits_nc, data_bits_nc_bandpass):
+             speaker_depth, test_description, original_message_in_bits, data_bits_nc, data_bits_nc_bandpass, avg_power_of_signal):
 
 
     transmitter_string = transmitter_setting_to_string()
     water_string = testing_water_to_string()
-    headers = ["ID","Bitrate","Carrier Frequency","Original Message","Decoded without bandpass","Hamming Dist without bandpass","Decoded with bandpass","Hamming Dist with bandpass","Encoding","Transmitter","Container","Speaker depth","Distance to speaker","Test description", "Original message in bits", "Data bits without bandpass", "Data bits with bandpass"]
+    headers = ["ID","Bitrate","Carrier Frequency","Average Power of signal", "Original Message","Decoded without bandpass","Hamming Dist without bandpass","Decoded with bandpass","Hamming Dist with bandpass","Encoding","Transmitter","Container","Speaker depth","Distance to speaker","Test description", "Original message in bits", "Data bits without bandpass", "Data bits with bandpass"]
 
     # Check if the file exists to determine if we need to write headers
     try:
@@ -66,7 +66,7 @@ def logInCsv(id,original_message,decoded_message1,hamming_dist_without,decod_msg
             writer.writerow(headers)
 
         # Write the log entry
-        writer.writerow([id,config.BIT_RATE,config.CARRIER_FREQ,original_message,decoded_message1,hamming_dist_without,decod_msg2,ham_dist_with,config.ENCODING,transmitter_string, water_string,speaker_depth,distance_to_speaker,test_description, original_message_in_bits, data_bits_nc, data_bits_nc_bandpass])
+        writer.writerow([id,config.BIT_RATE,config.CARRIER_FREQ,avg_power_of_signal ,original_message,decoded_message1,hamming_dist_without,decod_msg2,ham_dist_with,config.ENCODING,transmitter_string, water_string,speaker_depth,distance_to_speaker,test_description, original_message_in_bits, data_bits_nc, data_bits_nc_bandpass])
 
 def transmit_signal():
     transmitter = Transmitter(None, config.USE_ESP)
@@ -76,12 +76,13 @@ def transmit_signal():
     
     n = 5
     
-    bitrates = [500] * n
+    bitrates = [1000] * n
 
-    carrierfreqs = [6000]
+    carrierfreqs = np.arange(2000, 25000, 1000)
     
     global test_description
-    test_description = f"Checking best frequencies for 50cm, 3m, and 6m by looking at the received amplitude on an oscilloscope. Take out the 3 best and take picture, name the pictures and document the results."
+    test_description = f"Testing : average power of a signal"
+    # test_description = f"Testing: does sending a message with a low correlation < 3 to barker 13 make a diffence?"
 
     global speaker_depth
     speaker_depth = 200  # in cm
@@ -94,7 +95,8 @@ def transmit_signal():
             config.set_bitrate(bitrate)
             for carrierfreq in carrierfreqs:
                 config.set_carrierfreq(carrierfreq)
-                message = generatePayload.generate_payload(payload)
+                # message = generatePayload.generate_payload(payload)
+                message = "U" * 12
                 # create unique id for each tes
                 id = create_id()
                 transmitter.transmit(message, carrierfreq, bitrate)
@@ -135,6 +137,8 @@ def process_signal_for_testing(message, id):
     len_of_data_bits = compute_len_of_bits(message)
     nonCoherentReceiver = NonCoherentReceiver(id, band_pass = False)
     nonCoherentReceiver.set_len_of_data_bits(len_of_data_bits)
+    # doesnt matter if band pass or not, the receiver will always use the same data bits
+    avg_power_of_signal = nonCoherentReceiver.compute_average_power_of_signal()
 
     try:
         message_nc, debug_nc = nonCoherentReceiver.decode()
@@ -145,6 +149,7 @@ def process_signal_for_testing(message, id):
 
     nonCoherentReceiverWithBandPass = NonCoherentReceiver(id, band_pass = True)
     nonCoherentReceiverWithBandPass.set_len_of_data_bits(len_of_data_bits)
+
     try:
         message_nc_bandpass, debug_nc_bandpass = nonCoherentReceiverWithBandPass.decode()
         # nonCoherentReceiverWithBandPass.plot_simulation_steps()
@@ -156,10 +161,10 @@ def process_signal_for_testing(message, id):
         print("ID specified, not logging to csv")
         return
 
-    logging_and_printing(message_nc,message_nc_bandpass,message,debug_nc,debug_nc_bandpass,id)
+    logging_and_printing(message_nc,message_nc_bandpass,message,debug_nc,debug_nc_bandpass,id, avg_power_of_signal)
 
 
-def logging_and_printing(message_nc,message_nc_bandpass,message,debug_nc,debug_nc_bandpass,id):
+def logging_and_printing(message_nc,message_nc_bandpass,message,debug_nc,debug_nc_bandpass,id, avg_power_of_signal):
     print("Decoded message: no pass    ", message_nc)
     print("Decoded message, with pass: ", message_nc_bandpass)
     
@@ -170,6 +175,7 @@ def logging_and_printing(message_nc,message_nc_bandpass,message,debug_nc,debug_n
 
     data_bits_nc = "NaN"
     data_bits_nc_bandpass = "NaN"
+    
     if debug_nc != {}:
         decoded_bits = debug_nc["bits_without_preamble"]
         data_bits_nc = debug_nc["all_data_bits"]
@@ -188,7 +194,8 @@ def logging_and_printing(message_nc,message_nc_bandpass,message,debug_nc,debug_n
     print("Hamming distance of msgs, no pass:   ", hamming_dist)
     print("Hamming distance of msgs, with pass  ", hamming_dist_bandpass)
 
-    logInCsv(id,message,message_nc,hamming_dist,message_nc_bandpass,hamming_dist_bandpass, distance_to_speaker, speaker_depth, test_description, original_message_in_bits, data_bits_nc, data_bits_nc_bandpass)
+    logInCsv(id,message,message_nc,hamming_dist,message_nc_bandpass,hamming_dist_bandpass, distance_to_speaker, speaker_depth, 
+             test_description, original_message_in_bits, data_bits_nc, data_bits_nc_bandpass, avg_power_of_signal)
 
 
 if __name__ == "__main__":

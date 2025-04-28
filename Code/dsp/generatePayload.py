@@ -33,6 +33,7 @@ def bits_to_string(bits):
         byte = bits[i:i+8]
         byte_str = ''.join(str(b) for b in byte)
         chars.append(chr(int(byte_str, 2)))
+        print(f"Byte: {byte_str} -> Char: {chars[-1]}")  # Debugging line
     return ''.join(chars)
 
 def generate_payload(size):
@@ -54,7 +55,7 @@ def generate_payload(size):
 
         # Check correlation with Barker 13
         correlation = signal.correlate(config.BINARY_BARKER, payload, mode='same')
-        is_not_similar_to_BARKER_13 = np.all(correlation != 9)
+        is_not_similar_to_BARKER_13 = np.all(correlation < 3)
         # check if correlation contains a 9
         if is_not_similar_to_BARKER_13:
             return bits_to_string(payload)  # Good payload
@@ -62,9 +63,12 @@ def generate_payload(size):
 if __name__ == "__main__":
     size = 100  # Example size
     payload_bits = generate_payload(size)
-    payload_string = bits_to_string(payload_bits)
-    
+    # payload_string = bits_to_string(payload_bits)
+    # example of payload with barker corr < 3 : `u%.1@@C829fS
     print("Generated Payload (bits):", payload_bits)
-    print("Generated Payload (string):", payload_string)
+    # print("Generated Payload (string):", payload_string)
     print("Payload Length (bits):", len(payload_bits))
-    print("Payload Length (chars):", len(payload_string))
+    # print("Payload Length (chars):", len(payload_string))
+    a = max(signal.correlate(config.BINARY_BARKER, string_to_bits(payload_bits), mode='same'))
+    print(f"Max correlation with Barker 13: {a}")
+    
