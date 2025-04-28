@@ -1,4 +1,4 @@
-from audio_reciever import AudioReceiver
+from Code.dsp.receiver.audio_receiver import AudioReceiver
 from Code.dsp.Transmitter import Transmitter
 import config
 

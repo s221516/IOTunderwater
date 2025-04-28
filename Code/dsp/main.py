@@ -15,6 +15,7 @@ from receiver.receiverClass import NonCoherentReceiver
 from receiver.record_audio import create_wav_file_from_recording
 from errors import PreambleNotFoundError
 from Transmitter import Transmitter
+import generatePayload
 
 
 def transmitter_setting_to_string():
@@ -34,9 +35,7 @@ def compute_len_of_bits(message):
     len_of_data_bits = len(message) * 8
     len_of_preamble = len(config.BINARY_BARKER)
     if config.CONVOLUTIONAL_CODING:
-        len_of_data_bits = (
-            len_of_data_bits * 2 + len_of_preamble + 12
-        )  # NOTE talk with Mathias here
+        len_of_data_bits = (len_of_data_bits * 2 + len_of_preamble + 12)
     elif config.HAMMING_CODING:
         len_of_data_bits = len_of_data_bits * 3 / 2 + len_of_preamble
     else:

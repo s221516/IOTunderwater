@@ -2,6 +2,21 @@ import random
 import scipy.signal as signal
 import numpy as np
 import config
+import csv
+import os
+
+BARKER_13 = [1, 1, 1, 1, 1, 0, 0, 1, 1, 0, 1, 0, 1]
+
+def save_payload_combination_to_the_banned_combinations(string, bits):
+    """Save string and its bit representation to CSV when correlation is 9"""
+    filename = "Code/dsp/data/correlation_matches.csv"
+    file_exists = os.path.isfile(filename)
+    
+    with open(filename, 'a', newline='') as f:
+        writer = csv.writer(f)
+        if not file_exists:
+            writer.writerow(['String', 'Bits'])  # Write header if new file
+        writer.writerow([string, bits])
 
 def string_to_bits(s):
     # Convert a string to a list of bits (0 or 1)
