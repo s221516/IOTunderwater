@@ -1,6 +1,7 @@
 import random
-
-BARKER_13 = [1, 1, 1, 1, 1, 0, 0, 1, 1, 0, 1, 0, 1]
+import scipy.signal as signal
+import numpy as np
+import config
 
 def string_to_bits(s):
     # Convert a string to a list of bits (0 or 1)
@@ -18,12 +19,6 @@ def bits_to_string(bits):
         byte_str = ''.join(str(b) for b in byte)
         chars.append(chr(int(byte_str, 2)))
     return ''.join(chars)
-
-def correlate(bits, pattern):
-    # Cross-correlation between bits and a pattern
-    min_len = min(len(bits), len(pattern))
-    corr = sum(1 if bits[i] == pattern[i] else 0 for i in range(min_len))
-    return corr
 
 def generate_payload(size):
     # Ensure size is a multiple of 8
@@ -43,10 +38,11 @@ def generate_payload(size):
         payload = bit_list[:size]
 
         # Check correlation with Barker 13
-        if correlate(payload, BARKER_13) != 9:
-            return payload  # Good payload
-
-        print(f"Payload with correlation {correlate(payload, BARKER_13)} found, retrying...")
+        correlation = signal.correlate(config.BINARY_BARKER, payload, mode='same')
+        is_not_similar_to_BARKER_13 = np.all(correlation != 9)
+        # check if correlation contains a 9
+        if is_not_similar_to_BARKER_13:
+            return bits_to_string(payload)  # Good payload
 
 if __name__ == "__main__":
     size = 100  # Example size

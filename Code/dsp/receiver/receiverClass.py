@@ -15,7 +15,6 @@ from config import (
     PATH_TO_WAV_FILE,
     SAMPLE_RATE,
     PLOT_PREAMBLE_CORRELATION,
-    SAVE_DIR,
 )
 
 from encoding.hamming_codes import hamming_decode
@@ -42,7 +41,7 @@ def plot_wav_signal(sample_rate, wav_signal):
 
 class Receiver:
     def __init__(self, id: str, band_pass: bool):
-        _, self.wav_signal = wavfile.read(SAVE_DIR + "/raw_data/" + id + ".wav")
+        _, self.wav_signal = wavfile.read("Code/dsp/data/raw_data/" + id + ".wav")
         self.bit_rate = config.BIT_RATE
         self.carrier_freq = config.CARRIER_FREQ
         self.band_pass = band_pass
@@ -118,6 +117,7 @@ class Receiver:
             if std_factor > 1:
                 return self.remove_preamble_baker_code(bits, std_factor - 0.1)
             else:
+                print("Debug info: not finding preamble line 121")
                 return -1, []
 
         diff_in_peaks = np.diff(peak_indices)
