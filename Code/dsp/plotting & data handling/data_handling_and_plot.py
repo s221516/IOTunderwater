@@ -698,7 +698,7 @@ def analyze_ber_by_carrier_freq(file_path, test_description="Testing: Average po
     df = pd.read_csv(file_path)
     
     global dist
-    dist = 500
+    dist = 400
     if dist == 500:
         test_description = "Testing: At 5 m now testing for frequency sweep again for power average and BER, keeping stick exactly the same place for next test"
     else:
