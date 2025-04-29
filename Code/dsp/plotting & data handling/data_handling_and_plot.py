@@ -682,7 +682,8 @@ def analyze_bit_flips_from_csv(file_path, id):
         print(f"Error: No transmission found with ID {id}")
     except Exception as e:
         print(f"Error analyzing transmission {id}: {str(e)}")
-def analyze_ber_by_carrier_freq(file_path, test_description="Testing: Average power purely for check of interference"):
+
+def analyze_ber_by_carrier_freq(file_path, test_description="Testing: Average power purely for check of interference re-test on 5m"):
     """
     Analyze BER for each carrier frequency at 500 cm distance for a specific test description
     
@@ -698,6 +699,11 @@ def analyze_ber_by_carrier_freq(file_path, test_description="Testing: Average po
     
     global dist
     dist = 500
+    if dist == 500:
+        test_description = "Testing: Average power purely for check of interference re-test on 5m"
+    else:
+        test_description = "Testing: Average power purely for check of interference"
+        
     # Filter by test description and distance
     df = df[df['Test description'] == test_description]
     df = df[df['Distance to speaker'] == dist]
