@@ -682,16 +682,197 @@ def analyze_bit_flips_from_csv(file_path, id):
         print(f"Error: No transmission found with ID {id}")
     except Exception as e:
         print(f"Error analyzing transmission {id}: {str(e)}")
+def analyze_ber_by_carrier_freq(file_path, test_description="Testing: Average power purely for check of interference"):
+    """
+    Analyze BER for each carrier frequency at 500 cm distance for a specific test description
+    
+    Args:
+        file_path (str): Path to CSV file containing transmission data
+        test_description (str): Description to filter the data by
+    
+    Returns:
+        pd.DataFrame: DataFrame with BER results grouped by carrier frequency
+    """
+    # Read the CSV file
+    df = pd.read_csv(file_path)
+    
+    global dist
+    dist = 500
+    # Filter by test description and distance
+    df = df[df['Test description'] == test_description]
+    df = df[df['Distance to speaker'] == dist]
+    
+    if len(df) == 0:
+        print(f"No data found for test description: {test_description}")
+        return None
+    
+    # Convert Hamming distances to integers and handle NaN values
+    df['Hamming Dist without bandpass'] = pd.to_numeric(df['Hamming Dist without bandpass'], errors='coerce')
+    df['Hamming Dist with bandpass'] = pd.to_numeric(df['Hamming Dist with bandpass'], errors='coerce')
+    
+    # Group by carrier frequency
+    grouped = df.groupby('Carrier Frequency')
+    
+    results = []
+    message_length = 96  # Length of alternating bit sequence (48 '01' pairs)
+    
+    for carrier_freq, group in grouped:
+        # Count total transmissions
+        total_entries = len(group)
+        
+        # Without bandpass
+        valid_no_bp = group[group['Decoded without bandpass'] != 'No preamble found']
+        total_bits_no_bp = len(valid_no_bp) * message_length
+        total_errors_no_bp = valid_no_bp['Hamming Dist without bandpass'].sum()
+        invalid_no_bp = total_entries - len(valid_no_bp)
+        
+        # With bandpass
+        valid_bp = group[group['Decoded with bandpass'] != 'No preamble found']
+        total_bits_bp = len(valid_bp) * message_length
+        total_errors_bp = valid_bp['Hamming Dist with bandpass'].sum()
+        invalid_bp = total_entries - len(valid_bp)
+        
+        # Calculate BER
+        ber_no_bp = (total_errors_no_bp / total_bits_no_bp * 100) if total_bits_no_bp > 0 else None
+        ber_bp = (total_errors_bp / total_bits_bp * 100) if total_bits_bp > 0 else None
+        
+        results.append({
+            'Carrier_Frequency': carrier_freq,
+            'Total_Transmissions': total_entries,
+            'Invalid_No_BP': invalid_no_bp,
+            'Invalid_BP': invalid_bp,
+            'Valid_Transmissions_No_BP': len(valid_no_bp),
+            'Valid_Transmissions_BP': len(valid_bp),
+            'Total_Errors_No_BP': total_errors_no_bp,
+            'Total_Errors_BP': total_errors_bp,
+            'BER_No_BP': ber_no_bp,
+            'BER_With_BP': ber_bp,
+            'Average_Power': group['Average Power of signal'].mean()
+        })
+        
+        # Print results for verification
+        print(f"\nCarrier Frequency: {carrier_freq} Hz at 500 cm")
+        print(f"Test description: {test_description}")
+        print(f"Total transmissions: {total_entries}")
+        print(f"Average signal power: {group['Average Power of signal'].mean():.2f}")
+        print("\nWithout bandpass:")
+        print(f"  Invalid transmissions: {invalid_no_bp}")
+        print(f"  Valid transmissions: {len(valid_no_bp)}")
+        print(f"  Total errors: {total_errors_no_bp}")
+        print(f"  BER: {ber_no_bp:.2f}%" if ber_no_bp is not None else "  BER: N/A")
+        print("\nWith bandpass:")
+        print(f"  Invalid transmissions: {invalid_bp}")
+        print(f"  Valid transmissions: {len(valid_bp)}")
+        print(f"  Total errors: {total_errors_bp}")
+        print(f"  BER: {ber_bp:.2f}%" if ber_bp is not None else "  BER: N/A")
+        print("-" * 50)
+    
+    # Create DataFrame and sort by frequency
+    results_df = pd.DataFrame(results)
+    results_df = results_df.sort_values('Carrier_Frequency')
+    
+    # Plot results
+    plot_carrier_freq_analysis(results_df, test_description)
+    
+    return results_df
+
+def plot_carrier_freq_analysis(results_df, test_description):
+    """
+    Create plots showing BER and signal power vs carrier frequency at 500 cm
+    Including all frequencies from 1000 to 29000 Hz, with N/A values shown at top
+    
+    Args:
+        results_df (pd.DataFrame): DataFrame containing analysis results
+    """
+    # Create complete range of frequencies
+    all_frequencies = range(1000, 30000, 1000)
+    
+    # Create figure with two subplots
+    fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(15, 12))
+    
+    # Ensure all frequencies are in the DataFrame
+    complete_df = pd.DataFrame({'Carrier_Frequency': all_frequencies})
+    results_df = pd.merge(complete_df, results_df, on='Carrier_Frequency', how='left')
+    
+    # Replace NaN with 100 for plotting (will appear at top of plot)
+    plot_df = results_df.copy()
+    plot_df['BER_No_BP'] = plot_df['BER_No_BP'].fillna(100)
+    plot_df['BER_With_BP'] = plot_df['BER_With_BP'].fillna(100)
+    
+    # Plot BER vs Carrier Frequency
+    ax1.plot(plot_df['Carrier_Frequency'], plot_df['BER_No_BP'], 
+             'ro-', label='Without Bandpass', markersize=8)
+    ax1.plot(plot_df['Carrier_Frequency'], plot_df['BER_With_BP'], 
+             'bo-', label='With Bandpass', markersize=8)
+    
+    # Add value labels
+    for x, y1, y2 in zip(plot_df['Carrier_Frequency'], 
+                        plot_df['BER_No_BP'], 
+                        plot_df['BER_With_BP']):
+        if y1 == 100:  # N/A value
+            ax1.annotate('N/A', (x, y1), textcoords="offset points",
+                        xytext=(0, 10), ha='center', color='red')
+        elif pd.notna(y1):
+            ax1.annotate(f'{y1:.1f}%', (x, y1), textcoords="offset points",
+                        xytext=(0, 10), ha='center', color='red')
+            
+        if y2 == 100:  # N/A value
+            ax1.annotate('N/A', (x, y2), textcoords="offset points",
+                        xytext=(0, -15), ha='center', color='blue')
+        elif pd.notna(y2):
+            ax1.annotate(f'{y2:.1f}%', (x, y2), textcoords="offset points",
+                        xytext=(0, -15), ha='center', color='blue')
+    
+    # Configure BER plot
+    ax1.set_xlabel('Carrier Frequency (Hz)')
+    ax1.set_ylabel('Bit Error Rate (%)')
+    ax1.set_title(f'BER vs Carrier Frequency at {dist} cm')
+    ax1.grid(True, linestyle='--', alpha=0.7)
+    ax1.legend()
+    ax1.set_ylim(0, 105)  # Make room for N/A labels at top
+    
+    # Set x-axis ticks for every 1000 Hz
+    ax1.set_xticks(list(all_frequencies)[::2])  # Show every other frequency to avoid crowding
+    ax1.tick_params(axis='x', rotation=45)
+    
+    # Plot Average Power vs Carrier Frequency
+    ax2.plot(results_df['Carrier_Frequency'], results_df['Average_Power'], 
+             'go-', label='Signal Power', markersize=8)
+    
+    # Add value labels for power where data exists
+    for x, y in zip(results_df['Carrier_Frequency'], results_df['Average_Power']):
+        if pd.notna(y):
+            ax2.annotate(f'{y:.1f}', (x, y), textcoords="offset points",
+                        xytext=(0, 10), ha='center', color='green')
+        else:
+            ax2.annotate('N/A', (x, 0), textcoords="offset points",
+                        xytext=(0, 10), ha='center', color='green')
+    
+    # Configure power plot
+    ax2.set_xlabel('Carrier Frequency (Hz)')
+    ax2.set_ylabel('Average Signal Power')
+    ax2.set_title(f'Signal Power vs Carrier Frequency at {dist} cm')
+    ax2.grid(True, linestyle='--', alpha=0.7)
+    ax2.legend()
+    
+    # Set x-axis ticks for every 1000 Hz
+    ax2.set_xticks(list(all_frequencies)[::2])  # Show every other frequency to avoid crowding
+    ax2.tick_params(axis='x', rotation=45)
+    
+    # Adjust layout to prevent label overlap
+    plt.tight_layout()
+    plt.show()
+
 
 if __name__ == "__main__":  
-    ## NOTE: used to combine pool sweeps into one file, this only needs to be called once
-    # combine_csv_by_carrier_freq(12000)
-    # the code below also only needs to be called once, it loops through the files
+    # # NOTE: used to combine pool sweeps into one file, this only needs to be called once
+    # # combine_csv_by_carrier_freq(12000)
+    # # the code below also only needs to be called once, it loops through the files
     # for cf in ["6000",  "9000", "12000"]:
     #     df = compute_ber_by_distance_bitrate(f"Code/dsp/data/pool/pool_testing_cf{cf}_all_distances.csv")
     #     df.to_csv(f"Code/dsp/data/pool/ber_results_by_distance_cf{cf}.csv", index=False)
 
-    # plots the scatter plots for the ones above
+    # # plots the scatter plots for the ones above
     # for cf in ["6000", "9000", "12000"]:
     #     results_file = f"Code/dsp/data/pool/ber_results_by_distance_cf{cf}.csv"
     #     plot_ber_vs_distance_for_the_big_all_distances_files(results_file)
@@ -715,5 +896,9 @@ if __name__ == "__main__":
 
     # NOTE: use below to compute bit flip tendency of a given wav file - will compute for all_data_bits, raises an error
     # if the length of the received does not match the length of the transmitted
-    id_to_analyze = "01befded-cf21-4380-bb04-8a9f9de48385"
-    analyze_bit_flips_from_csv("Received_data_for_tests.csv", id_to_analyze)
+    # id_to_analyze = "01befded-cf21-4380-bb04-8a9f9de48385"
+    # analyze_bit_flips_from_csv("Received_data_for_tests.csv", id_to_analyze)
+
+    ## NOTE: use below to find the best carrier freq at 5 meters
+    file_path = "avg_power_of_rec_signal_purely_for_check_of_interference.csv"
+    results = analyze_ber_by_carrier_freq(file_path)
