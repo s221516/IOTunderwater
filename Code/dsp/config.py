@@ -52,9 +52,9 @@ APPLY_AVERAGING_PREAMBLE = False
 MIC_INDEX = 2 # Mathias, 1 Morten
 USE_ESP = True
 PLOT_PREAMBLE_CORRELATION = False
-SAVE_DIR = "Code/dsp/data"
 PATH_TO_WAV_FILE = "Code/dsp/data/testing_and_logging_recording.wav"
-FILE_NAME_DATA_TESTS = "Received_data_for_tests.csv"
+# FILE_NAME_DATA_TESTS = "Received_data_for_tests.csv"
+FILE_NAME_DATA_TESTS = "Average_power_of_received_signal.csv"
 HAMMING_CODING = False
 CONVOLUTIONAL_CODING = False
 LIST_OF_DATA_BITS = []
@@ -65,7 +65,7 @@ elif HAMMING_CODING:
 else:
     ENCODING = "No Encoding"
 
-
+IS_ID_SPECIFIED = None
 dark_horse_lyrics = """AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC"""
 
 if __name__ == "__main__":
@@ -74,4 +74,5 @@ if __name__ == "__main__":
     messages = "_me_w"
     bin_msg = string_to_bin_array(messages)
     autocorrelate = signal.correlate(BINARY_BARKER, bin_msg, mode='same')
+
     print(autocorrelate)
