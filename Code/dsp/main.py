@@ -84,25 +84,25 @@ def transmit_signal():
         "8" : 'Oi67/(~V8]w,x', 
         "9" : 'N(#-c~nC(^v>A'
     }
-    # payload_sizes = ["]3MH'@@H9&e6W",
-    #  '}VvF*E@9>-go*',
-    #  '+,M4J1ABraRJ&',
-    #  'i3aw,*X@j&y;y',
-    #  '~7,w]@s,V+{2Y',
-    #  ']_TzaWWF+Exg;',
-    #  'Oi67/(~V8]w,x',
-    #  'N(#-c~nC(^v>A',
-    # ]
-    n = 10
+    payload_sizes = ["]3MH'@@H9&e6W",
+     '}VvF*E@9>-go*',
+     '+,M4J1ABraRJ&',
+     'i3aw,*X@j&y;y',
+     '~7,w]@s,V+{2Y',
+     ']_TzaWWF+Exg;',
+     'Oi67/(~V8]w,x',
+     'N(#-c~nC(^v>A',
+    ]
+    n = 100
     
     bitrates = [500] * n
 
-    carrierfreqs = np.arange(1000, 30000, 1000)
+    carrierfreqs = [10000]
     
     global test_description
     # test_description = f"Testing : average power of a signal"
     # test_description = f"Testing: does sending a message with a low correlation < 3 to barker 13 make a diffence?"
-    test_description = f"Testing: At 5 m now testing for frequency sweep again for power average and BER, keeping stick exactly the same place for next test"
+    test_description = f"Testing: at 10kHz found to be the best candidate from previous tests. Here we are testing the ber with different payloads"
 
     global speaker_depth
     speaker_depth = 200  # in cm
@@ -116,9 +116,10 @@ def transmit_signal():
             for carrierfreq in carrierfreqs:
                 config.set_carrierfreq(carrierfreq)
                 # message = generatePayload.generate_payload(payload)
-                message = "U" * 12
+                # message = "U" * 12
                 # create unique id for each test
-                # message = payload
+                message = payload
+                print(f"Transmitting message: {message}")
                 id = create_id()
                 transmitter.transmit(message, carrierfreq, bitrate)
                 record_seconds = transmitter.calculate_transmission_time(message)
