@@ -93,7 +93,7 @@ def transmit_signal():
     #  'Oi67/(~V8]w,x',
     #  'N(#-c~nC(^v>A',
     # ]
-    payload_sizes = ["~7,w]@s,V+{2Y"]
+    payload_sizes = ["]_TzaWWF+Exg;"]
     n = 100
     
     bitrates = [500] * n
