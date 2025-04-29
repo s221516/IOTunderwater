@@ -93,7 +93,7 @@ def transmit_signal():
     #  'Oi67/(~V8]w,x',
     #  'N(#-c~nC(^v>A',
     # ]
-    payload_sizes = ["+,M4J1ABraRJ&"]
+    payload_sizes = ["i3aw,*X@j&y;y"]
     n = 100
     
     bitrates = [500] * n
@@ -103,7 +103,7 @@ def transmit_signal():
     global test_description
     # test_description = f"Testing : average power of a signal"
     # test_description = f"Testing: does sending a message with a low correlation < 3 to barker 13 make a diffence?"
-    test_description = f"Testing: at 10kHz found to be the best candidate from previous tests. Here we are testing the ber with different payloads, retest only for '}}VvF*E@9>-go*'"
+    test_description = f"Testing: at 10kHz found to be the best candidate from previous tests. Here we are testing the ber with different payloads, '"
 
     global speaker_depth
     speaker_depth = 200  # in cm
