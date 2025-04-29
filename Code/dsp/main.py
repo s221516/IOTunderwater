@@ -84,32 +84,31 @@ def transmit_signal():
         "8" : 'Oi67/(~V8]w,x', 
         "9" : 'N(#-c~nC(^v>A'
     }
-    # payload_sizes = ["]3MH'@@H9&e6W",
-    #  '}VvF*E@9>-go*',
-    #  '+,M4J1ABraRJ&',
-    #  'i3aw,*X@j&y;y',
-    #  '~7,w]@s,V+{2Y',
-    #  ']_TzaWWF+Exg;',
-    #  'Oi67/(~V8]w,x',
-    #  'N(#-c~nC(^v>A',
-    # ]
-    payload_sizes = ["N(#-c~nC(^v>A"]
-    n = 100
+    payload_sizes = ["]3MH'@@H9&e6W",
+     '}VvF*E@9>-go*',
+     '+,M4J1ABraRJ&',
+     'i3aw,*X@j&y;y',
+     '~7,w]@s,V+{2Y',
+     ']_TzaWWF+Exg;',
+     'Oi67/(~V8]w,x',
+     'N(#-c~nC(^v>A',
+    ]
+    n = 25
     
     bitrates = [500] * n
 
-    carrierfreqs = [10000]
+    carrierfreqs = [11000]
     
     global test_description
     # test_description = f"Testing : average power of a signal"
     # test_description = f"Testing: does sending a message with a low correlation < 3 to barker 13 make a diffence?"
-    test_description = f"Testing: at 10kHz found to be the best candidate from previous tests. Here we are testing the ber with different payloads, '"
+    test_description = f"Testing: payload similarity with barker 13 on 1m distance at 500 bit rate and 11000Hz carrier frequency"
 
     global speaker_depth
     speaker_depth = 200  # in cm
 
     global distance_to_speaker
-    distance_to_speaker = 500  # in cm
+    distance_to_speaker = 100  # in cm
 
     for payload in payload_sizes:
         for bitrate in bitrates:
