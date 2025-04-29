@@ -84,15 +84,16 @@ def transmit_signal():
         "8" : 'Oi67/(~V8]w,x', 
         "9" : 'N(#-c~nC(^v>A'
     }
-    payload_sizes = ["]3MH'@@H9&e6W",
-     '}VvF*E@9>-go*',
-     '+,M4J1ABraRJ&',
-     'i3aw,*X@j&y;y',
-     '~7,w]@s,V+{2Y',
-     ']_TzaWWF+Exg;',
-     'Oi67/(~V8]w,x',
-     'N(#-c~nC(^v>A',
-    ]
+    # payload_sizes = ["]3MH'@@H9&e6W",
+    #  '}VvF*E@9>-go*',
+    #  '+,M4J1ABraRJ&',
+    #  'i3aw,*X@j&y;y',
+    #  '~7,w]@s,V+{2Y',
+    #  ']_TzaWWF+Exg;',
+    #  'Oi67/(~V8]w,x',
+    #  'N(#-c~nC(^v>A',
+    # ]
+    payload_sizes = ["]3MH'@@H9&e6W"]
     n = 100
     
     bitrates = [500] * n
@@ -102,7 +103,7 @@ def transmit_signal():
     global test_description
     # test_description = f"Testing : average power of a signal"
     # test_description = f"Testing: does sending a message with a low correlation < 3 to barker 13 make a diffence?"
-    test_description = f"Testing: at 10kHz found to be the best candidate from previous tests. Here we are testing the ber with different payloads"
+    test_description = f"Testing: at 10kHz found to be the best candidate from previous tests. Here we are testing the ber with different payloads, retest only for '}}VvF*E@9>-go*'"
 
     global speaker_depth
     speaker_depth = 200  # in cm
