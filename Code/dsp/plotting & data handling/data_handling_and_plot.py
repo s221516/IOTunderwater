@@ -870,6 +870,45 @@ def plot_carrier_freq_analysis(results_df, test_description):
     plt.show()
 
 
+def analyze_invalid_transmissions(csv_path):
+    """
+    Analyze and plot invalid transmissions per unique original message.
+    Invalid transmissions are identified when "Decoded without bandpass" == "No preamble found".
+
+    Args:
+        csv_path (str): Path to the CSV file.
+    """
+    # Load CSV
+    df = pd.read_csv(csv_path)
+
+    # Compute number of invalid transmissions per message
+    invalid_transmissions = (
+        df.groupby('Original Message')
+        .apply(lambda x: (x['Decoded without bandpass'] == "No preamble found").sum())
+        .reset_index(name='Invalid Transmission Count')
+    )
+
+    # Compute total transmissions per message
+    total_transmissions = df['Original Message'].value_counts().reset_index()
+    total_transmissions.columns = ['Original Message', 'Total Transmissions']
+
+    # Merge results
+    result = pd.merge(total_transmissions, invalid_transmissions, on='Original Message')
+
+    # Plot
+    plt.figure(figsize=(12, 6))
+    plt.bar(result['Original Message'], result['Invalid Transmission Count'])
+    plt.xticks(rotation=90)
+    plt.xlabel('Original Message')
+    plt.ylabel('Invalid Transmission Count')
+    plt.title('Invalid Transmissions per Unique Message')
+    plt.tight_layout()
+    plt.grid(True, axis='y')
+    plt.show()
+
+    return result
+
+
 if __name__ == "__main__":  
     # # NOTE: used to combine pool sweeps into one file, this only needs to be called once
     # # combine_csv_by_carrier_freq(12000)
@@ -908,3 +947,6 @@ if __name__ == "__main__":
     ## NOTE: use below to find the best carrier freq at 5 meters
     file_path = "avg_power_of_rec_signal_purely_for_check_of_interference.csv"
     results = analyze_ber_by_carrier_freq(file_path)
+
+    # result_df = analyze_invalid_transmissions('5m_dist_10kHz_unique_payloads.csv')
+
