@@ -700,7 +700,7 @@ def analyze_ber_by_carrier_freq(file_path, test_description="Testing: Average po
     global dist
     dist = 500
     if dist == 500:
-        test_description = "Testing: Average power purely for check of interference re-test on 5m"
+        test_description = "Testing: At 5 m now testing for frequency sweep again for power average and BER, keeping stick exactly the same place for next test"
     else:
         test_description = "Testing: Average power purely for check of interference"
         
