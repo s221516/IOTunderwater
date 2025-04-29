@@ -76,19 +76,20 @@ def transmit_signal():
     
     n = 5
     
-    bitrates = [1000] * n
+    bitrates = [500] * n
 
-    carrierfreqs = np.arange(2000, 25000, 1000)
+    carrierfreqs = np.arange(1000, 30000, 1000)
     
     global test_description
-    test_description = f"Testing : average power of a signal"
+    # test_description = f"Testing : average power of a signal"
     # test_description = f"Testing: does sending a message with a low correlation < 3 to barker 13 make a diffence?"
+    test_description = f"Testing: Average power purely for check of interference"
 
     global speaker_depth
     speaker_depth = 200  # in cm
 
     global distance_to_speaker
-    distance_to_speaker = 600  # in cm
+    distance_to_speaker = 50  # in cm
 
     for payload in payload_sizes:
         for bitrate in bitrates:
@@ -97,7 +98,7 @@ def transmit_signal():
                 config.set_carrierfreq(carrierfreq)
                 # message = generatePayload.generate_payload(payload)
                 message = "U" * 12
-                # create unique id for each tes
+                # create unique id for each test
                 id = create_id()
                 transmitter.transmit(message, carrierfreq, bitrate)
                 record_seconds = transmitter.calculate_transmission_time(message)

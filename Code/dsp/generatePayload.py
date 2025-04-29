@@ -55,7 +55,7 @@ def generate_payload(size):
 
         # Check correlation with Barker 13
         correlation = signal.correlate(config.BINARY_BARKER, payload, mode='same')
-        is_not_similar_to_BARKER_13 = np.all(correlation < 3)
+        is_not_similar_to_BARKER_13 = np.all(correlation < 4)
         # check if correlation contains a 9
         if is_not_similar_to_BARKER_13:
             return bits_to_string(payload)  # Good payload
