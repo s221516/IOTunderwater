@@ -945,8 +945,8 @@ if __name__ == "__main__":
     # analyze_bit_flips_from_csv("Received_data_for_tests.csv", id_to_analyze)
 
     ## NOTE: use below to find the best carrier freq at 5 meters
-    file_path = "avg_power_of_rec_signal_purely_for_check_of_interference.csv"
-    results = analyze_ber_by_carrier_freq(file_path)
+    # file_path = "avg_power_of_rec_signal_purely_for_check_of_interference.csv"
+    # results = analyze_ber_by_carrier_freq(file_path)
 
-    # result_df = analyze_invalid_transmissions('5m_dist_10kHz_unique_payloads.csv')
+    result_df = analyze_invalid_transmissions('5m_dist_10kHz_unique_payloads.csv')
 
