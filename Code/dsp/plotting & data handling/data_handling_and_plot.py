@@ -683,7 +683,7 @@ def analyze_bit_flips_from_csv(file_path, id):
     except Exception as e:
         print(f"Error analyzing transmission {id}: {str(e)}")
 
-def analyze_ber_by_carrier_freq(file_path, test_description="Testing: Average power purely for check of interference re-test on 5m"):
+def analyze_ber_by_carrier_freq(file_path, test_description="Testing: testing impact of similarlity of payloads and barker 13"):
     """
     Analyze BER for each carrier frequency at 500 cm distance for a specific test description
     
@@ -698,15 +698,17 @@ def analyze_ber_by_carrier_freq(file_path, test_description="Testing: Average po
     df = pd.read_csv(file_path)
     
     global dist
-    dist = 500
-    if dist == 500:
-        test_description = "Testing: At 5 m now testing for frequency sweep again for power average and BER, keeping stick exactly the same place for next test"
-    else:
-        test_description = "Testing: Average power purely for check of interference"
+    dist = 100
+    bitrate = 500
+    # if dist == 500:
+    #     test_description = "Testing: At 5 m now testing for frequency sweep again for power average and BER, keeping stick exactly the same place for next test"
+    # else:
+    #     test_description = "Testing: Average power purely for check of interference"
         
     # Filter by test description and distance
     df = df[df['Test description'] == test_description]
     df = df[df['Distance to speaker'] == dist]
+    df = df[df['Bitrate'] == bitrate]
     
     if len(df) == 0:
         print(f"No data found for test description: {test_description}")
@@ -906,5 +908,5 @@ if __name__ == "__main__":
     # analyze_bit_flips_from_csv("Received_data_for_tests.csv", id_to_analyze)
 
     ## NOTE: use below to find the best carrier freq at 5 meters
-    file_path = "avg_power_of_rec_signal_purely_for_check_of_interference.csv"
-    results = analyze_ber_by_carrier_freq(file_path)
+    file_path = "1m_distance_payload_barker_similarity_impact.csv"
+    results = analyze_ber_by_carrier_freq(file_path, test_description="Testing: testing impact of similarlity of payloads and barker 13")
