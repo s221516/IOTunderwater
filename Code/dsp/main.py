@@ -83,13 +83,13 @@ def transmit_signal():
     global test_description
     # test_description = f"Testing : average power of a signal"
     # test_description = f"Testing: does sending a message with a low correlation < 3 to barker 13 make a diffence?"
-    test_description = f"Testing: Average power purely for check of interference"
+    test_description = f"Testing: Average power purely for check of interference re-test on 5m"
 
     global speaker_depth
     speaker_depth = 200  # in cm
 
     global distance_to_speaker
-    distance_to_speaker = 50  # in cm
+    distance_to_speaker = 500  # in cm
 
     for payload in payload_sizes:
         for bitrate in bitrates:
