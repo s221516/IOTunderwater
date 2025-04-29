@@ -55,7 +55,7 @@ def generate_payload(size, max_correlation=3):
 
         # Check correlation with Barker 13
         correlation = signal.correlate(config.BINARY_BARKER, payload, mode='same')
-        is_not_similar_to_BARKER_13 = np.all(correlation <= max_correlation)
+        is_not_similar_to_BARKER_13 = max(correlation) == max_correlation
         # check if correlation contains a 9
         if is_not_similar_to_BARKER_13:
             return bits_to_string(payload)  # Good payload
@@ -72,7 +72,7 @@ if __name__ == "__main__":
     a = max(signal.correlate(config.BINARY_BARKER, string_to_bits(payload_bits), mode='same'))
     print(f"Max correlation with Barker 13: {a}")
     unique_payload_correlations_size_100 = []
-    nums = np.arange(2, 9, 1)
+    nums = np.arange(2, 10, 1)
     for i in range(len(nums)):
         payload = generate_payload(size, nums[i])
         correlation = signal.correlate(config.BINARY_BARKER, string_to_bits(payload), mode='same')
@@ -81,13 +81,22 @@ if __name__ == "__main__":
         unique_payload_correlations_size_100.append(payload)
         
     print(unique_payload_correlations_size_100)
-    ["vgC6'@@H4M-i6", '52n=v)@FF!>W*', 'K*Fs|PBaiPE76', 'E35c-%AiBlPk$', 'F!wh%HpCnpKIJ', 'F5U7$&%+P<+wx', '+?>[Ij,&"Wt5z']
+    ["]3MH'@@H9&e6W",
+     '}VvF*E@9>-go*',
+     '+,M4J1ABraRJ&',
+     'i3aw,*X@j&y;y',
+     '~7,w]@s,V+{2Y',
+     ']_TzaWWF+Exg;',
+     'Oi67/(~V8]w,x',
+     'N(#-c~nC(^v>A',
+    ]
     unique_payloads_dict = {
-        "2" : "vgC6'@@H4M-i6", 
-        "3" : '52n=v)@FF!>W*', 
-        "4" : 'K*Fs|PBaiPE76',
-        "5" : 'E35c-%AiBlPk$', 
-        "6" : 'F!wh%HpCnpKIJ', 
-        "7" : 'F5U7$&%+P<+wx', 
-        "8" : '+?>[Ij,&"Wt5z'
+        "2" : "]3MH'@@H9&e6W", 
+        "3" : '}VvF*E@9>-go*', 
+        "4" : '+,M4J1ABraRJ&',
+        "5" : 'i3aw,*X@j&y;y', 
+        "6" : '~7,w]@s,V+{2Y', 
+        "7" : ']_TzaWWF+Exg;', 
+        "8" : 'Oi67/(~V8]w,x', 
+        "9" : 'N(#-c~nC(^v>A'
     }

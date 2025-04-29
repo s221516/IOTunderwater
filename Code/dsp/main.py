@@ -74,7 +74,26 @@ def transmit_signal():
     #messages = ["Lick_on_these_big_fat_nuts_and_tell_me_what_you_think"]
     payload_sizes = [100]
     
-    n = 5
+    unique_payloads_dict = {
+        "2" : "]3MH'@@H9&e6W", 
+        "3" : '}VvF*E@9>-go*', 
+        "4" : '+,M4J1ABraRJ&',
+        "5" : 'i3aw,*X@j&y;y', 
+        "6" : '~7,w]@s,V+{2Y', 
+        "7" : ']_TzaWWF+Exg;', 
+        "8" : 'Oi67/(~V8]w,x', 
+        "9" : 'N(#-c~nC(^v>A'
+    }
+    # payload_sizes = ["]3MH'@@H9&e6W",
+    #  '}VvF*E@9>-go*',
+    #  '+,M4J1ABraRJ&',
+    #  'i3aw,*X@j&y;y',
+    #  '~7,w]@s,V+{2Y',
+    #  ']_TzaWWF+Exg;',
+    #  'Oi67/(~V8]w,x',
+    #  'N(#-c~nC(^v>A',
+    # ]
+    n = 10
     
     bitrates = [500] * n
 
@@ -83,7 +102,7 @@ def transmit_signal():
     global test_description
     # test_description = f"Testing : average power of a signal"
     # test_description = f"Testing: does sending a message with a low correlation < 3 to barker 13 make a diffence?"
-    test_description = f"Testing: Average power purely for check of interference re-test on 5m"
+    test_description = f"Testing: At 5 m now testing for frequency sweep again for power average and BER, keeping stick exactly the same place for next test"
 
     global speaker_depth
     speaker_depth = 200  # in cm
@@ -99,6 +118,7 @@ def transmit_signal():
                 # message = generatePayload.generate_payload(payload)
                 message = "U" * 12
                 # create unique id for each test
+                # message = payload
                 id = create_id()
                 transmitter.transmit(message, carrierfreq, bitrate)
                 record_seconds = transmitter.calculate_transmission_time(message)
