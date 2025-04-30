@@ -84,25 +84,25 @@ def transmit_signal():
         "8" : 'Oi67/(~V8]w,x', 
         "9" : 'N(#-c~nC(^v>A'
     }
-    payload_sizes = ["]3MH'@@H9&e6W",
-     '}VvF*E@9>-go*',
-     '+,M4J1ABraRJ&',
-     'i3aw,*X@j&y;y',
-     '~7,w]@s,V+{2Y',
-     ']_TzaWWF+Exg;',
-     'Oi67/(~V8]w,x',
-     'N(#-c~nC(^v>A',
-    ]
+
+    #  '}VvF*E@9>-go*',
+    #  '+,M4J1ABraRJ&',
+    #  'i3aw,*X@j&y;y',
+    #  '~7,w]@s,V+{2Y',
+    #  ']_TzaWWF+Exg;',
+    #  'Oi67/(~V8]w,x',
+    #  'N(#-c~nC(^v>A',
+    # ]
     n = 25
     
-    bitrates = [500] * n
+    bitrates = [1000] * n
 
-    carrierfreqs = [11000]
+    carrierfreqs = np.arange(2000, 30000, 1000)
     
     global test_description
     # test_description = f"Testing : average power of a signal"
     # test_description = f"Testing: does sending a message with a low correlation < 3 to barker 13 make a diffence?"
-    test_description = f"Testing: payload similarity with barker 13 on 1m distance at 500 bit rate and 11000Hz carrier frequency"
+    test_description = f"Testing: varying payloads of size 100 on 1m dist and max marker correlation 0f 6"
 
     global speaker_depth
     speaker_depth = 200  # in cm
@@ -115,10 +115,9 @@ def transmit_signal():
             config.set_bitrate(bitrate)
             for carrierfreq in carrierfreqs:
                 config.set_carrierfreq(carrierfreq)
-                # message = generatePayload.generate_payload(payload)
+                message = generatePayload.generate_payload(payload)
                 # message = "U" * 12
                 # create unique id for each test
-                message = payload
                 print(f"Transmitting message: {message}")
                 id = create_id()
                 transmitter.transmit(message, carrierfreq, bitrate)

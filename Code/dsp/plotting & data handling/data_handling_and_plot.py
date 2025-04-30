@@ -882,6 +882,7 @@ def analyze_invalid_transmissions(csv_path):
     """
     # Load CSV
     df = pd.read_csv(csv_path)
+    df = df[df["Original Message"] != ("U" * 12)]
 
     # Compute number of invalid transmissions per message
     invalid_transmissions = (
@@ -949,3 +950,4 @@ if __name__ == "__main__":
     ## NOTE: use below to find the best carrier freq at 5 meters
     file_path = "1m_distance_payload_barker_similarity_impact.csv"
     results = analyze_ber_by_carrier_freq(file_path, test_description="Testing: testing impact of similarlity of payloads and barker 13")
+    # results = analyze_invalid_transmissions(file_path)
