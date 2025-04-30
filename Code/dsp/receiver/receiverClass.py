@@ -6,6 +6,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import scipy.signal as signal
 import config
+# import config
 from config import (
     APPLY_AVERAGING_PREAMBLE,
     APPLY_BAKER_PREAMBLE,
@@ -15,6 +16,7 @@ from config import (
     PATH_TO_WAV_FILE,
     SAMPLE_RATE,
     PLOT_PREAMBLE_CORRELATION,
+    IS_ID_SPECIFIED
 )
 
 from encoding.hamming_codes import hamming_decode
@@ -188,6 +190,13 @@ class Receiver:
             # else: # NOTE: all invalid characters will instead be "-", instead of just whitespace
             #     message += "-"
         return message
+    def plot_wave_in_time_domain(self, wave, l: str, ax=None, color="orange"):
+        if ax is None:
+            ax = plt.gca()
+
+        time_array = np.arange(len(wave)) / config.SAMPLE_RATE
+        ax.plot(time_array, wave, color=color, label=l, alpha=0.5)
+        plt.grid(True)
 
     def plot_simulation_steps(self):
         if self.wav_signal is None:
@@ -202,6 +211,8 @@ class Receiver:
 
         # Use the new visualization function
         fig = create_processing_visualization(self, message, debug_info)
+            # Plot time domain signals
+        # fig = self.plot_wave_in_time_domain(self.wav_signal, "Received", color="g")
         plt.show()
         return fig
 
@@ -314,7 +325,7 @@ class CoherentReceiver(Receiver):
 # Example usage
 if __name__ == "__main__":
     # Hilbert method
-    hilbert_receiver = NonCoherentReceiver.from_wav_file(PATH_TO_WAV_FILE)
+    hilbert_receiver = NonCoherentReceiver.from_wav_file(f"Code/dsp/data/raw_data/{IS_ID_SPECIFIED}.wav")
     message, debug = hilbert_receiver.decode()
     print("Hilbert Decoded:", message)
     hilbert_receiver.plot_simulation_steps()

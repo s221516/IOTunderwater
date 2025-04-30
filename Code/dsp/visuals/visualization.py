@@ -61,8 +61,7 @@ def create_processing_visualization(receiver, message, debug_info):
     # Check receiver type by looking at debug_info keys
     is_non_coherent = "envelope" in debug_info
 
-    # Plot time domain signals
-    plot_wave_in_time_domain(receiver.wav_signal, "Received", ax=ax1, color="g")
+    # plot_wave_in_time_domain(receiver.wav_signal, "Received", ax=ax1, color="g")
 
     if is_non_coherent:
         # NonCoherentReceiver plots
