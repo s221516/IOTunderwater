@@ -53,6 +53,28 @@ void string_to_bits(const char* str, int** bits, int* length) {
     }
 }
 
+void prepend_barker13(int** bits, int* length) {
+    int barker13[] = {1, 1, 1, 1, 1, 0, 0, 1, 1, 0, 1, 0, 1};
+    int barker_len = sizeof(barker13) / sizeof(barker13[0]);
+
+    int new_length = *length + barker_len;
+    *bits = realloc(*bits, new_length * sizeof(int));
+    if (*bits == NULL) {
+        ESP_LOGE("prepend_barker13", "Failed to realloc bits buffer.");
+        return;
+    }
+
+    for (int i = *length - 1; i >= 0; i--) {
+        (*bits)[i + barker_len] = (*bits)[i];
+    }
+
+    for (int i = 0; i < barker_len; i++) {
+        (*bits)[i] = barker13[i];
+    }
+
+    *length = new_length;
+}
+
 void create_scaled_carrier_symbol(int* buffer, float amplitude_scale) {
     float last_val = 0;
     int zero_crossing_index = samples_per_symbol - 1;
@@ -98,10 +120,11 @@ void send_signal() {
     int* message_bits = NULL;
     int message_length = 0;
     string_to_bits(message, &message_bits, &message_length);
-
+    prepend_barker13(&message_bits, &message_length);
     samples_per_symbol = roundf(sample_rate / bit_rate);
     int* symbol_one = malloc(samples_per_symbol * sizeof(int));
     int* symbol_zero = malloc(samples_per_symbol * sizeof(int));
+
     
     if (!symbol_one || !symbol_zero) {
         ESP_LOGE("main", "Failed to allocate symbol buffers.");
