@@ -2,9 +2,8 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import pandas as pd
 import glob
-import os
 import re
-
+import numpy as np
 
 def compute_ber(file_path):
     """
@@ -683,7 +682,7 @@ def analyze_bit_flips_from_csv(file_path, id):
     except Exception as e:
         print(f"Error analyzing transmission {id}: {str(e)}")
 
-def analyze_ber_by_carrier_freq(file_path, test_description="Testing: testing impact of similarlity of payloads and barker 13"):
+def analyze_ber_by_carrier_freq(file_path, dist, bitrate, transmitter, test_description="Testing: testing impact of similarlity of payloads and barker 13"):
     """
     Analyze BER for each carrier frequency at 500 cm distance for a specific test description
     
@@ -697,9 +696,6 @@ def analyze_ber_by_carrier_freq(file_path, test_description="Testing: testing im
     # Read the CSV file
     df = pd.read_csv(file_path)
     
-    global dist
-    dist = 100
-    bitrate = 500
     # if dist == 500:
     #     test_description = "Testing: At 5 m now testing for frequency sweep again for power average and BER, keeping stick exactly the same place for next test"
     # else:
@@ -709,6 +705,7 @@ def analyze_ber_by_carrier_freq(file_path, test_description="Testing: testing im
     df = df[df['Test description'] == test_description]
     df = df[df['Distance to speaker'] == dist]
     df = df[df['Bitrate'] == bitrate]
+    df = df[df['Transmitter'] == transmitter]
     
     if len(df) == 0:
         print(f"No data found for test description: {test_description}")
@@ -759,7 +756,7 @@ def analyze_ber_by_carrier_freq(file_path, test_description="Testing: testing im
         })
         
         # Print results for verification
-        print(f"\nCarrier Frequency: {carrier_freq} Hz at 500 cm")
+        print(f"\nCarrier Frequency: {carrier_freq} Hz at {dist} cm")
         print(f"Test description: {test_description}")
         print(f"Total transmissions: {total_entries}")
         print(f"Average signal power: {group['Average Power of signal'].mean():.2f}")
@@ -910,21 +907,10 @@ def analyze_invalid_transmissions(csv_path):
 
     return result
 
-
-import pandas as pd
-import matplotlib.pyplot as plt
-
-import pandas as pd
-import matplotlib.pyplot as plt
-
-import pandas as pd
-import matplotlib.pyplot as plt
-
-def plot_power_vs_distance_by_frequency(csv_path, min_freq_khz, max_freq_khz):
+def plot_power_vs_distance_by_frequency(csv_path, min_freq_khz, max_freq_khz, test_descript):
     """
-    Reads a CSV file, filters for a specific test description,
-    and for each unique carrier frequency within a given range (in kHz),
-    plots Distance vs Average Power.
+    Reads a CSV file and plots Distance vs Average Power for all carrier frequencies
+    in the same plot with different colors.
 
     Parameters:
     - csv_path: path to the CSV file.
@@ -935,7 +921,7 @@ def plot_power_vs_distance_by_frequency(csv_path, min_freq_khz, max_freq_khz):
     df = pd.read_csv(csv_path)
     
     # Filter for the specific test description
-    mask = df['Test description'] == 'Testing: Average power purely for check of interference'
+    mask = df['Test description'] == test_descript
     filtered_df = df[mask]
 
     # Further filter by the frequency range in kHz
@@ -945,33 +931,51 @@ def plot_power_vs_distance_by_frequency(csv_path, min_freq_khz, max_freq_khz):
     ]
 
     # Get all unique frequencies in that range
-    frequencies = freq_filtered_df['Carrier Frequency'].unique()
+    frequencies = sorted(freq_filtered_df['Carrier Frequency'].unique())
 
     if len(frequencies) == 0:
-        print(f"No carrier frequencies found in the range {min_freq_khz}–{max_freq_khz} kHz.")
+        print(f"No carrier frequencies found in the range {min_freq_khz}–{max_freq_khz} Hz.")
         return
 
-    # Plot each frequency's data in a separate figure
-    for freq in sorted(frequencies):
+    # Create color map for different frequencies
+    colors = plt.cm.rainbow(np.linspace(0, 1, len(frequencies)))
+    
+    # Create single large figure
+    plt.figure(figsize=(15, 10))
+
+    # Plot data for each frequency
+    for freq, color in zip(frequencies, colors):
         subset = freq_filtered_df[freq_filtered_df['Carrier Frequency'] == freq]
-        subset_sorted = subset.sort_values('Distance to speaker')
+        
+        # Group by distance and calculate mean power
+        avg_power = subset.groupby('Distance to speaker')['Average Power of signal'].agg(['mean']).reset_index()
+        avg_power_sorted = avg_power.sort_values('Distance to speaker')
+        
+        # Print intermediate values
+        print(f"\nCarrier Frequency: {freq} Hz")
+        print("Distance (cm) | Mean Power")
+        print("-" * 30)
+        for _, row in avg_power_sorted.iterrows():
+            print(f"{row['Distance to speaker']:11.0f} | {row['mean']:10.2f}")
 
-        plt.figure()
+        # Plot averaged points
         plt.plot(
-            subset_sorted['Distance to speaker'],
-            subset_sorted['Average Power of signal'],
-            marker='o',
-            label=f'{freq} kHz'
+            avg_power_sorted['Distance to speaker'],
+            avg_power_sorted['mean'],
+            'o-',
+            color=color,
+            label=f'{freq} Hz',
+            markersize=8,
+            alpha=0.9
         )
-        plt.title(f'Average Power vs. Distance\n(Carrier Frequency = {freq} kHz)')
-        plt.xlabel('Distance to speaker (meters)')
-        plt.ylabel('Average Power of signal (dBm)')
-        plt.legend()
-        plt.grid(True)
-        plt.tight_layout()
-        plt.show()
 
-
+    plt.title('Average Power vs. Distance for Different Carrier Frequencies')
+    plt.xlabel('Distance to speaker (cm)')
+    plt.ylabel('Average Power of signal')
+    plt.legend(bbox_to_anchor=(1.05, 1), loc='upper left')
+    plt.grid(True, linestyle='--', alpha=0.7)
+    plt.tight_layout()
+    plt.show()
 
 
 
@@ -1010,12 +1014,23 @@ if __name__ == "__main__":
     # id_to_analyze = "01befded-cf21-4380-bb04-8a9f9de48385"
     # analyze_bit_flips_from_csv("Received_data_for_tests.csv", id_to_analyze)
 
-    ## NOTE: use below to find the best carrier freq at 5 meters
 
+    ## NOTE: below file is for SG
+    file_path = "Average_power_of_received_signal.csv"
+    ## NOTE: below file is for ESP
+    # file_path = "avg_power_of_rec_signal_purely_for_check_of_interference.csv"
 
-    file_path = "1m_distance_payload_barker_similarity_impact.csv"
-    file_path = "avg_power_of_rec_signal_purely_for_check_of_interference.csv"
-    plot_power_vs_distance_by_frequency(file_path, 1000, 5000)
+    df = pd.read_csv(file_path)
+    print(df["Test description"].unique())
+    dist = 100
+    bitrate = 500
+    transmitter = "SG"
+    results_df = analyze_ber_by_carrier_freq(file_path, dist, bitrate, transmitter, "Testing: average power of a signal")
 
+    # plot_power_vs_distance_by_frequency(file_path, 2000, 10000, "Testing: average power of a signal")
+    
+    # plot_carrier_freq_analysis(results_df, "Testing: average power of a signal")
     #results = analyze_ber_by_carrier_freq(file_path, test_description="Testing: testing impact of similarlity of payloads and barker 13")
     # results = analyze_invalid_transmissions(file_path)
+
+    

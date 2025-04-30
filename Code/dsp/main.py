@@ -93,16 +93,17 @@ def transmit_signal():
     #  'Oi67/(~V8]w,x',
     #  'N(#-c~nC(^v>A',
     # ]
-    n = 25
+    n = 5
     
-    bitrates = [1000] * n
+    bitrates = [500] * n
 
-    carrierfreqs = np.arange(2000, 30000, 1000)
-    
+    carrierfreqs = np.arange(1000, 30000, 1000)
+    # carrierfreqs = [6000, 9000, 10000, 12000, 14000, 15000, 20000]
+
     global test_description
-    # test_description = f"Testing : average power of a signal"
+    test_description = f"Testing: average power of a signal"
     # test_description = f"Testing: does sending a message with a low correlation < 3 to barker 13 make a diffence?"
-    test_description = f"Testing: varying payloads of size 100 on 1m dist and max marker correlation 0f 6"
+    # test_description = f"Testing: testing signal generator with varying VPP. current VPP: 10"
 
     global speaker_depth
     speaker_depth = 200  # in cm
@@ -115,17 +116,22 @@ def transmit_signal():
             config.set_bitrate(bitrate)
             for carrierfreq in carrierfreqs:
                 config.set_carrierfreq(carrierfreq)
-                message = generatePayload.generate_payload(payload)
-                # message = "U" * 12
+                # message = generatePayload.generate_payload(payload)
+                message = "U" * 12
                 # create unique id for each test
-                print(f"Transmitting message: {message}")
+                # print(f"Transmitting message: {message}")
                 id = create_id()
                 transmitter.transmit(message, carrierfreq, bitrate)
                 record_seconds = transmitter.calculate_transmission_time(message)
 
+                if not config.USE_ESP:
+                    time.sleep(1)
+
                 print(f"Recording for: {record_seconds} seconds")
                 create_wav_file_from_recording(record_seconds, name=id)
                 print("Recording done")
+
+                time.sleep(0.3)
                     
                 # NOTE: If distance to speaker is too long add a sleep time here
                 # time.sleep(2)
@@ -152,9 +158,9 @@ def process_signal_for_chat():
 
 def process_signal_for_testing(message, id):
 
-    print(f"Carrier frequency: {config.CARRIER_FREQ}")
-    print(f"Bitrate: {config.BIT_RATE}")
-    print(f"id is specfied : {config.IS_ID_SPECIFIED == id}")
+    # print(f"Carrier frequency: {config.CARRIER_FREQ}")
+    # print(f"Bitrate: {config.BIT_RATE}")
+    # print(f"id is specfied : {config.IS_ID_SPECIFIED == id}")
     len_of_data_bits = compute_len_of_bits(message)
     nonCoherentReceiver = NonCoherentReceiver(id, band_pass = False)
     nonCoherentReceiver.set_len_of_data_bits(len_of_data_bits)
@@ -163,7 +169,7 @@ def process_signal_for_testing(message, id):
 
     try:
         message_nc, debug_nc = nonCoherentReceiver.decode()
-        nonCoherentReceiver.plot_simulation_steps()
+        # nonCoherentReceiver.plot_simulation_steps()
     except PreambleNotFoundError:
         message_nc = "No preamble found"
         debug_nc = {}
@@ -173,7 +179,7 @@ def process_signal_for_testing(message, id):
 
     try:
         message_nc_bandpass, debug_nc_bandpass = nonCoherentReceiverWithBandPass.decode()
-        nonCoherentReceiverWithBandPass.plot_simulation_steps()
+        # nonCoherentReceiverWithBandPass.plot_simulation_steps()
     except PreambleNotFoundError:
         message_nc_bandpass = "No preamble found"
         debug_nc_bandpass = {}
@@ -223,12 +229,12 @@ if __name__ == "__main__":
     
     
     if config.IS_ID_SPECIFIED == None:
-        
-        isWaterThePool = False
+
+        isWaterThePool = True
         transmit_signal()
 
     else:
-        df = pd.read_csv("Received_data_for_tests.csv", sep=",")
+        df = pd.read_csv("Average_power_of_received_signal.csv", sep=",")
         print(df.columns)
         original_message = df[df["ID"] == config.IS_ID_SPECIFIED]["Original Message"].values[0]
         decoded_message_without_bandpass = df[df["ID"] == config.IS_ID_SPECIFIED]["Decoded without bandpass"].values[0]
