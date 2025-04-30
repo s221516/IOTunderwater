@@ -93,33 +93,35 @@ def transmit_signal():
     #  'Oi67/(~V8]w,x',
     #  'N(#-c~nC(^v>A',
     # ]
-    n = 10
+    n = 35
     
-    bitrates = [100] * n
+    bitrates = [500] * n
 
     # carrierfreqs = np.arange(1000, 30000, 1000)
-    carrierfreqs = [2000]
+    carrierfreqs = [15000]
     # carrierfreqs = [6000, 9000, 10000, 12000, 14000, 15000, 20000]
 
     global test_description
     # test_description = f"Testing: average power of a signal"
     # test_description = f"Testing: does sending a message with a low correlation < 3 to barker 13 make a diffence?"
-    # test_description = f"Testing: testing signal generator with varying VPP. current VPP: 10"
-    test_description = f"Testing: TESTING ESP"
+    test_description = f"Testing: testing signal generator with varying VPP. current VPP: 0.25"
+    # test_description = f"Testing: TESTING ESP"
 
     global speaker_depth
     speaker_depth = 200  # in cm
 
     global distance_to_speaker
-    distance_to_speaker = 50  # in cm
+    distance_to_speaker = 100  # in cm
 
     for payload in payload_sizes:
         for bitrate in bitrates:
             config.set_bitrate(bitrate)
             for carrierfreq in carrierfreqs:
                 config.set_carrierfreq(carrierfreq)
+
                 # message = generatePayload.generate_payload(payload)
                 message = "U" * 12
+
                 # create unique id for each test
                 # print(f"Transmitting message: {message}")
                 id = create_id()
@@ -171,7 +173,7 @@ def process_signal_for_testing(message, id):
 
     try:
         message_nc, debug_nc = nonCoherentReceiver.decode()
-        nonCoherentReceiver.plot_simulation_steps()
+        # nonCoherentReceiver.plot_simulation_steps()
     except PreambleNotFoundError:
         message_nc = "No preamble found"
         debug_nc = {}

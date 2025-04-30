@@ -33,7 +33,7 @@ def set_carrierfreq(value):
     CARRIER_FREQ = value
 
 
-TRANSMITTER_PORT = "COM12"
+TRANSMITTER_PORT = "COM11"
 # TRANSMITTER_PORT = "/dev/cu.usbserial-0232D158"
 SAMPLE_RATE = 96000  # this capped by the soundcard, therefore, this is non-changeable
 
@@ -50,14 +50,14 @@ APPLY_BAKER_PREAMBLE = True
 APPLY_AVERAGING_PREAMBLE = False
 
 MIC_INDEX = 1 # Mathias, 1 Morten
-USE_ESP = True
+USE_ESP = False
 PLOT_PREAMBLE_CORRELATION = False
 PATH_TO_WAV_FILE = "Code/dsp/data/testing_and_logging_recording.wav"
 # FILE_NAME_DATA_TESTS = "Received_data_for_tests.csv"
 # FILE_NAME_DATA_TESTS = "Average_power_of_received_signal.csv"
 # FILE_NAME_DATA_TESTS = "5m_dist_10kHz_unique_payloads.csv"
 # FILE_NAME_DATA_TESTS = "1m_distance_payload_barker_similarity_impact.csv"
-FILE_NAME_DATA_TESTS = "1m_distance_checking_carrierfreq_esp_and_sg.csv"
+FILE_NAME_DATA_TESTS = "1m_distance_carrier_freq_sg_vpp_variable.csv"
 
 HAMMING_CODING = False
 CONVOLUTIONAL_CODING = False

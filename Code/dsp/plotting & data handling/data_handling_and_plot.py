@@ -977,6 +977,130 @@ def plot_power_vs_distance_by_frequency(csv_path, min_freq_khz, max_freq_khz, te
     plt.tight_layout()
     plt.show()
 
+def compute_ber_for_different_vpps(file_path):
+    """
+    Compute BER for different VPP values from test data and plot the results
+    
+    Args:
+        file_path (str): Path to CSV file
+        
+    Returns:
+        pd.DataFrame: DataFrame with columns [VPP, BER_No_BP, BER_With_BP, Valid_Transmissions]
+    """
+    # Read CSV file
+    df = pd.read_csv(file_path)
+    
+    # Extract VPP from test description using regex
+    df['VPP'] = df['Test description'].str.extract(r'VPP: (\d+)').astype(float)
+    
+    results = []
+    message_length = 96  # Length of message in bits
+    
+    # Group by VPP
+    for vpp, group in df.groupby('VPP'):
+        total_transmissions = len(group)
+        
+        # Count invalid transmissions (no preamble found)
+        invalid_no_bp = group[group['Decoded without bandpass'] == 'No preamble found'].shape[0]
+        invalid_bp = group[group['Decoded with bandpass'] == 'No preamble found'].shape[0]
+        
+        # Without bandpass
+        valid_no_bp = group[group['Decoded without bandpass'] != 'No preamble found']
+        total_bits_no_bp = len(valid_no_bp) * message_length
+        total_errors_no_bp = pd.to_numeric(valid_no_bp['Hamming Dist without bandpass'], errors='coerce').sum()
+        
+        # With bandpass
+        valid_bp = group[group['Decoded with bandpass'] != 'No preamble found']
+        total_bits_bp = len(valid_bp) * message_length
+        total_errors_bp = pd.to_numeric(valid_bp['Hamming Dist with bandpass'], errors='coerce').sum()
+        
+        # Calculate BER
+        ber_no_bp = (total_errors_no_bp / total_bits_no_bp * 100) if total_bits_no_bp > 0 else 100
+        ber_bp = (total_errors_bp / total_bits_bp * 100) if total_bits_bp > 0 else 100
+        
+        results.append({
+            'VPP': vpp,
+            'BER_No_BP': ber_no_bp,
+            'BER_With_BP': ber_bp,
+            'Invalid_No_BP': invalid_no_bp,
+            'Invalid_BP': invalid_bp,
+            'Valid_Transmissions_No_BP': len(valid_no_bp),
+            'Valid_Transmissions_BP': len(valid_bp),
+            'Total_Transmissions': total_transmissions,
+            'Average_Power': group['Average Power of signal'].mean()
+        })
+    
+    # Create DataFrame and sort by VPP
+    results_df = pd.DataFrame(results).sort_values('VPP')
+    
+    fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(12, 10))
+    
+    # Plot BER vs VPP
+    ax1.plot(results_df['VPP'], results_df['BER_No_BP'], 'ro-', label='Without Bandpass', markersize=8)
+    ax1.plot(results_df['VPP'], results_df['BER_With_BP'], 'bo-', label='With Bandpass', markersize=8)
+    
+    # Add bars for invalid transmissions
+    bar_width = 0.2
+    ax1_twin = ax1.twinx()
+    ax1_twin.bar(results_df['VPP'] - bar_width/2, results_df['Invalid_No_BP'], 
+                 width=bar_width, alpha=0.3, color='red', label='Invalid (No BP)')
+    ax1_twin.bar(results_df['VPP'] + bar_width/2, results_df['Invalid_BP'], 
+                 width=bar_width, alpha=0.3, color='blue', label='Invalid (BP)')
+    
+    # Add value labels for BER
+    for x, y1, y2 in zip(results_df['VPP'], results_df['BER_No_BP'], results_df['BER_With_BP']):
+        ax1.annotate(f'{y1:.1f}%', (x, y1), textcoords="offset points",
+                    xytext=(0, 10), ha='center', color='red')
+        ax1.annotate(f'{y2:.1f}%', (x, y2), textcoords="offset points",
+                    xytext=(0, -15), ha='center', color='blue')
+    
+    # Add value labels for invalid transmissions
+    for x, y1, y2 in zip(results_df['VPP'], results_df['Invalid_No_BP'], results_df['Invalid_BP']):
+        if y1 > 0:
+            ax1_twin.annotate(f'{int(y1)}', (x - bar_width/2, y1), textcoords="offset points",
+                            xytext=(0, 5), ha='center', color='darkred')
+        if y2 > 0:
+            ax1_twin.annotate(f'{int(y2)}', (x + bar_width/2, y2), textcoords="offset points",
+                            xytext=(0, 5), ha='center', color='darkblue')
+    
+    # Set x-axis ticks for each VPP value
+    vpp_values = sorted(results_df['VPP'].unique())
+    ax1.set_xticks(vpp_values)
+    ax1.set_xticklabels([f'{int(vpp)}' for vpp in vpp_values])
+    
+    ax1.set_xlabel('VPP')
+    ax1.set_ylabel('Bit Error Rate (%)')
+    ax1_twin.set_ylabel('Invalid Transmissions')
+    ax1.set_title('BER vs VPP with Invalid Transmissions')
+    ax1.grid(True, linestyle='--', alpha=0.7)
+    
+    # Combine legends from both axes
+    lines1, labels1 = ax1.get_legend_handles_labels()
+    lines2, labels2 = ax1_twin.get_legend_handles_labels()
+    ax1.legend(lines1 + lines2, labels1 + labels2, loc='upper right')
+    
+    # Plot Average Power vs VPP
+    ax2.plot(results_df['VPP'], results_df['Average_Power'], 'go-', label='Average Power', markersize=8)
+    
+    # Add value labels for power
+    for x, y in zip(results_df['VPP'], results_df['Average_Power']):
+        ax2.annotate(f'{y:.1f}', (x, y), textcoords="offset points",
+                    xytext=(0, 10), ha='center', color='green')
+    
+    # Set x-axis ticks for each VPP value in power plot
+    ax2.set_xticks(vpp_values)
+    ax2.set_xticklabels([f'{int(vpp)}' for vpp in vpp_values])
+    
+    ax2.set_xlabel('VPP')
+    ax2.set_ylabel('Average Power')
+    ax2.set_title('Average Power vs VPP')
+    ax2.grid(True, linestyle='--', alpha=0.7)
+    ax2.legend()
+    
+    plt.tight_layout()
+    plt.show()
+    
+    return results_df
 
 
 if __name__ == "__main__":  
@@ -1015,22 +1139,29 @@ if __name__ == "__main__":
     # analyze_bit_flips_from_csv("Received_data_for_tests.csv", id_to_analyze)
 
 
-    ## NOTE: below file is for SG
-    file_path = "Average_power_of_received_signal.csv"
-    ## NOTE: below file is for ESP
-    # file_path = "avg_power_of_rec_signal_purely_for_check_of_interference.csv"
+    # ## NOTE: below file is for SG
+    # file_path = "Average_power_of_received_signal.csv"
+    # ## NOTE: below file is for ESP
+    # # file_path = "avg_power_of_rec_signal_purely_for_check_of_interference.csv"
 
-    df = pd.read_csv(file_path)
-    print(df["Test description"].unique())
-    dist = 100
-    bitrate = 500
-    transmitter = "SG"
-    results_df = analyze_ber_by_carrier_freq(file_path, dist, bitrate, transmitter, "Testing: average power of a signal")
+    # df = pd.read_csv(file_path)
+    # print(df["Test description"].unique())
+    # dist = 100
+    # bitrate = 500
+    # transmitter = "SG"
+    # # "Testing: Average power purely for check of interference"
+    # results_df = analyze_ber_by_carrier_freq(file_path, dist, bitrate, transmitter, "Testing: average power of a signal")
 
     # plot_power_vs_distance_by_frequency(file_path, 2000, 10000, "Testing: average power of a signal")
     
+
+    test_file = "1m_distance_carrier_freq_sg_vpp_variable.csv"
+    result_df = compute_ber_for_different_vpps(test_file)
+
     # plot_carrier_freq_analysis(results_df, "Testing: average power of a signal")
     #results = analyze_ber_by_carrier_freq(file_path, test_description="Testing: testing impact of similarlity of payloads and barker 13")
     # results = analyze_invalid_transmissions(file_path)
+
+
 
     
