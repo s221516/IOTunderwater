@@ -991,8 +991,7 @@ def compute_ber_for_different_vpps(file_path):
     df = pd.read_csv(file_path)
     
     # Extract VPP from test description using regex
-    df['VPP'] = df['Test description'].str.extract(r'VPP: (\d+)').astype(float)
-    
+    df['VPP'] = df['Test description'].str.extract(r'VPP: (\d*\.?\d+)').astype(float)    
     results = []
     message_length = 96  # Length of message in bits
     
@@ -1033,29 +1032,33 @@ def compute_ber_for_different_vpps(file_path):
     # Create DataFrame and sort by VPP
     results_df = pd.DataFrame(results).sort_values('VPP')
     
+    # Create evenly spaced positions for plotting
+    vpp_positions = np.arange(len(results_df))
+    
+    # Create figure with two subplots
     fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(12, 10))
     
     # Plot BER vs VPP
-    ax1.plot(results_df['VPP'], results_df['BER_No_BP'], 'ro-', label='Without Bandpass', markersize=8)
-    ax1.plot(results_df['VPP'], results_df['BER_With_BP'], 'bo-', label='With Bandpass', markersize=8)
+    ax1.plot(vpp_positions, results_df['BER_No_BP'], 'ro-', label='Without Bandpass', markersize=8)
+    ax1.plot(vpp_positions, results_df['BER_With_BP'], 'bo-', label='With Bandpass', markersize=8)
     
     # Add bars for invalid transmissions
     bar_width = 0.2
     ax1_twin = ax1.twinx()
-    ax1_twin.bar(results_df['VPP'] - bar_width/2, results_df['Invalid_No_BP'], 
+    ax1_twin.bar(vpp_positions - bar_width/2, results_df['Invalid_No_BP'], 
                  width=bar_width, alpha=0.3, color='red', label='Invalid (No BP)')
-    ax1_twin.bar(results_df['VPP'] + bar_width/2, results_df['Invalid_BP'], 
+    ax1_twin.bar(vpp_positions + bar_width/2, results_df['Invalid_BP'], 
                  width=bar_width, alpha=0.3, color='blue', label='Invalid (BP)')
     
     # Add value labels for BER
-    for x, y1, y2 in zip(results_df['VPP'], results_df['BER_No_BP'], results_df['BER_With_BP']):
+    for x, y1, y2 in zip(vpp_positions, results_df['BER_No_BP'], results_df['BER_With_BP']):
         ax1.annotate(f'{y1:.1f}%', (x, y1), textcoords="offset points",
                     xytext=(0, 10), ha='center', color='red')
         ax1.annotate(f'{y2:.1f}%', (x, y2), textcoords="offset points",
                     xytext=(0, -15), ha='center', color='blue')
     
     # Add value labels for invalid transmissions
-    for x, y1, y2 in zip(results_df['VPP'], results_df['Invalid_No_BP'], results_df['Invalid_BP']):
+    for x, y1, y2 in zip(vpp_positions, results_df['Invalid_No_BP'], results_df['Invalid_BP']):
         if y1 > 0:
             ax1_twin.annotate(f'{int(y1)}', (x - bar_width/2, y1), textcoords="offset points",
                             xytext=(0, 5), ha='center', color='darkred')
@@ -1063,10 +1066,9 @@ def compute_ber_for_different_vpps(file_path):
             ax1_twin.annotate(f'{int(y2)}', (x + bar_width/2, y2), textcoords="offset points",
                             xytext=(0, 5), ha='center', color='darkblue')
     
-    # Set x-axis ticks for each VPP value
-    vpp_values = sorted(results_df['VPP'].unique())
-    ax1.set_xticks(vpp_values)
-    ax1.set_xticklabels([f'{int(vpp)}' for vpp in vpp_values])
+    # Set x-axis ticks with VPP values
+    ax1.set_xticks(vpp_positions)
+    ax1.set_xticklabels([f'{vpp}' for vpp in results_df['VPP']])
     
     ax1.set_xlabel('VPP')
     ax1.set_ylabel('Bit Error Rate (%)')
@@ -1080,16 +1082,16 @@ def compute_ber_for_different_vpps(file_path):
     ax1.legend(lines1 + lines2, labels1 + labels2, loc='upper right')
     
     # Plot Average Power vs VPP
-    ax2.plot(results_df['VPP'], results_df['Average_Power'], 'go-', label='Average Power', markersize=8)
+    ax2.plot(vpp_positions, results_df['Average_Power'], 'go-', label='Average Power', markersize=8)
     
     # Add value labels for power
-    for x, y in zip(results_df['VPP'], results_df['Average_Power']):
+    for x, y in zip(vpp_positions, results_df['Average_Power']):
         ax2.annotate(f'{y:.1f}', (x, y), textcoords="offset points",
                     xytext=(0, 10), ha='center', color='green')
     
-    # Set x-axis ticks for each VPP value in power plot
-    ax2.set_xticks(vpp_values)
-    ax2.set_xticklabels([f'{int(vpp)}' for vpp in vpp_values])
+    # Set x-axis ticks for power plot
+    ax2.set_xticks(vpp_positions)
+    ax2.set_xticklabels([f'{vpp}' for vpp in results_df['VPP']])
     
     ax2.set_xlabel('VPP')
     ax2.set_ylabel('Average Power')
@@ -1133,11 +1135,9 @@ if __name__ == "__main__":
     # #             "Code/dsp/data/plastic/esp_plastic_testing_v4_cf6000_100-300bps, 5sd, 5ds.csv"]
     # plot_ber_comparison_across_files(file_paths)
 
-    # NOTE: use below to compute bit flip tendency of a given wav file - will compute for all_data_bits, raises an error
-    # if the length of the received does not match the length of the transmitted
-    # id_to_analyze = "01befded-cf21-4380-bb04-8a9f9de48385"
-    # analyze_bit_flips_from_csv("Received_data_for_tests.csv", id_to_analyze)
-
+    # NOTE: use below to compute bit flip tendency of a given wav file
+    id_to_analyze = "41af8091-ff03-4f17-8567-470ce7141dd2"
+    analyze_bit_flips_from_csv("5m_dist_10kHz_unique_payloads.csv", id_to_analyze)
 
     # ## NOTE: below file is for SG
     # file_path = "Average_power_of_received_signal.csv"
@@ -1154,9 +1154,9 @@ if __name__ == "__main__":
 
     # plot_power_vs_distance_by_frequency(file_path, 2000, 10000, "Testing: average power of a signal")
     
-
-    test_file = "1m_distance_carrier_freq_sg_vpp_variable.csv"
-    result_df = compute_ber_for_different_vpps(test_file)
+    # # NOTE: below is for the vpp test
+    # test_file = "1m_distance_carrier_freq_sg_vpp_variable.csv"
+    # result_df = compute_ber_for_different_vpps(test_file)
 
     # plot_carrier_freq_analysis(results_df, "Testing: average power of a signal")
     #results = analyze_ber_by_carrier_freq(file_path, test_description="Testing: testing impact of similarlity of payloads and barker 13")
