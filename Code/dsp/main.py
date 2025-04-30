@@ -93,23 +93,25 @@ def transmit_signal():
     #  'Oi67/(~V8]w,x',
     #  'N(#-c~nC(^v>A',
     # ]
-    n = 5
+    n = 10
     
-    bitrates = [500] * n
+    bitrates = [100] * n
 
-    carrierfreqs = np.arange(1000, 30000, 1000)
+    # carrierfreqs = np.arange(1000, 30000, 1000)
+    carrierfreqs = [2000]
     # carrierfreqs = [6000, 9000, 10000, 12000, 14000, 15000, 20000]
 
     global test_description
-    test_description = f"Testing: average power of a signal"
+    # test_description = f"Testing: average power of a signal"
     # test_description = f"Testing: does sending a message with a low correlation < 3 to barker 13 make a diffence?"
     # test_description = f"Testing: testing signal generator with varying VPP. current VPP: 10"
+    test_description = f"Testing: TESTING ESP"
 
     global speaker_depth
     speaker_depth = 200  # in cm
 
     global distance_to_speaker
-    distance_to_speaker = 100  # in cm
+    distance_to_speaker = 50  # in cm
 
     for payload in payload_sizes:
         for bitrate in bitrates:
@@ -131,7 +133,7 @@ def transmit_signal():
                 create_wav_file_from_recording(record_seconds, name=id)
                 print("Recording done")
 
-                time.sleep(0.3)
+                # time.sleep(0.3)
                     
                 # NOTE: If distance to speaker is too long add a sleep time here
                 # time.sleep(2)
@@ -169,7 +171,7 @@ def process_signal_for_testing(message, id):
 
     try:
         message_nc, debug_nc = nonCoherentReceiver.decode()
-        # nonCoherentReceiver.plot_simulation_steps()
+        nonCoherentReceiver.plot_simulation_steps()
     except PreambleNotFoundError:
         message_nc = "No preamble found"
         debug_nc = {}
