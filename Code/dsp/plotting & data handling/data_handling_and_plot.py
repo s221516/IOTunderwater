@@ -699,7 +699,7 @@ def analyze_ber_by_carrier_freq(file_path, test_description="Testing: testing im
     
     global dist
     dist = 100
-    bitrate = 500
+    bitrate = 2000
     # if dist == 500:
     #     test_description = "Testing: At 5 m now testing for frequency sweep again for power average and BER, keeping stick exactly the same place for next test"
     # else:
@@ -1014,8 +1014,8 @@ if __name__ == "__main__":
 
 
     file_path = "1m_distance_payload_barker_similarity_impact.csv"
-    file_path = "avg_power_of_rec_signal_purely_for_check_of_interference.csv"
-    plot_power_vs_distance_by_frequency(file_path, 1000, 5000)
+    # file_path = "avg_power_of_rec_signal_purely_for_check_of_interference.csv"
+    # plot_power_vs_distance_by_frequency(file_path, 1000, 5000)
 
-    #results = analyze_ber_by_carrier_freq(file_path, test_description="Testing: testing impact of similarlity of payloads and barker 13")
-    # results = analyze_invalid_transmissions(file_path)
+    results = analyze_ber_by_carrier_freq(file_path, test_description="Testing: varying payloads of size 100 on 1m dist and max marker correlation 0f 6")
+    results = analyze_invalid_transmissions(file_path)
