@@ -163,7 +163,7 @@ def process_signal_for_testing(message, id):
 
     try:
         message_nc, debug_nc = nonCoherentReceiver.decode()
-        # noncoherent_receiver.plot_simulation_steps()
+        nonCoherentReceiver.plot_simulation_steps()
     except PreambleNotFoundError:
         message_nc = "No preamble found"
         debug_nc = {}
@@ -173,7 +173,7 @@ def process_signal_for_testing(message, id):
 
     try:
         message_nc_bandpass, debug_nc_bandpass = nonCoherentReceiverWithBandPass.decode()
-        # nonCoherentReceiverWithBandPass.plot_simulation_steps()
+        nonCoherentReceiverWithBandPass.plot_simulation_steps()
     except PreambleNotFoundError:
         message_nc_bandpass = "No preamble found"
         debug_nc_bandpass = {}
