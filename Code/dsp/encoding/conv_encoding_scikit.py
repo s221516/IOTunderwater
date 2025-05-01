@@ -1,7 +1,9 @@
 import commpy.channelcoding.convcode as cc
+import scipy.signal as signal
 import numpy as np
 import matplotlib.pyplot as plt
 import networkx as nx
+from .. import config
 
 def string_to_bits(string_input):
     """Convert a string to a numpy array of bits"""
@@ -370,3 +372,17 @@ if __name__ == "__main__":
     # results = find_dfree(message=MESSAGE, max_errors=10, trellis=trellis)
 
     plot_trellis_diagram(5)  # Show 5 stages
+    # msg = "}VvF*E@9>-go*" # 3
+    # msg = "+,M4J1ABraRJ&" # 4
+    # msg = "i3aw,*X@j&y;y" # 5
+    msg = "~7,w]@s,V+{2Y" # 6
+    msg_corr = signal.correlate(config.BINARY_BARKER, string_to_bits(msg), mode='same')
+    
+
+    max_corr_msg = np.max(msg_corr)
+    print(f"Max correlation with original message: {max_corr_msg}")
+    
+    msg_conv = conv_encode(string_to_bits(msg))
+    corr_conv_encoded = signal.correlate(config.BINARY_BARKER, msg_conv, mode='same')
+    max_corr = np.max(corr_conv_encoded)
+    print(f"Max correlation: {max_corr}")
