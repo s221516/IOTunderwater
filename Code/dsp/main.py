@@ -171,7 +171,8 @@ def process_signal_for_testing(message, id):
     # doesnt matter if band pass or not, the receiver will always use the same data bits
     avg_power_of_signal = nonCoherentReceiver.compute_average_power_of_signal()
     print(f"Average power of signal: {avg_power_of_signal}")
-    nonCoherentReceiver.plot_signal()
+    # nonCoherentReceiver.plot_signal()
+    nonCoherentReceiver.plot_spectogram()
 
     try:
         message_nc, debug_nc = nonCoherentReceiver.decode()
