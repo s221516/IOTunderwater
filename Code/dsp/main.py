@@ -40,7 +40,7 @@ def compute_len_of_bits(message):
     else:
         len_of_data_bits = len_of_data_bits + len_of_preamble
 
-    # print("Len of data bits (receiver): ", len_of_data_bits)
+    print("Len of data bits (receiver): ", len_of_data_bits)
     return len_of_data_bits
 
 def logInCsv(id,original_message,decoded_message1,hamming_dist_without,decod_msg2,ham_dist_with, distance_to_speaker, 
@@ -92,37 +92,33 @@ def transmit_signal():
     #  'Oi67/(~V8]w,x',
     #  'N(#-c~nC(^v>A',
     # ]
-    n = 10
+    n = 50
     
-    bitrates = [500] * n
-
-    # carrierfreqs = np.arange(1000, 20000, 1000)
-    # 1000 bad
-
-    carrierfreqs = [4000]
+    bitrates = [500] * n + [1000] * n + [1500] * n + [2000] * n + [2500] * n + [3000] * n
+    
+    carrierfreqs = [11000]
 
     global test_description
     # test_description = f"Testing: average power of a signal"
     # test_description = f"Testing: does sending a message with a low correlation < 3 to barker 13 make a diffence?"
     # test_description = f"Testing: testing signal generator with varying VPP. current VPP: 0.25"
-    test_description = f"Testing: TESTING ESP"
-    # test_description = f"Testing: "
+    test_description = f"Testing: Testing max bit rate at 3m distance"
 
     global speaker_depth
     speaker_depth = 200  # in cm
 
     global distance_to_speaker
-    distance_to_speaker = 100  # in cm
+    distance_to_speaker = 300  # in cm
 
     for payload in payload_sizes:
         for bitrate in bitrates:
             config.set_bitrate(bitrate)
             for carrierfreq in carrierfreqs:
                 config.set_carrierfreq(carrierfreq)
-                print("Carrier freq ", config.CARRIER_FREQ)
                 # message = generatePayload.generate_payload(payload)
-                message = "U" * 12
-
+                # message = "U" * 12
+                message = "i3aw,*X@j&y;y"
+                
                 # create unique id for each test
                 # print(f"Transmitting message: {message}")
                 id = create_id()
@@ -171,8 +167,8 @@ def process_signal_for_testing(message, id):
     nonCoherentReceiver.set_len_of_data_bits(len_of_data_bits)
     # doesnt matter if band pass or not, the receiver will always use the same data bits
     avg_power_of_signal = nonCoherentReceiver.compute_average_power_of_signal()
-    print(f"Average power of signal: {avg_power_of_signal}")
-    nonCoherentReceiver.plot_signal()
+    # print(f"Average power of signal: {avg_power_of_signal}")
+    # nonCoherentReceiver.plot_signal()
 
     try:
         message_nc, debug_nc = nonCoherentReceiver.decode()
@@ -187,7 +183,7 @@ def process_signal_for_testing(message, id):
     try:
         message_nc_bandpass, debug_nc_bandpass = nonCoherentReceiverWithBandPass.decode()
         # nonCoherentReceiverWithBandPass.plot_simulation_steps()
-        nonCoherentReceiver.plot_in_frequency_domain()
+        # nonCoherentReceiver.plot_in_frequency_domain()
     except PreambleNotFoundError:
         message_nc_bandpass = "No preamble found"
         debug_nc_bandpass = {}

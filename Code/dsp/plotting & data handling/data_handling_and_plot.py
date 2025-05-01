@@ -625,7 +625,12 @@ if __name__ == "__main__":
 
     df = pd.read_csv(file_path)
     print(df["Test description"].unique())
-    dist = 100
+    # dist = 100, 15000 hz
+    # dist = 200, 13000 hz
+    # dist = 300, 16000 hz
+    # dist = 400, 18000 hz
+    # dist = 500, 
+    dist = 400
     bitrate = 500
     transmitter = "SG"
     # "Testing: Average power purely for check of interference"
