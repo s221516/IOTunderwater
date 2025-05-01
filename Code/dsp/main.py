@@ -3,12 +3,11 @@ import collections
 from gc import collect
 import time
 import numpy as np
-import generatePayload
 import pandas as pd
 import scipy.signal as signal
 from tkinter import W
 
-import test
+import matplotlib.pyplot as plt
 import config
 import uuid
 from receiver.receiverClass import NonCoherentReceiver
@@ -93,19 +92,21 @@ def transmit_signal():
     #  'Oi67/(~V8]w,x',
     #  'N(#-c~nC(^v>A',
     # ]
-    n = 35
+    n = 10
     
     bitrates = [500] * n
 
-    # carrierfreqs = np.arange(1000, 30000, 1000)
-    carrierfreqs = [15000]
-    # carrierfreqs = [6000, 9000, 10000, 12000, 14000, 15000, 20000]
+    # carrierfreqs = np.arange(1000, 20000, 1000)
+    # 1000 bad
+
+    carrierfreqs = [4000]
 
     global test_description
     # test_description = f"Testing: average power of a signal"
     # test_description = f"Testing: does sending a message with a low correlation < 3 to barker 13 make a diffence?"
-    test_description = f"Testing: testing signal generator with varying VPP. current VPP: 0.25"
-    # test_description = f"Testing: TESTING ESP"
+    # test_description = f"Testing: testing signal generator with varying VPP. current VPP: 0.25"
+    test_description = f"Testing: TESTING ESP"
+    # test_description = f"Testing: "
 
     global speaker_depth
     speaker_depth = 200  # in cm
@@ -118,7 +119,7 @@ def transmit_signal():
             config.set_bitrate(bitrate)
             for carrierfreq in carrierfreqs:
                 config.set_carrierfreq(carrierfreq)
-
+                print("Carrier freq ", config.CARRIER_FREQ)
                 # message = generatePayload.generate_payload(payload)
                 message = "U" * 12
 
@@ -233,16 +234,13 @@ def logging_and_printing(message_nc,message_nc_bandpass,message,debug_nc,debug_n
              test_description, original_message_in_bits, data_bits_nc, data_bits_nc_bandpass, avg_power_of_signal)
 
 
-if __name__ == "__main__":
-    
-    
-    if config.IS_ID_SPECIFIED == None:
 
+if __name__ == "__main__":    
+    if config.IS_ID_SPECIFIED == None:
         isWaterThePool = True
         transmit_signal()
-
     else:
-        df = pd.read_csv("Average_power_of_received_signal.csv", sep=",")
+        df = pd.read_csv("1m_distance_bitrate_and_carrierfreq_combination.csv", sep=",")
         print(df.columns)
         original_message = df[df["ID"] == config.IS_ID_SPECIFIED]["Original Message"].values[0]
         decoded_message_without_bandpass = df[df["ID"] == config.IS_ID_SPECIFIED]["Decoded without bandpass"].values[0]

@@ -1,8 +1,6 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 import pandas as pd
-import glob
-import re
 import numpy as np
 
 def compute_ber_for_hamming_encoding_test(file_path):
@@ -621,9 +619,8 @@ if __name__ == "__main__":
     # id_to_analyze = "41af8091-ff03-4f17-8567-470ce7141dd2"
     # analyze_bit_flips_from_csv("5m_dist_10kHz_unique_payloads.csv", id_to_analyze)
 
-    ## NOTE: below file is for SG
+    ## NOTE: 
     file_path = "Average_power_of_received_signal.csv"
-    ## NOTE: below file is for ESP
     # file_path = "avg_power_of_rec_signal_purely_for_check_of_interference.csv"
 
     df = pd.read_csv(file_path)
@@ -632,15 +629,16 @@ if __name__ == "__main__":
     bitrate = 500
     transmitter = "SG"
     # "Testing: Average power purely for check of interference"
-    # results_df = analyze_ber_by_carrier_freq(file_path, dist, bitrate, transmitter, "Testing: average power of a signal")
+    results_df = analyze_ber_by_carrier_freq(file_path, dist, bitrate, transmitter, "Testing: average power of a signal")
 
     ## NOTE: change to see a subset of carrier freqs, min_freq, max_freq as inputs
-    plot_power_vs_distance_by_frequency(file_path, 11000, 15000, "Testing: average power of a signal")
+    # plot_power_vs_distance_by_frequency(file_path, 1000, 15000, "Testing: average power of a signal")
     
     # # NOTE: below is for the vpp test
     # test_file = "1m_distance_carrier_freq_sg_vpp_variable.csv"
     # result_df = compute_ber_for_different_vpps(test_file)
 
+    ## NOTE: new function
     # plot_carrier_freq_analysis(results_df, "Testing: average power of a signal")
     # results = analyze_ber_by_carrier_freq(file_path, test_description="Testing: testing impact of similarlity of payloads and barker 13")
     # results = analyze_invalid_transmissions(file_path)
