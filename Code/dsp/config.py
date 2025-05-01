@@ -59,7 +59,9 @@ PATH_TO_WAV_FILE = "Code/dsp/data/testing_and_logging_recording.wav"
 # FILE_NAME_DATA_TESTS = "1m_distance_carrier_freq_sg_vpp_variable.csv"
 # FILE_NAME_DATA_TESTS = "testing_esp.csv"
 FILE_NAME_DATA_TESTS = "spectrography_analysis_esp_sg_without_speaker.csv"
+# FILE_NAME_DATA_TESTS = "1m_distance_bitrate_and_carrierfreq_combination.csv"
 # FILE_NAME_DATA_TESTS = "computing_freq_impulse.csv"
+FILE_NAME_DATA_TESTS = "Max_bitrate_at_different_distances.csv"
 
 HAMMING_CODING = False
 CONVOLUTIONAL_CODING = False

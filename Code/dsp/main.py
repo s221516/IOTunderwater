@@ -40,7 +40,7 @@ def compute_len_of_bits(message):
     else:
         len_of_data_bits = len_of_data_bits + len_of_preamble
 
-    # print("Len of data bits (receiver): ", len_of_data_bits)
+    print("Len of data bits (receiver): ", len_of_data_bits)
     return len_of_data_bits
 
 def logInCsv(id,original_message,decoded_message1,hamming_dist_without,decod_msg2,ham_dist_with, distance_to_speaker, 
@@ -92,7 +92,7 @@ def transmit_signal():
     #  'Oi67/(~V8]w,x',
     #  'N(#-c~nC(^v>A',
     # ]
-    n = 10
+    n = 50
     
     bitrates = [500] * n
 
@@ -119,10 +119,10 @@ def transmit_signal():
             config.set_bitrate(bitrate)
             for carrierfreq in carrierfreqs:
                 config.set_carrierfreq(carrierfreq)
-                print("Carrier freq ", config.CARRIER_FREQ)
                 # message = generatePayload.generate_payload(payload)
-                message = "U" * 12
-
+                # message = "U" * 12
+                message = "i3aw,*X@j&y;y"
+                
                 # create unique id for each test
                 # print(f"Transmitting message: {message}")
                 id = create_id()
