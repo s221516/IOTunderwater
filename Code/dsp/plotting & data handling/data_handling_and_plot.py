@@ -205,11 +205,6 @@ def analyze_ber_by_carrier_freq(file_path, dist, bitrate, transmitter, test_desc
     # Read the CSV file
     df = pd.read_csv(file_path)
     
-    # if dist == 500:
-    #     test_description = "Testing: At 5 m now testing for frequency sweep again for power average and BER, keeping stick exactly the same place for next test"
-    # else:
-    #     test_description = "Testing: Average power purely for check of interference"
-        
     # Filter by test description and distance
     df = df[df['Test description'] == test_description]
     df = df[df['Distance to speaker'] == dist]
@@ -299,7 +294,7 @@ def plot_carrier_freq_analysis(results_df, test_description):
         results_df (pd.DataFrame): DataFrame containing analysis results
     """
     # Create complete range of frequencies
-    all_frequencies = range(1000, 30000, 1000)
+    all_frequencies = range(1000, 20000, 1000)
     
     # Create figure with two subplots
     fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(15, 12))
@@ -319,7 +314,15 @@ def plot_carrier_freq_analysis(results_df, test_description):
     ax1.plot(plot_df['Carrier_Frequency'], plot_df['BER_With_BP'], 
              'bo-', label='With Bandpass', markersize=8)
     
-    # Add value labels
+    # Add bars for invalid transmissions
+    bar_width = 200  # Width of bars in Hz
+    ax1_twin = ax1.twinx()
+    ax1_twin.bar(plot_df['Carrier_Frequency'] - bar_width/2, plot_df['Invalid_No_BP'],
+                width=bar_width, alpha=0.3, color='red', label='Invalid (No BP)')
+    ax1_twin.bar(plot_df['Carrier_Frequency'] + bar_width/2, plot_df['Invalid_BP'],
+                width=bar_width, alpha=0.3, color='blue', label='Invalid (BP)')
+    
+    # Add value labels for BER
     for x, y1, y2 in zip(plot_df['Carrier_Frequency'], 
                         plot_df['BER_No_BP'], 
                         plot_df['BER_With_BP']):
@@ -337,17 +340,36 @@ def plot_carrier_freq_analysis(results_df, test_description):
             ax1.annotate(f'{y2:.1f}%', (x, y2), textcoords="offset points",
                         xytext=(0, -15), ha='center', color='blue')
     
+    # Add value labels for invalid transmissions
+    for x, y1, y2 in zip(plot_df['Carrier_Frequency'], 
+                        plot_df['Invalid_No_BP'],
+                        plot_df['Invalid_BP']):
+        if pd.notna(y1) and y1 > 0:
+            ax1_twin.annotate(f'{int(y1)}', (x - bar_width/2, y1),
+                            textcoords="offset points",
+                            xytext=(0, 5), ha='center', color='darkred')
+        if pd.notna(y2) and y2 > 0:
+            ax1_twin.annotate(f'{int(y2)}', (x + bar_width/2, y2),
+                            textcoords="offset points",
+                            xytext=(0, 5), ha='center', color='darkblue')
+    
     # Configure BER plot
     ax1.set_xlabel('Carrier Frequency (Hz)')
     ax1.set_ylabel('Bit Error Rate (%)')
-    ax1.set_title(f'BER vs Carrier Frequency at {dist} cm')
+    ax1_twin.set_ylabel('Invalid Transmissions')
+    ax1.set_title(f'BER vs Carrier Frequency with Invalid Transmissions')
     ax1.grid(True, linestyle='--', alpha=0.7)
-    ax1.legend()
     ax1.set_ylim(0, 105)  # Make room for N/A labels at top
+    
+    # Combine legends from both axes
+    lines1, labels1 = ax1.get_legend_handles_labels()
+    lines2, labels2 = ax1_twin.get_legend_handles_labels()
+    ax1.legend(lines1 + lines2, labels1 + labels2, loc='upper right')
     
     # Set x-axis ticks for every 1000 Hz
     ax1.set_xticks(list(all_frequencies)[::2])  # Show every other frequency to avoid crowding
     ax1.tick_params(axis='x', rotation=45)
+
     
     # Plot Average Power vs Carrier Frequency
     ax2.plot(results_df['Carrier_Frequency'], results_df['Average_Power'], 
@@ -629,8 +651,9 @@ if __name__ == "__main__":
     # dist = 200, 13000 hz
     # dist = 300, 16000 hz
     # dist = 400, 18000 hz
-    # dist = 500, 
-    dist = 400
+    # dist = 500, 9000 hz
+    # dist = 600, 9000 hz
+    dist = 600
     bitrate = 500
     transmitter = "SG"
     # "Testing: Average power purely for check of interference"

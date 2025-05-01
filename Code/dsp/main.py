@@ -92,36 +92,36 @@ def transmit_signal():
     #  'Oi67/(~V8]w,x',
     #  'N(#-c~nC(^v>A',
     # ]
-    n = 50
+    n = 25
     
-    bitrates = [500] * n
-
-    carrierfreqs = np.arange(1000, 20000, 1000)
-    # 1000 bad
-
-    # carrierfreqs = [4000]
-
+    bitrates = [300] * n + [500] * n + [1000] * n + [1500] * n + [2000] * n
+    carrierfreqs = [9000]
+    
+    # bitrates = [500] * n 
+    # carrierfreqs = np.arange(1000, 20000, 1000)
+    
     global test_description
     # test_description = f"Testing: average power of a signal"
     # test_description = f"Testing: does sending a message with a low correlation < 3 to barker 13 make a diffence?"
     # test_description = f"Testing: testing signal generator with varying VPP. current VPP: 0.25"
-    test_description = f"Testing: Checking cleanliness of esp DAC straigt to mic and sig straight to mic"
-    # test_description = f"Testing: "
+    # test_description = f"Testing: Checking cleanliness of esp DAC straigt to mic and sig straight to mic"
+    # test_description = f"Testing: Test how bitrate and carrier freq affects eachother when they are too close"
+    test_description = f"Testing: Max bitrate for best carrier freq at a 6m distance"
 
     global speaker_depth
-    speaker_depth = 0  # in cm
+    speaker_depth = 200  # in cm
 
     global distance_to_speaker
-    distance_to_speaker = 0  # in cm
+    distance_to_speaker = 100  # in cm
 
     for payload in payload_sizes:
         for bitrate in bitrates:
             config.set_bitrate(bitrate)
             for carrierfreq in carrierfreqs:
                 config.set_carrierfreq(carrierfreq)
-                # message = generatePayload.generate_payload(payload)
+                message = generatePayload.generate_payload(payload)
+                message = "i3aw,*X@j&y;y" # message with correlation of 5
                 # message = "U" * 12
-                message = "i3aw,*X@j&y;y"
                 
                 # create unique id for each test
                 # print(f"Transmitting message: {message}")
@@ -171,9 +171,9 @@ def process_signal_for_testing(message, id):
     nonCoherentReceiver.set_len_of_data_bits(len_of_data_bits)
     # doesnt matter if band pass or not, the receiver will always use the same data bits
     avg_power_of_signal = nonCoherentReceiver.compute_average_power_of_signal()
-    print(f"Average power of signal: {avg_power_of_signal}")
+    # print(f"Average power of signal: {avg_power_of_signal}")
     # nonCoherentReceiver.plot_signal()
-    nonCoherentReceiver.plot_spectrogram_and_frequency_domain()
+    # nonCoherentReceiver.plot_spectrogram_and_frequency_domain()
 
     try:
         message_nc, debug_nc = nonCoherentReceiver.decode()
