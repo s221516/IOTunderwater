@@ -1,6 +1,7 @@
 from logging import config
 from typing import Dict, Tuple
 
+import librosa
 import commpy.channelcoding.convcode as cc
 import matplotlib.pyplot as plt
 import numpy as np
@@ -202,6 +203,34 @@ class Receiver:
         self.plot_wave_in_frequency_domain(self.wav_signal, ax=ax[1], color="blue")
         plt.tight_layout()
         plt.show()
+        
+    def plot_spectogram(self):
+        """Plots the spectrogram of the received WAV signal."""
+        if self.wav_signal is None:
+            print("No signal to plot spectrogram for.")
+            return
+
+        # Define hop_length (adjust as needed for desired time resolution)
+        hop_length = 256 
+        # Calculate the STFT (Short-Time Fourier Transform)
+        stft_result = librosa.stft(self.wav_signal.astype(float), hop_length=hop_length)
+        # Get the magnitude of the STFT result
+        # without decibels
+        amplitude_spectrogram = np.abs(stft_result)
+        # Convert to decibels (optional, for better visualization)
+        amplitude_spectrogram_db = librosa.amplitude_to_db(amplitude_spectrogram, ref=np.max)
+
+        plt.figure(figsize=(12, 6)) # Adjusted figure size for better visibility
+        # Display the spectrogram using decibels
+        librosa.display.specshow(amplitude_spectrogram_db, sr=config.SAMPLE_RATE, hop_length=hop_length, x_axis="time", y_axis="hz") 
+        plt.title("Spectrogram (Decibels)")
+        plt.colorbar(label="Amplitude (dB)") # Updated colorbar label
+        plt.xlabel("Time (s)")
+        plt.ylabel("Frequency (Hz)")
+        plt.ylim(0, 20000) # Limit y-axis to 20kHz
+        plt.tight_layout() # Adjust layout
+        plt.show()
+        
         
     def plot_wave_in_frequency_domain(self, wave, ax=None, color="b"):
         if ax is None:
