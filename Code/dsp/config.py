@@ -33,10 +33,10 @@ def set_carrierfreq(value):
     CARRIER_FREQ = value
 
 
-TRANSMITTER_PORT = "COM11"
-# TRANSMITTER_PORT = "/dev/cu.usbserial-0232D158"
+# TRANSMITTER_PORT = "COM11"
+TRANSMITTER_PORT = "/dev/cu.usbserial-0232D158"
 MIC_INDEX = 1 # Mathias, 1 Morten
-USE_ESP = False
+USE_ESP = True
 SAMPLE_RATE = 96000  # this capped by the soundcard, therefore, this is non-changeable
 
 BIT_RATE = 50
@@ -58,7 +58,7 @@ PATH_TO_WAV_FILE = "Code/dsp/data/testing_and_logging_recording.wav"
 # FILE_NAME_DATA_TESTS = "1m_distance_payload_barker_similarity_impact.csv"
 # FILE_NAME_DATA_TESTS = "1m_distance_carrier_freq_sg_vpp_variable.csv"
 # FILE_NAME_DATA_TESTS = "testing_esp.csv"
-FILE_NAME_DATA_TESTS = "1m_distance_bitrate_and_carrierfreq_combination.csv"
+FILE_NAME_DATA_TESTS = "spectrography_analysis_esp_sg_without_speaker.csv"
 # FILE_NAME_DATA_TESTS = "computing_freq_impulse.csv"
 
 HAMMING_CODING = False
@@ -74,8 +74,37 @@ else:
 
 
 IS_ID_SPECIFIED = None
-# IS_ID_SPECIFIED = "106158f2-e357-49eb-be28-e43a80eaa551"
-
+IS_ID_SPECIFIED = [
+    "c1ac15b6-66f5-40b5-94df-e1dec5e2961b",
+    "84b73c50-4f0b-48c1-a9c9-24f72ceb35e3",
+    "8ef43baf-f66e-4aa5-908b-6a1cf5a8133b",
+    "0f12a127-f7e4-469a-9506-eb84b20f1a8c",
+    "bb10ad5a-1f34-484b-bb68-fa4aa947c852",
+    "797850c6-259f-4926-90be-8f289a3b2511",
+    "e706c9e4-7571-4c78-9ab8-1013c58f49c5",
+    "7c8a6797-f8dc-4c0f-92aa-a6ec1749fe75",
+    "e1bd6a46-30f9-451f-9ef9-7cf5e8d24824",
+    "183a82c7-d906-4187-ae9a-7e485ca54711",
+    "5dae6d2b-24e1-483d-ac06-f295367be322",
+    "77cb942e-a15c-4296-a12f-eeec21153cf3",
+    "fc3a5201-61a6-40c7-b574-22593fcee20e",
+    "97c514a6-6a03-4a92-a9d0-8745f592b835",
+    "a3b4ad69-c966-41d5-acd2-45d24cdac5c0",
+    "99490ad4-df15-44aa-874d-86852528e048",
+    "9b488b5c-9b30-45c4-bae5-35efcec25cf2",
+    "968b5c1e-0b06-4481-be78-6b653c2548b4",
+    "5b4e4f2f-0d67-4d18-adbe-48614c49e3af",
+]
+# IS_ID_SPECIFIED = [
+#     "414bde8b-38d6-47f8-bf9b-89ba213d65b7",
+#     "e744e834-bfe5-4e54-b85b-8aaebac8af9b",
+#     "fc80780e-0cb6-4b96-ab84-ee73486882b7",
+#     "8ca4b5f2-278a-4956-a0ac-405657915f94",
+#     "0ab6d4c3-7a8b-4ab1-91a5-79c4ab73e893",
+#     "07d18a09-a169-441b-be00-ebf66aa2d026",
+#     "106158f2-e357-49eb-be28-e43a80eaa551",
+#     "e063b404-2209-4cec-a9c4-89d7d0add2c1",
+# ]
 dark_horse_lyrics = """AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC"""
 
 if __name__ == "__main__":

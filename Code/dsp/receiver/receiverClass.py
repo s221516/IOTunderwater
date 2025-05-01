@@ -204,8 +204,12 @@ class Receiver:
         plt.tight_layout()
         plt.show()
         
-    def plot_spectogram(self):
+    def plot_spectogram(self, ax=None):
         """Plots the spectrogram of the received WAV signal."""
+        if ax is None:
+            ax = plt.gca()
+            
+        
         if self.wav_signal is None:
             print("No signal to plot spectrogram for.")
             return
@@ -220,16 +224,13 @@ class Receiver:
         # Convert to decibels (optional, for better visualization)
         amplitude_spectrogram_db = librosa.amplitude_to_db(amplitude_spectrogram, ref=np.max)
 
-        plt.figure(figsize=(12, 6)) # Adjusted figure size for better visibility
         # Display the spectrogram using decibels
         librosa.display.specshow(amplitude_spectrogram_db, sr=config.SAMPLE_RATE, hop_length=hop_length, x_axis="time", y_axis="hz") 
-        plt.title("Spectrogram (Decibels)")
         plt.colorbar(label="Amplitude (dB)") # Updated colorbar label
-        plt.xlabel("Time (s)")
-        plt.ylabel("Frequency (Hz)")
-        plt.ylim(0, 20000) # Limit y-axis to 20kHz
-        plt.tight_layout() # Adjust layout
-        plt.show()
+        ax.set_title("Spectrogram (Decibels)")
+        ax.set_xlabel("Time (s)")
+        ax.set_ylabel("Frequency (Hz)")
+        ax.set_ylim(0, 20000) # Limit y-axis to 20kHz
         
         
     def plot_wave_in_frequency_domain(self, wave, ax=None, color="b"):
@@ -246,11 +247,27 @@ class Receiver:
         # Make it to decibels
         # frequency_magnitudes = 20 * np.log10(frequency_magnitudes / np.max(frequency_magnitudes))
 
-        ax.plot(frequencies_x_axis, frequency_magnitudes, ".-", color=color, alpha=0.5) 
+        # only plot the positive frequencies
+        positive_frequencies = frequencies_x_axis > 0
+        frequencies_x_axis = frequencies_x_axis[positive_frequencies]
+        frequency_magnitudes = frequency_magnitudes[positive_frequencies]
+
+        ax.plot(frequencies_x_axis, frequency_magnitudes, "-", color=color, alpha=0.5) 
         ax.set_xlabel("Frequency (Hz)")
         ax.set_ylabel("Magnitude")
         ax.set_title("Frequency Domain Signal")
         ax.grid(True)
+
+    def plot_spectrogram_and_frequency_domain(self):
+        if self.wav_signal is None:
+            print("No signal to visualize")
+            return
+
+        _ , ax = plt.subplots(2, 1, figsize=(10, 8))
+        self.plot_wave_in_frequency_domain(self.wav_signal, ax=ax[0], color="blue")
+        self.plot_spectogram(ax=ax[1])
+        plt.tight_layout()
+        plt.show()
 
     def plot_wave_in_time_domain(self, wave, l: str, ax=None, color="orange"):
         if ax is None:
