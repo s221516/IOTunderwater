@@ -33,14 +33,14 @@ def bits_to_string(bits):
         byte = bits[i:i+8]
         byte_str = ''.join(str(b) for b in byte)
         chars.append(chr(int(byte_str, 2)))
-        print(f"Byte: {byte_str} -> Char: {chars[-1]}")  # Debugging line
+        # print(f"Byte: {byte_str} -> Char: {chars[-1]}")  # Debugging line
     return ''.join(chars)
 
 def generate_payload(size, max_correlation=6):
     # Ensure size is a multiple of 8
     if size % 8 != 0:
         size += 8 - (size % 8)  # Round up to next multiple of 8
-        print(f"Size rounded up to {size} to match byte boundaries.")
+        # print(f"Size rounded up to {size} to match byte boundaries.")
 
     while True:
         # Generate a random string of printable characters (excluding space)

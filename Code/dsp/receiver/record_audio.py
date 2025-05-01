@@ -44,14 +44,14 @@ def create_wav_file_from_recording(record_seconds, name):
         input_device_index=MIC_INDEX,
     )
 
-    print("Recording...")
+    # print("Recording...")
     frames = []
 
     # Read and store audio data
     for _ in range(0, int(SAMPLE_RATE / CHUNK * record_seconds)):
         data = stream.read(CHUNK)
         frames.append(data)
-    print("Done recording")
+    # print("Done recording")
 
     # Stop and close the stream
     stream.stop_stream()
