@@ -94,11 +94,12 @@ def transmit_signal():
     # ]
     n = 10
     
-    bitrates = [3000] * n
+    bitrates = [500] * n
 
-    carrierfreqs = np.arange(1000, 30000, 1000)
-    # carrierfreqs = [5000]
-    # carrierfreqs = [6000, 9000, 10000, 12000, 14000, 15000, 20000]
+    # carrierfreqs = np.arange(1000, 20000, 1000)
+    # 1000 bad
+
+    carrierfreqs = [4000]
 
     global test_description
     # test_description = f"Testing: average power of a signal"
@@ -118,7 +119,7 @@ def transmit_signal():
             config.set_bitrate(bitrate)
             for carrierfreq in carrierfreqs:
                 config.set_carrierfreq(carrierfreq)
-
+                print("Carrier freq ", config.CARRIER_FREQ)
                 # message = generatePayload.generate_payload(payload)
                 message = "U" * 12
 
@@ -238,7 +239,7 @@ if __name__ == "__main__":
         isWaterThePool = True
         transmit_signal()
     else:
-        df = pd.read_csv("Average_power_of_received_signal.csv", sep=",")
+        df = pd.read_csv("1m_distance_bitrate_and_carrierfreq_combination.csv", sep=",")
         print(df.columns)
         original_message = df[df["ID"] == config.IS_ID_SPECIFIED]["Original Message"].values[0]
         decoded_message_without_bandpass = df[df["ID"] == config.IS_ID_SPECIFIED]["Decoded without bandpass"].values[0]

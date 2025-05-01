@@ -150,6 +150,8 @@ class Transmitter(threading.Thread):
         len_of_bits = len(message) * 8 + 13
         if self.isESP32:
             transmission_time = (config.REP_ESP * (len_of_bits / config.BIT_RATE)) - 0.7
+            if transmission_time < 1:
+                transmission_time = 1
         else:
             transmission_time = round((len_of_bits / config.BIT_RATE) * 5)
             
