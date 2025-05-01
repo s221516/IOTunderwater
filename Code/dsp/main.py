@@ -174,6 +174,7 @@ def process_signal_for_testing(message, id):
     try:
         message_nc_bandpass, debug_nc_bandpass = nonCoherentReceiverWithBandPass.decode()
         # nonCoherentReceiverWithBandPass.plot_simulation_steps()
+        nonCoherentReceiver.plot_in_frequency_domain()
     except PreambleNotFoundError:
         message_nc_bandpass = "No preamble found"
         debug_nc_bandpass = {}
@@ -228,7 +229,7 @@ if __name__ == "__main__":
         transmit_signal()
 
     else:
-        df = pd.read_csv("Received_data_for_tests.csv", sep=",")
+        df = pd.read_csv("Average_power_of_received_signal.csv", sep=",")
         print(df.columns)
         original_message = df[df["ID"] == config.IS_ID_SPECIFIED]["Original Message"].values[0]
         decoded_message_without_bandpass = df[df["ID"] == config.IS_ID_SPECIFIED]["Decoded without bandpass"].values[0]

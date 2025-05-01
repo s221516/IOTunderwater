@@ -23,7 +23,7 @@ from encoding.hamming_codes import hamming_decode
 from encoding.conv_encoding_scikit import conv_decode
 from errors import PreambleNotFoundError
 from scipy.io import wavfile
-from visuals.visualization import create_processing_visualization
+from visuals.visualization import create_processing_visualization, create_frequency_domain_visualization
 
 plt.style.use("ggplot")
 
@@ -190,6 +190,18 @@ class Receiver:
             # else: # NOTE: all invalid characters will instead be "-", instead of just whitespace
             #     message += "-"
         return message
+
+    def plot_in_frequency_domain(self):
+        if self.wav_signal is None:
+            print("No signal to visualize")
+            return
+        
+        _ , debug_info = self.decode()
+
+        fig = create_frequency_domain_visualization(self, debug_info)
+        plt.show()
+        return fig
+    
     def plot_wave_in_time_domain(self, wave, l: str, ax=None, color="orange"):
         if ax is None:
             ax = plt.gca()

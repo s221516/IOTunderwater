@@ -179,3 +179,60 @@ def create_processing_visualization(receiver, message, debug_info):
         ax.tick_params(axis="both", which="major", labelsize=8)
 
     return fig
+
+def create_frequency_domain_visualization(receiver, debug_info):
+    """
+    Create a visualization focusing on the frequency domain signals:
+    original, envelope, and filtered.
+    """
+    # Create a figure with 1 row and 3 columns
+    fig, axes = plt.subplots(1, 3, figsize=(15, 4), sharey=True)
+
+    # Adjust the subplot parameters for tighter spacing
+    plt.subplots_adjust(
+        left=0.06, right=0.98, bottom=0.15, top=0.85, wspace=0.2
+    )
+
+    # Add a title for the entire figure
+    plt.suptitle("Frequency Domain Analysis", fontsize=14, fontweight="bold")
+
+    # Plot original received signal in frequency domain
+    plot_wave_in_frequency_domain(receiver.wav_signal, ax=axes[0], color="g")
+    axes[0].set_title("Original Signal", fontsize=10)
+
+    # Check if envelope data is available (for NonCoherentReceiver)
+    if "envelope" in debug_info:
+        plot_wave_in_frequency_domain(debug_info["envelope"], ax=axes[1], color="b")
+        axes[1].set_title("Envelope Signal", fontsize=10)
+    elif "shifted_imag" in debug_info: # Handle CoherentReceiver case if needed
+         plot_wave_in_frequency_domain(debug_info["shifted_imag"], ax=axes[1], color="b")
+         axes[1].set_title("Shifted Signal", fontsize=10)
+    else:
+        axes[1].set_title("Intermediate Signal (N/A)", fontsize=10)
+        axes[1].text(0.5, 0.5, "No intermediate signal data", ha='center', va='center', transform=axes[1].transAxes)
+
+
+    # Plot filtered signal in frequency domain
+    if "filtered" in debug_info:
+        plot_wave_in_frequency_domain(debug_info["filtered"], ax=axes[2], color="r")
+        axes[2].set_title("Filtered Signal", fontsize=10)
+    else:
+        axes[2].set_title("Filtered Signal (N/A)", fontsize=10)
+        axes[2].text(0.5, 0.5, "No filtered signal data", ha='center', va='center', transform=axes[2].transAxes)
+
+
+    # Set common properties for frequency domain plots
+    for ax in axes:
+        ax.set_xlabel("Frequency (Hz)", fontsize=9)
+        ax.set_ylabel("Magnitude", fontsize=9)
+        ax.grid(True, alpha=0.5)
+        ax.tick_params(axis="both", which="major", labelsize=8)
+        # Limit x-axis if needed, e.g., based on expected frequency range
+        # ax.set_xlim([0, config.CARRIER_FREQ * 2]) # Example limit
+
+    # Ensure the y-label is only shown on the first plot
+    axes[1].set_ylabel("")
+    axes[2].set_ylabel("")
+
+
+    return fig

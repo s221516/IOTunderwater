@@ -15,6 +15,8 @@ def plot_wave_in_frequency_domain(wave, ax=None, color="b"):
     )
 
     frequency_magnitudes = np.abs(wave_f)
+    # Make it to decibels
+    frequency_magnitudes = 20 * np.log10(frequency_magnitudes / np.max(frequency_magnitudes))
 
     ax.plot(frequencies_x_axis, frequency_magnitudes, ".-", color=color, alpha=0.5)
 
