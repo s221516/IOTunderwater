@@ -1,5 +1,5 @@
 
- 
+import numpy as np
 
 def hamming_distance(received, expected):
     """Computes Hamming distance between received bits and expected bits."""
@@ -62,9 +62,12 @@ PATH_TO_WAV_FILE = "Code/dsp/data/testing_and_logging_recording.wav"
 # FILE_NAME_DATA_TESTS = "1m_distance_bitrate_and_carrierfreq_combination.csv"
 # FILE_NAME_DATA_TESTS = "computing_freq_impulse.csv"
 # FILE_NAME_DATA_TESTS = "Max_bitrate_at_different_distances.csv"
-FILE_NAME_DATA_TESTS = "Max_bitrate_at_different_distances_and_best_carrier_freq.csv"
+# FILE_NAME_DATA_TESTS = "Max_bitrate_at_different_distances_and_best_carrier_freq.csv"
+# FILE_NAME_DATA_TESTS = "Varying_payload_sizes.csv"
+# FILE_NAME_DATA_TESTS = "Random_payloads.csv"
+FILE_NAME_DATA_TESTS = "Conv_encoding_testing.csv"
 
-HAMMING_CODING = True
+HAMMING_CODING = False
 CONVOLUTIONAL_CODING = False
 
 LIST_OF_DATA_BITS = []
@@ -77,7 +80,7 @@ else:
 
 
 IS_ID_SPECIFIED = None
-# IS_ID_SPECIFIED = ["369832e7-40a0-4954-bf60-bcc00b7a8751"]
+# IS_ID_SPECIFIED = ["e1bd6a46-30f9-451f-9ef9-7cf5e8d24824"]
 # IS_ID_SPECIFIED = [
 #     "c1ac15b6-66f5-40b5-94df-e1dec5e2961b",
 #     "84b73c50-4f0b-48c1-a9c9-24f72ceb35e3",
@@ -102,10 +105,11 @@ IS_ID_SPECIFIED = None
 
 
 if __name__ == "__main__":
-    import scipy.signal as signal
+    # import scipy.signal as signal
     
-    messages = "_me_w"
-    bin_msg = string_to_bin_array(messages)
-    autocorrelate = signal.correlate(BINARY_BARKER, bin_msg, mode='same')
+    print(np.arange(50 // 8, 1050 // 8, 50 // 8))
+    # messages = "_me_w"
+    # bin_msg = string_to_bin_array(messages)
+    # autocorrelate = signal.correlate(BINARY_BARKER, bin_msg, mode='same')
 
-    print(autocorrelate)
+    # print(autocorrelate)

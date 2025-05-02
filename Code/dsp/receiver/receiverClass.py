@@ -106,12 +106,8 @@ class Receiver:
     def get_bits(self, thresholded_signal: np.ndarray) -> list:
         bits = []
 
-        for i in range(
-            0, len(thresholded_signal), self.samples_per_symbol
-        ):
-            mu = np.mean(
-                thresholded_signal[i : i + self.samples_per_symbol]
-            )
+        for i in range(0, len(thresholded_signal), self.samples_per_symbol):
+            mu = np.mean(thresholded_signal[i : i + self.samples_per_symbol])
             bits.append(1 if mu > 0.5 else 0)
         return bits
 

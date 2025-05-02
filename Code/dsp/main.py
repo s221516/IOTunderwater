@@ -70,8 +70,6 @@ def logInCsv(id,original_message,decoded_message1,hamming_dist_without,decod_msg
 def transmit_signal():
     transmitter = Transmitter(None, config.USE_ESP)
 
-    #messages = ["Lick_on_these_big_fat_nuts_and_tell_me_what_you_think"]
-    payload_sizes = [100]
     
     unique_payloads_dict = {
         "2" : "]3MH'@@H9&e6W", 
@@ -84,20 +82,13 @@ def transmit_signal():
         "9" : 'N(#-c~nC(^v>A'
     }
 
-    #  '}VvF*E@9>-go*',
-    #  '+,M4J1ABraRJ&',
-    #  'i3aw,*X@j&y;y',
-    #  '~7,w]@s,V+{2Y',
-    #  ']_TzaWWF+Exg;',
-    #  'Oi67/(~V8]w,x',
-    #  'N(#-c~nC(^v>A',
-    # ]
-    n = 25
+
+    n = 10
+    bitrates = [500] * n
+    payload_sizes = [900]
+    carrierfreqs = [15000]
     
-    bitrates = [300] * n + [500] * n + [1000] * n + [1500] * n + [2000] * n
-    carrierfreqs = [9000]
-    
-    # bitrates = [500] * n 
+    # bitrates = [100] * n + [500] * n + [1000] * n + [1500] * n + [2000] * n
     # carrierfreqs = np.arange(1000, 20000, 1000)
     
     global test_description
@@ -106,7 +97,9 @@ def transmit_signal():
     # test_description = f"Testing: testing signal generator with varying VPP. current VPP: 0.25"
     # test_description = f"Testing: Checking cleanliness of esp DAC straigt to mic and sig straight to mic"
     # test_description = f"Testing: Test how bitrate and carrier freq affects eachother when they are too close"
-    test_description = f"Testing: Max bitrate for best carrier freq at a 6m distance"
+    # test_description = f"Testing: Max bitrate for best carrier freq at a 6m distance"
+    # test_description = f"Testing: Variying payload sizes, increases with 6 char at a time"
+    # test_description = f"Testing: Variying payloads, size of payload = {payload_sizes[0]})"
 
     global speaker_depth
     speaker_depth = 200  # in cm
@@ -120,11 +113,10 @@ def transmit_signal():
             for carrierfreq in carrierfreqs:
                 config.set_carrierfreq(carrierfreq)
                 message = generatePayload.generate_payload(payload)
-                message = "i3aw,*X@j&y;y" # message with correlation of 5
-                # message = "U" * 12
-                
-                # create unique id for each test
+                # message = "i3aw,*X@j&y;y" # message with correlation of 5
+                # message = "U" * payload
                 # print(f"Transmitting message: {message}")
+                # create unique id for each test
                 id = create_id()
                 transmitter.transmit(message, carrierfreq, bitrate)
                 record_seconds = transmitter.calculate_transmission_time(message)
