@@ -64,8 +64,8 @@ PATH_TO_WAV_FILE = "Code/dsp/data/testing_and_logging_recording.wav"
 # FILE_NAME_DATA_TESTS = "Varying_payload_sizes.csv"
 # FILE_NAME_DATA_TESTS = "Random_payloads.csv"
 
-# FILE_NAME_DATA_TESTS = "Average_power_of_received_signal.csv"
-FILE_NAME_DATA_TESTS = "Max_bitrate_at_different_distances_and_best_carrier_freq.csv"
+FILE_NAME_DATA_TESTS = "Average_power_of_received_signal.csv"
+# FILE_NAME_DATA_TESTS = "Max_bitrate_at_different_distances_and_best_carrier_freq.csv"
 # FILE_NAME_DATA_TESTS = "Conv_encoding_testing.csv"
 
 HAMMING_CODING = False
@@ -80,8 +80,8 @@ else:
     ENCODING = "No Encoding"
 
 
-IS_ID_SPECIFIED = None
-# IS_ID_SPECIFIED = ["2b34682a-b6c7-40ff-bb36-9fd11061591d"]
+# IS_ID_SPECIFIED = None
+IS_ID_SPECIFIED = ["55e1ef22-3bc0-4432-8719-4796679ed391"]
 # IS_ID_SPECIFIED = [
 #     "c1ac15b6-66f5-40b5-94df-e1dec5e2961b",
 #     "84b73c50-4f0b-48c1-a9c9-24f72ceb35e3",

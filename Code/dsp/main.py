@@ -171,7 +171,7 @@ def process_signal_for_testing(message, id):
     avg_power_of_signal = nonCoherentReceiver.compute_average_power_of_signal()
     # print(f"Average power of signal: {avg_power_of_signal}")
     # nonCoherentReceiver.plot_signal()
-    nonCoherentReceiver.plot_spectrogram_and_frequency_domain()
+    # nonCoherentReceiver.plot_spectrogram_and_frequency_domain()
 
     try:
         message_nc, debug_nc = nonCoherentReceiver.decode()
