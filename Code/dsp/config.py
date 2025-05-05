@@ -33,10 +33,10 @@ def set_carrierfreq(value):
     CARRIER_FREQ = value
 
 
-TRANSMITTER_PORT = "COM11"
-# TRANSMITTER_PORT = "/dev/cu.usbserial-0232D158"
+# TRANSMITTER_PORT = "COM11"
+TRANSMITTER_PORT = "/dev/cu.usbserial-0232D158"
 MIC_INDEX = 1 # Mathias, 1 Morten
-USE_ESP = False
+USE_ESP = True
 SAMPLE_RATE = 96000  # this capped by the soundcard, therefore, this is non-changeable
 
 BIT_RATE = 50
@@ -62,10 +62,11 @@ PATH_TO_WAV_FILE = "Code/dsp/data/testing_and_logging_recording.wav"
 # FILE_NAME_DATA_TESTS = "1m_distance_bitrate_and_carrierfreq_combination.csv"
 # FILE_NAME_DATA_TESTS = "computing_freq_impulse.csv"
 # FILE_NAME_DATA_TESTS = "Max_bitrate_at_different_distances.csv"
-FILE_NAME_DATA_TESTS = "Max_bitrate_at_different_distances_and_best_carrier_freq.csv"
+# FILE_NAME_DATA_TESTS = "Max_bitrate_at_different_distances_and_best_carrier_freq.csv"
+FILE_NAME_DATA_TESTS = "1m_distance_payload_barker_similarity_impact.csv"
 
 HAMMING_CODING = True
-CONVOLUTIONAL_CODING = False
+CONVOLUTIONAL_CODING = True
 
 LIST_OF_DATA_BITS = []
 if CONVOLUTIONAL_CODING:
@@ -77,7 +78,13 @@ else:
 
 
 IS_ID_SPECIFIED = None
-# IS_ID_SPECIFIED = ["369832e7-40a0-4954-bf60-bcc00b7a8751"]
+IS_ID_SPECIFIED = ["645a52b8-f288-4eff-aeba-91434114baa5"]
+# IS_ID_SPECIFIED = [
+#     "2f61767c-fd61-4bce-8b9d-31d74d0f6a03",
+#     "894d52ee-80e4-41ca-afde-044726f3cafe",
+#     "b10bfe28-54d6-42f0-ad16-cfbd86cd623c",
+# ]
+# IS_ID_SPECIFIED = ["77973a98-2385-4e4f-92a2-904a48a1b0fb"]
 # IS_ID_SPECIFIED = [
 #     "c1ac15b6-66f5-40b5-94df-e1dec5e2961b",
 #     "84b73c50-4f0b-48c1-a9c9-24f72ceb35e3",

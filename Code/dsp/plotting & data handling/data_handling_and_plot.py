@@ -642,7 +642,7 @@ if __name__ == "__main__":
     # analyze_bit_flips_from_csv("5m_dist_10kHz_unique_payloads.csv", id_to_analyze)
 
     ## NOTE: 
-    file_path = "Average_power_of_received_signal.csv"
+    file_path = "ESP_new_average_power_1_3_6meters.csv"
     # file_path = "avg_power_of_rec_signal_purely_for_check_of_interference.csv"
 
     df = pd.read_csv(file_path)
@@ -653,11 +653,11 @@ if __name__ == "__main__":
     # dist = 400, 18000 hz
     # dist = 500, 9000 hz
     # dist = 600, 9000 hz
-    dist = 600
+    dist = 100
     bitrate = 500
-    transmitter = "SG"
+    transmitter = "ESP"
     # "Testing: Average power purely for check of interference"
-    results_df = analyze_ber_by_carrier_freq(file_path, dist, bitrate, transmitter, "Testing: average power of a signal")
+    results_df = analyze_ber_by_carrier_freq(file_path, dist, bitrate, transmitter, "Testing: Finding the average power for new implement on ESPage of fixed payload with barker corr 5")
 
     ## NOTE: change to see a subset of carrier freqs, min_freq, max_freq as inputs
     # plot_power_vs_distance_by_frequency(file_path, 1000, 15000, "Testing: average power of a signal")

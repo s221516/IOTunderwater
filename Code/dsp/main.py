@@ -92,10 +92,10 @@ def transmit_signal():
     #  'Oi67/(~V8]w,x',
     #  'N(#-c~nC(^v>A',
     # ]
-    n = 25
+    n = 5
     
-    bitrates = [300] * n + [500] * n + [1000] * n + [1500] * n + [2000] * n
-    carrierfreqs = [9000]
+    bitrates = [500] * n
+    carrierfreqs = [2000]
     
     # bitrates = [500] * n 
     # carrierfreqs = np.arange(1000, 20000, 1000)
@@ -106,7 +106,7 @@ def transmit_signal():
     # test_description = f"Testing: testing signal generator with varying VPP. current VPP: 0.25"
     # test_description = f"Testing: Checking cleanliness of esp DAC straigt to mic and sig straight to mic"
     # test_description = f"Testing: Test how bitrate and carrier freq affects eachother when they are too close"
-    test_description = f"Testing: Max bitrate for best carrier freq at a 6m distance"
+    test_description = f"Testing: Finding the average power for new implement on ESPage of fixed payload with barker corr 5"
 
     global speaker_depth
     speaker_depth = 200  # in cm
@@ -119,7 +119,7 @@ def transmit_signal():
             config.set_bitrate(bitrate)
             for carrierfreq in carrierfreqs:
                 config.set_carrierfreq(carrierfreq)
-                message = generatePayload.generate_payload(payload)
+                # message = generatePayload.generate_payload(payload)
                 message = "i3aw,*X@j&y;y" # message with correlation of 5
                 # message = "U" * 12
                 
@@ -173,7 +173,7 @@ def process_signal_for_testing(message, id):
     avg_power_of_signal = nonCoherentReceiver.compute_average_power_of_signal()
     # print(f"Average power of signal: {avg_power_of_signal}")
     # nonCoherentReceiver.plot_signal()
-    # nonCoherentReceiver.plot_spectrogram_and_frequency_domain()
+    nonCoherentReceiver.plot_spectrogram_and_frequency_domain()
 
     try:
         message_nc, debug_nc = nonCoherentReceiver.decode()
