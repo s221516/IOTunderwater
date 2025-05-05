@@ -33,8 +33,8 @@ def set_carrierfreq(value):
     CARRIER_FREQ = value
 
 
-TRANSMITTER_PORT = "COM12"
-# TRANSMITTER_PORT = "/dev/cu.usbserial-0232D158"
+# TRANSMITTER_PORT = "COM11"
+TRANSMITTER_PORT = "/dev/cu.usbserial-0232D158"
 MIC_INDEX = 1 # Mathias, 1 Morten
 USE_ESP = True
 SAMPLE_RATE = 96000  # this capped by the soundcard, therefore, this is non-changeable

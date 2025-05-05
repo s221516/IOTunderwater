@@ -993,7 +993,7 @@ if __name__ == "__main__":
     # analyze_bit_flips_from_csv("5m_dist_10kHz_unique_payloads.csv", id_to_analyze)
 
     ## NOTE: 
-    # file_path = "Average_power_of_received_signal.csv"
+    file_path = "ESP_new_average_power_1_3_6meters.csv"
     # file_path = "avg_power_of_rec_signal_purely_for_check_of_interference.csv"
 
     # df = pd.read_csv(file_path)
