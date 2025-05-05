@@ -441,12 +441,13 @@ def analyze_invalid_transmissions(csv_path):
 def plot_power_vs_distance_by_frequency(csv_path, min_freq_khz, max_freq_khz, test_descript):
     """
     Reads a CSV file and plots Distance vs Average Power for all carrier frequencies
-    in the same plot with different colors.
+    in the same plot with different colors, including error bars.
 
     Parameters:
     - csv_path: path to the CSV file.
     - min_freq_khz: minimum carrier frequency (in kHz) to include.
     - max_freq_khz: maximum carrier frequency (in kHz) to include.
+    - test_descript: test description to filter the data
     """
     # Load the CSV
     df = pd.read_csv(csv_path)
@@ -478,26 +479,30 @@ def plot_power_vs_distance_by_frequency(csv_path, min_freq_khz, max_freq_khz, te
     for freq, color in zip(frequencies, colors):
         subset = freq_filtered_df[freq_filtered_df['Carrier Frequency'] == freq]
         
-        # Group by distance and calculate mean power
-        avg_power = subset.groupby('Distance to speaker')['Average Power of signal'].agg(['mean']).reset_index()
-        avg_power_sorted = avg_power.sort_values('Distance to speaker')
+        # Group by distance and calculate mean and std power
+        stats = subset.groupby('Distance to speaker')['Average Power of signal'].agg(['mean', 'std']).reset_index()
+        stats_sorted = stats.sort_values('Distance to speaker')
         
         # Print intermediate values
         print(f"\nCarrier Frequency: {freq} Hz")
-        print("Distance (cm) | Mean Power")
-        print("-" * 30)
-        for _, row in avg_power_sorted.iterrows():
-            print(f"{row['Distance to speaker']:11.0f} | {row['mean']:10.2f}")
+        print("Distance (cm) | Mean Power | Std Dev")
+        print("-" * 45)
+        for _, row in stats_sorted.iterrows():
+            print(f"{row['Distance to speaker']:11.0f} | {row['mean']:10.2f} | {row['std']:7.2f}")
 
-        # Plot averaged points
-        plt.plot(
-            avg_power_sorted['Distance to speaker'],
-            avg_power_sorted['mean'],
-            'o-',
+        # Plot averaged points with error bars
+        plt.errorbar(
+            stats_sorted['Distance to speaker'],
+            stats_sorted['mean'],
+            yerr=stats_sorted['std'],
+            fmt='o-',
             color=color,
             label=f'{freq} Hz',
             markersize=8,
-            alpha=0.9
+            alpha=0.9,
+            capsize=5,
+            capthick=1,
+            elinewidth=1
         )
 
     plt.title('Average Power vs. Distance for Different Carrier Frequencies')
@@ -507,7 +512,7 @@ def plot_power_vs_distance_by_frequency(csv_path, min_freq_khz, max_freq_khz, te
     plt.grid(True, linestyle='--', alpha=0.7)
     plt.tight_layout()
     plt.show()
-
+    
 def compute_ber_for_different_vpps(file_path):
     """
     Compute BER for different VPP values from test data and plot the results
@@ -657,10 +662,10 @@ if __name__ == "__main__":
     bitrate = 500
     transmitter = "ESP"
     # "Testing: Average power purely for check of interference"
-    results_df = analyze_ber_by_carrier_freq(file_path, dist, bitrate, transmitter, "Testing: Finding the average power for new implement on ESPage of fixed payload with barker corr 5")
+    # results_df = analyze_ber_by_carrier_freq(file_path, dist, bitrate, transmitter, "Testing: average power of a signal")
 
     ## NOTE: change to see a subset of carrier freqs, min_freq, max_freq as inputs
-    # plot_power_vs_distance_by_frequency(file_path, 1000, 15000, "Testing: average power of a signal")
+    plot_power_vs_distance_by_frequency(file_path, 10000, 15000, "Testing: average power of a signal")
     
     # # NOTE: below is for the vpp test
     # test_file = "1m_distance_carrier_freq_sg_vpp_variable.csv"
