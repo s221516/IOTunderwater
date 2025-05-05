@@ -34,7 +34,7 @@ def compute_len_of_bits(message):
     len_of_data_bits = len(message) * 8
     len_of_preamble = len(config.BINARY_BARKER)
     if config.CONVOLUTIONAL_CODING:
-        len_of_data_bits = (len_of_data_bits * 2 + len_of_preamble + 12)
+        len_of_data_bits = (len_of_data_bits * 2 + len_of_preamble + 4)
     elif config.HAMMING_CODING:
         len_of_data_bits = len_of_data_bits * 3 / 2 + len_of_preamble
     else:
@@ -82,25 +82,30 @@ def transmit_signal():
         "9" : 'N(#-c~nC(^v>A'
     }
 
+    payload_sizes = [100]
 
-    n = 10
-    bitrates = [500] * n
-    payload_sizes = [900]
-    carrierfreqs = [15000]
+    n = 25
+    # bitrates = [500] * n 
+    bitrates = [300] * n + [500] * n + [1000] * n + [1500] * n + [2000] * n
     
-    # bitrates = [100] * n + [500] * n + [1000] * n + [1500] * n + [2000] * n
-    # carrierfreqs = np.arange(1000, 20000, 1000)
+
+    carrierfreqs = [10000]
+    # carrierfreqs = np.arange(1000, 21000, 1000)
     
     global test_description
-    # test_description = f"Testing: average power of a signal"
     # test_description = f"Testing: does sending a message with a low correlation < 3 to barker 13 make a diffence?"
     # test_description = f"Testing: testing signal generator with varying VPP. current VPP: 0.25"
     # test_description = f"Testing: Checking cleanliness of esp DAC straigt to mic and sig straight to mic"
     # test_description = f"Testing: Test how bitrate and carrier freq affects eachother when they are too close"
-    # test_description = f"Testing: Max bitrate for best carrier freq at a 6m distance"
     # test_description = f"Testing: Variying payload sizes, increases with 6 char at a time"
     # test_description = f"Testing: Variying payloads, size of payload = {payload_sizes[0]})"
+    # test_description = f"Testing: Convolutional encoding"
+    # test_description = f"Testing: TESTING ESP"
 
+    # test_description = f"Testing: average power of a signal - ESP"
+    # test_description = f"Testing: average power of a signal - ESP, reverted back to old code"
+    test_description = f"Testing: Max bitrate for best carrier freq at a 1m distance"
+    
     global speaker_depth
     speaker_depth = 200  # in cm
 
@@ -112,9 +117,10 @@ def transmit_signal():
             config.set_bitrate(bitrate)
             for carrierfreq in carrierfreqs:
                 config.set_carrierfreq(carrierfreq)
-                message = generatePayload.generate_payload(payload)
-                # message = "i3aw,*X@j&y;y" # message with correlation of 5
-                # message = "U" * payload
+                # message = generatePayload.generate_payload(payload)
+                message = "i3aw,*X@j&y;y" # message with correlation of 5, used for limit testing the two systems
+                # message = "U" * 12
+                
                 # print(f"Transmitting message: {message}")
                 # create unique id for each test
                 id = create_id()

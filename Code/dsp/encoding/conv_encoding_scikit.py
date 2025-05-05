@@ -3,7 +3,7 @@ import scipy.signal as signal
 import numpy as np
 import matplotlib.pyplot as plt
 import networkx as nx
-from .. import config
+# from .. import config
 
 def string_to_bits(string_input):
     """Convert a string to a numpy array of bits"""

@@ -344,12 +344,8 @@ class NonCoherentReceiver(Receiver):
 
         # print("Received bits:", bits)
 
-        if APPLY_AVERAGING_PREAMBLE:
-            bits_without_preamble = self.remove_preamble_average(bits)
-        elif APPLY_BAKER_PREAMBLE:
+        if APPLY_BAKER_PREAMBLE:
             bits_without_preamble, all_data_bits = self.remove_preamble_baker_code(bits)
-        else:
-            bits_without_preamble = self.remove_preamble_naive(bits)
 
         if bits_without_preamble == -1:
             print("No preamble found, error was raised in receiverClass")
