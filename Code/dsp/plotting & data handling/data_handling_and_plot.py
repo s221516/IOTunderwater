@@ -1628,11 +1628,11 @@ if __name__ == "__main__":
 
     # # NOTE: below computes the BER for varying lengths of the message
     # file_path = "Random_payloads.csv"
-    # # file_path = "Varying_payload_sizes.csv"
+    file_path = "Varying_payload_sizes.csv"
     # varying_length_analysis_and_plot(file_path, only_bandpass=True)
 
     # NOTE: computing bitflip tendency for a given file, computes for ESP and SG
-    # file_paths = ["1m_distance_payload_barker_similarity_impact.csv",
+    file_paths = ["1m_distance_payload_barker_similarity_impact.csv",
                   "1m_distance_carrier_freq_sg_vpp_variable.csv", 
                   "Max_bitrate_at_different_distances_and_best_carrier_freq.csv",
                   "Average_power_of_received_signal.csv", 
