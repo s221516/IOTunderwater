@@ -9,7 +9,6 @@ import scipy.signal as signal
 import config
 # import config
 from config import (
-    APPLY_AVERAGING_PREAMBLE,
     APPLY_BAKER_PREAMBLE,
     BINARY_BARKER,
     CONVOLUTIONAL_CODING,
@@ -113,9 +112,10 @@ class Receiver:
 
 
     def remove_preamble_baker_code(self, bits, std_factor=4):
-        correlation = signal.correlate(bits, BINARY_BARKER, mode="valid")
+        correlation = signal.correlate(bits, BINARY_BARKER, mode="valid") # old
+        # correlation = signal.correlate(BINARY_BARKER, bits, mode="same") # new
         threshold = np.mean(correlation) + std_factor * np.std(correlation)
-        peak_indices, _ = signal.find_peaks(correlation, height=threshold, distance=len_of_data_bits)
+        peak_indices, _ = signal.find_peaks(correlation, height=threshold, distance=100)
         if len(peak_indices) < 2:
             if std_factor > 1:
                 return self.remove_preamble_baker_code(bits, std_factor - 0.1)
@@ -129,8 +129,8 @@ class Receiver:
         data_bits_of_correct_len = []
         for i in range(len(peak_indices) - 1):
             all_data_bits.append(bits[peak_indices[i] + len(BINARY_BARKER) : peak_indices[i + 1]])
-            if abs(diff_in_peaks[i] - len_of_data_bits) == 0:
-                data_bits_of_correct_len.append(bits[peak_indices[i] + len(BINARY_BARKER) : peak_indices[i + 1]])
+            # if abs(diff_in_peaks[i] - len_of_data_bits) == 0:
+            data_bits_of_correct_len.append(bits[peak_indices[i] + len(BINARY_BARKER) : peak_indices[i + 1]])
 
         # NOTE: this is to plot the decodins of each entry of data bits
         print("Diff in peaks: ", diff_in_peaks)
@@ -145,7 +145,7 @@ class Receiver:
                 print(decoded_bits)
         if PLOT_PREAMBLE_CORRELATION:
             # NOTE: this plots the correlation of the preamble and the received signal
-            plt.figure(figsize=(14, 8))
+            plt.figure(figsize=(10, 6))
             plt.plot(
                 correlation, color="#FF3300", label="Correlation Value", linewidth=2
             )
@@ -163,7 +163,7 @@ class Receiver:
             )
             plt.xlabel("Bits from received signal")
             plt.ylabel("Correlation Value")
-            plt.title("Cross-Correlation with Preamble")
+            plt.title("Cross-Correlation with Preamble With Bandpass (BER: 0.54)")
             plt.legend()
             plt.grid()
             plt.show()
