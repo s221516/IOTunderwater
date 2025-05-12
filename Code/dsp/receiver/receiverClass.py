@@ -26,7 +26,7 @@ from errors import PreambleNotFoundError
 from scipy.io import wavfile
 from visuals.visualization import create_processing_visualization, create_frequency_domain_visualization
 
-plt.style.use("ggplot")
+# plt.style.use("ggplot")
 
 
 def plot_wav_signal(sample_rate, wav_signal):
@@ -48,8 +48,9 @@ class Receiver:
         self.bit_rate = config.BIT_RATE
         self.carrier_freq = config.CARRIER_FREQ
         self.band_pass = band_pass
-        self.cutoff_freq = self.bit_rate * 5
+        self.cutoff_freq = self.bit_rate * 1.2
         self.samples_per_symbol = int(SAMPLE_RATE / self.bit_rate)
+        self.filter_order = 4
 
     def _demodulate(self) -> Tuple[np.ndarray, Dict]:
         raise NotImplementedError("Subclasses must implement _demodulate")
@@ -92,7 +93,9 @@ class Receiver:
     def threshold_signal(self, normalized_signal: np.ndarray) -> np.ndarray:
         # this is called hyperestesis thresholding, essentially you have a memory while checking
         low = 0.4
+        print("Low: ", low)
         high = 0.6
+        print("High: ", high)
         thresholded = np.zeros_like(normalized_signal)
         state = 0
         for i in range(len(normalized_signal)):
@@ -200,7 +203,7 @@ class Receiver:
         plt.tight_layout()
         plt.show()
         
-    def plot_spectogram(self, ax=None):
+    def plot_spectrogram(self, ax=None):
         """Plots the spectrogram of the received WAV signal."""
         if ax is None:
             ax = plt.gca()
@@ -229,7 +232,16 @@ class Receiver:
         ax.set_ylim(0, 20000) # Limit y-axis to 20kHz
         
         
-    def plot_wave_in_frequency_domain(self, wave, ax=None, color="b"):
+    def plot_wave_in_frequency_domain(self, wave, ax=None, color="b", alpha=0.5, label=None):
+        """
+        Plots the frequency domain representation of the received WAV signal.
+        @param wave: The received WAV signal.
+        @param ax: The axis to plot on. If None, uses the current axis.
+        @param color: The color of the plot line.
+        @param alpha: The transparency of the plot line.
+        @param label: The label for the plot line for the legend.
+        @return: None
+        """
         if ax is None:
             ax = plt.gca()
 
@@ -241,14 +253,14 @@ class Receiver:
 
         frequency_magnitudes = np.abs(wave_f)
         # Make it to decibels
-        # frequency_magnitudes = 20 * np.log10(frequency_magnitudes / np.max(frequency_magnitudes))
+        frequency_magnitudes = 20 * np.log10(frequency_magnitudes / np.max(frequency_magnitudes))
 
         # only plot the positive frequencies
-        positive_frequencies = frequencies_x_axis > 0
-        frequencies_x_axis = frequencies_x_axis[positive_frequencies]
-        frequency_magnitudes = frequency_magnitudes[positive_frequencies]
+        # positive_frequencies = frequencies_x_axis > 0
+        # frequencies_x_axis = frequencies_x_axis[positive_frequencies]
+        # frequency_magnitudes = frequency_magnitudes[positive_frequencies]
 
-        ax.plot(frequencies_x_axis, frequency_magnitudes, "-", color=color, alpha=0.5) 
+        ax.plot(frequencies_x_axis, frequency_magnitudes, "-", color=color, alpha=alpha, label=label) 
         ax.set_xlabel("Frequency (Hz)")
         ax.set_ylabel("Magnitude")
         ax.set_title("Frequency Domain Signal")
@@ -261,11 +273,19 @@ class Receiver:
 
         _ , ax = plt.subplots(2, 1, figsize=(10, 8))
         self.plot_wave_in_frequency_domain(self.wav_signal, ax=ax[0], color="blue")
-        self.plot_spectogram(ax=ax[1])
+        self.plot_spectrogram(ax=ax[1])
         plt.tight_layout()
         plt.show()
 
     def plot_wave_in_time_domain(self, wave, l: str, ax=None, color="orange"):
+        """
+        Plots the time domain representation of the received WAV signal.
+        @param wave: The received WAV signal.
+        @param l: The label for the plot line for the legend.
+        @param ax: The axis to plot on. If None, uses the current axis.
+        @param color: The color of the plot line.
+        @return: None
+        """
         if ax is None:
             ax = plt.gca()
 
@@ -277,6 +297,11 @@ class Receiver:
         ax.grid(True)
 
     def plot_in_frequency_domain(self):
+        """
+        Plots raw signal, after envelope, and after lowpass filter in frequency domain.
+        @param self: Receiver object
+        @return: _type_: None
+        """
         if self.wav_signal is None:
             print("No signal to visualize")
             return
@@ -287,7 +312,87 @@ class Receiver:
         plt.show()
         return fig
     
+    def plot_in_frequency_after_bandpass_filter(self):
+        if self.wav_signal is None:
+            print("No signal to visualize")
+            return
 
+        # Apply bandpass filter
+        filtered_signal = self.bandpass_filter(self.wav_signal)
+        fig, ax = plt.subplots(1, 1, figsize=(10, 4))
+        self.plot_wave_in_frequency_domain(self.wav_signal, ax=ax, color="blue", alpha=0.3)
+        self.plot_wave_in_frequency_domain(filtered_signal, ax=ax, color="red", alpha=0.6)
+        plt.title("Frequency Domain after Bandpass Filter")
+        plt.xlabel("Frequency (Hz)")
+        plt.ylabel("Magnitude dB")
+        plt.xlim(0, 20000)  # Limit x-axis to 10kHz
+        plt.legend(["Original Signal", "After Bandpass Filter Before Envelope"])
+        plt.grid(True)
+        plt.tight_layout()
+        plt.show()
+        
+        
+    def plot_wave_in_freq_domain_after_envelope(self):
+        if self.wav_signal is None:
+            print("No signal to visualize")
+            return
+
+        # _demodulate returns a tuple, we need the debug_info dictionary
+        _filtered_signal, debug_info = self._demodulate() 
+        fig, ax = plt.subplots(1, 1, figsize=(10, 4))
+        
+        # Plot original signal with label
+        self.plot_wave_in_frequency_domain(self.wav_signal, ax=ax, color="blue", alpha=0.3, label="Original Signal")
+        # Plot signal after envelope with label
+        self.plot_wave_in_frequency_domain(debug_info["envelope"], ax=ax, color="red", alpha=0.6, label="After Envelope before Lowpass Filter")
+        # Plot the signal after lowpass filter with label
+        self.plot_wave_in_frequency_domain(debug_info["filtered"], ax=ax, color="purple", alpha=0.6, label="After Lowpass Filter")
+        
+        ### Plot vertical line at bandwidth around carrier frequency
+        # Using a distinct color (e.g., green) for Bandwidth lines
+        plt.axvline(x=self.carrier_freq - (self.bit_rate // 2), color="blue", linestyle="--", label="Bandwidth")
+        plt.axvline(x=self.carrier_freq + (self.bit_rate // 2), color="blue", linestyle="--")
+        
+        ### Plot vertical line at bit rate
+        plt.axvline(x=self.bit_rate // 2, color="red", linestyle="--", label="Bit Rate")
+        plt.axvline(x=-self.bit_rate // 2, color="red", linestyle="--")
+        
+        plt.title("Frequency Domain after Envelope")
+        plt.xlabel("Frequency (Hz)")
+        plt.ylabel("Magnitude dB")
+        plt.xlim(-15000, 15000)  # Limit x-axis
+        
+        # Add legend, placed in a corner (e.g., 'upper right')
+        # This will automatically use the labels provided in plot and axvline calls
+        plt.legend(loc='lower left', fontsize='small') 
+        
+        plt.grid(True)
+        plt.tight_layout()
+        plt.show()
+        
+    def plot_wave_in_time_domain_after_envelope(self):
+        
+        if self.wav_signal is None:
+            print("No signal to visualize")
+            return
+
+        # _demodulate returns a tuple, we need the debug_info dictionary
+        _filtered_signal, debug_info = self._demodulate() 
+        fig, ax = plt.subplots(1, 1, figsize=(10, 4))
+        
+        # Plot original signal with label
+        self.plot_wave_in_time_domain(self.wav_signal, "Original Signal", ax=ax, color="blue")
+        # Plot signal after envelope with label
+        self.plot_wave_in_time_domain(debug_info["envelope"], "After Envelope before Lowpass Filter", ax=ax, color="red")
+
+        plt.legend(["Original Signal", "After Envelope"])
+        plt.title("Time Domain after Envelope")
+        plt.tight_layout()
+        plt.show()
+        
+        
+        
+        
     def plot_simulation_steps(self):
         if self.wav_signal is None:
             print("No signal to visualize")
@@ -305,7 +410,97 @@ class Receiver:
         # fig = self.plot_wave_in_time_domain(self.wav_signal, "Received", color="g")
         plt.show()
         return fig
+    def plot_low_pass_filter_bode(self):
+        """
+        Generates and plots the magnitude response for the low-pass filter.
+        Uses a logarithmic x-axis from 1 to 10000 Hz. Font sizes adjusted for A4 paper.
+        """
+        cutoff_freq_lp = self.cutoff_freq # Hz
+        nyquist = 0.5 * config.SAMPLE_RATE
+        normalized_cutoff_lp = cutoff_freq_lp / nyquist
 
+        b_lp, a_lp = signal.butter(self.filter_order, normalized_cutoff_lp, btype='low', analog=False)
+        
+        w_lp, h_lp = signal.freqz(b_lp, a_lp, worN=8000, fs=config.SAMPLE_RATE) 
+
+        mag_lp = 20 * np.log10(np.abs(h_lp))
+
+        # Font sizes for A4 paper
+        title_fontsize = 14
+        label_fontsize = 14
+        legend_fontsize = 14
+        tick_fontsize = 14
+
+        plt.figure(figsize=(10, 6)) 
+        plt.semilogx(w_lp, mag_lp, color='blue') 
+        plt.title(f'Low-Pass Filter Magnitude Response (Order={self.filter_order}, Cutoff={cutoff_freq_lp:.2f} Hz)', fontsize=title_fontsize)
+        plt.xlabel('Frequency [Hz] (log scale)', fontsize=label_fontsize)
+        plt.ylabel('Magnitude [dB]', fontsize=label_fontsize)
+        plt.grid(which='both', linestyle='-', color='grey', alpha=0.5)
+        plt.axvline(cutoff_freq_lp, color='red', linestyle='--', label=f'Cutoff Freq: {cutoff_freq_lp:.2f} Hz')
+        plt.legend(fontsize=legend_fontsize)
+        plt.xlim([1, 10000]) 
+        plt.xticks(fontsize=tick_fontsize)
+        plt.yticks(fontsize=tick_fontsize)
+        
+        relevant_indices = (w_lp >= 1) & (w_lp <= 10000)
+        if np.any(relevant_indices):
+            min_mag_plot = np.min(mag_lp[relevant_indices])
+            max_mag_plot = np.max(mag_lp[relevant_indices])
+            plt.ylim([min_mag_plot - 5, max_mag_plot + 5])
+        else: 
+            plt.ylim([-100, 10])
+
+        plt.tight_layout()
+        plt.show()
+
+    def plot_band_pass_filter_bode(self):
+        """
+        Generates and plots the magnitude response for the band-pass filter.
+        Uses a logarithmic x-axis from 1 to 10000 Hz. Font sizes adjusted for A4 paper.
+        """
+        low_cutoff_bp = self.carrier_freq - self.bit_rate
+        high_cutoff_bp = self.carrier_freq + self.bit_rate
+        nyquist = 0.5 * config.SAMPLE_RATE
+        normalized_low_bp = low_cutoff_bp / nyquist
+        normalized_high_bp = high_cutoff_bp / nyquist
+
+        b_bp, a_bp = signal.butter(self.filter_order, [normalized_low_bp, normalized_high_bp], btype='band', analog=False)
+        
+        w_bp, h_bp = signal.freqz(b_bp, a_bp, worN=8000, fs=config.SAMPLE_RATE)
+
+        mag_bp = 20 * np.log10(np.abs(h_bp))
+
+        # Font sizes for A4 paper
+        title_fontsize = 14
+        label_fontsize = 14
+        legend_fontsize = 14
+        tick_fontsize = 14
+
+        plt.figure(figsize=(10, 6)) 
+        plt.semilogx(w_bp, mag_bp, color='green') 
+        plt.title(f'Band-Pass Filter Magnitude Response (Order={self.filter_order}, Passband: {low_cutoff_bp}-{high_cutoff_bp} Hz)', fontsize=title_fontsize)
+        plt.xlabel('Frequency [Hz] (log scale)', fontsize=label_fontsize)
+        plt.ylabel('Magnitude [dB]', fontsize=label_fontsize)
+        plt.grid(which='both', linestyle='-', color='grey', alpha=0.5)
+        plt.axvline(low_cutoff_bp, color='red', linestyle='--', label=f'Low Cutoff: {low_cutoff_bp} Hz')
+        plt.axvline(high_cutoff_bp, color='orange', linestyle='--', label=f'High Cutoff: {high_cutoff_bp} Hz')
+        plt.axvline(self.carrier_freq, color='purple', linestyle=':', label=f'Center Freq: {self.carrier_freq} Hz')
+        plt.legend(fontsize=legend_fontsize)
+        plt.xlim([1, 10000]) 
+        plt.xticks(fontsize=tick_fontsize)
+        plt.yticks(fontsize=tick_fontsize)
+
+        relevant_indices = (w_bp >= 1) & (w_bp <= 10000)
+        if np.any(relevant_indices):
+            min_mag_plot = np.min(mag_bp[relevant_indices])
+            max_mag_plot = np.max(mag_bp[relevant_indices])
+            plt.ylim([min_mag_plot - 5, max_mag_plot + 5])
+        else: 
+            plt.ylim([-100, 10])
+
+        plt.tight_layout()
+        plt.show()
     def set_len_of_data_bits(self, value):
         global len_of_data_bits
         len_of_data_bits = value
