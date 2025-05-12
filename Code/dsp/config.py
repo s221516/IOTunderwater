@@ -33,7 +33,7 @@ TRANSMITTER_PORT = "COM11"
 # TRANSMITTER_PORT = "/dev/cu.usbserial-0232D158"
 MIC_INDEX = 1 # Mathias, 1 Morten
 USE_ESP = False
-SAMPLE_RATE = 96000  # this capped by the soundcard, therefore, this is non-changeable
+SAMPLE_RATE = 48000   # this capped by the soundcard, therefore, this is non-changeable
 
 BIT_RATE = 50
 CARRIER_FREQ = 1000 

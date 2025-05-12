@@ -87,7 +87,7 @@ def transmit_signal():
     
     # bitrates = [500] * n 
     # bitrates = [300] * n + [500] * n + [1000] * n + [1500] * n + [2000] * n
-    bitrates = [3997]
+    bitrates = [500]
 
     carrierfreqs = [10000]
     # carrierfreqs = np.arange(1000, 21000, 1000)
