@@ -169,6 +169,8 @@ def process_signal_for_testing(message, id):
     nonCoherentReceiver.set_len_of_data_bits(len_of_data_bits)
     # doesnt matter if band pass or not, the receiver will always use the same data bits
     avg_power_of_signal = nonCoherentReceiver.compute_average_power_of_signal()
+    nonCoherentReceiver.plot_low_pass_filter_bode()
+    nonCoherentReceiver.plot_band_pass_filter_bode()
     # print(f"Average power of signal: {avg_power_of_signal}")
     nonCoherentReceiver.plot_signal()
     # nonCoherentReceiver.plot_spectrogram_and_frequency_domain()
@@ -261,3 +263,51 @@ if __name__ == "__main__":
             print("Correlation of the original message: ", counter)
             
             process_signal_for_testing(original_message, id)
+                # create_wav_file_from_recording()
+            import scipy.io.wavfile as wavfile
+            ## check data type of a generated .wav file
+
+            file_path = "Code/dsp/data/raw_data/ffc38fc7-7d9f-4074-9eeb-d0ce54a6964d.wav"
+            sample_rate, data = wavfile.read(file_path)
+            print(f"Sample Rate: {sample_rate}")
+            print(f"Data Type: {data.dtype}")
+            print(f"Data Shape: {data.shape}")
+            print(f"Data: {data}")
+
+            import numpy as np
+            import wave
+
+            def estimate_acoustic_power_from_wav(
+                wav_path,
+                hydrophone_sensitivity=40e-6,  # V/Pa
+                V_ref=1.0,                     # RMS voltage corresponding to full-scale int16
+                R=1.0,                         # measurement distance in meters
+                rho=1000,                      # water density (kg/m^3)
+                c=1500                         # sound speed (m/s)
+            ):
+                # Open WAV (int16 PCM)
+                wf = wave.open(wav_path, 'rb')
+                n_frames = wf.getnframes()
+                raw = wf.readframes(n_frames)
+                wf.close()
+                # Convert bytes to int16 samples
+                samples = np.frombuffer(raw, dtype=np.int16).astype(np.float64)
+                # Compute RMS of samples (in integer counts)
+                rms_counts = np.sqrt(np.mean(samples**2))
+                # Full-scale for int16 is 2^15-1 counts -> V_ref volts RMS
+                V_rms = (rms_counts / (2**15 - 1)) * V_ref
+                # Convert voltage to pressure (Pa)
+                p_rms = V_rms / hydrophone_sensitivity
+                # Compute acoustic intensity I = p^2/(rho*c)
+                I = p_rms**2 / (rho * c)
+                # Total acoustic power P = I * 4πR^2
+                P_acoustic = I * 4 * np.pi * R**2
+                return P_acoustic, V_rms, p_rms
+
+            # Example usage:
+            P_w, V_rms_meas, p_rms_meas = estimate_acoustic_power_from_wav(
+                file_path,
+                V_ref=1.0,  # calibrate to your soundcard's full-scale RMS voltage
+                R=1.0
+            )
+            print(f"Acoustic Power: {P_w} W")

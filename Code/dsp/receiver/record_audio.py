@@ -5,7 +5,7 @@ import numpy as np
 from collections import deque
 from config import PATH_TO_WAV_FILE, SAMPLE_RATE, MIC_INDEX
 from datetime import datetime
-
+from scipy.io import wavfile
 CHUNK = 1024  # the amount of frames read per buffer, 1024 to balance between latency and processing load
 # small chunk = reduces latency, but increases processing load
 # large chunk = increases latency, but decreases processing load
@@ -169,4 +169,12 @@ def get_avg_rms_value():
 
 
 if __name__ == "__main__":
-    create_wav_file_from_recording()
+    # Example usage
+    # create_wav_file_from_recording(5, "test_recording")
+    # continuous_recording_with_threshold(100)
+    # get_avg_rms_value()
+    pass
+    
+        
+        
+    

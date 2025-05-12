@@ -4,7 +4,17 @@ import matplotlib.patheffects as path_effects
 import pandas as pd
 import numpy as np
 import ast
-import scipy.signal as signal 
+from scipy.special import erfc
+
+
+# --- Theoretical Model Constants and Functions ---
+# (These are from your provided example block)
+
+# Hydrophone & conversion constants
+HYDRO_SENS = 40e-6    # V_rms per Pa (adjust if your value is different)
+V_REF      = 1.0      # Full-scale RMS voltage for int16 (adjust if different)
+RHO        = 1000     # kg/m^3 (density of water)
+C          = 1500     # m/s (speed of sound in water)import scipy.signal as signal 
 
 def compute_ber_for_hamming_encoding_test(file_path):
     """
@@ -1343,11 +1353,253 @@ def varying_correlation_value_and_plot(file_path, test_description, only_bandpas
     
     return results_df
 
+
+# 1) Channel‑model and comms functions
+
+def alpha_thorp(f_khz):
+    """Thorp attenuation in dB/km."""
+    f_sq = f_khz**2
+    return (0.11 * f_sq / (1 + f_sq) +
+            44 * f_sq / (4100 + f_sq) +
+            2.75e-4 * f_sq + 0.003)
+
+def Q(x):
+    """Q-function."""
+    return 0.5 * erfc(x / np.sqrt(2))
+
+# Note: The ber_2ask and packet_success_rate functions are used as provided.
+# The interpretation of snr_db in these functions is critical.
+# ber_2ask seems to assume snr_db is Eb/N0 or a related quantity for coherent detection.
+# packet_success_rate converts snr_db (assumed channel SNR) to an Eb/N0-like term.
+
+def ber_2ask(snr_db_for_formula):
+    """BER for 2-ASK, assuming snr_db_for_formula is the argument to sqrt() for Q."""
+    # This formula Q(sqrt(SNR_linear)) is typical for coherent BPSK/OOK.
+    # If snr_db_for_formula is channel SNR (linear), then it's Q(sqrt(SNR_linear)).
+    return Q(np.sqrt(10**(snr_db_for_formula / 10)))
+
+def packet_success_rate_theoretical(channel_snr_db, bitrate_bps, message_length_bits):
+    """
+    Calculates packet success rate.
+    channel_snr_db: The signal-to-noise ratio of the channel in dB.
+    bitrate_bps: The data rate in bits per second.
+    message_length_bits: The length of the packet in bits.
+    """
+    print(f"Channel SNR (dB): {channel_snr_db}, Bitrate: {bitrate_bps}, Message Length: {message_length_bits}")
+    pb = ber_2ask(channel_snr_db)
+    
+    if pb == 0: # Avoid log(0) issues if pb is extremely small
+        return 1.0
+    if pb == 1:
+        return 0.0
+        
+    # Packet success rate = (1 - Pb)^L
+    psr = (1 - pb)**message_length_bits
+    return psr
+def compute_snr_db(P_w, d_m, f_khz, Rb):
+    # 1) Source level Slevel (dB), using r = d
+    I = P_w / (4 * np.pi * d_m**2)
+    Slevel = 10 * (np.log10(I) - np.log10(0.67e-18))
+    # 2) Transmission loss Tloss (dB)
+    Tloss = 20 * np.log10(d_m) + alpha_thorp(f_khz) * d_m * 1e-3
+    # 3) Noise spectral density Nlevel (dB/Hz)
+    Nlevel = 50 - 18 * np.log10(f_khz)
+    # 4) Noise power over band B = 2 * Rb (dB)
+    B = Rb
+    Npow = Nlevel + 10 * np.log10(B)
+    # 5) Directivity index (omnidirectional = 0)
+    Dindex = 0
+    # Final SNR in dB
+    return Slevel - Tloss - Npow + Dindex
+
+def estimate_acoustic_power_from_wav(
+    avg_power_int16,
+    hydrophone_sensitivity=40e-6,  # 40 µV/Pa
+    V_ref=1.0,                     # assume full‑scale = 1 V_rms
+    R=1.0,                         # record distance = 1 m
+    rho=1000,                      # water density (kg/m³)
+    c=1500                         # sound speed (m/s)
+):
+
+    # 2) digital RMS (counts)
+    rms_counts = np.sqrt(np.mean(avg_power_int16**2))
+    # 3) convert to voltage: V_rms = (counts/fullscale_counts) * V_ref
+    V_rms = (rms_counts / (2**15 - 1)) * V_ref
+
+    # 4) convert to pressure: p_rms = V_rms / sensitivity
+    p_rms = V_rms / hydrophone_sensitivity  # in Pa
+
+    # 5) intensity: I = p_rms²/(ρ c)
+    I = p_rms**2 / (rho * c)  # W/m²
+
+    # 6) total acoustic power: P = I·4πR²
+    P_acoustic = I * 4 * np.pi * R**2
+    return P_acoustic, V_rms, p_rms
+
+def calculate_snr_from_received_power_counts(avg_power_counts, carrier_freq_hz, bitrate_bps):
+    """
+    Calculates SNR from average power counts.
+    """
+    # 1. Convert mean-square counts to V_rms_sq
+    # Assuming avg_power_counts is analogous to df['avg_power_counts'] from example
+    # And assuming it's for a 16-bit ADC, V_REF is peak.
+    # If V_REF is RMS full scale, then (2**15-1) is not needed, just scale.
+    # Let's assume V_REF is peak voltage for full scale of signed 16-bit.
+    # If avg_power_counts is already mean square of ADC values, then:
+    # V_rms_sq = avg_power_counts * (V_REF / (2**15 - 1))**2
+    # If avg_power_counts is sum of squares / N, and V_REF is peak for ADC:
+    # Max ADC value is 2**15-1. Voltage per count = V_REF / (2**15-1).
+    # avg_power_counts is mean of (ADC_value)^2.
+    # So, mean_sq_voltage = mean_of(ADC_value * V_REF/(2**15-1))^2 = mean(ADC_value^2) * (V_REF/(2**15-1))^2
+    # V_rms_sq = avg_power_counts * (V_REF / (2**15 - 1))**2 # This seems correct if V_REF is peak.
+    # If V_REF is RMS voltage corresponding to full scale digital value:
+    V_rms_sq = avg_power_counts / ((2**15 - 1)**2) * (V_REF**2) # As per user example structure
+
+    # 2. Pressure mean-square (Pa^2)
+    p_rms_sq = V_rms_sq / (HYDRO_SENS**2)
+
+    # 3. Received Level (RL) in dB re 1uPa
+    # RL_Pa_dB = 10 * log10(p_rms_sq / (1e-6 Pa)^2) = 10 * log10(p_rms_sq) + 120
+    if p_rms_sq <= 0: # Avoid log of non-positive
+        return -np.inf # Or handle as very low SNR
+    RL_Pa_dB = 10 * np.log10(p_rms_sq) + 120
+
+    # 4. Noise Level (NL)
+    f_khz = carrier_freq_hz / 1000.0
+    if f_khz <= 0: f_khz = 0.001 # Avoid log(0) for noise calc
+        
+    Nlevel_dB_re_uPa_per_rtHz = 50 - 18 * np.log10(f_khz) # Ambient noise spectrum level
+    Bandwidth_Hz = bitrate_bps # Effective noise bandwidth, often taken as 2*Rb or Rb
+    NL_dB_re_uPa = Nlevel_dB_re_uPa_per_rtHz + 10 * np.log10(Bandwidth_Hz)
+
+    # 5. SNR
+    SNR_dB = RL_Pa_dB - NL_dB_re_uPa
+    return SNR_dB
+
+def analyze_theoretical_packet_success(file_path, transmitter_filter, target_bitrate_bps, message_length_bits):
+    """
+    Analyzes theoretical packet success rate based on recorded average power.
+    Assumes 'Average Power of signal' column in CSV contains ADC counts squared mean.
+    """
+    df = pd.read_csv(file_path)
+
+    # Filter by transmitter
+    if transmitter_filter:
+        df = df[df['Transmitter'] == transmitter_filter]
+    
+    if df.empty:
+        print(f"No data found for transmitter: {transmitter_filter}")
+        return pd.DataFrame()
+
+    results_list = []
+    
+    # Group by Distance and Carrier Frequency
+    # Ensure 'Carrier Frequency' is numeric for calculations
+    df['Carrier Frequency'] = pd.to_numeric(df['Carrier Frequency'], errors='coerce')
+    df.dropna(subset=['Carrier Frequency', 'Average Power of signal', 'Distance to speaker'], inplace=True)
+
+
+    for group_keys, group_data in df.groupby(['Distance to speaker', 'Carrier Frequency']):
+        distance_cm, carrier_freq_hz = group_keys
+        
+        # Use 'Average Power of signal' as the mean of squared ADC counts
+        avg_power_counts_mean = group_data['Average Power of signal'].mean()
+
+        if pd.isna(avg_power_counts_mean) or pd.isna(carrier_freq_hz) or pd.isna(distance_cm):
+            continue
+
+        # --- Calculate estimated acoustic source power (P_w) from avg_power_counts_mean ---
+        # This logic is adapted from estimate_Pw_from_mean_square and uses V_rms_sq from calculate_snr_from_received_power_counts
+        
+        # 1. Convert mean_square_counts to V_rms_sq (mean_sq_voltage)
+        # V_REF is assumed to be the voltage corresponding to the peak ADC count (2**15-1)
+        # avg_power_counts_mean is mean(ADC_value^2)
+        mean_sq_voltage = avg_power_counts_mean * (V_REF / (2**15 - 1))**2
+        
+        # 2. Pressure mean-square at the measurement distance
+        p_rms_sq_at_measurement = mean_sq_voltage / (HYDRO_SENS**2)
+        
+        # 3. Intensity at the measurement distance
+        intensity_at_measurement = p_rms_sq_at_measurement / (RHO * C)
+        
+        # 4. Estimated total radiated acoustic power of the source (P_w)
+        #    Assumes the measurement was done at 'measurement_distance_m'.
+        measurement_distance_m = distance_cm / 100.0
+        if measurement_distance_m <= 0: # Avoid division by zero or issues with log(0) in Tloss if d_m is 0
+            estimated_source_acoustic_power_Pw = 0
+        else:
+            estimated_source_acoustic_power_Pw = intensity_at_measurement * 4 * np.pi * (measurement_distance_m**2)
+        # --- End of P_w calculation ---
+
+        # Calculate SNR using the estimated source power P_w and other parameters.
+        # The distance for SNR calculation (d_m in compute_snr_db) is the same measurement_distance_m.
+        if estimated_source_acoustic_power_Pw > 0 and measurement_distance_m > 0:
+            snr_db = compute_snr_db(
+                estimated_source_acoustic_power_Pw, 
+                measurement_distance_m, 
+                carrier_freq_hz / 1000.0, # f_khz
+                target_bitrate_bps       # Rb
+            )
+        else:
+            snr_db = -np.inf # Cannot compute SNR if power is zero or distance is zero
+
+        if snr_db == -np.inf: # Handle cases with no effective signal
+            psr = 0.0
+        else:
+            psr = packet_success_rate_theoretical(snr_db, target_bitrate_bps, message_length_bits)
+        
+        results_list.append({
+            'Distance (cm)': distance_cm,
+            'Carrier Frequency (Hz)': carrier_freq_hz,
+            'Avg Power Counts': avg_power_counts_mean,
+            'Estimated Source Power (W)': estimated_source_acoustic_power_Pw,
+            'Calculated SNR (dB)': snr_db,
+            'Theoretical PSR': psr
+        })
+        
+    results_df = pd.DataFrame(results_list)
+    results_df = results_df.sort_values(by=['Carrier Frequency (Hz)', 'Distance (cm)'])
+    
+    print("\nTheoretical Packet Success Rate Analysis (using estimated P_w from avg power counts):")
+    print(results_df[['Distance (cm)', 'Carrier Frequency (Hz)', 'Avg Power Counts', 'Estimated Source Power (W)', 'Calculated SNR (dB)', 'Theoretical PSR']].head())
+    return results_df
+
+def plot_theoretical_packet_success(results_df, transmitter_filter, target_bitrate_bps, message_length_bits):
+    """
+    Plots theoretical packet success rate vs. distance for different carrier frequencies.
+    """
+    if results_df.empty:
+        print("No data to plot for theoretical packet success rate.")
+        return
+
+    plt.figure(figsize=(14, 8))
+    
+    unique_carrier_freqs = sorted(results_df['Carrier Frequency (Hz)'].unique())
+    colors = plt.cm.viridis(np.linspace(0, 1, len(unique_carrier_freqs)))
+    
+    for i, freq_hz in enumerate(unique_carrier_freqs):
+        freq_data = results_df[results_df['Carrier Frequency (Hz)'] == freq_hz]
+        plt.plot(freq_data['Distance (cm)'], freq_data['Theoretical PSR'], 
+                 marker='o', linestyle='-', color=colors[i], 
+                 label=f'{int(freq_hz/1000)} kHz')
+
+    plt.xlabel('Distance to speaker (cm)', fontsize=14)
+    plt.ylabel('Theoretical Packet Success Rate (PSR)', fontsize=14)
+    plt.title(f'Theoretical PSR vs. Distance (Transmitter: {transmitter_filter}, Bitrate: {target_bitrate_bps}bps, MsgLen: {message_length_bits}bits)', fontsize=16)
+    plt.legend(title='Carrier Frequency', bbox_to_anchor=(1.05, 1), loc='upper left', fontsize=10)
+    plt.grid(True, linestyle='--', alpha=0.7)
+    plt.ylim(0, 1.05)
+    plt.xticks(fontsize=12)
+    plt.yticks(fontsize=12)
+    plt.tight_layout(rect=[0, 0, 0.85, 1]) # Adjust layout to make space for legend
+    plt.show()
+
+
 if __name__ == "__main__":  
     # # # NOTE: 
     # # # file_path = "ESP_new_average_power_1_3_6meters.csv"
     # file_path = "Average_power_of_received_signal.csv"
-    # # # file_path = "avg_power_of_rec_signal_purely_for_check_of_interference.csv"
+    # # file_path = "avg_power_of_rec_signal_purely_for_check_of_interference.csv"
     # file_path = "1m_distance_payload_barker_similarity_impact.csv"
 
     # df = pd.read_csv(file_path)
@@ -1376,7 +1628,7 @@ if __name__ == "__main__":
 
     # # NOTE: below computes the BER for varying lengths of the message
     # file_path = "Random_payloads.csv"
-    # # file_path = "Varying_payload_sizes.csv"
+    file_path = "Varying_payload_sizes.csv"
     # varying_length_analysis_and_plot(file_path, only_bandpass=True)
 
     # NOTE: computing bitflip tendency for a given file, computes for ESP and SG
@@ -1405,6 +1657,35 @@ if __name__ == "__main__":
     # results = analyze_ber_by_carrier_freq(file_path, test_description="Testing: testing impact of similarlity of payloads and barker 13")
     # results = analyze_invalid_transmissions(file_path)
 
+    # NOTE: theoretical likelihood of reading this message at these different distances.
+    # Use a file that has 'Average Power of signal' (as counts), 'Transmitter', 'Distance to speaker', 'Carrier Frequency'
+    # For example, the same file used for power vs distance or BER vs carrier freq.
+    file_path_for_theoretical = file_path # Ensure this file exists and has the needed columns
+    
+    # Parameters for the theoretical model
+    transmitter_to_analyze = "ESP" # or "ESP" or None to analyze all
+    theoretical_bitrate = 10    # bps
+    theoretical_message_length = 4000 # bits (e.g., 12 bytes * 8 bits/byte)
+
+    print(f"\n--- Analyzing Theoretical Packet Success Rate ---")
+    print(f"File: {file_path_for_theoretical}, Transmitter: {transmitter_to_analyze}, Bitrate: {theoretical_bitrate}bps, MsgLen: {theoretical_message_length}bits")
+    
+    theoretical_results_df = analyze_theoretical_packet_success(
+        file_path_for_theoretical,
+        transmitter_filter=transmitter_to_analyze,
+        target_bitrate_bps=theoretical_bitrate,
+        message_length_bits=theoretical_message_length
+    )
+    
+    if not theoretical_results_df.empty:
+        plot_theoretical_packet_success(
+            theoretical_results_df,
+            transmitter_filter=transmitter_to_analyze,
+            target_bitrate_bps=theoretical_bitrate,
+            message_length_bits=theoretical_message_length
+        )
+    else:
+        print("No theoretical results generated to plot.")
 
 
     
