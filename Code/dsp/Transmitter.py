@@ -124,7 +124,7 @@ class Transmitter(threading.Thread):
             time.sleep(0.2)
 
             command = f"""
-            APPLy:SIN {carrierfreq}, 10, 0
+            APPLy:SIN {carrierfreq}, 3.3, 0
             AM:SOUR INT
             AM:INTernal:FUNCtion USER
             AM:INT:FREQuency {freq}

@@ -84,10 +84,10 @@ def transmit_signal():
 
     payload_sizes = [100]
 
-    n = 25
-    # bitrates = [500] * n 
-    bitrates = [300] * n + [500] * n + [1000] * n + [1500] * n + [2000] * n
     
+    # bitrates = [500] * n 
+    # bitrates = [300] * n + [500] * n + [1000] * n + [1500] * n + [2000] * n
+    bitrates = [3997]
 
     carrierfreqs = [10000]
     # carrierfreqs = np.arange(1000, 21000, 1000)
@@ -104,8 +104,8 @@ def transmit_signal():
 
     # test_description = f"Testing: average power of a signal - ESP"
     # test_description = f"Testing: average power of a signal - ESP, reverted back to old code"
-    test_description = f"Testing: Max bitrate for best carrier freq at a 1m distance"
-    
+    # test_description = f"Testing: Max bitrate for best carrier freq at a 1m distance"
+    test_description = f"Testing: TESTING SG NO SPEAK"
     global speaker_depth
     speaker_depth = 200  # in cm
 
@@ -118,8 +118,8 @@ def transmit_signal():
             for carrierfreq in carrierfreqs:
                 config.set_carrierfreq(carrierfreq)
                 # message = generatePayload.generate_payload(payload)
-                message = "i3aw,*X@j&y;y" # message with correlation of 5, used for limit testing the two systems
-                # message = "U" * 12
+                # message = "i3aw,*X@j&y;y" # message with correlation of 5, used for limit testing the two systems
+                message = "U" * 498
                 
                 # print(f"Transmitting message: {message}")
                 # create unique id for each test
@@ -172,7 +172,7 @@ def process_signal_for_testing(message, id):
     nonCoherentReceiver.plot_low_pass_filter_bode()
     nonCoherentReceiver.plot_band_pass_filter_bode()
     # print(f"Average power of signal: {avg_power_of_signal}")
-    # nonCoherentReceiver.plot_signal()
+    nonCoherentReceiver.plot_signal()
     # nonCoherentReceiver.plot_spectrogram_and_frequency_domain()
 
     try:

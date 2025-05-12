@@ -146,7 +146,7 @@ def generate_payload(size, target_correlation=6, convolutional_encoding=config.C
 
         # --- Check Correlation of Original Bits ---
         try:
-            correlation_orig = signal.correlate(config.BINARY_BARKER, payload_bits, mode='same')
+            correlation_orig = signal.correlate(payload_bits, config.BINARY_BARKER, mode='valid')
             max_corr_orig = np.max(correlation_orig) if correlation_orig.size else -np.inf
         except ValueError as e:
             # print(f"Correlation error (orig): {e}") # e.g., if payload_bits is empty
@@ -163,7 +163,7 @@ def generate_payload(size, target_correlation=6, convolutional_encoding=config.C
                 try:
                     encoded_bits = conv_encode(payload_bits, trellis) # Get numpy array
 
-                    correlation_enc = signal.correlate(config.BINARY_BARKER, encoded_bits, mode='same')
+                    correlation_enc = signal.correlate(encoded_bits, config.BINARY_BARKER, mode='valid')
                     max_corr_enc = np.max(correlation_enc) if correlation_enc.size else -np.inf
 
                     # --- Condition 2: Encoded bits correlation must ALSO match target ---
@@ -183,20 +183,20 @@ def generate_payload(size, target_correlation=6, convolutional_encoding=config.C
 
 if __name__ == "__main__":
     size = 100  # Example size
-    payload_bits = generate_payload(size, 3)
+    payload_bits = generate_payload(size, 5)
     # payload_string = bits_to_string(payload_bits)
     # example of payload with barker corr < 3 : `u%.1@@C829fS
     print("Generated Payload (bits):", payload_bits)
     # print("Generated Payload (string):", payload_string)
     print("Payload Length (bits):", len(payload_bits))
     # print("Payload Length (chars):", len(payload_string))
-    a = max(signal.correlate(config.BINARY_BARKER, string_to_bits(payload_bits), mode='same'))
+    a = max(signal.correlate(string_to_bits(payload_bits), config.BINARY_BARKER, mode='valid'))
     print(f"Max correlation with Barker 13: {a}")
     unique_payload_correlations_size_100 = []
-    nums = np.arange(2, 10, 1)
+    nums = np.arange(5, 10, 1)
     for i in range(len(nums)):
         payload = generate_payload(size, nums[i])
-        correlation = signal.correlate(config.BINARY_BARKER, string_to_bits(payload), mode='same')
+        correlation = signal.correlate(string_to_bits(payload_bits), config.BINARY_BARKER, mode='valid')
         max_correlation = max(correlation)
         print(f"Max correlation with Barker 13: {max_correlation}")
         unique_payload_correlations_size_100.append(payload)

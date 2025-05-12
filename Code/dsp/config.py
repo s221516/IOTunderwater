@@ -1,5 +1,6 @@
 
 import numpy as np
+import scipy.signal as signal
 
 def hamming_distance(received, expected):
     """Computes Hamming distance between received bits and expected bits."""
@@ -8,7 +9,6 @@ def hamming_distance(received, expected):
     else:
         return sum(r != e for r, e in zip(received, expected))
 
-
 def bytes_to_bin_array(byte_array):
     """Converts a byte array into a binary array."""
     bin_array = []
@@ -16,27 +16,23 @@ def bytes_to_bin_array(byte_array):
         bin_array.extend([int(bit) for bit in format(byte, "08b")])
     return bin_array
 
-
 def string_to_bin_array(string):
     """Converts a string into a binary array."""
     byte_array = string.encode("utf-8")
     return bytes_to_bin_array(byte_array)
 
-
 def set_bitrate(value):
     global BIT_RATE
     BIT_RATE = value
-
 
 def set_carrierfreq(value):
     global CARRIER_FREQ
     CARRIER_FREQ = value
 
-
-# TRANSMITTER_PORT = "COM11"
-TRANSMITTER_PORT = "/dev/cu.usbserial-0232D158"
+TRANSMITTER_PORT = "COM11"
+# TRANSMITTER_PORT = "/dev/cu.usbserial-0232D158"
 MIC_INDEX = 1 # Mathias, 1 Morten
-USE_ESP = True
+USE_ESP = False
 SAMPLE_RATE = 96000  # this capped by the soundcard, therefore, this is non-changeable
 
 BIT_RATE = 50
@@ -49,7 +45,6 @@ REP_ESP = 8
 # BINARY_BARKER = [1, 1, 1, 0, 0, 0, 1, 0, 0, 1, 0]
 BINARY_BARKER = [1, 1, 1, 1, 1, 0, 0, 1, 1, 0, 1, 0, 1]
 APPLY_BAKER_PREAMBLE = True
-APPLY_AVERAGING_PREAMBLE = False
 PLOT_PREAMBLE_CORRELATION = False
 PATH_TO_WAV_FILE = "Code/dsp/data/testing_and_logging_recording.wav"
 # FILE_NAME_DATA_TESTS = "Received_data_for_tests.csv"
@@ -64,9 +59,10 @@ PATH_TO_WAV_FILE = "Code/dsp/data/testing_and_logging_recording.wav"
 # FILE_NAME_DATA_TESTS = "Varying_payload_sizes.csv"
 # FILE_NAME_DATA_TESTS = "Random_payloads.csv"
 
-FILE_NAME_DATA_TESTS = "Average_power_of_received_signal.csv"
+# FILE_NAME_DATA_TESTS = "Average_power_of_received_signal.csv"
 # FILE_NAME_DATA_TESTS = "Max_bitrate_at_different_distances_and_best_carrier_freq.csv"
 # FILE_NAME_DATA_TESTS = "Conv_encoding_testing.csv"
+FILE_NAME_DATA_TESTS = "Signal_generator_simulation_limit_test.csv"
 
 HAMMING_CODING = False
 CONVOLUTIONAL_CODING = False
@@ -80,8 +76,9 @@ else:
     ENCODING = "No Encoding"
 
 
-# IS_ID_SPECIFIED = None
-IS_ID_SPECIFIED = ["e6de6ba7-0b9e-4ddf-9469-8a4c5dc3d5d7"]
+IS_ID_SPECIFIED = None
+# IS_ID_SPECIFIED = ["8f3207dc-cbf1-49b3-bb61-bad46f986ff0"]
+# IS_ID_SPECIFIED = ["fd0ab44d-46a8-48fc-b8c5-82e5fd18c07a"]
 # IS_ID_SPECIFIED = [
 #     "c1ac15b6-66f5-40b5-94df-e1dec5e2961b",
 #     "84b73c50-4f0b-48c1-a9c9-24f72ceb35e3",
@@ -108,9 +105,9 @@ IS_ID_SPECIFIED = ["e6de6ba7-0b9e-4ddf-9469-8a4c5dc3d5d7"]
 if __name__ == "__main__":
     # import scipy.signal as signal
     
-    print(np.arange(50 // 8, 1050 // 8, 50 // 8))
-    # messages = "_me_w"
-    # bin_msg = string_to_bin_array(messages)
-    # autocorrelate = signal.correlate(BINARY_BARKER, bin_msg, mode='same')
+    # print(np.arange(50 // 8, 1050 // 8, 50 // 8))
+    messages = "]3MH'@@H9&e6W"
+    bin_msg = string_to_bin_array(messages)
+    autocorrelate = signal.correlate(bin_msg, BINARY_BARKER, mode='same')
 
-    # print(autocorrelate)
+    print(autocorrelate)

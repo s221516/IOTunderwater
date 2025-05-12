@@ -125,6 +125,7 @@ def evaluate_preamble_detection(sequences, snr_range=np.arange(13, -15, -1)):
 
 def plot_detection_performance(results):
     """Plot detection performance results"""
+    plt.rcParams.update({'font.size': 12})  # Increase base font size
     fig, ax = plt.subplots(figsize=(8, 6))
     
     for name in results['Sequence'].unique():
@@ -132,11 +133,12 @@ def plot_detection_performance(results):
         ax.plot(sequence_results['SNR'], sequence_results['Detection Rate'], 
                 marker='o', label=name)
     
-    ax.set_xlabel('Signal-to-Noise Ratio (dB)')
-    ax.set_ylabel('Detection Rate (probability)')
-    ax.set_title('Detection Rate vs SNR')
+    ax.set_xlabel('Signal-to-Noise Ratio (dB)', fontsize=12)
+    ax.set_ylabel('Detection Rate (probability)', fontsize=12)
+    ax.set_title('Detection Rate vs SNR', fontsize=14)
+    ax.tick_params(axis='both', labelsize=11)
     ax.grid(True)
-    ax.legend()
+    ax.legend(fontsize=11)
     ax.set_ylim(0.7, 1.05)
     
     plt.tight_layout()
@@ -164,10 +166,10 @@ def main():
     print(df)
     
     # Plot comparison
-    # fig = plot_sequence_comparison(sequences)
-    # plt.show()
+    fig = plot_sequence_comparison(sequences)
+    plt.show()
     
-        # Add detection performance analysis
+    # Add detection performance analysis
     print("\nEvaluating detection performance...")
     detection_results = evaluate_preamble_detection(sequences)
     
