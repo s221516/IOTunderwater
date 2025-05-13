@@ -91,49 +91,47 @@ class Transmitter(threading.Thread):
             else:
                 bits = self.message_toBitArray(message)
 
-                if CONVOLUTIONAL_CODING:
-                    bits = conv_encode(bits)
-                    bits = bits.tolist()
+            if CONVOLUTIONAL_CODING:
+                bits = conv_encode(bits)
+                bits = bits.tolist()
 
-                if APPLY_BAKER_PREAMBLE:
-                    bits = BINARY_BARKER + bits
+            if APPLY_BAKER_PREAMBLE:
+                bits = BINARY_BARKER + bits
 
+            # change bits to -1 for signal generator scipy commands
+            for i in range(0, len(bits), 1):
+                if bits[i] == 0:
+                    bits[i] = -1
 
-                # change bits to -1 for signal generator scipy commands
-                for i in range(0, len(bits), 1):
-                    if bits[i] == 0:
-                        bits[i] = -1
+            bits = np.array(bits)
+            arb_wave_form_command = "DATA:DAC VOLATILE, " + ", ".join(map(str, bits * 2047))
 
-                bits = np.array(bits)
-                arb_wave_form_command = "DATA:DAC VOLATILE, " + ", ".join(map(str, bits * 2047))
+            len_of_bits = len(bits)
 
-                len_of_bits = len(bits)
+            freq = bitrate / len_of_bits
 
-                freq = bitrate / len_of_bits
+            # print("Transmitted bits (transmitter): ", len_of_bits)
 
-                # print("Transmitted bits (transmitter): ", len_of_bits)
+            name = "ARB1"
+            command = f"""
+            {arb_wave_form_command}
+            DATA:COPY {name}
+            FUNC:USER {name}
+            FUNC USER
+            """
+            self.send_command(command)
 
-                name = "ARB1"
-                command = f"""
-                {arb_wave_form_command}
-                DATA:COPY {name}
-                FUNC:USER {name}
-                FUNC USER
-                """
-                self.send_command(command)
+            time.sleep(0.2)
 
-                time.sleep(0.2)
-
-                command = f"""
-                APPLy:SIN {carrierfreq}, 10, 0
-                AM:SOUR INT
-                AM:INTernal:FUNCtion USER
-                AM:INT:FREQuency {freq}
-                AM:DEPT 120
-                AM:STAT ON
-                """
-
-                self.send_command(command)
+            command = f"""
+            APPLy:SIN {carrierfreq}, 3.3, 0
+            AM:SOUR INT
+            AM:INTernal:FUNCtion USER
+            AM:INT:FREQuency {freq}
+            AM:DEPT 120
+            AM:STAT ON
+            """
+            self.send_command(command)
 
     def stopTransmission(self):
 
@@ -149,11 +147,12 @@ class Transmitter(threading.Thread):
     def calculate_transmission_time(self, message):
         len_of_bits = len(message) * 8 + 13
         if self.isESP32:
-            transmission_time = (config.REP_ESP * (len_of_bits / config.BIT_RATE)) - 0.7
-            if transmission_time < 1:
-                transmission_time = 1
+            transmission_time = round((len_of_bits / config.BIT_RATE) * 5)
         else:
             transmission_time = round((len_of_bits / config.BIT_RATE) * 5)
+
+        if transmission_time < 1:
+            transmission_time = 1
             
         return transmission_time
     
@@ -169,7 +168,6 @@ class Transmitter(threading.Thread):
             
             # Wait for the transmission to complete
             time.sleep(transmission_time)
-
 
             #The signal generator will not stop transmitting until the next message is sent, so we need to stop it manually
             if not config.USE_ESP:

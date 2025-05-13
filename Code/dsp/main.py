@@ -34,13 +34,13 @@ def compute_len_of_bits(message):
     len_of_data_bits = len(message) * 8
     len_of_preamble = len(config.BINARY_BARKER)
     if config.CONVOLUTIONAL_CODING:
-        len_of_data_bits = (len_of_data_bits * 2 + len_of_preamble + 12)
+        len_of_data_bits = (len_of_data_bits * 2 + len_of_preamble + 4)
     elif config.HAMMING_CODING:
         len_of_data_bits = len_of_data_bits * 3 / 2 + len_of_preamble
     else:
         len_of_data_bits = len_of_data_bits + len_of_preamble
 
-    # print("Len of data bits (receiver): ", len_of_data_bits)
+    print("Len of data bits (receiver): ", len_of_data_bits)
     return len_of_data_bits
 
 def logInCsv(id,original_message,decoded_message1,hamming_dist_without,decod_msg2,ham_dist_with, distance_to_speaker, 
@@ -70,8 +70,6 @@ def logInCsv(id,original_message,decoded_message1,hamming_dist_without,decod_msg
 def transmit_signal():
     transmitter = Transmitter(None, config.USE_ESP)
 
-    #messages = ["Lick_on_these_big_fat_nuts_and_tell_me_what_you_think"]
-    payload_sizes = [100]
     
     unique_payloads_dict = {
         "2" : "]3MH'@@H9&e6W", 
@@ -84,30 +82,30 @@ def transmit_signal():
         "9" : 'N(#-c~nC(^v>A'
     }
 
-    #  '}VvF*E@9>-go*',
-    #  '+,M4J1ABraRJ&',
-    #  'i3aw,*X@j&y;y',
-    #  '~7,w]@s,V+{2Y',
-    #  ']_TzaWWF+Exg;',
-    #  'Oi67/(~V8]w,x',
-    #  'N(#-c~nC(^v>A',
-    # ]
-    n = 10
+    payload_sizes = [100]
+
     
-    bitrates = [500] * n
+    # bitrates = [500] * n 
+    # bitrates = [300] * n + [500] * n + [1000] * n + [1500] * n + [2000] * n
+    bitrates = [2000]
 
-    # carrierfreqs = np.arange(1000, 20000, 1000)
-    # 1000 bad
-
-    carrierfreqs = [4000]
-
+    carrierfreqs = [10000]
+    # carrierfreqs = np.arange(1000, 21000, 1000)
+    
     global test_description
-    # test_description = f"Testing: average power of a signal"
     # test_description = f"Testing: does sending a message with a low correlation < 3 to barker 13 make a diffence?"
     # test_description = f"Testing: testing signal generator with varying VPP. current VPP: 0.25"
-    test_description = f"Testing: TESTING ESP"
-    # test_description = f"Testing: "
+    # test_description = f"Testing: Checking cleanliness of esp DAC straigt to mic and sig straight to mic"
+    # test_description = f"Testing: Test how bitrate and carrier freq affects eachother when they are too close"
+    # test_description = f"Testing: Variying payload sizes, increases with 6 char at a time"
+    # test_description = f"Testing: Variying payloads, size of payload = {payload_sizes[0]})"
+    # test_description = f"Testing: Convolutional encoding"
+    # test_description = f"Testing: TESTING ESP"
 
+    # test_description = f"Testing: average power of a signal - ESP"
+    # test_description = f"Testing: average power of a signal - ESP, reverted back to old code"
+    # test_description = f"Testing: Max bitrate for best carrier freq at a 1m distance"
+    test_description = f"Testing: TESTING ESP NO SPEAK"
     global speaker_depth
     speaker_depth = 200  # in cm
 
@@ -119,18 +117,23 @@ def transmit_signal():
             config.set_bitrate(bitrate)
             for carrierfreq in carrierfreqs:
                 config.set_carrierfreq(carrierfreq)
-                print("Carrier freq ", config.CARRIER_FREQ)
                 # message = generatePayload.generate_payload(payload)
-                message = "U" * 12
-
-                # create unique id for each test
+                # message = "i3aw,*X@j&y;y" # message with correlation of 5, used for limit testing the two systems
+                message = "U" * 498
+                
                 # print(f"Transmitting message: {message}")
+                # create unique id for each test
                 id = create_id()
                 transmitter.transmit(message, carrierfreq, bitrate)
                 record_seconds = transmitter.calculate_transmission_time(message)
 
                 if not config.USE_ESP:
                     time.sleep(1)
+
+                if config.USE_ESP:
+                    # time.sleep(4.5931)
+                    pass
+                   
 
                 print(f"Recording for: {record_seconds} seconds")
                 create_wav_file_from_recording(record_seconds, name=id)
@@ -171,8 +174,12 @@ def process_signal_for_testing(message, id):
     nonCoherentReceiver.set_len_of_data_bits(len_of_data_bits)
     # doesnt matter if band pass or not, the receiver will always use the same data bits
     avg_power_of_signal = nonCoherentReceiver.compute_average_power_of_signal()
-    print(f"Average power of signal: {avg_power_of_signal}")
-    nonCoherentReceiver.plot_signal()
+    # nonCoherentReceiver.plot_low_pass_filter_bode()
+    # nonCoherentReceiver.plot_band_pass_filter_bode()
+    # print(f"Average power of signal: {avg_power_of_signal}")
+    # nonCoherentReceiver.plot_signal()
+    # nonCoherentReceiver.plot_spectrogram_and_frequency_domain()
+    nonCoherentReceiver.plot_wave_in_time_domain_after_envelope(message)
 
     try:
         message_nc, debug_nc = nonCoherentReceiver.decode()
@@ -187,7 +194,7 @@ def process_signal_for_testing(message, id):
     try:
         message_nc_bandpass, debug_nc_bandpass = nonCoherentReceiverWithBandPass.decode()
         # nonCoherentReceiverWithBandPass.plot_simulation_steps()
-        nonCoherentReceiver.plot_in_frequency_domain()
+        # nonCoherentReceiver.plot_in_frequency_domain()
     except PreambleNotFoundError:
         message_nc_bandpass = "No preamble found"
         debug_nc_bandpass = {}
@@ -239,24 +246,26 @@ if __name__ == "__main__":
         isWaterThePool = True
         transmit_signal()
     else:
-        df = pd.read_csv("1m_distance_bitrate_and_carrierfreq_combination.csv", sep=",")
-        print(df.columns)
-
-
-        original_message = df[df["ID"] == config.IS_ID_SPECIFIED]["Original Message"].values[0]
-        decoded_message_without_bandpass = df[df["ID"] == config.IS_ID_SPECIFIED]["Decoded without bandpass"].values[0]
-        decoded_with_bandpass = df[df["ID"] == config.IS_ID_SPECIFIED]["Decoded with bandpass"].values[0]
-        bitrate = df[df["ID"] == config.IS_ID_SPECIFIED]["Bitrate"].values[0]
-        carrier_freq = df[df["ID"] == config.IS_ID_SPECIFIED]["Carrier Frequency"].values[0]
-        config.set_bitrate(bitrate)
-        config.set_carrierfreq(carrier_freq)
-        print("Original message:                 ", original_message)
-        print("Decoded message without bandpass: ", decoded_message_without_bandpass)
-        print("Decoded message with bandpass:    ", decoded_with_bandpass)
-        corr = signal.correlate(config.string_to_bin_array(original_message), config.BINARY_BARKER, mode='same')
-        is_not_similar_to_BARKER_13 = np.all(corr != 9)
-        print(f"boolean check : {is_not_similar_to_BARKER_13}")
-        counter = collections.Counter(corr)
-        print("Correlation of the original message: ", counter)
-        
-        process_signal_for_testing(original_message, config.IS_ID_SPECIFIED)
+        for id in config.IS_ID_SPECIFIED:
+            df = pd.read_csv(config.FILE_NAME_DATA_TESTS, sep=",")
+            # print(df.columns)
+            original_message = df[df["ID"] == id]["Original Message"].values[0]
+            decoded_message_without_bandpass = df[df["ID"] == id]["Decoded without bandpass"].values[0]
+            decoded_with_bandpass = df[df["ID"] == id]["Decoded with bandpass"].values[0]
+            bitrate = df[df["ID"] == id]["Bitrate"].values[0]
+            carrier_freq = df[df["ID"] == id]["Carrier Frequency"].values[0]
+            config.set_bitrate(bitrate)
+            config.set_carrierfreq(carrier_freq)
+            print(f"Transmitter : {df[df['ID'] == id]['Transmitter'].values[0]}")
+            print(f"Bitrate: {bitrate}")
+            print(f"Carrier frequency: {carrier_freq}")
+            print("Original message:                 ", original_message)
+            print("Decoded message without bandpass: ", decoded_message_without_bandpass)
+            print("Decoded message with bandpass:    ", decoded_with_bandpass)
+            corr = signal.correlate(config.string_to_bin_array(original_message), config.BINARY_BARKER, mode='same')
+            is_not_similar_to_BARKER_13 = np.all(corr != 9)
+            print(f"boolean check : {is_not_similar_to_BARKER_13}")
+            counter = collections.Counter(corr)
+            print("Correlation of the original message: ", counter)
+            
+            process_signal_for_testing(original_message, id)
