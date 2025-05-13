@@ -12,33 +12,24 @@
 
 #define UART_NUM UART_NUM_0
 #define BUF_SIZE (1024)
-#define MAX_LINE_LENGTH 128
+#define MAX_LINE_LENGTH 1000
 #define PI 3.14159265
+#define INPUT_SIZE 500
 
 static dac_oneshot_handle_t dac_handle;
 
 int bit_rate = 100;
 int carrier_freq = 6000;
-char message[100] = "Hello World!";
+char message[INPUT_SIZE] = "Hello World!";
 int samples_per_symbol = 0;
 float sample_rate = 0;
 int repetitions = 1;
 
-static int prev_symbol_last_value = -1;
-
 void transmit_symbol(int* wave) {
-    if (prev_symbol_last_value >= 0) {
-        int discontinuity = abs(prev_symbol_last_value - wave[0]);
-        if (discontinuity > 1) {
-            printf("⚠️  Discontinuity detected! Change: %d\n", discontinuity);
-        }
-    }
 
     for (int i = 0; i < samples_per_symbol; i++) {
         dac_oneshot_output_voltage(dac_handle, wave[i]);
     }
-
-    prev_symbol_last_value = wave[samples_per_symbol - 1];
 }
 
 void string_to_bits(const char* str, int** bits, int* length) {
@@ -76,9 +67,6 @@ void prepend_barker13(int** bits, int* length) {
 }
 
 void create_scaled_carrier_symbol(int* buffer, float amplitude_scale) {
-    float last_val = 0;
-    int zero_crossing_index = samples_per_symbol - 1;
-
     for (int i = 0; i < samples_per_symbol; i++) {
         float t = (float)i / sample_rate;
         float s = sin(2 * PI * carrier_freq * t) * amplitude_scale;
@@ -86,20 +74,7 @@ void create_scaled_carrier_symbol(int* buffer, float amplitude_scale) {
         int val = (int)(scaled);
         if (val < 0) val = 0;
         if (val > 255) val = 255;
-
         buffer[i] = val;
-
-        // Save last zero-crossing (going negative to positive)
-        if (last_val < 128 && scaled >= 128) {
-            zero_crossing_index = i;
-        }
-
-        last_val = scaled;
-    }
-
-    // Cut off after last zero crossing
-    for (int i = zero_crossing_index + 1; i < samples_per_symbol; i++) {
-        buffer[i] = 128; // Mid-point (DAC idle)
     }
 }
 
@@ -125,6 +100,7 @@ void send_signal() {
     int* symbol_one = malloc(samples_per_symbol * sizeof(int));
     int* symbol_zero = malloc(samples_per_symbol * sizeof(int));
 
+    printf("%d \n", message_length);
     
     if (!symbol_one || !symbol_zero) {
         ESP_LOGE("main", "Failed to allocate symbol buffers.");
@@ -134,14 +110,14 @@ void send_signal() {
     
     float samples_per_carrier = sample_rate / carrier_freq;
     if (samples_per_symbol < samples_per_carrier) {
-        ESP_LOGE("main", "❌ Bitrate too high or carrier frequency too low: 1-symbol cannot fit full carrier cycle.");
+        ESP_LOGE("main", "Bitrate too high or carrier frequency too low: 1-symbol cannot fit full carrier cycle.");
         const char *error_msg = "ERROR: Symbol duration too short for full carrier wave. Try lowering bitrate or increasing frequency.\r\n";
         uart_write_bytes(UART_NUM, error_msg, strlen(error_msg));
         return;
     }
 
     create_scaled_carrier_symbol(symbol_one, 1.0f);  // Bit 1 → full amplitude
-    create_scaled_carrier_symbol(symbol_zero, 0.0f); // Bit 0 → low amplitude
+    create_scaled_carrier_symbol(symbol_zero, 0.1f); // Bit 0 → low amplitude
 
     // UART print of settings
     char settings_message[256];
@@ -169,27 +145,23 @@ void send_signal() {
 
 void process_input(char *input) {
     int value;
-    char valueStr[100];
-
+    
     if (sscanf(input, "FREQ %d", &value) == 1) {
+        sample_rate = measureSampleRateOfDAC();
         carrier_freq = value;
 
     } else if (sscanf(input, "BITRATE %d", &value) == 1) {
+        sample_rate = measureSampleRateOfDAC();
         bit_rate = value;
 
     } else if (sscanf(input, "REP %d", &value) == 1) {
+        sample_rate = measureSampleRateOfDAC();
         repetitions = value;
 
     } else {
-        if (sscanf(input, "%99s", valueStr) == 1) {
-            sample_rate = measureSampleRateOfDAC(); // Measure DAC sample rate
-            strncpy(message, valueStr, sizeof(message) - 1);
-            message[sizeof(message) - 1] = '\0';
-            send_signal();
-        } else {
-            const char *error_message = "Invalid input. Please enter a valid command.\r\n";
-            uart_write_bytes(UART_NUM, error_message, strlen(error_message));
-        }
+        strncpy(message, input, sizeof(message) - 1);
+        message[sizeof(message) - 1] = '\0';  // Ensure null-termination
+        send_signal();
     }
 
     const char *ok_message = "OK\r\n";
@@ -204,13 +176,13 @@ void init_uart() {
         .stop_bits = UART_STOP_BITS_1,
         .flow_ctrl = UART_HW_FLOWCTRL_DISABLE,
     };
-    uart_driver_install(UART_NUM, BUF_SIZE * 2, 0, 0, NULL, 0);
+    uart_driver_install(UART_NUM, BUF_SIZE * 2, BUF_SIZE * 2, 0, NULL, 0);
     uart_param_config(UART_NUM, &uart_config);
 }
 
 void app_main() {
     init_uart();
-
+    
     dac_oneshot_config_t dac_cfg = {
         .chan_id = DAC_CHAN_0,
     };
@@ -221,6 +193,8 @@ void app_main() {
     char line_buffer[MAX_LINE_LENGTH];
     int idx = 0;
 
+
+    sample_rate = measureSampleRateOfDAC(); // Measure DAC sample rate
     while (1) {
         uint8_t byte;
         int len = uart_read_bytes(UART_NUM, &byte, 1, 20 / portTICK_PERIOD_MS);

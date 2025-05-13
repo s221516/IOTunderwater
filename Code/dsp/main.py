@@ -241,6 +241,8 @@ if __name__ == "__main__":
     else:
         df = pd.read_csv("1m_distance_bitrate_and_carrierfreq_combination.csv", sep=",")
         print(df.columns)
+
+
         original_message = df[df["ID"] == config.IS_ID_SPECIFIED]["Original Message"].values[0]
         decoded_message_without_bandpass = df[df["ID"] == config.IS_ID_SPECIFIED]["Decoded without bandpass"].values[0]
         decoded_with_bandpass = df[df["ID"] == config.IS_ID_SPECIFIED]["Decoded with bandpass"].values[0]
