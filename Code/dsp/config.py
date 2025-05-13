@@ -29,18 +29,18 @@ def set_carrierfreq(value):
     global CARRIER_FREQ
     CARRIER_FREQ = value
 
-TRANSMITTER_PORT = "COM11"
-# TRANSMITTER_PORT = "/dev/cu.usbserial-0232D158"
-MIC_INDEX = 1 # Mathias, 1 Morten
-USE_ESP = False
-SAMPLE_RATE = 48000   # this capped by the soundcard, therefore, this is non-changeable
+# TRANSMITTER_PORT = "COM11"
+TRANSMITTER_PORT = "/dev/cu.usbserial-0232D158"
+MIC_INDEX = 2 # Mathias, 1 Morten
+USE_ESP = True
+SAMPLE_RATE = 96000   # this capped by the soundcard, therefore, this is non-changeable
 
-BIT_RATE = 50
-CARRIER_FREQ = 1000 
+BIT_RATE = 500
+CARRIER_FREQ = 11000 
 SAMPLES_PER_SYMBOL = int(SAMPLE_RATE / BIT_RATE)
 CUT_OFF_FREQ = (CARRIER_FREQ + BIT_RATE) // 2
 
-REP_ESP = 8
+REP_ESP = 5
 # BINARY_BARKER = [1, 1, 1, 0, 0, 1, 0]
 # BINARY_BARKER = [1, 1, 1, 0, 0, 0, 1, 0, 0, 1, 0]
 BINARY_BARKER = [1, 1, 1, 1, 1, 0, 0, 1, 1, 0, 1, 0, 1]
@@ -58,7 +58,7 @@ PATH_TO_WAV_FILE = "Code/dsp/data/testing_and_logging_recording.wav"
 # FILE_NAME_DATA_TESTS = "Max_bitrate_at_different_distances.csv"
 # FILE_NAME_DATA_TESTS = "Varying_payload_sizes.csv"
 # FILE_NAME_DATA_TESTS = "Random_payloads.csv"
-
+# FILE_NAME_DATA_TESTS = "avg_power_of_rec_signal_purely_for_check_of_interference.csv"
 # FILE_NAME_DATA_TESTS = "Average_power_of_received_signal.csv"
 # FILE_NAME_DATA_TESTS = "Max_bitrate_at_different_distances_and_best_carrier_freq.csv"
 # FILE_NAME_DATA_TESTS = "Conv_encoding_testing.csv"
@@ -77,8 +77,9 @@ else:
 
 
 IS_ID_SPECIFIED = None
-# IS_ID_SPECIFIED = ["8f3207dc-cbf1-49b3-bb61-bad46f986ff0"]
-# IS_ID_SPECIFIED = ["fd0ab44d-46a8-48fc-b8c5-82e5fd18c07a"]
+# IS_ID_SPECIFIED = ["7906ebdb-664b-46bc-96ea-78049d9e182c"]#"b3c2d680-cb83-4ab0-9cf7-a566ae5d360f","91bf3f5b-c1d0-4492-9f9f-d6030520731d","a70d7f0f-f891-4034-9642-8a144b49a59b"]
+# IS_ID_SPECIFIED = ["91bf3f5b-c1d0-4492-9f9f-d6030520731d"]
+# IS_ID_SPECIFIED = ["948ebdd5-0edd-47e3-ae00-18c75a484194"] # esp32 attenuated 4000 bits
 # IS_ID_SPECIFIED = [
 #     "c1ac15b6-66f5-40b5-94df-e1dec5e2961b",
 #     "84b73c50-4f0b-48c1-a9c9-24f72ceb35e3",
@@ -100,8 +101,10 @@ IS_ID_SPECIFIED = None
 #     "968b5c1e-0b06-4481-be78-6b653c2548b4",
 #     "5b4e4f2f-0d67-4d18-adbe-48614c49e3af",
 # ]
-
-
+# IS_ID_SPECIFIED = ["84b73c50-4f0b-48c1-a9c9-24f72ceb35e3"] # ESP straight into computer
+# IS_ID_SPECIFIED = ["190209f4-1a18-48f7-a33f-7058cc78ac3b"] # ESP straight into computer 4000 bits attenuaed
+# IS_ID_SPECIFIED = ["91fab62e-e45c-4205-962b-9e65238b4cbd"]
+IS_ID_SPECIFIED = ["9a3e3d04-5989-419e-902a-dfd7d9670abf"] # bitrate 1000, cf 10000, esp 
 if __name__ == "__main__":
     # import scipy.signal as signal
     

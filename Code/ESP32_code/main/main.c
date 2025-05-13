@@ -145,6 +145,7 @@ void send_signal() {
 
 void process_input(char *input) {
     int value;
+    // NOTE: THIS LINE RIGHT HERE IS THE LIMITING FACTOR FOR HOW LONG THE MESSAGE CAN BE FOR AN ESP OUTPUT
     char valueStr[100];
     
     
