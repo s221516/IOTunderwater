@@ -147,9 +147,9 @@ class Transmitter(threading.Thread):
     def calculate_transmission_time(self, message):
         len_of_bits = len(message) * 8 + 13
         if self.isESP32:
-            transmission_time = round((len_of_bits / config.BIT_RATE) * 5)
+            transmission_time = round((len_of_bits / config.BIT_RATE) * config.REP_ESP)
         else:
-            transmission_time = round((len_of_bits / config.BIT_RATE) * 5)
+            transmission_time = round((len_of_bits / config.BIT_RATE) * config.REP_ESP)
 
         if transmission_time < 1:
             transmission_time = 1

@@ -87,7 +87,7 @@ def transmit_signal():
     
     # bitrates = [500] * n 
     # bitrates = [300] * n + [500] * n + [1000] * n + [1500] * n + [2000] * n
-    bitrates = [2000]
+    bitrates = [500]
 
     carrierfreqs = [10000]
     # carrierfreqs = np.arange(1000, 21000, 1000)
@@ -131,8 +131,8 @@ def transmit_signal():
                     time.sleep(1)
 
                 if config.USE_ESP:
-                    # time.sleep(4.5931)
-                    pass
+                    time.sleep(4.5931)
+                    # pass
                    
 
                 print(f"Recording for: {record_seconds} seconds")

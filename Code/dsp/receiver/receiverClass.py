@@ -202,8 +202,9 @@ class Receiver:
     def remove_preamble_baker_code(self, bits, std_factor=4):
         correlation = signal.correlate(bits, BINARY_BARKER, mode="valid") # old
         # correlation = signal.correlate(BINARY_BARKER, bits, mode="same") # new
+        dist = 1
         threshold = np.mean(correlation) + std_factor * np.std(correlation)
-        peak_indices, _ = signal.find_peaks(correlation, height=threshold, distance=100)
+        peak_indices, _ = signal.find_peaks(correlation, height=threshold, distance=dist)
         if len(peak_indices) < 2:
             if std_factor > 1:
                 return self.remove_preamble_baker_code(bits, std_factor - 0.1)
@@ -212,7 +213,7 @@ class Receiver:
                 return -1, [], []
             
         
-        _, properties = signal.find_peaks(correlation, height=threshold, distance=100)
+        _, properties = signal.find_peaks(correlation, height=threshold, distance=dist)
         ### max height 
         max_peak = max(properties["peak_heights"])
         print("Max peak: ", max_peak)
@@ -499,10 +500,11 @@ class Receiver:
                 time_sec = i / self.sample_rate
                 current_xlim = ax.get_xlim()
                 if current_xlim[0] <= time_sec <= current_xlim[1]:
-                     plt.axvline(x=time_sec, color="green", linestyle="--", alpha=0.7, linewidth=3.0)
+                    plt.axvline(x=time_sec, color="green", linestyle="--", alpha=0.7, linewidth=3.0)
+                    # pass
         print(f" values : {debug_info['index_of_9']}")
         ### at debug_info["index_of_9"] plot vertical lines!!
-        if "index_of_9" in debug_info:
+        if debug_info["index_of_9"] is not None:
             for i in range(len(debug_info["index_of_9"])):
                 # at index debug_info["index_of_9"][i] plot vertical lines
                 time_sec = (debug_info["index_of_9"][i] / self.sample_rate) * self.samples_per_symbol
@@ -511,16 +513,12 @@ class Receiver:
                     plt.axvline(x=time_sec, color="black", linestyle="--", alpha=0.7, linewidth=3.0)
                     
 
-
-            
-        
-
         # plt.xlim(1.0, 1.490)  # Limit x-axis to 2 seconds as per user's existing code
 
         handles, labels = ax.get_legend_handles_labels()
         if handles: # Avoid creating a legend if there's nothing to label
             by_label = dict(zip(labels, handles)) # Remove duplicate labels
-            ax.legend(by_label.values(), by_label.keys(), loc='lower left', fontsize='small')
+            ax.legend(by_label.values(), by_label.keys(), loc='lower left', fontsize='large')
         payload_size = len(msg_original_text) * 8 + 13
         if config.USE_ESP:
             transmitter = "ESP"
@@ -676,6 +674,7 @@ class NonCoherentReceiver(Receiver):
             "analytic": analytic,
             "envelope": envelope,
             "filtered": filtered,
+            "index_of_9": None,
         }
 
     def decode(self) -> Tuple[str, Dict]:
