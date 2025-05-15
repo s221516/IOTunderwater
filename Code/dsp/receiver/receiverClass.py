@@ -166,7 +166,7 @@ class Receiver:
             )
             plt.xlabel("Bits from received signal")
             plt.ylabel("Correlation Value")
-            plt.title("Cross-Correlation with Preamble With Bandpass (BER: 0.54)")
+            plt.title("Cross-Correlation with Preamble With Bandpass (BER: 0.54)", fontsize = 20)
             plt.legend()
             plt.grid()
             plt.show()
@@ -253,6 +253,7 @@ class Receiver:
 
         frequency_magnitudes = np.abs(wave_f)
         # Make it to decibels
+        # NOTE: CHANGE THIS TO 10  
         frequency_magnitudes = 20 * np.log10(frequency_magnitudes / np.max(frequency_magnitudes))
 
         # only plot the positive frequencies

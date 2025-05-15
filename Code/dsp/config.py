@@ -33,7 +33,7 @@ TRANSMITTER_PORT = "COM11"
 # TRANSMITTER_PORT = "/dev/cu.usbserial-0232D158"
 MIC_INDEX = 1 # Mathias, 1 Morten
 USE_ESP = False
-SAMPLE_RATE = 48000   # this capped by the soundcard, therefore, this is non-changeable
+SAMPLE_RATE = 96000  # this capped by the soundcard, therefore, this is non-changeable
 
 BIT_RATE = 50
 CARRIER_FREQ = 1000 
@@ -45,11 +45,11 @@ REP_ESP = 8
 # BINARY_BARKER = [1, 1, 1, 0, 0, 0, 1, 0, 0, 1, 0]
 BINARY_BARKER = [1, 1, 1, 1, 1, 0, 0, 1, 1, 0, 1, 0, 1]
 APPLY_BAKER_PREAMBLE = True
-PLOT_PREAMBLE_CORRELATION = False
+PLOT_PREAMBLE_CORRELATION = True
 PATH_TO_WAV_FILE = "Code/dsp/data/testing_and_logging_recording.wav"
 # FILE_NAME_DATA_TESTS = "Received_data_for_tests.csv"
 # FILE_NAME_DATA_TESTS = "5m_dist_10kHz_unique_payloads.csv"
-# FILE_NAME_DATA_TESTS = "1m_distance_payload_barker_similarity_impact.csv"
+FILE_NAME_DATA_TESTS = "1m_distance_payload_barker_similarity_impact.csv"
 # FILE_NAME_DATA_TESTS = "1m_distance_carrier_freq_sg_vpp_variable.csv"
 # FILE_NAME_DATA_TESTS = "testing_esp.csv"
 # FILE_NAME_DATA_TESTS = "spectrography_analysis_esp_sg_without_speaker.csv"
@@ -62,7 +62,7 @@ PATH_TO_WAV_FILE = "Code/dsp/data/testing_and_logging_recording.wav"
 # FILE_NAME_DATA_TESTS = "Average_power_of_received_signal.csv"
 # FILE_NAME_DATA_TESTS = "Max_bitrate_at_different_distances_and_best_carrier_freq.csv"
 # FILE_NAME_DATA_TESTS = "Conv_encoding_testing.csv"
-FILE_NAME_DATA_TESTS = "Signal_generator_simulation_limit_test.csv"
+# FILE_NAME_DATA_TESTS = "Signal_generator_simulation_limit_test.csv"
 
 HAMMING_CODING = False
 CONVOLUTIONAL_CODING = False
@@ -76,9 +76,9 @@ else:
     ENCODING = "No Encoding"
 
 
-IS_ID_SPECIFIED = None
-# IS_ID_SPECIFIED = ["8f3207dc-cbf1-49b3-bb61-bad46f986ff0"]
-# IS_ID_SPECIFIED = ["fd0ab44d-46a8-48fc-b8c5-82e5fd18c07a"]
+# IS_ID_SPECIFIED = None
+IS_ID_SPECIFIED = ["5b74fd86-a5bf-474a-a231-2c53348a2c51"]
+# IS_ID_SPECIFIED = ["2e1a0995-112e-4d1a-ae8d-cbcdd332eca7"]
 # IS_ID_SPECIFIED = [
 #     "c1ac15b6-66f5-40b5-94df-e1dec5e2961b",
 #     "84b73c50-4f0b-48c1-a9c9-24f72ceb35e3",

@@ -18,7 +18,7 @@ C          = 1500     # m/s (speed of sound in water)import scipy.signal as sign
 
 def compute_ber_for_hamming_encoding_test(file_path):
     """
-    Compute BER and preamble detection statistics for Hamming vs No encoding
+    Compute BER and preamble detection statistics for Hamming vs No encoding with standard deviations
     
     Args:
         file_path (str): Path to CSV file containing the test results
@@ -53,16 +53,31 @@ def compute_ber_for_hamming_encoding_test(file_path):
         
         # Calculate BER for valid transmissions
         message_length = message_lengths[encoding]
-        total_bits_no_bp = len(valid_no_bp) * message_length
-        total_bits_bp = len(valid_bp) * message_length
         
-        # Sum up Hamming distances (errors)
-        total_errors_no_bp = valid_no_bp['Hamming Dist without bandpass'].sum()
-        total_errors_bp = valid_bp['Hamming Dist with bandpass'].sum()
+        # Arrays to store individual BER values for std calculation
+        ber_array_no_bp = []
+        ber_array_bp = []
         
-        # Calculate BER
-        ber_no_bp = (total_errors_no_bp / total_bits_no_bp * 100) if total_bits_no_bp > 0 else 100
-        ber_bp = (total_errors_bp / total_bits_bp * 100) if total_bits_bp > 0 else 100
+        # Process no bandpass results
+        for _, row in valid_no_bp.iterrows():
+            errors = pd.to_numeric(row['Hamming Dist without bandpass'], errors='coerce')
+            if pd.notna(errors):
+                ber = errors / message_length
+                ber_array_no_bp.append(ber)
+                
+        # Process bandpass results
+        for _, row in valid_bp.iterrows():
+            errors = pd.to_numeric(row['Hamming Dist with bandpass'], errors='coerce')
+            if pd.notna(errors):
+                ber = errors / message_length
+                ber_array_bp.append(ber)
+        
+        # Calculate mean BER and standard deviation
+        ber_no_bp_mean = np.mean(ber_array_no_bp) if ber_array_no_bp else 1.0
+        ber_bp_mean = np.mean(ber_array_bp) if ber_array_bp else 1.0
+        
+        ber_no_bp_std = np.std(ber_array_no_bp) / np.sqrt(len(ber_array_no_bp)) if ber_array_no_bp else 0
+        ber_bp_std = np.std(ber_array_bp) / np.sqrt(len(ber_array_bp)) if ber_array_bp else 0
         
         # Store results
         results[encoding] = {
@@ -71,10 +86,10 @@ def compute_ber_for_hamming_encoding_test(file_path):
             'no_preamble_bp': no_preamble_bp,
             'valid_transmissions_no_bp': len(valid_no_bp),
             'valid_transmissions_bp': len(valid_bp),
-            'total_errors_no_bp': total_errors_no_bp,
-            'total_errors_bp': total_errors_bp,
-            'ber_no_bp': ber_no_bp,
-            'ber_bp': ber_bp
+            'ber_no_bp_mean': ber_no_bp_mean,
+            'ber_bp_mean': ber_bp_mean,
+            'ber_no_bp_std': ber_no_bp_std,
+            'ber_bp_std': ber_bp_std
         }
         
         print(f"\nResults for {encoding}:")
@@ -82,14 +97,12 @@ def compute_ber_for_hamming_encoding_test(file_path):
         print("\nWithout Bandpass:")
         print(f"No preamble found: {no_preamble_no_bp} ({no_preamble_no_bp/total_transmissions*100:.1f}%)")
         print(f"Valid transmissions: {len(valid_no_bp)}")
-        print(f"Error ratio: {total_errors_no_bp}/{total_bits_no_bp} = {total_errors_no_bp/total_bits_no_bp:.4f}")
-        print(f"BER: {ber_no_bp:.2f}%")
+        print(f"BER: {ber_no_bp_mean:.3f} ± {ber_no_bp_std:.3f}")
         
         print("\nWith Bandpass:")
         print(f"No preamble found: {no_preamble_bp} ({no_preamble_bp/total_transmissions*100:.1f}%)")
         print(f"Valid transmissions: {len(valid_bp)}")
-        print(f"Error ratio: {total_errors_bp}/{total_bits_bp} = {total_errors_bp/total_bits_bp:.4f}")
-        print(f"BER: {ber_bp:.2f}%")
+        print(f"BER: {ber_bp_mean:.3f} ± {ber_bp_std:.3f}")
         print("-" * 50)
     
     return results
@@ -500,6 +513,7 @@ def compute_ber_for_different_vpps(file_path):
     """
     Compute BER for different VPP values from test data and plot the results
     with error bars for both BER and power measurements.
+    Power is shown in dB scale.
     
     Args:
         file_path (str): Path to CSV file
@@ -533,7 +547,7 @@ def compute_ber_for_different_vpps(file_path):
             ber_no_bp = np.mean(ber_array_no_bp)
             ber_no_bp_std = np.std(ber_array_no_bp) / np.sqrt(len(ber_array_no_bp))
         else:
-            ber_no_bp = 1.0  # Changed from 100 to 1.0
+            ber_no_bp = 1.0
             ber_no_bp_std = 0
         
         # Process with bandpass
@@ -552,12 +566,16 @@ def compute_ber_for_different_vpps(file_path):
             ber_bp = np.mean(ber_array_bp)
             ber_bp_std = np.std(ber_array_bp) / np.sqrt(len(ber_array_bp))
         else:
-            ber_bp = 1.0  # Changed from 100 to 1.0
+            ber_bp = 1.0
             ber_bp_std = 0
         
-        # Calculate power statistics
-        power_mean = group['Average Power of signal'].mean()
-        power_std = group['Average Power of signal'].std() / np.sqrt(len(group))
+        # Calculate power statistics in dB
+        power_linear = group['Average Power of signal'].mean()
+        power_db = 10 * np.log10(power_linear) if power_linear > 0 else -100  # Convert to dB
+        power_std_linear = group['Average Power of signal'].std() / np.sqrt(len(group))
+        # Convert standard deviation to dB scale
+        power_std_db = (10 * np.log10(power_linear + power_std_linear) - 
+                       10 * np.log10(power_linear)) if power_linear > 0 else 0
         
         results.append({
             'VPP': vpp,
@@ -565,13 +583,13 @@ def compute_ber_for_different_vpps(file_path):
             'BER_With_BP': ber_bp,
             'BER_No_BP_Std': ber_no_bp_std,
             'BER_BP_Std': ber_bp_std,
-            'Invalid_No_BP': invalid_no_bp_rate,  # Now storing as percentage (0-1)
-            'Invalid_BP': invalid_bp_rate,  # Now storing as percentage (0-1)
+            'Invalid_No_BP': invalid_no_bp_rate,
+            'Invalid_BP': invalid_bp_rate,
             'Valid_Transmissions_No_BP': len(valid_no_bp),
             'Valid_Transmissions_BP': len(valid_bp),
             'Total_Transmissions': total_transmissions,
-            'Average_Power': power_mean,
-            'Power_Std': power_std
+            'Average_Power_dB': power_db,
+            'Power_Std_dB': power_std_db
         })
     
     # Create DataFrame and sort by VPP
@@ -609,7 +627,7 @@ def compute_ber_for_different_vpps(file_path):
         ax1.annotate(f'{y2:.2f}', (x, y2), textcoords="offset points",
                     xytext=(15, 10), ha='center', color='blue')
     
-    # Add value labels for invalid transmissions with left offset
+    # Add value labels for invalid transmissions
     for bar in bars_no_bp:
         height = bar.get_height()
         if height > 0:
@@ -638,46 +656,40 @@ def compute_ber_for_different_vpps(file_path):
     ax1_twin.set_ylabel('Invalid Transmission Rate')
     ax1.set_title('BER vs VPP with Invalid Transmissions, Distance: 100 cm, Bitrate: 500 bps')
     ax1.grid(True, linestyle='--', alpha=0.7)
-    
-    # Set y-axis limits
     ax1.set_ylim(0, 1.1)
     ax1_twin.set_ylim(0, 1.1)
-
+    
     # Combine legends
     lines1, labels1 = ax1.get_legend_handles_labels()
     lines2, labels2 = ax1_twin.get_legend_handles_labels()
     ax1.legend(lines1 + lines2, labels1 + labels2, loc='upper right')
     
-    # Plot Average Power vs VPP with error bars
-    ax2.errorbar(vpp_positions, results_df['Average_Power'],
-                yerr=results_df['Power_Std'],
+    # Plot Average Power (dB) vs VPP with error bars
+    ax2.errorbar(vpp_positions, results_df['Average_Power_dB'],
+                yerr=results_df['Power_Std_dB'],
                 fmt='go-', label='Average Power', markersize=8,
                 capsize=5, capthick=1, elinewidth=1)
     
-    # Add value labels for power
-    for x, y in zip(vpp_positions, results_df['Average_Power']):
-        ax2.annotate(f'{y:.1f}', (x, y), textcoords="offset points",
+    # Add value labels for power in dB
+    for x, y in zip(vpp_positions, results_df['Average_Power_dB']):
+        ax2.annotate(f'{y:.1f} dB', (x, y), textcoords="offset points",
                     xytext=(0, 10), ha='center', color='green')
     
     # Configure power plot
     ax2.set_xticks(vpp_positions)
     ax2.set_xticklabels([f'{vpp}' for vpp in results_df['VPP']])
     ax2.set_xlabel('VPP', labelpad=-5)
-    ax2.set_ylabel('Average Power')
+    ax2.set_ylabel('Average Power (dB)')
     ax2.set_title('Average Power vs VPP, Distance: 100 cm, Bitrate: 500 bps')
     ax2.grid(True, linestyle='--', alpha=0.7)
     ax2.legend()
     
-    # Set y-axis limits with extra space for error bars
-    ymin, ymax = ax2.get_ylim()
-    ax2.set_ylim(ymin, ymax * 1.05)
-
     plt.tight_layout()
     plt.show()
     
     return results_df
 
-def analyze_ber_by_bitrate_and_distance(file_path, only_bandpass=False, compare_hamming=False, transmitter_select="BOTH"):
+def analyze_ber_by_bitrate_and_distance(file_path, only_bandpass=False, compare_hamming=False, transmitter_select="BOTH", only_hamming=False):
     """
     Create a plot showing BER vs distance with different lines for each bitrate
     
@@ -686,13 +698,12 @@ def analyze_ber_by_bitrate_and_distance(file_path, only_bandpass=False, compare_
         only_bandpass (bool): If True, only show results with bandpass filtering
         compare_hamming (bool): If True, compare with and without Hamming encoding
         transmitter_select (str): "ESP", "SG", or "BOTH" to filter transmitter type
+        only_hamming (bool): If True, show only Hamming encoded results
     """
-    # Read CSV file and validate transmitter selection
     df = pd.read_csv(file_path)
     if transmitter_select not in ["ESP", "SG", "BOTH"]:
         raise ValueError("transmitter_select must be 'ESP', 'SG', or 'BOTH'")
     
-    # Define message lengths and setup plot
     message_lengths = {
         'No Encoding': 96,
         'Hamming Encoding': 132
@@ -702,15 +713,37 @@ def analyze_ber_by_bitrate_and_distance(file_path, only_bandpass=False, compare_
     df = df[df['Bitrate'].isin(allowed_bitrates)]
     distances = sorted(df['Distance to speaker'].unique())
 
-    # Set global font sizes
-    plt.rcParams.update({'font.size': 12})  # Increase base font size
-
-    # Create figure and axes
+    print("\n=== Detailed Analysis Results ===")
+    print("=" * 80)
+    
+    def print_stats_table(trans_type, bitrate, distance, group_data, msg_length):
+        """Helper function to print detailed statistics"""
+        total_trans = len(group_data)
+        valid_trans = len(group_data[group_data['Decoded with bandpass'] != 'No preamble found'])
+        invalid_rate = (total_trans - valid_trans) / total_trans if total_trans > 0 else 0
+        
+        ber_array = []
+        for _, row in group_data[group_data['Decoded with bandpass'] != 'No preamble found'].iterrows():
+            errors = pd.to_numeric(row['Hamming Dist with bandpass'], errors='coerce')
+            if pd.notna(errors):
+                ber = errors / msg_length
+                ber_array.append(ber)
+        
+        mean_ber = np.mean(ber_array) if ber_array else 1.0
+        ber_std = np.std(ber_array) / np.sqrt(len(ber_array)) if ber_array else 0
+        
+        print(f"\n{trans_type} at {bitrate}bps, Distance: {distance}cm")
+        print(f"  Total transmissions: {total_trans}")
+        print(f"  Valid transmissions: {valid_trans}")
+        print(f"  Invalid rate: {invalid_rate:.3f}")
+        print(f"  BER: {mean_ber:.3f} ± {ber_std:.3f}")
+    
+    # Create visualization
+    plt.rcParams.update({'font.size': 12})
     plt.figure(figsize=(8, 8))
     ax = plt.gca()
     ax_top = ax.twiny()
     
-    # Get carrier frequencies based on transmitter type
     def get_carrier_freqs(data, transmitter):
         return data[data['Transmitter'] == transmitter].groupby('Distance to speaker')['Carrier Frequency'].first()
     
@@ -720,7 +753,6 @@ def analyze_ber_by_bitrate_and_distance(file_path, only_bandpass=False, compare_
         carrier_freqs_esp = get_carrier_freqs(df, "ESP")
         carrier_freqs_sg = get_carrier_freqs(df, "SG")
     
-    # Define colors and markers
     colors = plt.cm.rainbow(np.linspace(0, 1, len(allowed_bitrates)))
     markers = {
         'No Encoding': 'o',
@@ -728,14 +760,18 @@ def analyze_ber_by_bitrate_and_distance(file_path, only_bandpass=False, compare_
         'SG': 'o',
         'ESP': 's'
     }
-    
+
     # Process data for each bitrate
     for idx, bitrate in enumerate(allowed_bitrates):
+        print(f"\nAnalyzing Bitrate: {bitrate} bps")
+        print("-" * 40)
+        
         bitrate_data = df[df['Bitrate'] == bitrate]
         
-        # Define conditions based on comparison type
         if compare_hamming:
             conditions = [
+                ('Hamming Encoding', bitrate_data[bitrate_data['Encoding'] == 'Hamming Encoding'])
+            ] if only_hamming else [
                 ('No Encoding', bitrate_data[bitrate_data['Encoding'] == 'No Encoding']),
                 ('Hamming Encoding', bitrate_data[bitrate_data['Encoding'] == 'Hamming Encoding'])
             ]
@@ -751,84 +787,86 @@ def analyze_ber_by_bitrate_and_distance(file_path, only_bandpass=False, compare_
         
         # Process each condition
         for trans_type, trans_data in conditions:
-            results = []
             msg_length = message_lengths['Hamming Encoding' if 'Hamming' in trans_type else 'No Encoding']
+            results = []
             
-            # Calculate BER for each distance
+            all_bers = []
+            all_invalid_rates = []
+            
             for distance in distances:
                 group = trans_data[trans_data['Distance to speaker'] == distance]
                 if len(group) == 0:
                     continue
                 
-                # Process bandpass results
+                # Print detailed statistics for this group
+                print_stats_table(trans_type, bitrate, distance, group, msg_length)
+                
                 valid_bp = group[group['Decoded with bandpass'] != 'No preamble found']
+                invalid_rate = (len(group) - len(valid_bp)) / len(group)
                 ber_array_bp = []
+                
                 for _, row in valid_bp.iterrows():
                     errors = pd.to_numeric(row['Hamming Dist with bandpass'], errors='coerce')
                     if pd.notna(errors):
                         ber = errors / msg_length
                         ber_array_bp.append(ber)
+                        all_bers.append(ber)
+                
+                all_invalid_rates.append(invalid_rate)
                 
                 ber_bp = np.mean(ber_array_bp) if ber_array_bp else 1.0
                 ber_bp_std = np.std(ber_array_bp) / np.sqrt(len(ber_array_bp)) if ber_array_bp else 0
                 
-                # Process non-bandpass results if needed
-                if not only_bandpass:
-                    valid_no_bp = group[group['Decoded without bandpass'] != 'No preamble found']
-                    ber_array_no_bp = []
-                    for _, row in valid_no_bp.iterrows():
-                        errors = pd.to_numeric(row['Hamming Dist without bandpass'], errors='coerce')
-                        if pd.notna(errors):
-                            ber = errors / msg_length
-                            ber_array_no_bp.append(ber)
-                    
-                    ber_no_bp = np.mean(ber_array_no_bp) if ber_array_no_bp else 1.0
-                    ber_no_bp_std = np.std(ber_array_no_bp) / np.sqrt(len(ber_array_no_bp)) if ber_array_no_bp else 0
-                
                 results.append({
                     'Distance': distance,
-                    'BER_BP': ber_bp,
-                    'BER_BP_Std': ber_bp_std,
-                    'BER_No_BP': ber_no_bp if not only_bandpass else None,
-                    'BER_No_BP_Std': ber_no_bp_std if not only_bandpass else None
+                    'BER': ber_bp,
+                    'BER_std': ber_bp_std
                 })
             
-            # Plot results if available
+            # Print summary statistics for this condition
+            if all_bers:
+                mean_ber = np.mean(all_bers)
+                ber_std = np.std(all_bers) / np.sqrt(len(all_bers))
+                mean_invalid = np.mean(all_invalid_rates)
+                print(f"\nSummary for {trans_type} at {bitrate}bps:")
+                print(f"Overall BER: {mean_ber:.3f} ± {ber_std:.3f}")
+                print(f"Overall Invalid Rate: {mean_invalid:.3f}")
+                print("-" * 40)
+            
             if results:
                 df_results = pd.DataFrame(results)
                 label_base = f'{trans_type} {bitrate}bps'
                 
-                # Plot bandpass results with error bars
-                ax.errorbar(df_results['Distance'], df_results['BER_BP'],
-                          yerr=df_results['BER_BP_Std'],
+                ax.errorbar(df_results['Distance'], df_results['BER'],
+                          yerr=df_results['BER_std'],
                           marker=markers[trans_type], linestyle='-', color=colors[idx],
-                          label=f'{label_base} (BP)', markersize=8,
+                          label=f'{label_base}', markersize=8,
                           capsize=5, capthick=1, elinewidth=1)
                 
-                # Add labels at 600cm with dynamic offset
+                # Add value annotations for 600cm point
                 mask_600cm = df_results['Distance'] == 600
                 if any(mask_600cm):
-                    ber_value = df_results.loc[mask_600cm, 'BER_BP'].values[0]
-                    ber_std = df_results.loc[mask_600cm, 'BER_BP_Std'].values[0]
-                    
+                    ber_value = df_results.loc[mask_600cm, 'BER'].values[0]
                     y_offset = -5 if bitrate == 2000 else (5 if bitrate == 1500 else 0)
                     if bitrate == 1000 and msg_length == 132:
                         y_offset = -10
-                    
+                    if bitrate == 1500 and msg_length == 96:
+                        y_offset = -10
+                    if bitrate == 2000 and msg_length == 96:
+                        y_offset = 5
+
                     ax.annotate(f'{ber_value:.2f}',
                               xy=(600, ber_value),
                               xytext=(7, y_offset),
                               textcoords='offset points',
                               color=colors[idx],
                               fontsize=12)
-                    print(f"BER {ber_value} +- {ber_bp_std}")
     
-        # Configure axes with increased font sizes
+    # Configure plot
     ax.set_xlim(30, 690)
     ax_top.set_xlim(ax.get_xlim())
     ax_top.set_xticks(distances)
     
-    # Set carrier frequency labels based on transmitter type with larger font
     if transmitter_select != "BOTH":
         ax_top.set_xticklabels([f'{carrier_freqs[d]/1000:.0f}kHz' for d in distances], 
                               rotation=45, fontsize=13)
@@ -836,33 +874,32 @@ def analyze_ber_by_bitrate_and_distance(file_path, only_bandpass=False, compare_
         ax_top.set_xticklabels([f'ESP:{carrier_freqs_esp[d]/1000:.0f}kHz SG:{carrier_freqs_sg[d]/1000:.0f}kHz' 
                                for d in distances], rotation=45, fontsize=13)
     
-        # Configure plot appearance with larger fonts
     ax_top.set_xlabel('Carrier Frequency', fontsize=14, labelpad=5)
     ax.set_xlabel('Distance (cm)', fontsize=14, labelpad=5)
-    ax.set_ylabel('Bit Error Rate (%)', fontsize=14, labelpad=5)
+    ax.set_ylabel('Bit Error Rate', fontsize=14, labelpad=5)
     title = f'Bit Error Rate vs Distance - {transmitter_select}'
     if compare_hamming:
-        title += ' (Comparing Hamming Encoding)'
+        title += ' with Hamming Encoding'
     ax.set_title(title, fontsize=16, pad=20)
     
-    # Configure grid and ticks
     ax.grid(True, linestyle='--', alpha=0.7)
-    ax.set_ylim(0, 0.6)
+    ax.set_ylim(0, 0.8)
     ax.set_xticks(distances)
     ax.tick_params(axis='x', rotation=45, labelsize=13)
     ax.tick_params(axis='y', labelsize=13)
     ax_top.tick_params(axis='x', labelsize=13)
     
-    # Adjust layout with legend at bottom
-    plt.subplots_adjust(right=0.95, top=0.85, bottom=0.25)  # Increased bottom margin
-    ax.legend(bbox_to_anchor=(0.5, -0.35),  # Centered horizontally, below plot 
-             loc='center',                   # Center alignment
-             fontsize=11,                    # Match other font sizes
-             ncol=3)                         # Spread legend items horizontally
+    # Adjust layout with legend at top right
+    plt.subplots_adjust(right=0.85, top=0.85)
+    ax.legend(bbox_to_anchor=(1.15, 1.0),
+             loc='upper right',
+             fontsize=11,
+             ncol=1)
     
     plt.tight_layout()
     plt.show()
-    
+
+
 def varying_length_analysis_and_plot(file_path, only_bandpass=False):
     """
     Compute and plot average BER vs message length using Hamming distance from the CSV file.
@@ -995,7 +1032,39 @@ def varying_length_analysis_and_plot(file_path, only_bandpass=False):
                             color='darkred',
                             fontweight='bold',
                             fontsize=10)
+        # Print debug statistics
+    print("\n=== Detailed Statistics for Each Message Length ===")
+    for _, row in stats.iterrows():
+        print(f"\nMessage Length: {row['Message Length']} bits")
+        print("With Bandpass:")
+        print(f"BER: {row[('BER_BP', 'mean')]:.3f} ± {row[('BER_BP', 'std')]:.3f}")
+        print(f"Invalid Rate: {row[('Invalid_BP', 'percentage')]:.3f}")
+        
+        if not only_bandpass:
+            print("\nWithout Bandpass:")
+            print(f"BER: {row[('BER_No_BP', 'mean')]:.3f} ± {row[('BER_No_BP', 'std')]:.3f}")
+            print(f"Invalid Rate: {row[('Invalid_No_BP', 'percentage')]:.3f}")
+        print("-" * 50)
     
+    # Print overall statistics
+    print("\n=== Overall Statistics ===")
+    print("With Bandpass:")
+    mean_ber_bp = stats[('BER_BP', 'mean')].mean()
+    std_ber_bp = np.sqrt(np.sum(stats[('BER_BP', 'std')]**2))/len(stats)
+    mean_invalid_bp = stats[('Invalid_BP', 'percentage')].mean()
+    print(f"Average BER across all lengths: {mean_ber_bp:.3f} ± {std_ber_bp:.3f}")
+    print(f"Average Invalid Rate: {mean_invalid_bp:.3f}")
+    
+    if not only_bandpass:
+        print("\nWithout Bandpass:")
+        mean_ber_no_bp = stats[('BER_No_BP', 'mean')].mean()
+        std_ber_no_bp = np.sqrt(np.sum(stats[('BER_No_BP', 'std')]**2))/len(stats)
+        mean_invalid_no_bp = stats[('Invalid_No_BP', 'percentage')].mean()
+        print(f"Average BER across all lengths: {mean_ber_no_bp:.3f} ± {std_ber_no_bp:.3f}")
+        print(f"Average Invalid Rate: {mean_invalid_no_bp:.3f}")
+    print("=" * 50)
+
+
     # Configure plot
     ax.set_xlabel('Message Length (bits)')
     ax.set_ylabel('Bit Error Rate (%)')
@@ -1396,6 +1465,7 @@ def packet_success_rate_theoretical(channel_snr_db, bitrate_bps, message_length_
     # Packet success rate = (1 - Pb)^L
     psr = (1 - pb)**message_length_bits
     return psr
+
 def compute_snr_db(P_w, d_m, f_khz, Rb):
     # 1) Source level Slevel (dB), using r = d
     I = P_w / (4 * np.pi * d_m**2)
@@ -1596,53 +1666,56 @@ def plot_theoretical_packet_success(results_df, transmitter_filter, target_bitra
 
 
 if __name__ == "__main__":  
-    # # # NOTE: 
+    # # NOTE: 
     # # # file_path = "ESP_new_average_power_1_3_6meters.csv"
-    # file_path = "Average_power_of_received_signal.csv"
+    file_path = "Average_power_of_received_signal.csv"
     # # file_path = "avg_power_of_rec_signal_purely_for_check_of_interference.csv"
-    # file_path = "1m_distance_payload_barker_similarity_impact.csv"
+    # # file_path = "1m_distance_payload_barker_similarity_impact.csv"
 
+    # # file_path = "Code/dsp/data/plastic/SG_plastic_hamming_encoding_testing_cf_6000_400bps, 5sd, 50ds.csv"
+    # compute_ber_for_hamming_encoding_test(file_path)
+    
     # df = pd.read_csv(file_path)
     # print(df["Test description"].unique())
-    # dist = 100
-    # bitrate = 1000
-    # transmitter = "ESP"
+    # dist = 500
+    # bitrate = 500
+    # transmitter = "SG"
     # # "Testing: Average power purely for check of interference"
     # # "Testing: average power of a signal"  
     # # "Testing: average power of a signal - ESP"
     # # "Testing: average power of a signal - ESP, reverted back to old code"
     # # Testing: varying payloads of size 100 on 1m dist and max marker correlation 0f 6
-    # results_df = analyze_ber_by_carrier_freq(file_path, dist, bitrate, transmitter, "Testing: varying payloads of size 100 on 1m dist and max marker correlation 0f 6", show_error_bars=True)
+    # results_df = analyze_ber_by_carrier_freq(file_path, dist, bitrate, transmitter, "Testing: average power of a signal", show_error_bars=True)
 
-    # # NOTE: change to see a subset of carrier freqs, min_freq, max_freq as inputs
+    # NOTE: change to see a subset of carrier freqs, min_freq, max_freq as inputs
     # plot_power_vs_distance_by_frequency(file_path, 9000, 15000, "Testing: average power of a signal")
     
     # # NOTE: below is for the vpp test
     # test_file = "1m_distance_carrier_freq_sg_vpp_variable.csv"
     # result_df = compute_ber_for_different_vpps(test_file)
 
-    # # NOTE: below computes BER for the max bitrate using ESP, set only_bandpass = True if you only want to compare bandpass, compare_hamming = True if you want to compare
-    # # SG with and without hamming. Both cant be true at the same time :) 
-    # file_path = "Max_bitrate_at_different_distances_and_best_carrier_freq.csv"
-    # results = analyze_ber_by_bitrate_and_distance(file_path, only_bandpass=True, compare_hamming=True, transmitter_select="SG")
+    # NOTE: below computes BER for the max bitrate using ESP, set only_bandpass = True if you only want to compare bandpass, compare_hamming = True if you want to compare
+    # SG with and without hamming. Both cant be true at the same time :) 
+    file_path = "Max_bitrate_at_different_distances_and_best_carrier_freq.csv"
+    results = analyze_ber_by_bitrate_and_distance(file_path, only_bandpass=True, compare_hamming=False, transmitter_select="ESP", only_hamming=False)
 
     # # NOTE: below computes the BER for varying lengths of the message
     # file_path = "Random_payloads.csv"
-    file_path = "Varying_payload_sizes.csv"
+    # # file_path = "Varying_payload_sizes.csv"
     # varying_length_analysis_and_plot(file_path, only_bandpass=True)
 
-    # NOTE: computing bitflip tendency for a given file, computes for ESP and SG
-    file_paths = ["1m_distance_payload_barker_similarity_impact.csv",
-                  "1m_distance_carrier_freq_sg_vpp_variable.csv", 
-                  "Max_bitrate_at_different_distances_and_best_carrier_freq.csv",
-                  "Average_power_of_received_signal.csv", 
-                  "5m_dist_10kHz_unique_payloads.csv",
-                  "Random_payloads.csv",
-                  "Varying_payload_sizes.csv",
-                  "avg_power_of_rec_signal_purely_for_check_of_interference.csv", 
-                  "Received_data_for_tests.csv"
-                  ]
-    results = analyze_bit_flips_by_transmitter(file_paths)
+    # # NOTE: computing bitflip tendency for a given file, computes for ESP and SG
+    # file_paths = ["1m_distance_payload_barker_similarity_impact.csv",
+    #               "1m_distance_carrier_freq_sg_vpp_variable.csv", 
+    #               "Max_bitrate_at_different_distances_and_best_carrier_freq.csv",
+    #               "Average_power_of_received_signal.csv", 
+    #               "5m_dist_10kHz_unique_payloads.csv",
+    #               "Random_payloads.csv",
+    #               "Varying_payload_sizes.csv",
+    #               "avg_power_of_rec_signal_purely_for_check_of_interference.csv", 
+    #               "Received_data_for_tests.csv"
+    #               ]
+    # results = analyze_bit_flips_by_transmitter(file_paths)
 
     # NOTE: below computes random payload composition importance
     # TODO: Figure out how to do the note above :)
@@ -1657,35 +1730,35 @@ if __name__ == "__main__":
     # results = analyze_ber_by_carrier_freq(file_path, test_description="Testing: testing impact of similarlity of payloads and barker 13")
     # results = analyze_invalid_transmissions(file_path)
 
-    # NOTE: theoretical likelihood of reading this message at these different distances.
-    # Use a file that has 'Average Power of signal' (as counts), 'Transmitter', 'Distance to speaker', 'Carrier Frequency'
-    # For example, the same file used for power vs distance or BER vs carrier freq.
-    file_path_for_theoretical = file_path # Ensure this file exists and has the needed columns
+    # # NOTE: theoretical likelihood of reading this message at these different distances.
+    # # Use a file that has 'Average Power of signal' (as counts), 'Transmitter', 'Distance to speaker', 'Carrier Frequency'
+    # # For example, the same file used for power vs distance or BER vs carrier freq.
+    # file_path_for_theoretical = file_path # Ensure this file exists and has the needed columns
     
-    # Parameters for the theoretical model
-    transmitter_to_analyze = "ESP" # or "ESP" or None to analyze all
-    theoretical_bitrate = 10    # bps
-    theoretical_message_length = 4000 # bits (e.g., 12 bytes * 8 bits/byte)
+    # # Parameters for the theoretical model
+    # transmitter_to_analyze = "ESP" # or "ESP" or None to analyze all
+    # theoretical_bitrate = 10    # bps
+    # theoretical_message_length = 4000 # bits (e.g., 12 bytes * 8 bits/byte)
 
-    print(f"\n--- Analyzing Theoretical Packet Success Rate ---")
-    print(f"File: {file_path_for_theoretical}, Transmitter: {transmitter_to_analyze}, Bitrate: {theoretical_bitrate}bps, MsgLen: {theoretical_message_length}bits")
+    # print(f"\n--- Analyzing Theoretical Packet Success Rate ---")
+    # print(f"File: {file_path_for_theoretical}, Transmitter: {transmitter_to_analyze}, Bitrate: {theoretical_bitrate}bps, MsgLen: {theoretical_message_length}bits")
     
-    theoretical_results_df = analyze_theoretical_packet_success(
-        file_path_for_theoretical,
-        transmitter_filter=transmitter_to_analyze,
-        target_bitrate_bps=theoretical_bitrate,
-        message_length_bits=theoretical_message_length
-    )
+    # theoretical_results_df = analyze_theoretical_packet_success(
+    #     file_path_for_theoretical,
+    #     transmitter_filter=transmitter_to_analyze,
+    #     target_bitrate_bps=theoretical_bitrate,
+    #     message_length_bits=theoretical_message_length
+    # )
     
-    if not theoretical_results_df.empty:
-        plot_theoretical_packet_success(
-            theoretical_results_df,
-            transmitter_filter=transmitter_to_analyze,
-            target_bitrate_bps=theoretical_bitrate,
-            message_length_bits=theoretical_message_length
-        )
-    else:
-        print("No theoretical results generated to plot.")
+    # if not theoretical_results_df.empty:
+    #     plot_theoretical_packet_success(
+    #         theoretical_results_df,
+    #         transmitter_filter=transmitter_to_analyze,
+    #         target_bitrate_bps=theoretical_bitrate,
+    #         message_length_bits=theoretical_message_length
+    #     )
+    # else:
+    #     print("No theoretical results generated to plot.")
 
 
     

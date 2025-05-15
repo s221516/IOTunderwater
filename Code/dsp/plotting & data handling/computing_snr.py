@@ -99,8 +99,9 @@ def compute_snr(signal_file, noise_file, bandpass_filter=None, plot_signals=Fals
 if __name__ == "__main__":
     # signal_path = "Code/dsp/data/signal_plus_noice_plastic_tank.wav"
     # signal_path = "Code/dsp/data/raw_data/71bb5db0-9772-4fec-b1f8-e9b7436c4f49.wav" # 1 vpp
-    signal_path = "Code/dsp/data/raw_data/d7a33921-d295-48a1-87de-c3945c92f2ea.wav" # 0.5 vpp
-    signal_path = "Code/dsp/data/raw_data/7bbb25bf-967e-436c-bd53-e9f55c148197.wav" # 0.25 vpp
+    # signal_path = "Code/dsp/data/raw_data/d7a33921-d295-48a1-87de-c3945c92f2ea.wav" # 0.5 vpp
+    # signal_path = "Code/dsp/data/raw_data/7bbb25bf-967e-436c-bd53-e9f55c148197.wav" # 0.25 vpp
+    signal_path = "Code/dsp/data/raw_data/ab1b4883-3254-45b0-b074-8f28b04c88b5.wav" # 6 vpp
     noise_path = "Code/dsp/data/noise_only_plastic_tank.wav"
     
     snr = compute_snr(signal_path, noise_path, plot_signals=True)
