@@ -16,12 +16,12 @@ static dac_oneshot_handle_t dac_handle;
 
 #define UART_NUM UART_NUM_0
 #define BUF_SIZE (1024)
-#define MAX_LINE_LENGTH 128
+#define MAX_LINE_LENGTH 1000
 #define PI 3.14159265
 
 int bit_rate = 100;
 int carrier_freq = 6000;
-char message[100] = "Hello World!";
+char message[INPUT_SIZE] = "Hello World!";
 int samples_per_symbol = 0;
 float sample_rate = 0;
 int repetitions = 10;
@@ -145,11 +145,13 @@ void send_signal() {
 
 void process_input(char *input) {
     int value;
+    // NOTE: THIS LINE RIGHT HERE IS THE LIMITING FACTOR FOR HOW LONG THE MESSAGE CAN BE FOR AN ESP OUTPUT
     char valueStr[100];
     
     
 
     if (sscanf(input, "FREQ %d", &value) == 1) {
+        sample_rate = measureSampleRateOfDAC();
         carrier_freq = value;
     
     // } else if (sscanf(input, "%d", &value) == 1) {
@@ -159,9 +161,11 @@ void process_input(char *input) {
     //     printf("Sample rate set to: %f\n", sample_rate);
 
     } else if (sscanf(input, "BITRATE %d", &value) == 1) {
+        sample_rate = measureSampleRateOfDAC();
         bit_rate = value;
 
     } else if (sscanf(input, "REP %d", &value) == 1) {
+        sample_rate = measureSampleRateOfDAC();
         repetitions = value;
 
     } else {
@@ -193,7 +197,7 @@ void init_uart() {
         .stop_bits = UART_STOP_BITS_1,
         .flow_ctrl = UART_HW_FLOWCTRL_DISABLE,
     };
-    uart_driver_install(UART_NUM, BUF_SIZE * 2, 0, 0, NULL, 0);
+    uart_driver_install(UART_NUM, BUF_SIZE * 2, BUF_SIZE * 2, 0, NULL, 0);
     uart_param_config(UART_NUM, &uart_config);
 }
 
@@ -201,7 +205,7 @@ void app_main() {
 
     
     init_uart();
-
+    
     dac_oneshot_config_t dac_cfg = {
         .chan_id = DAC_CHAN_0,
     };

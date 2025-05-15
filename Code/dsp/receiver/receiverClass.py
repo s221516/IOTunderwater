@@ -14,7 +14,6 @@ from config import (
     CONVOLUTIONAL_CODING,
     HAMMING_CODING,
     PATH_TO_WAV_FILE,
-    SAMPLE_RATE,
     PLOT_PREAMBLE_CORRELATION,
     IS_ID_SPECIFIED
 )
@@ -47,9 +46,95 @@ class Receiver:
         self.bit_rate = config.BIT_RATE
         self.carrier_freq = config.CARRIER_FREQ
         self.band_pass = band_pass
-        self.cutoff_freq = self.bit_rate * 1.2
-        self.samples_per_symbol = int(SAMPLE_RATE / self.bit_rate)
+        self.cutoff_freq = self.bit_rate * 5
+        self.sample_rate = config.SAMPLE_RATE
+        self.samples_per_symbol = int(self.sample_rate / self.bit_rate)
         self.filter_order = 4
+
+    def _text_to_bits_list(text: str) -> list[int]:
+        """Converts a string to a list of bits (8 bits per character, ASCII)."""
+        bits_list = []
+        for char_val in text:
+            bits_list.extend([int(b) for b in bin(ord(char_val))[2:].zfill(8)])
+        return bits_list
+
+    def _find_first_preamble_start_in_bits(self, full_bitstream: list[int], std_factor_start=4, min_std_factor=1.0, step=0.1) -> int | None:
+        """
+        Internal helper to find the starting bit index of the first detected preamble.
+        This performs its own correlation and peak finding.
+        """
+        full_bitstream = np.array(full_bitstream)
+        BINARY_BARKER = np.array(config.BINARY_BARKER)
+        print("Length of full_bitstream: ", len(full_bitstream))
+        print("Length of BINARY_BARKER: ", len(BINARY_BARKER))
+        
+        if len(full_bitstream) < len(BINARY_BARKER):
+            return None
+
+        current_std_factor = std_factor_start
+        while current_std_factor >= min_std_factor:
+            correlation = signal.correlate(full_bitstream, BINARY_BARKER, mode="valid")
+            print("Length of correlation: ", len(correlation))
+            if len(correlation) == 0:
+                return None # Should not happen if initial length check passed
+
+            threshold = np.mean(correlation) + current_std_factor * np.std(correlation)
+            # Find the first peak that meets the criteria
+            peak_indices, _ = signal.find_peaks(correlation, height=threshold, distance=100)
+            
+            if peak_indices.size > 0:
+                return peak_indices[0] # Return the index of the first peak found
+            
+            current_std_factor -= step
+        
+        return None # No preamble found after trying different std_factors
+
+    def estimate_absolute_first_error_time(self, original_message_text: str, decoded_message_text: str, full_bitstream_from_get_bits: list[int] | None) -> float | None:
+        """
+        Estimates the absolute time of the first bit error from the start of the
+        processed signal, by first finding the preamble in full_bitstream_from_get_bits.
+        """
+        if not original_message_text or not decoded_message_text or full_bitstream_from_get_bits is None:
+            return None
+        
+        if self.samples_per_symbol == 0 or self.sample_rate == 0:
+            return None
+
+        first_preamble_start_index = self._find_first_preamble_start_in_bits(full_bitstream_from_get_bits)
+
+        if first_preamble_start_index is None:
+            # print("Debug: Preamble not found by estimate_absolute_first_error_time.")
+            return None # Cannot establish payload start
+
+        payload_start_offset_in_bitstream = first_preamble_start_index + len(BINARY_BARKER)
+
+        original_bits = Receiver._text_to_bits_list(original_message_text)
+        print(f"Decoded message text: {decoded_message_text}")
+        decoded_bits = Receiver._text_to_bits_list(decoded_message_text)
+
+        first_error_bit_index_in_payload = -1
+        len_to_compare = min(len(original_bits), len(decoded_bits))
+
+        for i in range(len_to_compare):
+            if original_bits[i] != decoded_bits[i]:
+                first_error_bit_index_in_payload = i
+                break
+        
+        if first_error_bit_index_in_payload == -1 and len(original_bits) != len(decoded_bits):
+            first_error_bit_index_in_payload = len_to_compare 
+
+        if first_error_bit_index_in_payload != -1:
+            absolute_error_bit_index = payload_start_offset_in_bitstream + first_error_bit_index_in_payload
+            
+            # Ensure the error index is within the bounds of the full bitstream
+            if absolute_error_bit_index < len(full_bitstream_from_get_bits):
+                error_time_seconds = (absolute_error_bit_index * self.samples_per_symbol) / self.sample_rate
+                return error_time_seconds
+            else:
+                # print("Debug: Calculated absolute error bit index is out of bounds of the full bitstream.")
+                return None
+        
+        return None # No error found in payload
 
     def _demodulate(self) -> Tuple[np.ndarray, Dict]:
         raise NotImplementedError("Subclasses must implement _demodulate")
@@ -60,7 +145,7 @@ class Receiver:
 
     def bandpass_filter(self, input_signal: np.ndarray) -> np.ndarray:
         """Apply a bandpass filter around the carrier frequency"""
-        nyquist = SAMPLE_RATE * 0.5
+        nyquist = self.sample_rate * 0.5
         order = 4
         low = (self.carrier_freq - self.bit_rate) / nyquist
         high = (self.carrier_freq + self.bit_rate) / nyquist
@@ -69,7 +154,7 @@ class Receiver:
         return signal.filtfilt(b, a, input_signal)
 
     def filter_signal(self, input_signal: np.ndarray) -> np.ndarray:
-        nyquist = SAMPLE_RATE * 0.5
+        nyquist = self.sample_rate * 0.5
         order = 4
         cutoff = self.cutoff_freq / nyquist
         b, a = signal.butter(order, cutoff, btype="low", analog=False)
@@ -92,9 +177,7 @@ class Receiver:
     def threshold_signal(self, normalized_signal: np.ndarray) -> np.ndarray:
         # this is called hyperestesis thresholding, essentially you have a memory while checking
         low = 0.4
-        print("Low: ", low)
         high = 0.6
-        print("High: ", high)
         thresholded = np.zeros_like(normalized_signal)
         state = 0
         for i in range(len(normalized_signal)):
@@ -117,16 +200,28 @@ class Receiver:
     def remove_preamble_baker_code(self, bits, std_factor=4):
         correlation = signal.correlate(bits, BINARY_BARKER, mode="valid") # old
         # correlation = signal.correlate(BINARY_BARKER, bits, mode="same") # new
+        dist = 100
         threshold = np.mean(correlation) + std_factor * np.std(correlation)
-        peak_indices, _ = signal.find_peaks(correlation, height=threshold, distance=100)
+        peak_indices, _ = signal.find_peaks(correlation, height=threshold, distance=dist)
         if len(peak_indices) < 2:
             if std_factor > 1:
                 return self.remove_preamble_baker_code(bits, std_factor - 0.1)
             else:
                 print("Debug info: not finding preamble line 121")
-                return -1, []
-
+                return -1, [], []
+            
+        
+        _, properties = signal.find_peaks(correlation, height=threshold, distance=dist)
+        ### max height 
+        max_peak = max(properties["peak_heights"])
+        print("Max peak: ", max_peak)
         diff_in_peaks = np.diff(peak_indices)
+        
+        ### peak_indices with correlation = 9 
+        print(type(properties["peak_heights"]))
+        print("Peak heights: ", properties["peak_heights"])
+        print("Peak indices: ", peak_indices)
+        print(f"values at peak_indices: {correlation[peak_indices]}")
         
         all_data_bits            = []
         data_bits_of_correct_len = []
@@ -174,7 +269,7 @@ class Receiver:
         avg = [int(round((sum(col)) / len(col))) for col in zip(*data_bits_of_correct_len)]
         if avg == []:
             avg = -1
-        return avg, all_data_bits
+        return avg, all_data_bits, peak_indices
 
 
     def decode_bytes_to_bits(self, bits: list) -> str:
@@ -226,7 +321,7 @@ class Receiver:
         # Display the spectrogram using decibels
         librosa.display.specshow(amplitude_spectrogram_db, sr=config.SAMPLE_RATE, hop_length=hop_length, x_axis="time", y_axis="hz") 
         plt.colorbar(label="Amplitude (dB)") # Updated colorbar label
-        ax.set_title("Spectrogram (Decibels)")
+        ax.set_title(f"Spectrogram (Decibels) for signal with carrier {self.carrier_freq}Hz and bitrate {self.bit_rate}Hz")
         ax.set_xlabel("Time (s)")
         ax.set_ylabel("Frequency (Hz)")
         ax.set_ylim(0, 20000) # Limit y-axis to 20kHz
@@ -257,11 +352,17 @@ class Receiver:
         frequency_magnitudes = 20 * np.log10(frequency_magnitudes / np.max(frequency_magnitudes))
 
         # only plot the positive frequencies
-        # positive_frequencies = frequencies_x_axis > 0
-        # frequencies_x_axis = frequencies_x_axis[positive_frequencies]
-        # frequency_magnitudes = frequency_magnitudes[positive_frequencies]
+        positive_frequencies = frequencies_x_axis > 0
+        frequencies_x_axis = frequencies_x_axis[positive_frequencies]
+        frequency_magnitudes = frequency_magnitudes[positive_frequencies]
 
         ax.plot(frequencies_x_axis, frequency_magnitudes, "-", color=color, alpha=alpha, label=label) 
+        
+        ## Make vertical line at bandpass
+        ax.axvline(x = self.carrier_freq - (self.bit_rate // 2), color="blue", linestyle="--", label="Bandwidth")
+        ax.axvline(x = self.carrier_freq + (self.bit_rate // 2), color="blue", linestyle="--")
+        ax.legend(loc='upper right', fontsize='small')
+        ax.set_xlim(0, 20000)  # Limit x-axis to 20kHz
         ax.set_xlabel("Frequency (Hz)")
         ax.set_ylabel("Magnitude")
         ax.set_title("Frequency Domain Signal")
@@ -278,7 +379,7 @@ class Receiver:
         plt.tight_layout()
         plt.show()
 
-    def plot_wave_in_time_domain(self, wave, l: str, ax=None, color="orange"):
+    def plot_wave_in_time_domain(self, wave, l: str, ax=None, color="orange", alpha=0.5):
         """
         Plots the time domain representation of the received WAV signal.
         @param wave: The received WAV signal.
@@ -291,7 +392,7 @@ class Receiver:
             ax = plt.gca()
 
         time_array = np.arange(len(wave)) / config.SAMPLE_RATE
-        ax.plot(time_array, wave, color=color, label=l, alpha=0.5)
+        ax.plot(time_array, wave, color=color, label=l, alpha=alpha)
         ax.set_xlabel("Time (s)")
         ax.set_ylabel("Amplitude")
         ax.set_title("Time Domain Signal")
@@ -371,29 +472,110 @@ class Receiver:
         plt.tight_layout()
         plt.show()
         
-    def plot_wave_in_time_domain_after_envelope(self):
+    def plot_wave_in_time_domain_after_envelope(self, msg_original_text:str):
         
         if self.wav_signal is None:
             print("No signal to visualize")
             return
 
         # _demodulate returns a tuple, we need the debug_info dictionary
-        _filtered_signal, debug_info = self._demodulate() 
+        try:
+            _, debug_info = self.decode()
+        except Exception as e:
+            _, debug_info = self._demodulate()
+
         fig, ax = plt.subplots(1, 1, figsize=(10, 4))
         
-        # Plot original signal with label
-        self.plot_wave_in_time_domain(self.wav_signal, "Original Signal", ax=ax, color="blue")
-        # Plot signal after envelope with label
-        self.plot_wave_in_time_domain(debug_info["envelope"], "After Envelope before Lowpass Filter", ax=ax, color="red")
+        self.plot_wave_in_time_domain(self.wav_signal, "Original Signal", ax=ax, color="blue", alpha=0.2)
+        if "envelope" in debug_info:
+            self.plot_wave_in_time_domain(debug_info["envelope"], "After Envelope", ax=ax, color="red", alpha=0.7)
+        if "filtered" in debug_info: # This is typically the LPF output on the envelope
+            self.plot_wave_in_time_domain(debug_info["filtered"], "After Lowpass Filter", ax=ax, color="purple", alpha=1.0)
+        
+        # Plot vertical lines for symbol boundaries
+        if self.samples_per_symbol > 0 and self.sample_rate > 0:
+            for i in range(0, len(self.wav_signal), self.samples_per_symbol):
+                # Only plot if within the current xlim to avoid too many lines if zoomed out
+                time_sec = i / self.sample_rate
+                current_xlim = ax.get_xlim()
+                if current_xlim[0] <= time_sec <= current_xlim[1]:
+                    plt.axvline(x=time_sec, color="green", linestyle="--", alpha=0.7, linewidth=3.0)
+                    # pass
+        print(f" values : {debug_info['index_of_9']}")
+        ### at debug_info["index_of_9"] plot vertical lines!!
+        if debug_info["index_of_9"] is not None:
+            for i in range(len(debug_info["index_of_9"])):
+                # at index debug_info["index_of_9"][i] plot vertical lines
+                time_sec = (debug_info["index_of_9"][i] / self.sample_rate) * self.samples_per_symbol
+                current_xlim = ax.get_xlim()
+                if current_xlim[0] <= time_sec <= current_xlim[1]:
+                    plt.axvline(x=time_sec, color="black", linestyle="--", alpha=0.7, linewidth=3.0)
+                    
 
-        plt.legend(["Original Signal", "After Envelope"])
-        plt.title("Time Domain after Envelope")
+        # plt.xlim(1.0, 1.490)  # Limit x-axis to 2 seconds as per user's existing code
+
+        handles, labels = ax.get_legend_handles_labels()
+        if handles: # Avoid creating a legend if there's nothing to label
+            by_label = dict(zip(labels, handles)) # Remove duplicate labels
+            ax.legend(by_label.values(), by_label.keys(), loc='lower left', fontsize='large')
+        payload_size = len(msg_original_text) * 8 + 13
+        if config.USE_ESP:
+            transmitter = "ESP"
+        else:
+            transmitter = "SG"
+        plt.title(f"{transmitter} : Time Domain of signal with payload size {str(payload_size)} bits, cf {self.carrier_freq}Hz, bitrate {self.bit_rate}Hz")
         plt.tight_layout()
         plt.show()
         
+    def plot_wave_in_time_after_thresholding(self, msg_original_text:str):
+        if self.wav_signal is None:
+            print("No signal to visualize")
+            return
+
+        try:
+            message, debug_info = self.decode()
+        except Exception as e:
+            print(f"could not plot {e}")
+            return
         
+        fig, ax = plt.subplots(1, 1, figsize=(10, 4))
+        self.plot_wave_in_time_domain(debug_info["normalized"], "Normalized Signal", ax=ax, color="blue", alpha=0.2)
+        self.plot_wave_in_time_domain(debug_info["thresholded"], "Thresholded Signal", ax=ax, color="red", alpha=0.7)
         
+        # Plot vertical lines for symbol boundaries
         
+        # Plot vertical lines for symbol boundaries
+        if self.samples_per_symbol > 0 and self.sample_rate > 0:
+            for i in range(0, len(self.wav_signal), self.samples_per_symbol):
+                # Only plot if within the current xlim to avoid too many lines if zoomed out
+                time_sec = i / self.sample_rate
+                current_xlim = ax.get_xlim()
+                if current_xlim[0] <= time_sec <= current_xlim[1]:
+                    plt.axvline(x=time_sec, color="green", linestyle="--", alpha=0.7, linewidth=3.0)
+                    # pass
+        print(f" values : {debug_info['index_of_9']}")
+        ### at debug_info["index_of_9"] plot vertical lines!!
+        if debug_info["index_of_9"] is not None:
+            for i in range(len(debug_info["index_of_9"])):
+                # at index debug_info["index_of_9"][i] plot vertical lines
+                time_sec = (debug_info["index_of_9"][i] / self.sample_rate) * self.samples_per_symbol
+                current_xlim = ax.get_xlim()
+                if current_xlim[0] <= time_sec <= current_xlim[1]:
+                    plt.axvline(x=time_sec, color="black", linestyle="--", alpha=0.7, linewidth=3.0)
+        handles, labels = ax.get_legend_handles_labels()
+        if handles: # Avoid creating a legend if there's nothing to label
+            by_label = dict(zip(labels, handles)) # Remove duplicate labels
+            ax.legend(by_label.values(), by_label.keys(), loc='lower left', fontsize='large')
+        payload_size = len(msg_original_text) * 8 + 13
+        if config.USE_ESP:
+            transmitter = "ESP"
+        else:
+            transmitter = "SG"
+        plt.title(f"{transmitter} : Time Domain of signal with payload size {str(payload_size)} bits, cf {self.carrier_freq}Hz, bitrate {self.bit_rate}Hz")
+        plt.tight_layout()
+        plt.show()        
+        
+    
     def plot_simulation_steps(self):
         if self.wav_signal is None:
             print("No signal to visualize")
@@ -502,6 +684,18 @@ class Receiver:
 
         plt.tight_layout()
         plt.show()
+    
+    
+    # def plot_envelope_thresholded_with_samples_per_symbol_ticls(self):
+
+    
+    
+    
+    
+    
+    
+    
+    
     def set_len_of_data_bits(self, value):
         global len_of_data_bits
         len_of_data_bits = value
@@ -528,6 +722,7 @@ class NonCoherentReceiver(Receiver):
             "analytic": analytic,
             "envelope": envelope,
             "filtered": filtered,
+            "index_of_9": None,
         }
 
     def decode(self) -> Tuple[str, Dict]:
@@ -541,7 +736,7 @@ class NonCoherentReceiver(Receiver):
         # print("Received bits:", bits)
 
         if APPLY_BAKER_PREAMBLE:
-            bits_without_preamble, all_data_bits = self.remove_preamble_baker_code(bits)
+            bits_without_preamble, all_data_bits, index_of_9 = self.remove_preamble_baker_code(bits)
 
         if bits_without_preamble == -1:
             print("No preamble found, error was raised in receiverClass")
@@ -560,6 +755,7 @@ class NonCoherentReceiver(Receiver):
             "normalized": normalized,
             "thresholded": thresholded,
             "bits_without_preamble": bits_without_preamble,
+            "index_of_9": index_of_9 if APPLY_BAKER_PREAMBLE else None,
         }
         return message, debug_info
 
