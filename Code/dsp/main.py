@@ -190,9 +190,10 @@ def process_signal_for_testing(message, id):
 
     nonCoherentReceiverWithBandPass = NonCoherentReceiver(id, band_pass = True)
     nonCoherentReceiverWithBandPass.set_len_of_data_bits(len_of_data_bits)
-
+    nonCoherentReceiverWithBandPass.plot_wave_in_time_domain_after_envelope(message)
     try:
         message_nc_bandpass, debug_nc_bandpass = nonCoherentReceiverWithBandPass.decode()
+        nonCoherentReceiverWithBandPass.plot_wave_in_time_after_thresholding(message)
         # nonCoherentReceiverWithBandPass.plot_simulation_steps()
         # nonCoherentReceiver.plot_in_frequency_domain()
     except PreambleNotFoundError:

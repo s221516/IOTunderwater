@@ -32,7 +32,7 @@ def set_carrierfreq(value):
 # TRANSMITTER_PORT = "COM11"
 TRANSMITTER_PORT = "/dev/cu.usbserial-0232D158"
 MIC_INDEX = 2 # Mathias, 1 Morten
-USE_ESP = False
+USE_ESP = True
 SAMPLE_RATE = 96000   # this capped by the soundcard, therefore, this is non-changeable
 
 BIT_RATE = 500
@@ -60,9 +60,9 @@ PATH_TO_WAV_FILE = "Code/dsp/data/testing_and_logging_recording.wav"
 # FILE_NAME_DATA_TESTS = "Random_payloads.csv"
 # FILE_NAME_DATA_TESTS = "avg_power_of_rec_signal_purely_for_check_of_interference.csv"
 # FILE_NAME_DATA_TESTS = "Average_power_of_received_signal.csv"
-# FILE_NAME_DATA_TESTS = "Max_bitrate_at_different_distances_and_best_carrier_freq.csv"
+FILE_NAME_DATA_TESTS = "Max_bitrate_at_different_distances_and_best_carrier_freq.csv"
 # FILE_NAME_DATA_TESTS = "Conv_encoding_testing.csv"
-FILE_NAME_DATA_TESTS = "Signal_generator_simulation_limit_test.csv"
+# FILE_NAME_DATA_TESTS = "Signal_generator_simulation_limit_test.csv"
 
 HAMMING_CODING = False
 CONVOLUTIONAL_CODING = False
@@ -80,7 +80,7 @@ IS_ID_SPECIFIED = None
 IS_ID_SPECIFIED = ["7906ebdb-664b-46bc-96ea-78049d9e182c"]#"b3c2d680-cb83-4ab0-9cf7-a566ae5d360f","91bf3f5b-c1d0-4492-9f9f-d6030520731d","a70d7f0f-f891-4034-9642-8a144b49a59b"]
 # IS_ID_SPECIFIED = ["91bf3f5b-c1d0-4492-9f9f-d6030520731d"]
 # IS_ID_SPECIFIED = ["948ebdd5-0edd-47e3-ae00-18c75a484194"] # esp32 attenuated 4000 bits
-# IS_ID_SPECIFIED = [
+IS_ID_SPECIFIED = [
 #     "c1ac15b6-66f5-40b5-94df-e1dec5e2961b",
 #     "84b73c50-4f0b-48c1-a9c9-24f72ceb35e3",
 #     "8ef43baf-f66e-4aa5-908b-6a1cf5a8133b",
@@ -100,10 +100,11 @@ IS_ID_SPECIFIED = ["7906ebdb-664b-46bc-96ea-78049d9e182c"]#"b3c2d680-cb83-4ab0-9
 #     "9b488b5c-9b30-45c4-bae5-35efcec25cf2",
 #     "968b5c1e-0b06-4481-be78-6b653c2548b4",
 #     "5b4e4f2f-0d67-4d18-adbe-48614c49e3af",
-# ]
+    "11a56a27-b3fe-4389-9c44-1624bdbcfea5",
+]
 # IS_ID_SPECIFIED = ["7c3036d6-654a-4b77-8fe2-2cfc6697f732"] # ESP straight into computer
 # IS_ID_SPECIFIED = ["190209f4-1a18-48f7-a33f-7058cc78ac3b"] # ESP straight into computer 4000 bits attenuaed
-# IS_ID_SPECIFIED = ["8a58d36b-96f7-424e-b9c8-6cad8323b037"]
+IS_ID_SPECIFIED = ["9d552825-968b-46b4-8c76-41f58e663ccc"]
 # IS_ID_SPECIFIED = ["8a58d36b-96f7-424e-b9c8-6cad8323b037"] # bitrate 1000, cf 10000, esp 
 if __name__ == "__main__":
     # import scipy.signal as signal

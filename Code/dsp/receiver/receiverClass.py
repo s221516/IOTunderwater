@@ -176,10 +176,8 @@ class Receiver:
 
     def threshold_signal(self, normalized_signal: np.ndarray) -> np.ndarray:
         # this is called hyperestesis thresholding, essentially you have a memory while checking
-        low = 0.5
-        print("Low: ", low)
-        high = 0.5
-        print("High: ", high)
+        low = 0.4
+        high = 0.6
         thresholded = np.zeros_like(normalized_signal)
         state = 0
         for i in range(len(normalized_signal)):
@@ -202,7 +200,7 @@ class Receiver:
     def remove_preamble_baker_code(self, bits, std_factor=4):
         correlation = signal.correlate(bits, BINARY_BARKER, mode="valid") # old
         # correlation = signal.correlate(BINARY_BARKER, bits, mode="same") # new
-        dist = 1
+        dist = 100
         threshold = np.mean(correlation) + std_factor * np.std(correlation)
         peak_indices, _ = signal.find_peaks(correlation, height=threshold, distance=dist)
         if len(peak_indices) < 2:
@@ -524,10 +522,59 @@ class Receiver:
             transmitter = "ESP"
         else:
             transmitter = "SG"
-        plt.title(f"{transmitter} : Time Domain of signal with payload size {str(payload_size)} bits")
+        plt.title(f"{transmitter} : Time Domain of signal with payload size {str(payload_size)} bits, cf {self.carrier_freq}Hz, bitrate {self.bit_rate}Hz")
         plt.tight_layout()
         plt.show()
         
+    def plot_wave_in_time_after_thresholding(self, msg_original_text:str):
+        if self.wav_signal is None:
+            print("No signal to visualize")
+            return
+
+        try:
+            message, debug_info = self.decode()
+        except Exception as e:
+            print(f"could not plot {e}")
+            return
+        
+        fig, ax = plt.subplots(1, 1, figsize=(10, 4))
+        self.plot_wave_in_time_domain(debug_info["normalized"], "Normalized Signal", ax=ax, color="blue", alpha=0.2)
+        self.plot_wave_in_time_domain(debug_info["thresholded"], "Thresholded Signal", ax=ax, color="red", alpha=0.7)
+        
+        # Plot vertical lines for symbol boundaries
+        
+        # Plot vertical lines for symbol boundaries
+        if self.samples_per_symbol > 0 and self.sample_rate > 0:
+            for i in range(0, len(self.wav_signal), self.samples_per_symbol):
+                # Only plot if within the current xlim to avoid too many lines if zoomed out
+                time_sec = i / self.sample_rate
+                current_xlim = ax.get_xlim()
+                if current_xlim[0] <= time_sec <= current_xlim[1]:
+                    plt.axvline(x=time_sec, color="green", linestyle="--", alpha=0.7, linewidth=3.0)
+                    # pass
+        print(f" values : {debug_info['index_of_9']}")
+        ### at debug_info["index_of_9"] plot vertical lines!!
+        if debug_info["index_of_9"] is not None:
+            for i in range(len(debug_info["index_of_9"])):
+                # at index debug_info["index_of_9"][i] plot vertical lines
+                time_sec = (debug_info["index_of_9"][i] / self.sample_rate) * self.samples_per_symbol
+                current_xlim = ax.get_xlim()
+                if current_xlim[0] <= time_sec <= current_xlim[1]:
+                    plt.axvline(x=time_sec, color="black", linestyle="--", alpha=0.7, linewidth=3.0)
+        handles, labels = ax.get_legend_handles_labels()
+        if handles: # Avoid creating a legend if there's nothing to label
+            by_label = dict(zip(labels, handles)) # Remove duplicate labels
+            ax.legend(by_label.values(), by_label.keys(), loc='lower left', fontsize='large')
+        payload_size = len(msg_original_text) * 8 + 13
+        if config.USE_ESP:
+            transmitter = "ESP"
+        else:
+            transmitter = "SG"
+        plt.title(f"{transmitter} : Time Domain of signal with payload size {str(payload_size)} bits, cf {self.carrier_freq}Hz, bitrate {self.bit_rate}Hz")
+        plt.tight_layout()
+        plt.show()        
+        
+    
     def plot_simulation_steps(self):
         if self.wav_signal is None:
             print("No signal to visualize")
