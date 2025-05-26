@@ -12,22 +12,6 @@ def generate_barker13_binary():
     barker = generate_barker13_bipolar()
     return (barker + 1) // 2
 
-
-def generate_m_sequence(degree=4):
-    """Generate M-sequence of given degree"""
-    length = 2**degree - 1
-    sequence = np.zeros(length)
-    register = np.ones(degree)  # Initial state
-    
-    # Feedback taps for degree 4 (x^4 + x^3 + 1)
-    for i in range(length):
-        sequence[i] = register[-1]
-        feedback = (register[3] + register[2]) % 2
-        register[1:] = register[:-1]
-        register[0] = feedback
-    
-    return sequence  # Already in {0,1} format
-
 def compute_autocorrelation(sequence):
     """Compute autocorrelation of sequence"""
     # Convert to {-1,1} for correlation, then back to {0,1}
@@ -179,15 +163,9 @@ def main():
     fig = plot_sequence_comparison(sequences)
     plt.show()
     
-    # # Add detection performance analysis
-    # print("\nEvaluating detection performance...")
-    # detection_results = evaluate_preamble_detection(sequences)
-    
-    # # Plot detection performance
-    # detection_fig = plot_detection_performance(detection_results)
     plt.show()
     
-    return df, fig, #detection_fig
+    return df, fig
 
 if __name__ == "__main__":
     main()

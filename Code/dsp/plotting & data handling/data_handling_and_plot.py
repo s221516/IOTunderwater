@@ -1498,46 +1498,62 @@ def varying_correlation_value_and_plot(file_path, test_description, only_bandpas
 
 
 if __name__ == "__main__":  
-    # NOTE: 
-    # # file_path = "ESP_new_average_power_1_3_6meters.csv"
-    file_path = "Average_power_of_received_signal.csv"
-    # file_path = "avg_power_of_rec_signal_purely_for_check_of_interference.csv"
-    # file_path = "1m_distance_payload_barker_similarity_impact.csv"
+    # below is the three functions to call for figure 24, 25, 32, and 33.
 
-    # file_path = "Code/dsp/data/plastic/SG_plastic_hamming_encoding_testing_cf_6000_400bps, 5sd, 50ds.csv"
-    # compute_ber_for_hamming_encoding_test(file_path)
+    # This is for figure 24, using the commented filepath
+    # # NOTE: change to see a subset of carrier freqs, min_freq, max_freq as inputs
+    # file_path = "Average_power_of_received_signal.csv"
+    # plot_power_vs_distance_by_frequency(file_path, 9000, 15000, "Testing: average power of a signal")
+
     
-    # df = pd.read_csv(file_path)
-    # print(df["Test description"].unique())
+    ## This is for figure 25, where the varibles is to defined the different bitrates and distances. Keep the bitrate constant, but change the dist 
+    ## depending on the distance you want. There is most datat for the signal generator, and this is also the only one plotted in the report
     # dist = 500
     # bitrate = 500
     # transmitter = "SG"
-    # # "Testing: Average power purely for check of interference"
-    # # "Testing: average power of a signal"  
-    # # "Testing: average power of a signal - ESP"
-    # # "Testing: average power of a signal - ESP, reverted back to old code"
-    # # Testing: varying payloads of size 100 on 1m dist and max marker correlation 0f 6
+    # "Testing: average power of a signal" 
+    # file_path = "Average_power_of_received_signal.csv" 
     # results_df = analyze_ber_by_carrier_freq(file_path, dist, bitrate, transmitter, "Testing: average power of a signal", show_error_bars=True)
 
-    # # NOTE: change to see a subset of carrier freqs, min_freq, max_freq as inputs
-    # plot_power_vs_distance_by_frequency(file_path, 9000, 15000, "Testing: average power of a signal")
     
-    # # NOTE: below is for the vpp test
-    # test_file = "1m_distance_carrier_freq_sg_vpp_variable.csv"
-    # result_df = compute_ber_for_different_vpps(test_file)
-
+    # This is for figure 32 and 33. Set the variables for what you want to see. To reduce cluttering and also what is shown in the thesis 
     # # NOTE: below computes BER for the max bitrate using ESP, set only_bandpass = True if you only want to compare bandpass, compare_hamming = True if you want to compare
     # # SG with and without hamming. Both cant be true at the same time :) 
     # file_path = "Max_bitrate_at_different_distances_and_best_carrier_freq.csv"
     # results = analyze_ber_by_bitrate_and_distance(file_path, only_bandpass=True, compare_hamming=True, transmitter_select="SG", only_hamming=True)
 
-    # NOTE: below computes the BER for varying lengths of the message
-    test_descrip = None
-    # file_path = "Varying_payload_sizes.csv"
-    # file_path = "Random_payloads.csv"
-    file_path = "Random_payloads_CORRECT_BARKER.csv"
-    test_descrip = "Testing with correct barker13 implementaion"
-    varying_length_analysis_and_plot(file_path, test_description = test_descrip, only_bandpass=True)
+
+
+    # no functions to use below here :)
+
+
+
+
+
+
+
+
+
+
+    # file_path = "Code/dsp/data/plastic/SG_plastic_hamming_encoding_testing_cf_6000_400bps, 5sd, 50ds.csv"
+    # compute_ber_for_hamming_encoding_test(file_path)
+
+
+
+
+    # # NOTE: below is for the vpp test
+    # test_file = "1m_distance_carrier_freq_sg_vpp_variable.csv"
+    # result_df = compute_ber_for_different_vpps(test_file)
+
+
+
+    # # NOTE: below computes the BER for varying lengths of the message
+    # test_descrip = None
+    # # file_path = "Varying_payload_sizes.csv"
+    # # file_path = "Random_payloads.csv"
+    # file_path = "Random_payloads_CORRECT_BARKER.csv"
+    # test_descrip = "Testing with correct barker13 implementaion"
+    # varying_length_analysis_and_plot(file_path, test_description = test_descrip, only_bandpass=True)
 
     # # NOTE: computing bitflip tendency for a given file, computes for ESP and SG
     # file_paths = ["1m_distance_payload_barker_similarity_impact.csv",
