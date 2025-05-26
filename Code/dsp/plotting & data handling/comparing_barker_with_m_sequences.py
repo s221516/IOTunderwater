@@ -3,11 +3,15 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from scipy.signal import correlate
 
-def generate_barker13():
-    """Generate Barker-13 sequence"""
-    barker = np.array([1, 1, 1, 1, 1, -1, -1, 1, 1, -1, 1, -1, 1])
-    # barker = np.concatenate((barker, barker), axis = 0)
-    return (barker + 1) // 2  # Convert from {-1,1} to {0,1}
+def generate_barker13_bipolar():
+    """Generate Barker-13 sequence in {-1,1} format"""
+    return np.array([1, 1, 1, 1, 1, -1, -1, 1, 1, -1, 1, -1, 1])
+
+def generate_barker13_binary():
+    """Generate Barker-13 sequence in {0,1} format"""
+    barker = generate_barker13_bipolar()
+    return (barker + 1) // 2
+
 
 def generate_m_sequence(degree=4):
     """Generate M-sequence of given degree"""
@@ -46,7 +50,7 @@ def analyze_sequence_properties(sequence_name, sequence):
 
 def plot_sequence_comparison(sequences):
     """Plot comparison of sequences"""
-    fig, axes = plt.subplots(2, len(sequences), figsize=(15, 8))
+    fig, axes = plt.subplots(2, len(sequences), figsize=(10, 8))
     
     for i, (name, seq) in enumerate(sequences.items()):
         # Plot sequence as binary points
@@ -62,9 +66,15 @@ def plot_sequence_comparison(sequences):
         # Plot autocorrelation
         autocorr = compute_autocorrelation(seq)
         axes[1, i].plot(autocorr, color='blue')
-        axes[1, i].set_title(f'{name} Autocorrelation')
+        axes[1, i].set_title(f'{name} Autocorrelation', fontsize = 16)
         axes[1, i].set_xlabel('Lag')
         axes[1, i].set_ylabel('Correlation')
+        # Set integer y-ticks for autocorrelation
+        y_max = np.ceil(np.max(autocorr))
+        y_min = np.floor(np.min(autocorr))
+        axes[1, i].set_yticks(np.arange(y_min, y_max + 1, 1))
+        axes[1, i].grid(True, linestyle='--', alpha=0.7)
+    
         axes[1, i].grid(True, linestyle='--', alpha=0.7)
     
     plt.tight_layout()
@@ -72,10 +82,10 @@ def plot_sequence_comparison(sequences):
 
 def evaluate_preamble_detection(sequences, snr_range=np.arange(13, -15, -1)):
     """
-    Evaluate preamble detection performance in noisy environments using binary sequences
+    Evaluate preamble detection performance in noisy environments using {-1,1} sequences
     
     Args:
-        sequences (dict): Dictionary of binary (0,1) sequences to evaluate
+        sequences (dict): Dictionary of {-1,1} sequences to evaluate
         snr_range (array): Range of SNR values in dB to test
     
     Returns:
@@ -86,8 +96,8 @@ def evaluate_preamble_detection(sequences, snr_range=np.arange(13, -15, -1)):
     
     for name, seq in sequences.items():
         seq_len = len(seq)
-        # Use 70% of maximum correlation as threshold (max correlation = sum of ones in sequence)
-        threshold = 0.7 * np.sum(seq)  
+        # Use 70% of maximum correlation as threshold (max correlation = length of sequence)
+        threshold = 0.7 * len(seq)
         
         for snr in snr_range:
             detections = 0
@@ -99,8 +109,8 @@ def evaluate_preamble_detection(sequences, snr_range=np.arange(13, -15, -1)):
                 insert_pos = np.random.randint(0, noise_len - seq_len)
                 signal[insert_pos:insert_pos + seq_len] = seq
                 
-                # Add noise based on SNR (scaled for binary values)
-                signal_power = np.mean(seq**2)
+                # Add noise based on SNR
+                signal_power = np.mean(seq**2)  # Should be 1 for {-1,1} sequences
                 noise_power = signal_power / (10**(snr/10))
                 noise = np.random.normal(0, np.sqrt(noise_power), len(signal))
                 noisy_signal = signal + noise
@@ -146,12 +156,12 @@ def plot_detection_performance(results):
 
 def main():
     # Generate sequences
-    barker13 = generate_barker13()
-    m_seq = generate_m_sequence(5)  # 4th degree M-sequence (length 15)
-    
+    barker_bipolar = generate_barker13_bipolar()
+    barker_binary = generate_barker13_binary()
+
     sequences = {
-        'Barker-13': barker13,
-        'M-sequence': m_seq
+        'Barker-13 {-1,1}': barker_bipolar,
+        'Barker-13 {0,1}': barker_binary
     }
     
     # Analyze properties
@@ -169,15 +179,15 @@ def main():
     fig = plot_sequence_comparison(sequences)
     plt.show()
     
-    # Add detection performance analysis
-    print("\nEvaluating detection performance...")
-    detection_results = evaluate_preamble_detection(sequences)
+    # # Add detection performance analysis
+    # print("\nEvaluating detection performance...")
+    # detection_results = evaluate_preamble_detection(sequences)
     
-    # Plot detection performance
-    detection_fig = plot_detection_performance(detection_results)
+    # # Plot detection performance
+    # detection_fig = plot_detection_performance(detection_results)
     plt.show()
     
-    return df, fig, detection_fig
+    return df, fig, #detection_fig
 
 if __name__ == "__main__":
     main()
