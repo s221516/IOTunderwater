@@ -1517,10 +1517,10 @@ if __name__ == "__main__":
 
     
     # This is for figure 32 and 33. Set the variables for what you want to see. To reduce cluttering and also what is shown in the thesis 
-    # # NOTE: below computes BER for the max bitrate using ESP, set only_bandpass = True if you only want to compare bandpass, compare_hamming = True if you want to compare
-    # # SG with and without hamming. Both cant be true at the same time :) 
-    # file_path = "Max_bitrate_at_different_distances_and_best_carrier_freq.csv"
-    # results = analyze_ber_by_bitrate_and_distance(file_path, only_bandpass=True, compare_hamming=True, transmitter_select="SG", only_hamming=True)
+    # NOTE: below computes BER for the max bitrate using ESP, set only_bandpass = True if you only want to compare bandpass, compare_hamming = True if you want to compare
+    # SG with and without hamming. Both cant be true at the same time :) 
+    file_path = "Max_bitrate_at_different_distances_and_best_carrier_freq.csv"
+    results = analyze_ber_by_bitrate_and_distance(file_path, only_bandpass=True, compare_hamming=True, transmitter_select="SG", only_hamming=True)
 
 
 

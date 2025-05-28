@@ -193,7 +193,7 @@ def process_signal_for_testing(message, id):
     # nonCoherentReceiverWithBandPass.plot_wave_in_time_domain_after_envelope(message)
     try:
         message_nc_bandpass, debug_nc_bandpass = nonCoherentReceiverWithBandPass.decode()
-        # nonCoherentReceiverWithBandPass.plot_wave_in_time_after_thresholding(message)
+        nonCoherentReceiverWithBandPass.plot_wave_in_time_after_thresholding(message)
         # nonCoherentReceiverWithBandPass.plot_simulation_steps()
         # nonCoherentReceiverWithBandPass.plot_spectrogram_and_frequency_domain()
     except PreambleNotFoundError:
@@ -201,8 +201,8 @@ def process_signal_for_testing(message, id):
         debug_nc_bandpass = {}
     
     if config.IS_ID_SPECIFIED != None:
-        logging_and_printing(message_nc,message_nc_bandpass,message,debug_nc,debug_nc_bandpass,id, avg_power_of_signal)
-        # print("ID specified, not logging to csv")
+        # logging_and_printing(message_nc,message_nc_bandpass,message,debug_nc,debug_nc_bandpass,id, avg_power_of_signal)
+        print("ID specified, not logging to csv")
         return
 
     logging_and_printing(message_nc,message_nc_bandpass,message,debug_nc,debug_nc_bandpass,id, avg_power_of_signal)
@@ -252,10 +252,10 @@ if __name__ == "__main__":
         transmit_signal()
     else:
         for id in config.IS_ID_SPECIFIED:
-            distance_to_speaker = 100
-            speaker_depth = 200
-            test_description = "Testing with correct barker13 implementaion" 
-            isWaterThePool = True
+            # distance_to_speaker = 100
+            # speaker_depth = 200
+            # test_description = "Testing with correct barker13 implementaion" 
+            # isWaterThePool = True
             df = pd.read_csv(config.FILE_NAME_DATA_TESTS, sep=",")
             # print(df.columns)
             original_message = df[df["ID"] == id]["Original Message"].values[0]
