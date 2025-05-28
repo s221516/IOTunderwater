@@ -33,33 +33,29 @@ def analyze_sequence_properties(sequence_name, sequence):
     }
 
 def plot_sequence_comparison(sequences):
-    """Plot comparison of sequences"""
-    fig, axes = plt.subplots(2, len(sequences), figsize=(10, 8))
+    """Plot comparison of sequence autocorrelations"""
+    fig, ax = plt.subplots(figsize=(6, 6))
     
-    for i, (name, seq) in enumerate(sequences.items()):
-        # Plot sequence as binary points
-        axes[0, i].scatter(range(len(seq)), seq, color='blue', s=100)
-        axes[0, i].set_title(f'{name} Sequence')
-        axes[0, i].set_xlabel('Index')
-        axes[0, i].set_ylabel('Bit Value')
-        axes[0, i].set_yticks([0, 1])
-        axes[0, i].set_xticks(np.arange(0, len(seq), 1))
-        axes[0, i].set_ylim(-0.1, 1.1)  # Add small padding
-        axes[0, i].grid(True, linestyle='--', alpha=0.7)
-        
-        # Plot autocorrelation
+    colors = {
+        'Barker-13 {-1,1}': 'red',
+        'Barker-13 {0,1}': 'blue'
+    }
+    
+    # Plot autocorrelations
+    for name, seq in sequences.items():
         autocorr = compute_autocorrelation(seq)
-        axes[1, i].plot(autocorr, color='blue')
-        axes[1, i].set_title(f'{name} Autocorrelation', fontsize = 16)
-        axes[1, i].set_xlabel('Lag')
-        axes[1, i].set_ylabel('Correlation')
-        # Set integer y-ticks for autocorrelation
-        y_max = np.ceil(np.max(autocorr))
-        y_min = np.floor(np.min(autocorr))
-        axes[1, i].set_yticks(np.arange(y_min, y_max + 1, 1))
-        axes[1, i].grid(True, linestyle='--', alpha=0.7)
+        ax.plot(autocorr, color=colors[name], label=name)
     
-        axes[1, i].grid(True, linestyle='--', alpha=0.7)
+    ax.set_title('Autocorrelation Comparison', fontsize=16)
+    ax.set_xlabel('Lag')
+    ax.set_ylabel('Correlation')
+    
+    # Set integer y-ticks for autocorrelation
+    y_max = np.ceil(np.max([compute_autocorrelation(seq) for seq in sequences.values()]))
+    y_min = np.floor(np.min([compute_autocorrelation(seq) for seq in sequences.values()]))
+    ax.set_yticks(np.arange(y_min, y_max + 1, 1))
+    ax.grid(True, linestyle='--', alpha=0.7)
+    ax.legend()
     
     plt.tight_layout()
     return fig
