@@ -2,9 +2,8 @@ from cProfile import label
 from logging import config
 from typing import Dict, Tuple
 
-from cv2 import line
-import librosa
-import commpy.channelcoding.convcode as cc
+# import librosa
+# import commpy.channelcoding.convcode as cc
 import matplotlib.pyplot as plt
 import numpy as np
 import scipy.signal as signal
@@ -13,6 +12,7 @@ import config
 from config import (
     APPLY_BAKER_PREAMBLE,
     BINARY_BARKER,
+    BINARY_BARKER_CORRECT,
     CONVOLUTIONAL_CODING,
     HAMMING_CODING,
     PATH_TO_WAV_FILE,
@@ -178,8 +178,8 @@ class Receiver:
 
     def threshold_signal(self, normalized_signal: np.ndarray) -> np.ndarray:
         # this is called hyperestesis thresholding, essentially you have a memory while checking
-        low = 0.4
-        high = 0.6
+        low = 0.5
+        high = 0.5
         thresholded = np.zeros_like(normalized_signal)
         state = 0
         for i in range(len(normalized_signal)):
@@ -200,11 +200,13 @@ class Receiver:
 
 
     def remove_preamble_baker_code(self, bits, std_factor=4):
-        correlation = signal.correlate(bits, BINARY_BARKER, mode="valid") # old
-        # correlation = signal.correlate(BINARY_BARKER, bits, mode="same") # new
-        dist = 100
+        bits = [1 if x == 1 else -1 for x in bits]
+        # print(bits[:20])
+
+        correlation = signal.correlate(bits, BINARY_BARKER_CORRECT, mode="valid") # old
+        
         threshold = np.mean(correlation) + std_factor * np.std(correlation)
-        peak_indices, _ = signal.find_peaks(correlation, height=threshold, distance=dist)
+        peak_indices, _ = signal.find_peaks(correlation, height=threshold, distance=len_of_data_bits)
         if len(peak_indices) < 2:
             if std_factor > 1:
                 return self.remove_preamble_baker_code(bits, std_factor - 0.1)
@@ -213,7 +215,7 @@ class Receiver:
                 return -1, [], []
             
         
-        _, properties = signal.find_peaks(correlation, height=threshold, distance=dist)
+        _, properties = signal.find_peaks(correlation, height=threshold, distance=len_of_data_bits)
         ### max height 
         max_peak = max(properties["peak_heights"])
         print("Max peak: ", max_peak)
@@ -227,10 +229,13 @@ class Receiver:
         
         all_data_bits            = []
         data_bits_of_correct_len = []
+
         for i in range(len(peak_indices) - 1):
+            data_section = bits[peak_indices[i] + len(BINARY_BARKER) : peak_indices[i + 1]]
+            # Convert back to {0,1} format for decoding
+            data_section_binary = [(1 if x == 1 else 0) for x in data_section]
             all_data_bits.append(bits[peak_indices[i] + len(BINARY_BARKER) : peak_indices[i + 1]])
-            # if abs(diff_in_peaks[i] - len_of_data_bits) == 0:
-            data_bits_of_correct_len.append(bits[peak_indices[i] + len(BINARY_BARKER) : peak_indices[i + 1]])
+            data_bits_of_correct_len.append(data_section_binary)
 
         # NOTE: this is to plot the decodins of each entry of data bits
         print("Diff in peaks: ", diff_in_peaks)
@@ -241,8 +246,10 @@ class Receiver:
             elif HAMMING_CODING:
                 print(self.decode_bytes_to_bits(hamming_decode(data_bits_of_correct_len[i])))
             else:
+                data_bits_of_correct_len[i] 
                 decoded_bits = self.decode_bytes_to_bits(data_bits_of_correct_len[i])
                 print(decoded_bits)
+
         if PLOT_PREAMBLE_CORRELATION:
             # NOTE: this plots the correlation of the preamble and the received signal
             plt.figure(figsize=(10, 6))
@@ -263,7 +270,7 @@ class Receiver:
             )
             plt.xlabel("Bits from received signal")
             plt.ylabel("Correlation Value")
-            plt.title("Cross-Correlation with Preamble With Bandpass (BER: 0.54)")
+            plt.title("Cross-Correlation with Preamble With Bandpass (BER: 0.54)", fontsize = 20)
             plt.legend()
             plt.grid()
             plt.show()
@@ -271,6 +278,7 @@ class Receiver:
         avg = [int(round((sum(col)) / len(col))) for col in zip(*data_bits_of_correct_len)]
         if avg == []:
             avg = -1
+
         return avg, all_data_bits, peak_indices
 
 
@@ -297,7 +305,7 @@ class Receiver:
         fig, ax = plt.subplots(2, 1, figsize=(10, 8))
         self.plot_wave_in_time_domain(self.wav_signal, "Original Signal", ax=ax[0], color="blue")
         self.plot_wave_in_frequency_domain(self.wav_signal, ax=ax[1], color="blue")
-        plt.tight_layout()
+        plt.tight_layout()  
         plt.show()
         
     def plot_spectrogram(self, ax=None):
@@ -310,23 +318,23 @@ class Receiver:
             print("No signal to plot spectrogram for.")
             return
 
-        # Define hop_length (adjust as needed for desired time resolution)
-        hop_length = 256 
-        # Calculate the STFT (Short-Time Fourier Transform)
-        stft_result = librosa.stft(self.wav_signal.astype(float), hop_length=hop_length)
-        # Get the magnitude of the STFT result
-        # without decibels
-        amplitude_spectrogram = np.abs(stft_result)
-        # Convert to decibels (optional, for better visualization)
-        amplitude_spectrogram_db = librosa.amplitude_to_db(amplitude_spectrogram, ref=np.max)
+        # # Define hop_length (adjust as needed for desired time resolution)
+        # hop_length = 256 
+        # # Calculate the STFT (Short-Time Fourier Transform)
+        # stft_result = librosa.stft(self.wav_signal.astype(float), hop_length=hop_length)
+        # # Get the magnitude of the STFT result
+        # # without decibels
+        # amplitude_spectrogram = np.abs(stft_result)
+        # # Convert to decibels (optional, for better visualization)
+        # amplitude_spectrogram_db = librosa.amplitude_to_db(amplitude_spectrogram, ref=np.max)
 
-        # Display the spectrogram using decibels
-        librosa.display.specshow(amplitude_spectrogram_db, sr=config.SAMPLE_RATE, hop_length=hop_length, x_axis="time", y_axis="hz") 
-        plt.colorbar(label="Amplitude (dB)") # Updated colorbar label
-        ax.set_title(f"Spectrogram (Decibels) for signal with carrier {self.carrier_freq}Hz and bitrate {self.bit_rate}Hz")
-        ax.set_xlabel("Time (s)")
-        ax.set_ylabel("Frequency (Hz)")
-        ax.set_ylim(0, 20000) # Limit y-axis to 20kHz
+        # # Display the spectrogram using decibels
+        # librosa.display.specshow(amplitude_spectrogram_db, sr=config.SAMPLE_RATE, hop_length=hop_length, x_axis="time", y_axis="hz") 
+        # plt.colorbar(label="Amplitude (dB)") # Updated colorbar label
+        # ax.set_title(f"Spectrogram (Decibels) for signal with carrier {self.carrier_freq}Hz and bitrate {self.bit_rate}Hz")
+        # ax.set_xlabel("Time (s)")
+        # ax.set_ylabel("Frequency (Hz)")
+        # ax.set_ylim(0, 20000) # Limit y-axis to 20kHz
         
         
     def plot_wave_in_frequency_domain(self, wave, ax=None, color="b", alpha=0.5, label=None):

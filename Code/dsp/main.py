@@ -87,9 +87,9 @@ def transmit_signal():
     
     # bitrates = [500] * n 
     # bitrates = [300] * n + [500] * n + [1000] * n + [1500] * n + [2000] * n
-    bitrates = [500]
+    bitrates = [25000]
 
-    carrierfreqs = [10000]
+    carrierfreqs = [60000]
     # carrierfreqs = np.arange(1000, 21000, 1000)
     
     global test_description
@@ -119,7 +119,7 @@ def transmit_signal():
                 config.set_carrierfreq(carrierfreq)
                 # message = generatePayload.generate_payload(payload)
                 # message = "i3aw,*X@j&y;y" # message with correlation of 5, used for limit testing the two systems
-                message = "U" * 498
+                message = "U" * 4000
                 
                 # print(f"Transmitting message: {message}")
                 # create unique id for each test
@@ -179,7 +179,7 @@ def process_signal_for_testing(message, id):
     # print(f"Average power of signal: {avg_power_of_signal}")
     # nonCoherentReceiver.plot_signal()
     # nonCoherentReceiver.plot_spectrogram_and_frequency_domain()
-    nonCoherentReceiver.plot_wave_in_time_domain_after_envelope(message)
+    # nonCoherentReceiver.plot_wave_in_time_domain_after_envelope(message)
 
     try:
         message_nc, debug_nc = nonCoherentReceiver.decode()
@@ -190,18 +190,19 @@ def process_signal_for_testing(message, id):
 
     nonCoherentReceiverWithBandPass = NonCoherentReceiver(id, band_pass = True)
     nonCoherentReceiverWithBandPass.set_len_of_data_bits(len_of_data_bits)
-    nonCoherentReceiverWithBandPass.plot_wave_in_time_domain_after_envelope(message)
+    # nonCoherentReceiverWithBandPass.plot_wave_in_time_domain_after_envelope(message)
     try:
         message_nc_bandpass, debug_nc_bandpass = nonCoherentReceiverWithBandPass.decode()
-        nonCoherentReceiverWithBandPass.plot_wave_in_time_after_thresholding(message)
+        # nonCoherentReceiverWithBandPass.plot_wave_in_time_after_thresholding(message)
         # nonCoherentReceiverWithBandPass.plot_simulation_steps()
-        # nonCoherentReceiver.plot_in_frequency_domain()
+        # nonCoherentReceiverWithBandPass.plot_spectrogram_and_frequency_domain()
     except PreambleNotFoundError:
         message_nc_bandpass = "No preamble found"
         debug_nc_bandpass = {}
     
     if config.IS_ID_SPECIFIED != None:
-        print("ID specified, not logging to csv")
+        logging_and_printing(message_nc,message_nc_bandpass,message,debug_nc,debug_nc_bandpass,id, avg_power_of_signal)
+        # print("ID specified, not logging to csv")
         return
 
     logging_and_printing(message_nc,message_nc_bandpass,message,debug_nc,debug_nc_bandpass,id, avg_power_of_signal)
@@ -237,6 +238,9 @@ def logging_and_printing(message_nc,message_nc_bandpass,message,debug_nc,debug_n
     print("Hamming distance of msgs, no pass:   ", hamming_dist)
     print("Hamming distance of msgs, with pass  ", hamming_dist_bandpass)
 
+    if config.IS_ID_SPECIFIED:
+        id = "RECOMPUTING"
+
     logInCsv(id,message,message_nc,hamming_dist,message_nc_bandpass,hamming_dist_bandpass, distance_to_speaker, speaker_depth, 
              test_description, original_message_in_bits, data_bits_nc, data_bits_nc_bandpass, avg_power_of_signal)
 
@@ -248,6 +252,10 @@ if __name__ == "__main__":
         transmit_signal()
     else:
         for id in config.IS_ID_SPECIFIED:
+            distance_to_speaker = 100
+            speaker_depth = 200
+            test_description = "Testing with correct barker13 implementaion" 
+            isWaterThePool = True
             df = pd.read_csv(config.FILE_NAME_DATA_TESTS, sep=",")
             # print(df.columns)
             original_message = df[df["ID"] == id]["Original Message"].values[0]
