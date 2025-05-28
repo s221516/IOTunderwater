@@ -1,3 +1,4 @@
+from cProfile import label
 from logging import config
 from typing import Dict, Tuple
 
@@ -47,7 +48,7 @@ class Receiver:
         self.bit_rate = config.BIT_RATE
         self.carrier_freq = config.CARRIER_FREQ
         self.band_pass = band_pass
-        self.cutoff_freq = self.bit_rate * 5
+        self.cutoff_freq = self.bit_rate 
         self.sample_rate = config.SAMPLE_RATE
         self.samples_per_symbol = int(self.sample_rate / self.bit_rate)
         self.filter_order = 4
@@ -156,7 +157,7 @@ class Receiver:
 
     def filter_signal(self, input_signal: np.ndarray) -> np.ndarray:
         nyquist = self.sample_rate * 0.5
-        order = 4
+        order = 8
         cutoff = self.cutoff_freq / nyquist
         b, a = signal.butter(order, cutoff, btype="low", analog=False)
         return signal.filtfilt(b, a, input_signal)
@@ -357,8 +358,7 @@ class Receiver:
 
         frequency_magnitudes = np.abs(wave_f)
         # Make it to decibels
-        # NOTE: CHANGE THIS TO 10  
-        frequency_magnitudes = 20 * np.log10(frequency_magnitudes / np.max(frequency_magnitudes))
+        frequency_magnitudes = 10 * np.log10(frequency_magnitudes / np.max(frequency_magnitudes))
 
         # only plot the positive frequencies
         positive_frequencies = frequencies_x_axis > 0
@@ -366,16 +366,6 @@ class Receiver:
         frequency_magnitudes = frequency_magnitudes[positive_frequencies]
 
         ax.plot(frequencies_x_axis, frequency_magnitudes, "-", color=color, alpha=alpha, label=label) 
-        
-        ## Make vertical line at bandpass
-        ax.axvline(x = self.carrier_freq - (self.bit_rate // 2), color="blue", linestyle="--", label="Bandwidth")
-        ax.axvline(x = self.carrier_freq + (self.bit_rate // 2), color="blue", linestyle="--")
-        ax.legend(loc='upper right', fontsize='small')
-        ax.set_xlim(0, 20000)  # Limit x-axis to 20kHz
-        ax.set_xlabel("Frequency (Hz)")
-        ax.set_ylabel("Magnitude")
-        ax.set_title("Frequency Domain Signal")
-        ax.grid(True)
 
     def plot_spectrogram_and_frequency_domain(self):
         if self.wav_signal is None:
@@ -431,13 +421,18 @@ class Receiver:
         # Apply bandpass filter
         filtered_signal = self.bandpass_filter(self.wav_signal)
         fig, ax = plt.subplots(1, 1, figsize=(10, 4))
-        self.plot_wave_in_frequency_domain(self.wav_signal, ax=ax, color="blue", alpha=0.3)
-        self.plot_wave_in_frequency_domain(filtered_signal, ax=ax, color="red", alpha=0.6)
-        plt.title("Frequency Domain after Bandpass Filter")
-        plt.xlabel("Frequency (Hz)")
-        plt.ylabel("Magnitude dB")
-        plt.xlim(0, 20000)  # Limit x-axis to 10kHz
-        plt.legend(["Original Signal", "After Bandpass Filter Before Envelope"])
+        self.plot_wave_in_frequency_domain(self.wav_signal, ax=ax, color="blue", alpha=0.8, label ="Original Signal")
+        # self.plot_wave_in_frequency_domain(filtered_signal, ax=ax, color="red", alpha=0.6, label="After Bandpass Filter")
+
+        plt.axvline(x=self.carrier_freq - (self.bit_rate // 2), color="blue", linestyle="--", label="Bandwidth")
+        plt.axvline(x=self.carrier_freq + (self.bit_rate // 2), color="blue", linestyle="--", label=None)
+        
+        plt.title(f"Frequency Domain after Bandpass Filter, cf = {self.carrier_freq} Hz, bit rate = {self.bit_rate} bps", fontsize=14)
+        plt.xlabel("Frequency (Hz)", fontsize=14)
+        plt.ylabel("Magnitude dB", fontsize=14)
+        plt.xlim(0, 30000)  # Limit x-axis to 10kHz
+        plt.ylim(-60, 0)
+        plt.legend(loc='lower left', fontsize=14)
         plt.grid(True)
         plt.tight_layout()
         plt.show()
@@ -453,7 +448,7 @@ class Receiver:
         fig, ax = plt.subplots(1, 1, figsize=(10, 4))
         
         # Plot original signal with label
-        self.plot_wave_in_frequency_domain(self.wav_signal, ax=ax, color="blue", alpha=0.3, label="Original Signal")
+        # self.plot_wave_in_frequency_domain(self.wav_signal, ax=ax, color="blue", alpha=0.6, label="Original Signal")
         # Plot signal after envelope with label
         self.plot_wave_in_frequency_domain(debug_info["envelope"], ax=ax, color="red", alpha=0.6, label="After Envelope before Lowpass Filter")
         # Plot the signal after lowpass filter with label
@@ -461,22 +456,23 @@ class Receiver:
         
         ### Plot vertical line at bandwidth around carrier frequency
         # Using a distinct color (e.g., green) for Bandwidth lines
-        plt.axvline(x=self.carrier_freq - (self.bit_rate // 2), color="blue", linestyle="--", label="Bandwidth")
-        plt.axvline(x=self.carrier_freq + (self.bit_rate // 2), color="blue", linestyle="--")
+        # plt.axvline(x=self.carrier_freq + (self.bit_rate // 2), color="blue", linestyle="--")
+        # plt.axvline(x=self.carrier_freq - (self.bit_rate // 2), color="blue", linestyle="--", label="Bandwidth")
         
         ### Plot vertical line at bit rate
-        plt.axvline(x=self.bit_rate // 2, color="red", linestyle="--", label="Bit Rate")
-        plt.axvline(x=-self.bit_rate // 2, color="red", linestyle="--")
+        plt.axvline(x=self.bit_rate // 2, color="blue", linestyle="-.", label="Bit Rate")
+        # plt.axvline(x=-self.bit_rate // 2, color="blue", linestyle="-.", label=None)
         
-        plt.title("Frequency Domain after Envelope")
-        plt.xlabel("Frequency (Hz)")
-        plt.ylabel("Magnitude dB")
-        plt.xlim(-15000, 15000)  # Limit x-axis
+        plt.title(f"Frequency Domain after Envelope no bp filter, cf = {self.carrier_freq} Hz, bit rate = {self.bit_rate} bps", fontsize=14)
+        plt.xlabel("Frequency (Hz)", fontsize=14)
+        plt.ylabel("Magnitude dB", fontsize=14)
+        plt.xlim(0, 4000)  # Limit x-axis
+        plt.ylim(-70, 0)
         
         # Add legend, placed in a corner (e.g., 'upper right')
         # This will automatically use the labels provided in plot and axvline calls
-        plt.legend(loc='lower left', fontsize='small') 
-        
+        plt.legend(loc='upper right', fontsize=14)
+
         plt.grid(True)
         plt.tight_layout()
         plt.show()
@@ -498,18 +494,18 @@ class Receiver:
         self.plot_wave_in_time_domain(self.wav_signal, "Original Signal", ax=ax, color="blue", alpha=0.2)
         if "envelope" in debug_info:
             self.plot_wave_in_time_domain(debug_info["envelope"], "After Envelope", ax=ax, color="red", alpha=0.7)
-        if "filtered" in debug_info: # This is typically the LPF output on the envelope
-            self.plot_wave_in_time_domain(debug_info["filtered"], "After Lowpass Filter", ax=ax, color="purple", alpha=1.0)
+        # if "filtered" in debug_info: # This is typically the LPF output on the envelope
+            # self.plot_wave_in_time_domain(debug_info["filtered"], "After Lowpass Filter", ax=ax, color="purple", alpha=1.0)
         
         # Plot vertical lines for symbol boundaries
-        if self.samples_per_symbol > 0 and self.sample_rate > 0:
-            for i in range(0, len(self.wav_signal), self.samples_per_symbol):
-                # Only plot if within the current xlim to avoid too many lines if zoomed out
-                time_sec = i / self.sample_rate
-                current_xlim = ax.get_xlim()
-                if current_xlim[0] <= time_sec <= current_xlim[1]:
-                    plt.axvline(x=time_sec, color="green", linestyle="--", alpha=0.7, linewidth=3.0)
-                    # pass
+        # if self.samples_per_symbol > 0 and self.sample_rate > 0:
+        #     for i in range(0, len(self.wav_signal), self.samples_per_symbol):
+        #         # Only plot if within the current xlim to avoid too many lines if zoomed out
+        #         time_sec = i / self.sample_rate
+        #         current_xlim = ax.get_xlim()
+        #         if current_xlim[0] <= time_sec <= current_xlim[1]:
+        #             plt.axvline(x=time_sec, color="green", linestyle="--", alpha=0.7, linewidth=3.0)
+        #             # pass
         print(f" values : {debug_info['index_of_9']}")
         ### at debug_info["index_of_9"] plot vertical lines!!
         if debug_info["index_of_9"] is not None:
@@ -532,10 +528,26 @@ class Receiver:
             transmitter = "ESP"
         else:
             transmitter = "SG"
-        plt.title(f"{transmitter} : Time Domain of signal with payload size {str(payload_size)} bits, cf {self.carrier_freq}Hz, bitrate {self.bit_rate}Hz")
+
+        ### Adjust font sizes for A4 paper
+        title_fontsize = 14
+        label_fontsize = 14
+        legend_fontsize = 14
+        tick_fontsize = 14
+        plt.xlabel("Time (s)", fontsize=label_fontsize)
+        plt.ylabel("Amplitude", fontsize=label_fontsize)
+        plt.xticks(fontsize=tick_fontsize)
+        plt.yticks(fontsize=tick_fontsize)
+        
+        plt.title(f"{transmitter} : Time Domain of signal with payload size {str(payload_size)} bits, cf {self.carrier_freq}Hz, bitrate {self.bit_rate}Hz",
+                  fontsize=title_fontsize)
+        plt.xlim(0, 2)  # Limit x-axis to 2 seconds as per user's existing code
         plt.tight_layout()
         plt.show()
-        
+
+        plt.savefig("preamble_1_test.pdf", bbox_inches="tight")
+
+ 
     def plot_wave_in_time_after_thresholding(self, msg_original_text:str):
         if self.wav_signal is None:
             print("No signal to visualize")
@@ -548,8 +560,8 @@ class Receiver:
             return
         
         fig, ax = plt.subplots(1, 1, figsize=(10, 4))
-        self.plot_wave_in_time_domain(debug_info["normalized"], "Normalized Signal", ax=ax, color="blue", alpha=0.2)
-        self.plot_wave_in_time_domain(debug_info["thresholded"], "Thresholded Signal", ax=ax, color="red", alpha=0.7)
+        self.plot_wave_in_time_domain(debug_info["normalized"], "Normalized Signal", ax=ax, color="blue", alpha=0.6)
+        # self.plot_wave_in_time_domain(debug_info["thresholded"], "Thresholded Signal", ax=ax, color="red", alpha=0.7)
         
         # Plot vertical lines for symbol boundaries
         
@@ -571,20 +583,38 @@ class Receiver:
                 current_xlim = ax.get_xlim()
                 if current_xlim[0] <= time_sec <= current_xlim[1]:
                     plt.axvline(x=time_sec, color="black", linestyle="--", alpha=0.7, linewidth=3.0)
+        
+        #### For each symbol bin plot the thresholded value of 1 or 0
+        bits = []
+        for i in range(0, len(debug_info["thresholded"]), self.samples_per_symbol):
+            mu = np.mean(debug_info["thresholded"][i : i + self.samples_per_symbol])
+            bits.append(1 if mu > 0.5 else 0)
+            
+        # plot the bits and label them
+        for i in range(len(bits)):
+            if bits[i] == 1:
+                plt.axvspan(i * self.samples_per_symbol / self.sample_rate, (i + 1) * self.samples_per_symbol / self.sample_rate, label="1", color='green', alpha=0.3)
+            else:
+                plt.axvspan(i * self.samples_per_symbol / self.sample_rate, (i + 1) * self.samples_per_symbol / self.sample_rate, label="0", color='red', alpha=0.3)
         handles, labels = ax.get_legend_handles_labels()
         if handles: # Avoid creating a legend if there's nothing to label
             by_label = dict(zip(labels, handles)) # Remove duplicate labels
-            ax.legend(by_label.values(), by_label.keys(), loc='lower left', fontsize='large')
+            ax.legend(by_label.values(), by_label.keys(), loc='lower left', fontsize=14)
         payload_size = len(msg_original_text) * 8 + 13
         if config.USE_ESP:
             transmitter = "ESP"
         else:
             transmitter = "SG"
-        plt.title(f"{transmitter} : Time Domain of signal with payload size {str(payload_size)} bits, cf {self.carrier_freq}Hz, bitrate {self.bit_rate}Hz")
+        plt.title(f"{transmitter} : Time Domain of signal with payload size {str(payload_size)} bits, cf {self.carrier_freq}Hz, bitrate {self.bit_rate}Hz",
+                  fontsize=14)
+        plt.xlabel("Time (s)", fontsize=14)
+        plt.ylabel("Amplitude", fontsize=14)
+        plt.xticks(fontsize=14)
+        plt.yticks(fontsize=14)
+        # plt.xlim(2, 6)  # Limit x-axis to 2 seconds as per user's existing code
         plt.tight_layout()
         plt.show()        
-        
-    
+
     def plot_simulation_steps(self):
         if self.wav_signal is None:
             print("No signal to visualize")
@@ -661,7 +691,7 @@ class Receiver:
         
         w_bp, h_bp = signal.freqz(b_bp, a_bp, worN=8000, fs=config.SAMPLE_RATE)
 
-        mag_bp = 20 * np.log10(np.abs(h_bp))
+        mag_bp = 10 * np.log10(np.abs(h_bp))
 
         # Font sizes for A4 paper
         title_fontsize = 14
@@ -679,7 +709,7 @@ class Receiver:
         plt.axvline(high_cutoff_bp, color='orange', linestyle='--', label=f'High Cutoff: {high_cutoff_bp} Hz')
         plt.axvline(self.carrier_freq, color='purple', linestyle=':', label=f'Center Freq: {self.carrier_freq} Hz')
         plt.legend(fontsize=legend_fontsize)
-        plt.xlim([1, 10000]) 
+        plt.xlim([1, 1000000]) 
         plt.xticks(fontsize=tick_fontsize)
         plt.yticks(fontsize=tick_fontsize)
 

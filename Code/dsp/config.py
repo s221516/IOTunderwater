@@ -88,7 +88,6 @@ else:
 # IS_ID_SPECIFIED = ["7c3036d6-654a-4b77-8fe2-2cfc6697f732"] # ESP straight into computer
 # IS_ID_SPECIFIED = ["190209f4-1a18-48f7-a33f-7058cc78ac3b"] # ESP straight into computer 4000 bits attenuaed
 # IS_ID_SPECIFIED = ["9d552825-968b-46b4-8c76-41f58e663ccc"]
-IS_ID_SPECIFIED = ["e7014386-5e79-4a51-b86d-278678b9e8c3"]
 # IS_ID_SPECIFIED = ["8a58d36b-96f7-424e-b9c8-6cad8323b037"] # bitrate 1000, cf 10000, esp 
 
 
