@@ -68,7 +68,7 @@ def logInCsv(id,original_message,decoded_message1,hamming_dist_without,decod_msg
         writer.writerow([id,config.BIT_RATE,config.CARRIER_FREQ,avg_power_of_signal ,original_message,decoded_message1,hamming_dist_without,decod_msg2,ham_dist_with,config.ENCODING,transmitter_string, water_string,speaker_depth,distance_to_speaker,test_description, original_message_in_bits, data_bits_nc, data_bits_nc_bandpass])
 
 def transmit_signal():
-    transmitter = Transmitter(None, config.USE_ESP)
+    # transmitter = Transmitter(None, config.USE_ESP)
 
     
     unique_payloads_dict = {
@@ -124,8 +124,8 @@ def transmit_signal():
                 # print(f"Transmitting message: {message}")
                 # create unique id for each test
                 id = create_id()
-                transmitter.transmit(message, carrierfreq, bitrate)
-                record_seconds = transmitter.calculate_transmission_time(message)
+                # transmitter.transmit(message, carrierfreq, bitrate)
+                # record_seconds = transmitter.calculate_transmission_time(message)
 
                 if not config.USE_ESP:
                     time.sleep(1)
@@ -134,7 +134,7 @@ def transmit_signal():
                     time.sleep(4.5931)
                     # pass
                    
-
+                record_seconds = 5
                 print(f"Recording for: {record_seconds} seconds")
                 create_wav_file_from_recording(record_seconds, name=id)
                 print("Recording done")
@@ -143,7 +143,7 @@ def transmit_signal():
                     
                 # NOTE: If distance to speaker is too long add a sleep time here
                 # time.sleep(2)
-                transmitter.stopTransmission()
+                # transmitter.stopTransmission()
 
                 process_signal_for_testing(message, id)
 

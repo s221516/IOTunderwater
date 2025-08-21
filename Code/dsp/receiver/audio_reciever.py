@@ -4,7 +4,9 @@ import numpy as np
 import threading
 from collections import deque
 
-from errors import PreambleNotFoundError
+from sympy import E
+
+# from errors import PreambleNotFoundError
 from main import process_signal_for_chat
 import config
 
@@ -114,7 +116,7 @@ class AudioReceiver(threading.Thread):
                             config.CARRIER_FREQ,
                             config.BIT_RATE,
                         )
-                    except PreambleNotFoundError:
+                    except Exception as e:
                         msg = "No preamble found"
                         msg_bp = "No preamble found"
                     print("----------------")
@@ -136,3 +138,7 @@ class AudioReceiver(threading.Thread):
 
     def run(self):
         self.monitor_audio()
+
+if __name__ == "__main__":
+    receiver = AudioReceiver(shared_state={"is_transmitting": False})
+    receiver.list_audio_devices()

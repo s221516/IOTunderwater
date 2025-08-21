@@ -1,9 +1,13 @@
+import sys
 import os
+project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
+if project_root not in sys.path:
+    sys.path.insert(0, project_root)
 import wave
 import pyaudio
 import numpy as np
 from collections import deque
-from config import PATH_TO_WAV_FILE, SAMPLE_RATE, MIC_INDEX
+from dsp.config import PATH_TO_WAV_FILE, SAMPLE_RATE, MIC_INDEX
 from datetime import datetime
 from scipy.io import wavfile
 CHUNK = 1024  # the amount of frames read per buffer, 1024 to balance between latency and processing load
@@ -24,15 +28,15 @@ def create_wav_file_from_recording(record_seconds, name):
     wf.setsampwidth(p.get_sample_size(FORMAT))
     wf.setframerate(SAMPLE_RATE)
 
-    # # List available input devices
-    # info = p.get_host_api_info_by_index(0)
-    # numdevices = info.get("deviceCount")
+    # List available input devices
+    info = p.get_host_api_info_by_index(0)
+    numdevices = info.get("deviceCount")
 
-    # # matches over all input devices in your computer, and prints them
-    # for i in range(0, numdevices):
-    #     device_info = p.get_device_info_by_host_api_device_index(0, i)
-    #     device_name = device_info.get("name")
-    #     print(f"DEVICE {device_name} {i}")
+    # matches over all input devices in your computer, and prints them
+    for i in range(0, numdevices):
+        device_info = p.get_device_info_by_host_api_device_index(0, i)
+        device_name = device_info.get("name")
+        print(f"DEVICE {device_name} {i}")
 
     # Open the audio stream
     stream = p.open(
@@ -170,10 +174,10 @@ def get_avg_rms_value():
 
 if __name__ == "__main__":
     # Example usage
-    # create_wav_file_from_recording(5, "test_recording")
+    create_wav_file_from_recording(5, "test_recording")
     # continuous_recording_with_threshold(100)
     # get_avg_rms_value()
-    pass
+    # pass
     
         
         
