@@ -4,8 +4,15 @@ from random import randrange
 
 def hamming_distance(received, expected):
     """Computes Hamming distance between received bits and expected bits."""
+    # Convert to integers if they're strings or other types
+    if received and not isinstance(received[0], int):
+        received = [int(bit) for bit in received]
+    if expected and not isinstance(expected[0], int):
+        expected = [int(bit) for bit in expected]
+
     if (len(received) != len(expected)):
-        return 
+        print(f"Warning: Different lengths - received: {len(received)}, expected: {len(expected)}")
+        return None
     else:
         return sum(r != e for r, e in zip(received, expected))
 
